@@ -432,6 +432,20 @@ a { color: var(--sky-dark); }
 .q-feedback.correct { background: #e9f7ef; border-left: 4px solid var(--leaf); }
 .q-feedback.incorrect { background: #fde8e1; border-left: 4px solid var(--animal); }
 .q-feedback.info { background: #eef7fc; border-left: 4px solid var(--sky-dark); }
+.q-hints { margin: 10px 0 14px; }
+.hint-revealed {
+  background: #fff8d6; border-left: 4px solid #f5b400;
+  padding: 10px 14px; border-radius: 8px; margin: 8px 0; font-size: 14px;
+  animation: fade .25s;
+}
+.hint-revealed b { color: #8a5a00; }
+.hint-btn {
+  background: linear-gradient(135deg, #ffe7a3, #ffc452);
+  color: #5a4500; border: 2px solid #f0b53a; padding: 8px 14px;
+  border-radius: 999px; cursor: pointer; font-weight: 700; font-size: 13px;
+}
+.hint-btn:hover { transform: translateY(-1px); box-shadow: 0 2px 8px rgba(255,170,0,.25); }
+.hints-done { font-size: 12px; color: var(--ink-soft); margin-top: 6px; font-style: italic; }
 .q-controls { display: flex; justify-content: space-between; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 14px; }
 .q-flag { background: transparent; border: 2px solid #eee; padding: 8px 12px; border-radius: 10px; font-weight: 700; color: var(--ink-soft); }
 .q-flag.on { background: #fef0f5; border-color: var(--berry); color: var(--berry); }
@@ -1476,8 +1490,8 @@ const QUIZ = [
     feedback:"The sun (sunlight). Leaves are like tiny solar panels." },
 
   { type:"mcq", diff:"easy", q:"Which is the one thing EVERY living thing needs (plants and animals)?",
-    choices:["Meat","Sunshine every hour","Water","Fresh air at all times"], correct:2,
-    feedback:["Only animals eat things, not plants.","Plants need lots of sun, but not animals like deep-sea fish.","Yes! Every living thing on Earth needs water.","Air matters, but water is the one nobody lives without — which is why we ask it first on Mars."] },
+    choices:["Food they hunt or gather","Direct sunlight every day","Water","Oxygen to breathe"], correct:2,
+    feedback:["Plants don't hunt — they make their own food. So this can't be it.","Deep-sea creatures live in total darkness and do fine without sunlight.","Yes! Every single living thing on Earth needs water — that's why scientists ask 'is there water?' before 'are there aliens?'","Most plants don't 'breathe' oxygen the way animals do — they use carbon dioxide instead. So this isn't the universal one."] },
 
   { type:"fill", diff:"easy", q:"The body part plants use to catch sunlight is their ______.",
     correctText:["leaves","leaf","green leaves"],
@@ -1502,12 +1516,16 @@ const QUIZ = [
 
   { type:"mcq", diff:"medium", q:"Your friend says 'Plants eat soil — that's why we put them in dirt!' Why is your friend wrong?",
     choices:[
-      "Plants don't grow in soil",
-      "If plants ate soil, the pot would have a big hole under the plant as it grew. Plants are mostly made from air (CO₂) and water",
-      "Plants eat sunlight only, they don't need soil at all",
-      "Actually your friend is right"
+      "Plants don't actually grow in soil — they grow in pure water with their roots dangling",
+      "Plants are mostly built from air and water; soil mostly anchors the roots",
+      "Plants only need a little soil at the start; after that they live on light and air alone",
+      "Actually your friend is right — soil is exactly what plants eat, just very slowly"
     ], correct:1, misconception:true,
-    feedback:["⚠️ Plants DO grow in soil — that part is true.","Yes! Great reasoning. Plants pull carbon dioxide from air and water from soil, but they don't eat the soil itself.","⚠️ Plants do use a tiny bit of stuff from the soil (minerals) — just not as food.","⚠️ Careful! This is a common misconception. Plants don't eat soil — they use mainly air and water."] },
+    hints:[
+      "Look at a potted plant after a year. Has the soil level gone way down, like it's been eaten?",
+      "Where does most of a plant's WEIGHT come from? Hint: there's a famous experiment from 1648 where a tree gained 75 kg but the soil barely changed."
+    ],
+    feedback:["⚠️ Plants do grow in soil — their roots need it to anchor and to find water.","Yes! Plants pull carbon dioxide from the air and water from the soil. The soil is mostly an anchor with a few extra minerals — not 'food'.","⚠️ Plants need soil their whole life — for water and minerals — not just at the start.","⚠️ Classic misconception! If plants ate soil, the pot would empty out as the plant grew. It doesn't."] },
 
   { type:"scenario", diff:"medium", q:"You find a Venus fly trap at a plant shop. It eats flies! Does that make it an animal?",
     choices:["Yes, because it eats","No, it's still a plant","It's a fungus","It's its own kingdom"], correct:1,
@@ -1516,12 +1534,16 @@ const QUIZ = [
 
   { type:"mcq", diff:"medium", q:"Why do we call the stuff in the 'Plant Food' bag at the store FERTILIZER, not actual food?",
     choices:[
-      "Because plants don't like food",
-      "Because it wouldn't burn — it has no energy in it. Plants get energy from the sun, not from fertilizer",
-      "Because plants eat food but from a different bag",
-      "Because it's too expensive"
+      "It's a backup snack — real food still has to come from the soil itself",
+      "It has no energy of its own; it just adds extra minerals — plants still make their actual food from sunlight",
+      "Real plant food only comes from rain, and fertilizer skips the rain part",
+      "It's a special food that only flowering plants need; leafy plants make their own"
     ], correct:1,
-    feedback:["Not really why.","Yes! The burn test proves fertilizer has no energy. It's just a few extra minerals, like a vitamin, not food.","Not the reason.","Price isn't the science here."] },
+    hints:[
+      "Try a thought experiment: would fertilizer BURN if you set it on fire? What does that tell you about energy stored inside it?",
+      "Compare it to vitamins for humans. Vitamins help your body work, but they're not what gives you the energy to run around. So what IS the equivalent of energy for plants?"
+    ],
+    feedback:["⚠️ Soil isn't food either — it's mostly an anchor with a few minerals. Same idea as fertilizer.","Yes! Try the burn test — fertilizer doesn't burn because it has no stored energy. It's like a vitamin, not food. Plants make their actual food from sunlight.","⚠️ Rain is just water. Plants need water, but water alone isn't food — it's an ingredient.","⚠️ All plants need the same things. Fertilizer is just an extra-mineral boost, not a special 'food group'."] },
 
   { type:"fill", diff:"medium", q:"Energy flows from the sun, to plants, then to animals, and finally exits as ______.",
     correctText:["heat"],
@@ -1529,13 +1551,13 @@ const QUIZ = [
 
   { type:"scenario", diff:"medium", q:"You fill a jar with pure water and a cut sunflower stem. Days later, the sunflower starts to wilt, even though it has plenty of water. Why?",
     choices:[
-      "Because plants don't actually need water",
-      "Because there's no sunlight",
-      "Because the cut stem can't reach the ground",
-      "Because plants need more than just water — they need light, and the flower was cut so it can't make new parts forever"
+      "Cut flowers don't actually need water — they prefer dry air to last longer",
+      "The water is too clean; flowers need 'pond-style' water with food bits floating in it",
+      "Sunflowers won't survive without sunlight; the room must have been too dark",
+      "A cut flower has no roots, so it can't gather the minerals or grow new parts it needs to stay alive"
     ], correct:3,
-    scenario:"Remember what plants need BESIDES water.",
-    feedback:["Plants do need water.","They might — but even with sun, a cut flower still wilts.","Not really the reason — ground isn't food.","Yes — a cut flower can't keep living without its full system, even with light and water."] },
+    scenario:"Think about which BODY PARTS the flower lost when it was cut.",
+    feedback:["⚠️ Cut flowers definitely need water — without it they wilt almost immediately.","⚠️ 'Plant food in pond water' isn't really a thing. Plants make their own food from sunlight.","Sunlight matters, but a cut sunflower in a sunny window still wilts eventually. Think bigger.","Yes! Roots gather water and minerals all day long. Without roots, the flower runs out of what it needs to repair and stay alive."] },
 
   { type:"mcq", diff:"medium", q:"Which of these came from the Animal Kingdom? (Pick the best answer.)",
     choices:["Cotton t-shirt","Wooden pencil","Leather belt","Paper book"], correct:2,
@@ -1551,12 +1573,12 @@ const QUIZ = [
 
   { type:"mcq", diff:"medium", q:"Why do coral reefs get counted as animals even though they don't move around much?",
     choices:[
-      "Because they're red",
-      "Because each tiny coral polyp has a mouth and eats tiny things from the water",
-      "Because they live in water",
-      "They aren't animals — they're plants"
+      "Because they're brightly colored, like other animals",
+      "Because each tiny coral polyp has a mouth and catches plankton from the water",
+      "Because they're hard like animal bones — corals are basically underwater skeletons",
+      "They aren't animals at all — they're a kind of underwater plant that grows in colonies"
     ], correct:1,
-    feedback:["Color isn't the rule.","Yes! The mouth is the animal test. Coral polyps have tiny mouths and eat plankton.","Lots of plants also live in water (seaweed).","⚠️ Misconception — corals are animals."] },
+    feedback:["⚠️ Color isn't the rule — many plants are colorful too (think flowers!).","Yes! The mouth is the test. Coral polyps are tiny animals with mouths that catch plankton — that's why they count.","⚠️ Coral isn't bone — it's a hard outer shell the polyps build, like a snail's shell. The polyps inside are the actual animals.","⚠️ Common mix-up! Corals look planty (stuck in place, branching) but they're animals because of those tiny mouths."] },
 
   { type:"scenario", diff:"hard", q:"You read this label on a cereal box: 'Made from 100% natural corn, cooked with love.' Is this food in the Biological category, the Natural Earth category, or the Human-Made category?",
     choices:["Biological","Natural Earth","Human-Made","A mix of all three"], correct:0,
@@ -1574,12 +1596,16 @@ const QUIZ = [
 
   { type:"scenario", diff:"hard", q:"A wheat field and a cow pasture are side by side. The wheat field produces 10x more food than the pasture. Why?",
     choices:[
-      "Cows are smaller than wheat",
-      "Wheat plants are right at the start of the food chain (they use sunlight directly), so less energy is wasted before we eat it",
-      "The farmer waters the wheat more",
-      "Cows are lazier"
+      "Cows are smaller than wheat plants, so a field fits fewer of them",
+      "Wheat is one step from the sun; cows are two steps — most of the energy is lost before it reaches us",
+      "Farmers water wheat fields more carefully, so wheat grows bigger crops",
+      "Cows take 5 years to grow but wheat only takes 5 months, so cows eat their own profits"
     ], correct:1,
-    feedback:["Not the main reason.","Yes! Every time energy goes from one step to the next, lots is lost as heat. Fewer steps = more energy left for us.","Watering isn't why.","Energy loss at each step is the real reason."] },
+    hints:[
+      "Draw the food chain on paper. For wheat: Sun → wheat → us. For cows: Sun → grass → cow → us. What's different?",
+      "Each step in a food chain LOSES about 90% of the energy as heat. So if wheat captures 100 units, how much do you get from a cow that ate that wheat?"
+    ],
+    feedback:["⚠️ Size isn't the main thing — both wheat and cows fit fields just fine.","Yes! Each step in a food chain loses about 90% of the energy as heat. Fewer steps = more energy left for us.","⚠️ Watering helps both, but it's not why a wheat field beats a cow pasture by 10x.","⚠️ Time-to-grow matters a little, but the real reason is energy loss between food-chain steps."] },
 
   { type:"open", diff:"hard", q:"A friend says: 'My bread isn't alive anymore, and it came from a factory — so it's not biological, it's human-made.' Write what you would say back. (2–3 sentences.)",
     scenario:"Think about where bread started out.",
@@ -1597,39 +1623,39 @@ const QUIZ = [
     ], correct:1,
     feedback:["Plants aren't eating soil.","Yes! Fertilizer is just extra minerals. Without enough sun or water, plants can't photosynthesize — that's the real food. Always check the basics.","⚠️ More fertilizer won't help — minerals aren't energy.","Animals won't help."] },
 
-  { type:"scenario", diff:"hard", q:"A 100-year-old oak tree weighs about 10,000 kg. The soil in its pot has barely gone down. Where did all the mass of the tree come from?",
+  { type:"scenario", diff:"hard", q:"A 100-year-old oak tree weighs about 10,000 kg. The soil around it has barely gone down. Where did all the mass of the tree come from?",
     choices:[
-      "From eating the soil bit by bit",
-      "Mostly from carbon dioxide gas (from air) + water",
-      "From the roots pulling up rocks",
-      "From sunlight turning into wood"
+      "From slowly eating the soil bit by bit — that's why old soil eventually looks 'used up'",
+      "Mostly from air (CO₂) and water; sunlight is the energy that snaps them together into wood",
+      "From roots pulling up tiny rocks and minerals over many decades",
+      "From sunlight itself — over time, light slowly turns into wood and leaves"
     ], correct:1, misconception:true,
-    feedback:["⚠️ Classic misconception — soil didn't disappear.","Yes! Most of that 10,000 kg came from air (CO₂) and water, arranged by sunlight energy. Wild, right?","Roots don't eat rocks.","⚠️ Sunlight is energy, not matter. Light doesn't turn into wood — it powers the process."] },
+    feedback:["⚠️ Classic misconception. If trees ate soil, the ground would sink. It barely changes.","Yes! Most of an oak's 10,000 kg comes from air (CO₂) and water. Sunlight is the energy that builds them into wood — but the matter itself comes from air and water.","⚠️ Roots collect minerals, but minerals are a tiny fraction of a tree's weight — the bulk comes from air and water.","⚠️ Sunlight is ENERGY, not matter. Light powers the process; it doesn't become wood."] },
 
   { type:"open", diff:"hard", q:"A bird eats worms. The worms eat dead leaves. Write the full path of the bird's energy — start at the SUN.",
     feedback:"Expected answer: Sun → plants (green leaves catch sunlight) → leaves fall and rot → worms eat the decaying leaves → birds eat the worms. Every step = energy lost as heat. Start is always the Sun." },
 
-  { type:"scenario", diff:"boss", q:"Think BIG: if every plant on Earth suddenly disappeared overnight, how long would ALL animals (including humans) last?",
-    choices:[
-      "Forever, because we could make food in factories",
-      "A few months to years, because the food chain collapses — no more plants means no more animals that eat plants, which means nothing for meat-eaters either",
-      "Only 1 day",
-      "Humans would be fine because we're smart"
-    ], correct:1, misconception:true,
-    feedback:["⚠️ Factories can't make food from nothing — they need crops.","Yes! Even factory food starts with plants. Without plants, EVERY animal eventually runs out. This is why plants are called 'producers' — they produce food for the whole planet.","Not 1 day — we'd have stored food for a while.","⚠️ Being smart doesn't give us energy. Our bodies still need biological food, which starts with plants."] },
+  { type:"open", diff:"boss", q:"Think BIG: if every plant on Earth suddenly disappeared overnight, how long would ALL animals (including humans) last? Walk through your reasoning. (3–5 sentences.)",
+    scenario:"There's no single 'right' number — what matters is the chain of reasoning.",
+    hints:[
+      "Animals come in two main groups: plant-eaters and meat-eaters. Which group runs out of food FIRST when plants vanish?",
+      "Once plant-eaters die out, what happens to the meat-eaters who depended on them?",
+      "Humans are special — we have stored food in pantries, factories, and warehouses. But where did all that stored food originally come from? And how long would it last?"
+    ],
+    feedback:"Strong answer: A few months to a year or two. Plants are 'producers' — they catch sunlight and make ALL the food on Earth. The instant plants vanish:\n• Plant-eaters (cows, deer, rabbits) starve first — within weeks.\n• Meat-eaters (lions, wolves) lose their food source soon after — months.\n• Humans last longest because of stored grain, meat, and canned food — but every bite of that started as a plant. Once stockpiles run out (a year or two), we run out too.\nEven 'factory food' is just processed plants and animals. No plants = no food. This is why plants are called producers — they produce food for the whole planet." },
 
   { type:"open", diff:"boss", q:"You invent a 'solar hat' that turns sunlight into energy for your body. Explain TWO reasons why this wouldn't actually work for humans, even if the technology was perfect. (Use what you learned today.)",
     scenario:"Think about size of plants, and think about how your body works compared to a plant.",
     feedback:"Expected ideas: (1) Our bodies use different chemistry than plants — we can't 'plug' light energy into animal cells like plants do with photosynthesis. (2) A hat is tiny compared to all the leaves a plant uses. Plants sit still all day to soak up sun; humans run, play, and think, using 100x more energy. You'd need leaves the size of a backyard." },
 
-  { type:"scenario", diff:"boss", q:"Design an experiment: You want to prove to a doubter that soil is NOT plant food. You have plants, water, sunlight, soil, and two empty jars. What do you do? (Choose the best plan.)",
-    choices:[
-      "Grow one plant in soil and one in just sand/glass beads with water + sunlight. If the sand one also grows, soil isn't 'food'.",
-      "Bury the plant deeper and see if it disappears",
-      "Feed the plant plant food every day and see if it gets fatter",
-      "Ask the soil if it feels hungry"
-    ], correct:0,
-    feedback:["Perfect scientific thinking! If a plant grows in sand (which has no 'nutrition' to eat) with just sunlight + water, it proves the soil wasn't the food. This is basically the famous Van Helmont experiment from 1648!","That doesn't test the idea.","Fertilizer isn't food either, so this doesn't prove anything.","😂 Soil doesn't talk, but good for thinking outside the box!"] },
+  { type:"open", diff:"boss", q:"Design an experiment: You want to prove to a doubter that soil is NOT plant food. You have plants, water, sunlight, soil, and two empty jars. Describe your plan and what you'd predict.",
+    scenario:"A good experiment compares two setups that are IDENTICAL except for one thing.",
+    hints:[
+      "What single thing should be DIFFERENT between your two jars? (Hint: it has to be the thing you're testing.)",
+      "If you replace the soil with something that has zero 'food' value — like clean sand or glass beads — what would you EXPECT to happen if the doubter were right? What would actually happen?",
+      "A scientist named Van Helmont did almost exactly this in 1648. He grew a tree for 5 years, weighing the soil before and after. What do you think he found?"
+    ],
+    feedback:"Strong plan: Plant one seed in jar A with regular soil + water + sunlight. Plant a matching seed in jar B with clean sand (or glass beads) + water + sunlight. Keep everything else identical — same water, same window, same seed type.\n\nPrediction: If soil were 'food', only plant A would grow. But plant B grows fine too! That proves the soil isn't food — water + sunlight are doing the real work, with soil mostly as an anchor.\n\nThis is basically the Van Helmont experiment from 1648 — he weighed the soil before and after growing a willow tree for 5 years. The tree gained 75 kg; the soil lost only 50 grams. Where did all that wood come from? Air and water, not soil." },
 
   { type:"open", diff:"boss", q:"BIG FINAL QUESTION: Pick one kingdom — plant OR animal — and make the strongest argument you can that your kingdom is more important to life on Earth. Then write what the other kingdom would argue back. (3–4 sentences per side.)",
     scenario:"There's no single right answer — this question is about REASONING. Use what you know.",
@@ -1642,6 +1668,7 @@ let TOTAL_SLIDES = 35;
 let quizIndex = 0;
 let quizAnswers = {};        // indexed by question index
 let quizFlags = new Set();
+let quizHintsRevealed = {};  // qIdx -> number of hints revealed (0..hints.length)
 let quizStarted = false;
 let homework = {};
 let resources = JSON.parse(localStorage.getItem('b3_resources') || '[]');
@@ -1996,7 +2023,7 @@ function clearHomework() {
 function startQuiz() {
   const name = document.getElementById('quiz-student-name').value.trim();
   if (!name) { alert('Please type your name first.'); return; }
-  quizIndex = 0; quizAnswers = {}; quizFlags = new Set(); quizStarted = true;
+  quizIndex = 0; quizAnswers = {}; quizFlags = new Set(); quizHintsRevealed = {}; quizStarted = true;
   document.getElementById('quizStart').classList.add('hide');
   document.getElementById('quizArea').classList.remove('hide');
   document.getElementById('quizResult').classList.add('hide');
@@ -2061,6 +2088,7 @@ function renderCurrentQuestion() {
   const existing = quizAnswers[quizIndex];
   const isAnswered = !!existing;
   const scenario = q.scenario ? `<div class="q-scenario">${q.scenario}</div>` : '';
+  const hintsHtml = renderHintsBlock(q, quizIndex, isAnswered);
   let body = '';
   if (q.type === 'mcq' || q.type === 'scenario') {
     body = `<div class="choice-list">${q.choices.map((c,i)=>{
@@ -2113,6 +2141,7 @@ function renderCurrentQuestion() {
       </div>
       <div class="q-text">${q.q}</div>
       ${scenario}
+      ${hintsHtml}
       ${body}
       ${feedbackHtml}
       <div class="q-controls">
@@ -2132,6 +2161,34 @@ function pickChoice(i) {
   quizAnswers[quizIndex] = { type: q.type, selected: i, correct: (i === q.correct) };
   renderQuizNavigator();
   renderCurrentQuestion();
+}
+function renderHintsBlock(q, qIdx, isAnswered) {
+  if (!q.hints || !q.hints.length) return '';
+  const total = q.hints.length;
+  const revealed = quizHintsRevealed[qIdx] || 0;
+  let html = '<div class="q-hints">';
+  for (let i = 0; i < revealed && i < total; i++) {
+    html += `<div class="hint-revealed"><b>💡 Hint ${i+1}:</b> ${q.hints[i]}</div>`;
+  }
+  if (!isAnswered && revealed < total) {
+    const label = revealed === 0
+      ? '💡 Need a hint?'
+      : `💡 Show another hint (${revealed} of ${total} used)`;
+    html += `<button class="hint-btn" onclick="revealHint()">${label}</button>`;
+  } else if (revealed >= total) {
+    html += `<div class="hints-done">All ${total} hints revealed.</div>`;
+  }
+  html += '</div>';
+  return html;
+}
+function revealHint() {
+  const q = quizQ(quizIndex);
+  if (!q || !q.hints) return;
+  const cur = quizHintsRevealed[quizIndex] || 0;
+  if (cur < q.hints.length) {
+    quizHintsRevealed[quizIndex] = cur + 1;
+    renderCurrentQuestion();
+  }
 }
 function submitFill() {
   const q = quizQ(quizIndex);
