@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chapter B-4A · Identification of Living Things · Science Adventure</title>
+<style>
+:root {
+  --bg: #fff8f0; --ink: #1f2a44; --ink-soft: #4a5472; --paper: #fff;
+  --sun: #ffb703; --leaf: #2a9d8f; --leaf-dark: #1f7a70; --animal: #e76f51;
+  --sky: #8ecae6; --sky-dark: #219ebc; --berry: #c7477a;
+  --shadow: 0 10px 30px rgba(30,40,70,.12); --shadow-sm: 0 4px 12px rgba(30,40,70,.08);
+  --radius: 18px; --radius-sm: 10px;
+  --font-display: "Fredoka", "Nunito", sans-serif; --font-body: "Nunito", sans-serif;
+}
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap');
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { font-family: var(--font-body); color: var(--ink); line-height: 1.55; min-height: 100vh;
+  background: radial-gradient(1200px 600px at 10% -10%, #ffe8c4 0%, transparent 60%), radial-gradient(900px 500px at 110% 10%, #cdeadf 0%, transparent 60%), var(--bg); }
+h1, h2, h3, h4 { font-family: var(--font-display); margin: 0 0 .4em; }
+h1 { font-size: clamp(28px, 4vw, 48px); line-height: 1.1; } h2 { font-size: clamp(22px, 3vw, 34px); }
+p { margin: 0 0 1em; } button { font-family: inherit; cursor: pointer; } a { color: var(--sky-dark); }
+
+.topnav { position: sticky; top: 0; z-index: 50; display: flex; align-items: center; gap: 16px; padding: 12px 22px; background: rgba(255,255,255,.85); backdrop-filter: blur(10px); border-bottom: 1px solid #eee; }
+.brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 700; font-size: 20px; }
+.brand .logo { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--sun), var(--animal)); display: grid; place-items: center; color: #fff; font-size: 22px; }
+.nav-spacer { flex: 1; }
+.nav-btn { border: 1px solid #e5e5e5; background: #fff; border-radius: 999px; padding: 8px 14px; font-weight: 700; color: var(--ink-soft); }
+.nav-btn:hover { background: #fafafa; }
+.teacher-badge { background: var(--berry); color:#fff; border-color: var(--berry); }
+
+.container { max-width: 1180px; margin: 0 auto; padding: 26px 22px 80px; }
+
+.chapter-header { background: var(--paper); border-radius: var(--radius); padding: 22px 26px; box-shadow: var(--shadow); margin-bottom: 18px; }
+.chapter-meta { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; color: var(--ink-soft); font-size: 14px; }
+.pill { display: inline-block; padding: 4px 10px; background: #f3efe9; border-radius: 999px; font-weight: 700; font-size: 12px; color: var(--ink-soft); }
+.parts-preview { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 14px; }
+.parts-preview .pp { background: #fafaf4; border-radius: 10px; padding: 10px 12px; font-size: 13px; border-left: 4px solid var(--sun); }
+.parts-preview .pp.p2 { border-color: var(--leaf); }
+.parts-preview .pp b { display: block; font-family: var(--font-display); color: var(--ink); font-size: 14px; }
+@media (max-width: 700px){ .parts-preview { grid-template-columns: 1fr; } }
+.sources-pill { background: linear-gradient(90deg,#fef3f8,#f1f9f5); color: var(--ink); padding: 4px 10px; border-radius: 999px; font-weight: 700; font-size: 11px; }
+
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; background: var(--paper); padding: 8px; border-radius: 14px; box-shadow: var(--shadow-sm); margin-bottom: 18px; position: sticky; top: 62px; z-index: 40; }
+.tab { border: none; background: transparent; padding: 10px 16px; border-radius: 10px; font-weight: 800; color: var(--ink-soft); }
+.tab.active { background: var(--ink); color: #fff; }
+.tab:not(.active):hover { background: #f3f0ea; }
+.tab-panel { display: none; } .tab-panel.active { display: block; }
+
+.slide-wrap { background: var(--paper); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+.slide-stage { padding: 40px 46px; min-height: 520px; position: relative; overflow: hidden; }
+.slide { display: none; animation: fade .35s ease; position: relative; }
+.slide.active { display: block; }
+@keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+.slide-controls { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 20px; border-top: 1px solid #eee; background: #fcfbf7; flex-wrap: wrap; }
+.slide-btn { background: var(--ink); color: #fff; border: none; padding: 10px 18px; border-radius: 10px; font-weight: 800; }
+.slide-btn.ghost { background: transparent; color: var(--ink-soft); }
+.slide-btn:disabled { opacity: .4; cursor: not-allowed; }
+.slide-meta { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--ink-soft); flex-wrap: wrap; }
+.part-marker { font-weight: 800; font-family: var(--font-display); padding: 4px 12px; border-radius: 999px; font-size: 12px; letter-spacing: .05em; }
+.part-marker.p1 { background: #fff3d6; color: #9a6a00; }
+.part-marker.p2 { background: #dff3ed; color: var(--leaf-dark); }
+.slide-progress { flex: 1; min-width: 140px; max-width: 360px; height: 8px; background: #eee; border-radius: 999px; overflow: hidden; margin: 0 6px; }
+.slide-progress-fill { height: 100%; background: linear-gradient(90deg, var(--sun), var(--animal)); transition: width .3s; }
+
+.big-q { font-family: var(--font-display); font-size: clamp(28px, 4vw, 44px); line-height: 1.15; margin: 0 0 14px; }
+.lead { font-size: 18px; color: var(--ink-soft); max-width: 720px; }
+.callout { background: #fff8e6; border-left: 5px solid var(--sun); padding: 14px 18px; border-radius: 10px; margin: 14px 0; }
+.callout.leaf { background: #eaf7f2; border-color: var(--leaf); }
+.callout.animal { background: #fdefe9; border-color: var(--animal); }
+.callout.sky { background: #e6f4fb; border-color: var(--sky-dark); }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items: center; }
+@media (max-width: 760px){ .two-col { grid-template-columns: 1fr; } }
+
+.part-banner { text-align: center; padding: 20px 10px; border-radius: 14px; }
+.part-banner.p1 { background: linear-gradient(135deg, #ffecb3, #fff6e0); }
+.part-banner.p2 { background: linear-gradient(135deg, #d6efe7, #f0faf6); }
+.part-banner .pb-pill { display: inline-block; padding: 6px 16px; background: rgba(0,0,0,.08); border-radius: 999px; font-family: var(--font-display); font-weight: 700; font-size: 13px; letter-spacing: .1em; color: var(--ink); margin-bottom: 16px; }
+.part-banner h1 { font-size: clamp(36px, 6vw, 64px); margin: 6px 0; }
+.part-banner .pb-sub { font-size: 20px; color: var(--ink-soft); max-width: 640px; margin: 0 auto 20px; }
+.part-banner .pb-meta { display: inline-flex; flex-wrap: wrap; gap: 10px; justify-content: center; font-size: 14px; color: var(--ink-soft); background: rgba(255,255,255,.7); padding: 10px 16px; border-radius: 999px; }
+.part-banner .pb-emoji { font-size: 100px; margin: 10px 0; }
+
+.video-wrap { background: #111; border-radius: 14px; overflow: hidden; position: relative; max-width: 800px; margin: 10px auto; }
+.video-ratio { position: relative; width: 100%; padding-top: 56.25%; }
+.video-ratio iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+.video-caption { background: #f8f4ec; padding: 10px 14px; border-radius: 10px; margin-top: 10px; font-size: 14px; }
+.video-edit-row { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; flex-wrap: wrap; gap: 10px; }
+.video-meta { font-size: 13px; color: var(--ink-soft); }
+
+.beat { background: linear-gradient(180deg, #fffbf4, #fff); border-radius: 14px; padding: 20px; border: 2px dashed #f0d9a6; margin: 14px 0; }
+.beat .beat-badge { display: inline-block; font-family: var(--font-display); font-weight: 800; letter-spacing: .05em; font-size: 12px; padding: 4px 12px; border-radius: 999px; margin-bottom: 10px; }
+.beat.activity .beat-badge { background: var(--sun); color: #fff; }
+.beat.mystery .beat-badge { background: var(--berry); color: #fff; }
+.beat.sci .beat-badge { background: var(--leaf); color: #fff; }
+.mystery-answer { margin-top: 10px; padding: 12px; background: #f2faf5; border-radius: 10px; border-left: 4px solid var(--leaf); display: none; }
+.mystery-open .mystery-answer { display: block; animation: fade .3s; }
+.reveal-btn { margin-top: 10px; background: var(--berry); color: #fff; border: none; padding: 10px 16px; border-radius: 10px; font-weight: 800; }
+.mystery-open .reveal-btn { display: none; }
+
+.reveal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin-top: 14px; }
+.reveal-card { background: #fff; border-radius: 14px; padding: 16px; box-shadow: var(--shadow-sm); cursor: pointer; min-height: 140px; border: 2px solid #eee; }
+.reveal-card .back { display: none; }
+.reveal-card.open .front { display: none; } .reveal-card.open .back { display: block; }
+.reveal-card.open { background: linear-gradient(180deg, #fff9ea, #fff); border-color: var(--sun); }
+
+.teacher-note { margin-top: 14px; }
+.teacher-note summary { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; background: #fff4e1; border: 1.5px solid #f3d48a; color: #8f6a15; padding: 6px 14px; border-radius: 999px; font-weight: 700; font-size: 13px; list-style: none; }
+.teacher-note summary::-webkit-details-marker { display: none; }
+.teacher-note .note-body { background: #fffbe6; border: 1.5px solid #f3d48a; border-radius: 12px; padding: 12px 14px; font-size: 14px; margin-top: 8px; max-width: 600px; }
+.session-break { background: linear-gradient(135deg, #fff5e0, #fff0d6); border-radius: 14px; padding: 16px 20px; margin-top: 18px; border-left: 6px solid var(--sun); display: flex; gap: 14px; align-items: center; }
+.session-break .icon { font-size: 40px; }
+.session-break h4 { margin: 0 0 4px; font-family: var(--font-display); }
+.session-break p { margin: 0; font-size: 14px; color: var(--ink-soft); }
+
+/* HOMEWORK + QUIZ + TEACHER + MODAL + PRESENT shared same as B-4 */
+.hw-intro { background: linear-gradient(135deg, #e9f6fd, #fff); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow-sm); margin-bottom: 16px;}
+.hw-list { display: grid; gap: 14px; }
+.hw-card { background: var(--paper); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 20px; border-left: 6px solid var(--sky-dark); }
+.hw-card h3 { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.hw-num { width: 34px; height: 34px; border-radius: 50%; background: var(--sky-dark); color: #fff; display: grid; place-items: center; font-family: var(--font-display); font-weight: 800; }
+.hw-card textarea { width: 100%; border: 2px solid #eee; border-radius: 10px; padding: 10px; font-family: inherit; font-size: 15px; margin-top: 6px; min-height: 80px; resize: vertical; }
+.btn { border: none; background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 10px; font-weight: 800; font-family: inherit; }
+.btn.secondary { background: #fff; color: var(--ink); border: 2px solid var(--ink); }
+.btn.success { background: var(--leaf); } .btn.warn { background: var(--animal); }
+.btn.ghost { background: transparent; color: var(--ink-soft); border: 2px solid #eee;}
+.btn.small { padding: 6px 12px; font-size: 13px; }
+.submit-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; align-items: center; }
+
+.quiz-start { background: linear-gradient(135deg, #fff0e0, #e8f7ef); border-radius: var(--radius); padding: 26px; box-shadow: var(--shadow); text-align: center; }
+.quiz-layout { display: grid; grid-template-columns: 230px 1fr; gap: 18px; align-items: start; }
+@media (max-width: 820px){ .quiz-layout { grid-template-columns: 1fr; } }
+.quiz-nav-sticky { position: sticky; top: 130px; }
+.quiz-navigator { background: var(--paper); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow-sm); }
+.qn-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; margin-bottom: 10px; }
+.qn { aspect-ratio: 1; border-radius: 6px; border: 2px solid #eee; background: #fafaf4; color: var(--ink-soft); font-weight: 800; font-size: 12px; cursor: pointer; display: grid; place-items: center; padding: 0; position: relative; }
+.qn.current { border-color: var(--ink); box-shadow: 0 0 0 2px rgba(31,42,68,.2); color: var(--ink); }
+.qn.answered { background: #e9f7ef; border-color: var(--leaf); color: var(--leaf-dark); }
+.qn.wrong { background: #fde8e1; border-color: var(--animal); color: var(--animal); }
+.qn.open { background: #eef7fc; border-color: var(--sky-dark); color: var(--sky-dark); }
+.qn.flagged::after { content: "🚩"; position: absolute; top: -4px; right: -4px; font-size: 10px; }
+.qn-legend { font-size: 11px; color: var(--ink-soft); padding-top: 8px; margin-top: 4px; border-top: 1px solid #eee; }
+.qn-legend span { display: inline-flex; align-items: center; gap: 4px; margin-right: 10px; }
+.qn-dot { width: 10px; height: 10px; border-radius: 3px; background: #fafaf4; border: 1.5px solid #eee; display: inline-block; }
+.qn-dot.answered { background: #e9f7ef; border-color: var(--leaf); }
+.qn-dot.wrong { background: #fde8e1; border-color: var(--animal); }
+.qn-dot.open { background: #eef7fc; border-color: var(--sky-dark); }
+.quiz-progress { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.progress-bar { flex: 1; height: 10px; background: #eee; border-radius: 999px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--sun), var(--animal)); transition: width .3s; }
+.q-card { background: var(--paper); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); margin-bottom: 16px; }
+.q-difficulty { font-size: 12px; font-weight: 800; letter-spacing: .1em; margin-bottom: 6px; }
+.q-difficulty.easy { color: var(--leaf); } .q-difficulty.medium { color: var(--sun); } .q-difficulty.hard { color: var(--animal); } .q-difficulty.boss { color: var(--berry); }
+.q-text { font-family: var(--font-display); font-size: 20px; margin: 4px 0 16px; }
+.q-scenario { background: #f8f4ec; padding: 12px 14px; border-radius: 10px; font-style: italic; margin-bottom: 12px; }
+.choice-list { display: grid; gap: 8px; }
+.choice { border: 2px solid #eee; background: #fff; padding: 12px 14px; border-radius: 12px; text-align: left; font-weight: 700; font-size: 15px; }
+.choice:hover:not(:disabled) { border-color: var(--ink-soft); }
+.choice.correct { border-color: var(--leaf); background: #e9f7ef; }
+.choice.incorrect { border-color: var(--animal); background: #fde8e1; }
+.q-feedback { margin-top: 12px; padding: 12px 14px; border-radius: 10px; display: none; font-size: 15px; }
+.q-feedback.show { display: block; }
+.q-feedback.correct { background: #e9f7ef; border-left: 4px solid var(--leaf); }
+.q-feedback.incorrect { background: #fde8e1; border-left: 4px solid var(--animal); }
+.q-feedback.info { background: #eef7fc; border-left: 4px solid var(--sky-dark); }
+.q-controls { display: flex; justify-content: space-between; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 14px; }
+.q-flag { background: transparent; border: 2px solid #eee; padding: 8px 12px; border-radius: 10px; font-weight: 700; color: var(--ink-soft); }
+.q-flag.on { background: #fef0f5; border-color: var(--berry); color: var(--berry); }
+.quiz-result { background: var(--paper); border-radius: var(--radius); padding: 30px; box-shadow: var(--shadow); text-align: center; }
+.score-donut { width: 160px; height: 160px; border-radius: 50%; margin: 20px auto; display: grid; place-items: center; font-family: var(--font-display); font-size: 40px; background: conic-gradient(var(--leaf) calc(var(--p,0)*1%), #eee 0); position: relative; }
+.score-donut::after { content:""; position: absolute; inset: 14px; border-radius: 50%; background: #fff;}
+.score-donut span { position: relative; z-index: 1; color: var(--ink); font-weight: 800; }
+
+.teacher-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+.teacher-card { background: var(--paper); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow-sm); border-top: 6px solid var(--berry); }
+.teacher-card h3 { display: flex; gap: 8px; align-items: center; font-family: var(--font-display); }
+.teacher-card small { color: var(--ink-soft); }
+.teacher-card input, .teacher-card textarea { width: 100%; padding: 10px; border: 2px solid #eee; border-radius: 10px; font-family: inherit; font-size: 14px; margin-top: 6px; }
+.submissions-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.submissions-table th, .submissions-table td { text-align: left; padding: 8px; border-bottom: 1px solid #eee; }
+
+.modal-back { position: fixed; inset: 0; background: rgba(20,25,40,.5); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px;}
+.modal-back.show { display: flex; }
+.modal { background: #fff; border-radius: var(--radius); padding: 24px; max-width: 520px; width: 100%; box-shadow: var(--shadow);}
+.modal input { width: 100%; padding: 10px; border: 2px solid #eee; border-radius: 10px; margin: 6px 0 10px; }
+
+body.presenting { background: #0f1419; }
+body.presenting .topnav, body.presenting .chapter-header, body.presenting .tabs, body.presenting .slide-controls { display: none !important; }
+body.presenting .container { max-width: none; padding: 0; }
+body.presenting .tab-panel { display: none; } body.presenting #panel-lesson { display: block; }
+body.presenting .slide-wrap { position: fixed; inset: 0; border-radius: 0; box-shadow: none; background: linear-gradient(135deg, #fff 0%, #fdf7ec 100%); z-index: 999; overflow: hidden; }
+body.presenting .slide-stage { padding: 0; min-height: 100vh; height: 100vh; display: block; overflow: hidden; }
+body.presenting .slide.active { display: flex; flex-direction: column; justify-content: center; width: 100%; height: 100vh; padding: 5vh 7vw; gap: 1em; overflow-y: auto; position: relative; }
+body.presenting .slide.active > * { width: 100%; max-width: 1600px; margin-left: auto; margin-right: auto; }
+body.presenting .big-q { font-size: clamp(44px, 5.2vw, 82px); line-height: 1.08; }
+body.presenting .lead { font-size: clamp(22px, 2.4vw, 34px); }
+body.presenting p, body.presenting li { font-size: clamp(18px, 1.7vw, 24px); }
+body.presenting .callout { font-size: clamp(20px, 2vw, 28px); padding: 20px 26px; }
+body.presenting .part-banner { position: absolute; inset: 0; width: 100vw; height: 100vh; max-width: none; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 6vh 4vw; border-radius: 0; z-index: 1; }
+body.presenting .part-banner h1 { font-size: clamp(72px, 9vw, 160px); line-height: 0.95; }
+body.presenting .part-banner .pb-emoji { font-size: clamp(110px, 13vw, 200px); }
+body.presenting .part-banner .pb-sub { font-size: clamp(26px, 2.8vw, 44px); max-width: 1100px; }
+body.presenting .beat { padding: 5vh 6vw; border-radius: 24px; border-width: 3px; min-height: 65vh; display: flex; flex-direction: column; justify-content: center; }
+body.presenting .beat h3 { font-size: clamp(40px, 4vw, 64px); }
+body.presenting .beat p, body.presenting .beat li { font-size: clamp(22px, 2vw, 30px); }
+body.presenting .reveal-grid { grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 26px; }
+body.presenting .reveal-card { min-height: 220px; padding: 32px; font-size: 1.25em; }
+body.presenting .reveal-card b { font-size: clamp(26px, 2.4vw, 36px); display: block; margin-bottom: 10px; }
+body.presenting .video-wrap { max-width: min(1200px, 88vw); }
+
+.present-bar { display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(20,25,40,.92); color: #fff; padding: 10px 18px; border-radius: 999px; gap: 10px; align-items: center; z-index: 1000; backdrop-filter: blur(10px); opacity: 0.4; }
+body.presenting .present-bar { display: flex; }
+.present-bar:hover { opacity: 1; }
+.present-bar button { background: transparent; border: 1px solid rgba(255,255,255,.2); color: #fff; padding: 6px 12px; border-radius: 999px; font-weight: 700; }
+.present-bar .counter { font-weight: 700; padding: 0 8px; }
+.present-bar .exit { background: var(--animal); border-color: var(--animal); }
+
+.hide { display: none !important; } .small { font-size: 13px; color: var(--ink-soft); }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="brand"><span class="logo">🔬</span> Science Adventure</div>
+  <span class="pill">Chapter 7 · B-4A + SCI</span>
+  <div class="nav-spacer"></div>
+  <button class="nav-btn" onclick="window.location.href='index.html'">🏠 Home</button>
+  <button class="nav-btn" onclick="enterPresentMode()">🖥 Present</button>
+  <button class="nav-btn" id="teacherToggle" onclick="openTeacherLogin()">🔒 Teacher</button>
+  <button class="nav-btn teacher-only hide" onclick="signOutTeacher()" style="color:var(--animal);border-color:#fdcbbd;">🔒 Exit</button>
+</nav>
+
+<div class="container">
+
+<div class="chapter-header">
+  <div class="chapter-meta">
+    <span class="pill">Lesson B-4A + SCI Identification</span>
+    <span class="pill" style="background:#eaf7f2;color:var(--leaf-dark);">Life Science</span>
+    <span class="pill">⏱ ~2 hours · 2 sessions</span>
+    <span class="sources-pill">BFSU + SCI MERGED</span>
+  </div>
+  <h1 style="margin:10px 0 4px;">🔍 Identification of Living Things 🌳🐦</h1>
+  <p class="lead">Become a real naturalist. Learn to name the trees, birds, and flowers you see every day — and figure out why they live where they live.</p>
+  <div class="parts-preview">
+    <div class="pp"><b>📅 Session 1 · Becoming a Naturalist · ~55–65 min</b>Why identify? How field guides work. Identifying trees and birds. Observation habits.</div>
+    <div class="pp p2"><b>📅 Session 2 · Habitats & Environments · ~45–55 min</b>What animals need. What plants need. Why wildlife lives WHERE it lives. Human impact.</div>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" data-tab="lesson">🎬 Lesson</button>
+  <button class="tab" data-tab="homework">📓 Homework</button>
+  <button class="tab" data-tab="quiz">🧠 Quiz</button>
+  <button class="tab teacher-only hide" data-tab="teacher">🧑‍🏫 Teacher</button>
+</div>
+
+<div class="tab-panel active" id="panel-lesson">
+  <div class="slide-wrap">
+    <div class="slide-stage" id="slide-stage">
+
+      <div class="slide active" data-slide="1" data-part="1">
+        <div class="part-banner p1"><span class="pb-pill">SESSION 1 · PART 1 OF 2</span><div class="pb-emoji">🌳 🦉 🌸</div><h1>Becoming a Naturalist</h1><p class="pb-sub">You know hundreds of faces. You can learn hundreds of trees and birds the same way.</p><div class="pb-meta">🎬 1 video · 🎲 Tree & bird ID · 🕵️ 2 mysteries</div></div>
+      </div>
+
+      <div class="slide" data-slide="2" data-part="1">
+        <div class="two-col">
+          <div>
+            <p class="pill">🔭 Today's adventure</p>
+            <h2 class="big-q">How many kinds of trees are in your neighborhood?</h2>
+            <p class="lead">You walk past them every day. 20? 50? 100? Most people have NO idea. What if you could name every one?</p>
+            <div class="callout">🤔 <b>Today's mission:</b> turn into a <b>naturalist</b> — someone who can name the living things around them. It's a superpower you can build over a lifetime.</div>
+          </div>
+          <div style="font-size: 180px; text-align:center;">🌲🌳🌴</div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="3" data-part="1">
+        <h2 class="big-q">Why does naming matter? 🤷</h2>
+        <p class="lead">Knowing names <b>changes how you see</b>. A "tree" becomes an oak, a maple, a pine — each with its own character. A "bird" becomes a sparrow, a robin, a cardinal — each with its own song.</p>
+        <div class="callout leaf"><b>🌟 You can't love what you don't notice.</b> And you can't notice what you can't name. Naturalists have an advantage: they see a richer world.</div>
+        <p>And there's a practical reason too: scientists use names to <b>share discoveries</b>. If you say "I saw a bird," nobody knows which. If you say "I saw a scarlet tanager," scientists around the world know exactly what you mean.</p>
+      </div>
+
+      <div class="slide" data-slide="4" data-part="1">
+        <h2 class="big-q">🔑 Your secret weapon: the field guide</h2>
+        <p class="lead">A <b>field guide</b> is a book (or app) full of pictures and info about every tree/bird/flower in your region. You see a tree → look through the pictures → match it → BOOM, you know its name.</p>
+        <div class="reveal-grid">
+          <div class="reveal-card"><div class="front"><b>🌳 Tree guide</b><div class="small">Leaves, bark, shape</div></div></div>
+          <div class="reveal-card"><div class="front"><b>🐦 Bird guide</b><div class="small">Colors, size, song</div></div></div>
+          <div class="reveal-card"><div class="front"><b>🌸 Flower guide</b><div class="small">Petals, color, season</div></div></div>
+          <div class="reveal-card"><div class="front"><b>🐛 Bug guide</b><div class="small">Legs, wings, pattern</div></div></div>
+        </div>
+        <div class="callout"><b>💡 Pro tip:</b> Start with ONE group. Trees are easiest — they don't run away. Then birds. Then flowers.</div>
+      </div>
+
+      <div class="slide" data-slide="5" data-part="1" data-type="video" data-video-id="qFVh2fTR2XA">
+        <h2 class="big-q">🎬 Watch: Guess That Tree! <span class="pill">~4 min</span></h2>
+        <p class="lead">SciShow Kids host Jessi shows how to tell different evergreen trees apart — and it's way easier than you'd think.</p>
+        <div class="video-wrap"><div class="video-ratio"><iframe src="https://www.youtube.com/embed/qFVh2fTR2XA" title="Guess That Tree - SciShow Kids" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
+        <div class="video-edit-row"><span class="video-meta">📽 SciShow Kids</span><a class="btn small secondary" href="https://www.youtube.com/watch?v=qFVh2fTR2XA" target="_blank">▶ Open on YouTube</a></div>
+        <div class="video-caption">🎯 <b>Listen for:</b> the 3 features Jessi uses to tell trees apart. Can you remember all 3?</div>
+      </div>
+
+      <div class="slide" data-slide="6" data-part="1">
+        <h2 class="big-q">🌳 Leaf Detective: 4 clues</h2>
+        <p class="lead">For ANY tree, look at these 4 clues:</p>
+        <div class="reveal-grid">
+          <div class="reveal-card"><div class="front"><b>1. Leaf shape</b><div class="small">Round? Pointy? Skinny? Wide?</div></div></div>
+          <div class="reveal-card"><div class="front"><b>2. Leaf edge</b><div class="small">Smooth? Jagged like a saw?</div></div></div>
+          <div class="reveal-card"><div class="front"><b>3. Arrangement</b><div class="small">One leaf or many on a stem? Opposite or alternating?</div></div></div>
+          <div class="reveal-card"><div class="front"><b>4. Bark pattern</b><div class="small">Smooth? Rough? Peely?</div></div></div>
+        </div>
+        <div class="callout"><b>📝 Together, these clues</b> narrow any tree down to one species.</div>
+      </div>
+
+      <div class="slide" data-slide="7" data-part="1">
+        <div class="beat activity">
+          <span class="beat-badge">🎲 ACTIVITY · 20 MIN · OUTDOORS</span>
+          <h3>The Leaf Press</h3>
+          <p>Let's start your collection. Outside, find <b>5 leaves from 5 different trees</b>. Don't rip whole branches — just one leaf each.</p>
+          <ol>
+            <li>🍃 Pick 5 leaves from 5 different trees.</li>
+            <li>📄 Place each between sheets of clean paper.</li>
+            <li>📚 Stack heavy books on top for a week.</li>
+            <li>🔍 Use a tree field guide to identify each one.</li>
+            <li>✍️ Label each pressed leaf with its name + where you found it.</li>
+          </ol>
+          <details class="teacher-note"><summary>👩‍🏫 Teacher note</summary><div class="note-body"><b>Teacher:</b> Don't worry about getting every ID right. The struggle IS the learning. If you hit a mystery tree, label it "Mystery Tree #1" and save for later — you'll ID it eventually. Keep collections in a small notebook or folder.</div></details>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="8" data-part="1">
+        <h2 class="big-q">🐦 Now do the same with birds</h2>
+        <p class="lead">Birds are trickier because they move! Here's the trick: <b>put out a feeder</b>. The same birds will come back every day. You'll learn them fast.</p>
+        <div class="reveal-grid">
+          <div class="reveal-card"><div class="front"><b>👀 Size &amp; shape</b><div class="small">Big or tiny? Round or slender?</div></div></div>
+          <div class="reveal-card"><div class="front"><b>🎨 Colors</b><div class="small">Where is the red? The blue?</div></div></div>
+          <div class="reveal-card"><div class="front"><b>🎵 Sound</b><div class="small">Each bird sings differently</div></div></div>
+          <div class="reveal-card"><div class="front"><b>🕊 Behavior</b><div class="small">Hops? Walks? Perches? Flies fast?</div></div></div>
+        </div>
+        <div class="callout sky"><b>🏠 Pro tip:</b> put the feeder near a window. You and your family can watch from inside. Perfect winter project.</div>
+      </div>
+
+      <div class="slide" data-slide="9" data-part="1">
+        <div class="beat sci">
+          <span class="beat-badge">🧪 SCI SESSION 2 TIE-IN</span>
+          <h3>Build a Bird Feeder from a Water Bottle</h3>
+          <p>No feeder? Make one!</p>
+          <ol>
+            <li>Poke holes in the bottom of a clean plastic bottle for drainage.</li>
+            <li>Poke 2 holes through the sides (near the bottom), push a stick through for perches.</li>
+            <li>Cut small feeding holes just above each perch.</li>
+            <li>Fill with birdseed. Hang from a tree.</li>
+          </ol>
+          <p>Check it every morning! Keep a list of which birds visit. After 2 weeks you'll know them by sight.</p>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="10" data-part="1">
+        <div class="beat mystery" id="mystery-10">
+          <span class="beat-badge">🕵️ MYSTERY #1 · THINK BEFORE YOU CLICK</span>
+          <h3>The Unknown Visitor</h3>
+          <p>You see a strange brown bird at your feeder. You look through every page of your bird guide. It doesn't match ANYTHING. What do you do?</p>
+          <button class="reveal-btn" onclick="document.getElementById('mystery-10').classList.add('mystery-open')">🔍 Show answer</button>
+          <div class="mystery-answer">🎯 Three options: (1) Look again — is it a <b>juvenile</b> (young bird)? Young birds often look different from adults. (2) Is it a <b>female</b>? In many species, females are plainer than males and easy to miss. (3) <b>Save it for later</b>. Write down all the clues (size, color, behavior, where it was) or take a photo. Find someone at a nature center or online birding group who can help. Real scientists ask each other for help all the time!</div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="11" data-part="1">
+        <div class="beat mystery" id="mystery-11">
+          <span class="beat-badge">🕵️ MYSTERY #2 · THINK BEFORE YOU CLICK</span>
+          <h3>The Same Tree, Different Place</h3>
+          <p>You find an oak tree in your yard. Your uncle, who lives 500 miles away, says there are oaks where he lives too. Is it the SAME kind of oak? How would you know?</p>
+          <button class="reveal-btn" onclick="document.getElementById('mystery-11').classList.add('mystery-open')">🔍 Show answer</button>
+          <div class="mystery-answer">🎯 Probably NOT the same species! There are over 600 kinds of oak trees! Your field guide will have <b>range maps</b> — little maps showing where each species lives. Your oak might be a white oak; your uncle's could be a live oak or red oak. All are oaks (same genus), but different species. This is why field guides are local — always use a field guide for YOUR region.</div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="12" data-part="1">
+        <h2 class="big-q">🎉 End of Session 1</h2>
+        <div class="callout leaf">✅ What you nailed:<ul><li>Why naming matters: it changes how you see the world</li><li>How to use a <b>field guide</b></li><li>4 clues for tree ID: shape, edge, arrangement, bark</li><li>4 clues for bird ID: size, color, sound, behavior</li><li>Keep a collection! Real scientists do.</li></ul></div>
+        <div class="session-break"><div class="icon">🌟</div><div><h4>End of Session 1!</h4><p>Next session we dig into <b>where</b> each living thing lives — and why.</p></div></div>
+      </div>
+
+      <div class="slide" data-slide="13" data-part="2">
+        <div class="part-banner p2"><span class="pb-pill">SESSION 2 · PART 2 OF 2</span><div class="pb-emoji">🏡 🌍 🐻</div><h1>Habitats & Environments</h1><p class="pb-sub">Why do polar bears live in the Arctic and camels live in the desert? Not luck — math.</p><div class="pb-meta">🕵️ 4 mysteries · 🧠 Critical thinking</div></div>
+      </div>
+
+      <div class="slide" data-slide="14" data-part="2">
+        <h2 class="big-q">What does every animal need to survive? 🐰</h2>
+        <p class="lead">Think of a rabbit. What does it need? Let's list it all:</p>
+        <div class="reveal-grid">
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>Guess #1</b></div><div class="back">🥕 <b>Food</b> — and the RIGHT food (carrots for rabbits, not fish!)</div></div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>Guess #2</b></div><div class="back">💧 <b>Water</b> — all animals need it</div></div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>Guess #3</b></div><div class="back">🏠 <b>Shelter</b> — a burrow to hide and raise babies</div></div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>Guess #4</b></div><div class="back">🌡 <b>Right climate</b> — not too hot, not too cold</div></div>
+        </div>
+        <div class="callout animal"><b>The 4 Basic Needs</b> of every animal: food · water · shelter · climate. This combo is called its <b>HABITAT</b>.</div>
+      </div>
+
+      <div class="slide" data-slide="15" data-part="2">
+        <h2 class="big-q">But the SPECIFICS vary wildly 🤯</h2>
+        <p class="lead">Every animal has the same 4 needs — but the DETAILS are totally different.</p>
+        <div class="reveal-grid">
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🦌 Deer food?</b></div><div class="back">Leaves, twigs, grass</div></div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🦅 Eagle food?</b></div><div class="back">Fish, small mammals, other birds</div></div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🐪 Camel water?</b></div><div class="back">Tiny amount — gets most from food!</div></div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🐸 Frog water?</b></div><div class="back">MUST live near water — can't dry out</div></div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🐻 Bear shelter?</b></div><div class="back">Cave, den, or hollow log for winter</div></div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🦋 Butterfly shelter?</b></div><div class="back">Tucks under leaves — doesn't need much</div></div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="16" data-part="2">
+        <div class="beat mystery" id="mystery-16">
+          <span class="beat-badge">🕵️ MYSTERY #3 · THINK BEFORE YOU CLICK</span>
+          <h3>The Missing Beaver</h3>
+          <p>Your cousin tells you a beaver has moved into her backyard in Arizona (a desert!). You're skeptical. Why would you doubt this story?</p>
+          <button class="reveal-btn" onclick="document.getElementById('mystery-16').classList.add('mystery-open')">🔍 Show answer</button>
+          <div class="mystery-answer">🎯 Beavers need <b>flowing water</b> (streams or rivers) to build dams and lodges. They also eat tree bark — they need woods with specific trees like willow or aspen. Arizona deserts don't have those habitat needs. No flowing water + no right trees = no beaver home. Your cousin probably saw a muskrat or a large rodent! Habitat rules everything.</div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="17" data-part="2">
+        <h2 class="big-q">🌱 Plants have needs too (they call them ENVIRONMENTAL needs)</h2>
+        <p class="lead">Plants don't need food/shelter like animals. But they need:</p>
+        <div class="reveal-grid">
+          <div class="reveal-card open"><div class="back"><b>💧 Water</b> — from rain, soaked up by roots</div></div>
+          <div class="reveal-card open"><div class="back"><b>☀️ Light</b> — sunshine for making food</div></div>
+          <div class="reveal-card open"><div class="back"><b>🌱 Soil</b> — to anchor roots + provide minerals</div></div>
+          <div class="reveal-card open"><div class="back"><b>🌡 Climate</b> — not too hot, not too cold</div></div>
+        </div>
+        <div class="callout leaf"><b>Plant = these 4 ingredients.</b> Each species has its OWN sweet spot — a cactus hates lots of water; a rainforest fern will die without constant wet.</div>
+      </div>
+
+      <div class="slide" data-slide="18" data-part="2">
+        <div class="beat mystery" id="mystery-18">
+          <span class="beat-badge">🕵️ MYSTERY #4 · THINK BEFORE YOU CLICK</span>
+          <h3>Panda Problems</h3>
+          <p>Giant pandas eat only bamboo. Wild bamboo only grows in certain mountain forests of China. Why does this combination make pandas almost extinct?</p>
+          <button class="reveal-btn" onclick="document.getElementById('mystery-18').classList.add('mystery-open')">🔍 Show answer</button>
+          <div class="mystery-answer">🎯 Pandas have a <b>very narrow habitat</b>. They need ONE type of food (bamboo) that grows in ONE type of place (specific mountain forests). When humans cut down those forests to make farms or roads, pandas have nowhere else to go. Contrast with raccoons — they eat almost anything and live almost anywhere. When a species has a narrow habitat, small changes become huge disasters. That's why pandas are rare and raccoons are everywhere.</div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="19" data-part="2">
+        <h2 class="big-q">How humans change habitats 🏗</h2>
+        <div class="two-col">
+          <div>
+            <p>We <b>build</b> houses → fields become neighborhoods.</p>
+            <p>We <b>chop</b> forests → animals lose shelter.</p>
+            <p>We <b>dam</b> rivers → fish can't travel home.</p>
+            <p>We <b>pollute</b> → water and air poison plants and animals.</p>
+            <div class="callout animal"><b>Hard truth:</b> when we change habitats, local species must adapt, move, or die out.</div>
+          </div>
+          <div style="font-size:120px;text-align:center;">🏗🌲➡️🏙</div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="20" data-part="2">
+        <div class="beat mystery" id="mystery-20">
+          <span class="beat-badge">🕵️ MYSTERY #5 · THINK BEFORE YOU CLICK</span>
+          <h3>The Disappearing Meadow</h3>
+          <p>A flowery meadow was next to your school. This year they paved it into a parking lot. What happens to the butterflies and bees that lived there?</p>
+          <button class="reveal-btn" onclick="document.getElementById('mystery-20').classList.add('mystery-open')">🔍 Show answer</button>
+          <div class="mystery-answer">🎯 They lose their <b>habitat</b>. Butterflies and bees need flowers for food. No flowers = no food. They'll try to find another meadow nearby — but if there isn't one, they starve or migrate far. That's why even small <b>pockets of wild space</b> matter (backyard flower gardens, public parks, road medians with wildflowers). Every pocket helps local wildlife survive. What could YOU plant in your yard to help them?</div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="21" data-part="2">
+        <div class="beat mystery" id="mystery-21">
+          <span class="beat-badge">🕵️ MYSTERY #6 · THINK BEFORE YOU CLICK</span>
+          <h3>Why are zoos so hard?</h3>
+          <p>Why is it so tricky to keep animals healthy in zoos? A zookeeper can bring an elephant food and water. Isn't that enough?</p>
+          <button class="reveal-btn" onclick="document.getElementById('mystery-21').classList.add('mystery-open')">🔍 Show answer</button>
+          <div class="mystery-answer">🎯 <b>Food and water aren't enough</b>! Animals need the right <b>shelter, climate, social life, space, and enrichment</b>. Elephants are social — they need other elephants. Penguins need cold. Tigers need huge territories. Good zookeepers are habitat engineers: they try to match every single need, not just feeding. When a zoo does this right, animals thrive and even have babies. When they don't, animals get sick or die young. Zoos are much harder than they look!</div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="22" data-part="2">
+        <h2 class="big-q">🧠 Why can HUMANS live anywhere?</h2>
+        <div class="two-col">
+          <div>
+            <p class="lead">Polar bears only in the Arctic. Camels only in deserts. But humans? We live in the Arctic, the tropics, the desert, the mountains, even underwater (submarines)!</p>
+            <p>What's our trick? (Think before peeking 👀)</p>
+          </div>
+          <div class="callout"><b>Answer:</b> We CHANGE our habitat. We build houses with heating + cooling. We grow food far from where we live and ship it. We invent clothes for any climate. Animals must match the habitat — we reshape it. That's our superpower. And also our danger — we reshape habitats in ways that hurt everyone else.</div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="23" data-part="2">
+        <h2 class="big-q">✨ What you now know</h2>
+        <ul style="font-size:18px;">
+          <li>🔍 A <b>naturalist</b> can name the living things around them</li>
+          <li>📖 <b>Field guides</b> + observation skills = identification superpower</li>
+          <li>🌳 Trees: leaf shape, edge, arrangement, bark</li>
+          <li>🐦 Birds: size, color, sound, behavior</li>
+          <li>🐰 Every animal's <b>habitat</b> = food + water + shelter + climate</li>
+          <li>🌱 Every plant's <b>environment</b> = water + light + soil + climate</li>
+          <li>🏗 When humans change habitats, local species must adapt, move, or die</li>
+          <li>🧒 Humans are special: we change our habitat instead of matching it</li>
+        </ul>
+        <div class="callout"><b>🎁 Coming up next:</b> Chapter 8 — we'll crack what a "species" really is. Why are all dogs one species but oak trees are hundreds?</div>
+      </div>
+
+    </div>
+    <div class="slide-controls">
+      <button class="slide-btn ghost" onclick="prevSlide()" id="prevBtn">← Back</button>
+      <div class="slide-meta">
+        <span class="part-marker" id="partMarker">PART 1</span>
+        <span id="slideNum" class="small">Slide 1 / 23</span>
+        <div class="slide-progress"><div class="slide-progress-fill" id="slideProgress" style="width:0%"></div></div>
+        <button class="slide-btn ghost" onclick="enterPresentMode()" style="font-size:13px;padding:6px 12px;">🖥 Present</button>
+      </div>
+      <button class="slide-btn" onclick="nextSlide()" id="nextBtn">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- HOMEWORK -->
+<div class="tab-panel" id="panel-homework">
+  <div class="hw-intro"><h2 style="margin-top:0;">📓 Homework Missions</h2><p>This chapter's homework is real-world field work — get outside!</p><div class="small" id="hwConfigNote"></div></div>
+  <div class="hw-list" id="homework-list"></div>
+  <div class="q-card" style="text-align:center;"><h3>📤 Submit all homework</h3><input type="text" id="hw-student-name" placeholder="Your name" style="width:260px;padding:10px;border:2px solid #eee;border-radius:10px;font-size:15px;" /><div class="submit-row" style="justify-content:center;"><button class="btn success" onclick="submitHomework()">📤 Submit</button><button class="btn secondary" onclick="downloadHomework()">💾 Save as file</button></div><div id="hwSubmitMsg" class="small" style="margin-top:10px;"></div></div>
+</div>
+
+<!-- QUIZ -->
+<div class="tab-panel" id="panel-quiz">
+  <div id="quizStart" class="quiz-start"><div style="font-size: 80px;">🧠</div><h2>Ready for the Big Quiz?</h2><p class="lead" style="margin-left:auto;margin-right:auto;">30 questions about identifying living things + habitats.</p><input type="text" id="quiz-student-name" placeholder="Your name" style="width:260px;padding:10px;border:2px solid #eee;border-radius:10px;font-size:15px;margin:10px;" /><div><button class="btn success" onclick="startQuiz()">🚀 Start</button></div></div>
+  <div id="quizArea" class="hide"></div>
+  <div id="quizResult" class="hide"></div>
+</div>
+
+<!-- TEACHER -->
+<div class="tab-panel" id="panel-teacher">
+  <div class="hw-intro" style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;"><div style="flex:1;min-width:240px;"><h2 style="margin-top:0;">🧑‍🏫 Teacher Center</h2><p>Settings, API key, and submissions.</p></div><button class="btn ghost" onclick="signOutTeacher()">🔒 Sign out</button></div>
+  <div class="teacher-grid">
+    <div class="teacher-card"><h3>📚 Teacher Notes</h3><small>Lesson plan + answer keys</small><div style="margin-top:10px;"><a class="btn" href="chapter-b4a-teacher-notes.html" target="_blank">📖 Open Teacher Notes</a></div></div>
+    <div class="teacher-card"><h3>🔑 Claude API Key</h3><input type="password" id="apiKey" placeholder="sk-ant-..." /><div class="submit-row"><button class="btn" onclick="saveApiKey()">💾 Save</button></div><div class="small" id="apiStatus"></div></div>
+    <div class="teacher-card"><h3>📬 Submissions</h3><input type="email" id="teacherEmail" placeholder="teacher@example.com" /><input type="url" id="webhookUrl" placeholder="Formspree URL (optional)" /><div class="submit-row"><button class="btn" onclick="saveSubmitSettings()">💾 Save</button></div></div>
+    <div class="teacher-card" style="grid-column: span 2;"><h3>📥 Student submissions</h3><div id="submissionsTable"></div><div class="submit-row"><button class="btn" onclick="exportSubmissions()">💾 Export</button><button class="btn ghost" onclick="clearSubmissions()">🗑 Clear</button></div></div>
+  </div>
+</div>
+
+</div>
+
+<div class="present-bar" id="presentBar"><button onclick="prevSlide()">◀</button><span class="counter" id="presentCounter">1 / 23</span><button onclick="nextSlide()">▶</button><button class="exit" onclick="exitPresentMode()">✕ Exit</button></div>
+
+<div class="modal-back" id="modal"><div class="modal"><h3 id="modal-title">Hello</h3><div id="modal-body"></div><div class="submit-row" style="justify-content:flex-end;" id="modal-actions"></div></div></div>
+
+<script>
+const HOMEWORK = [
+  { icon:"🌳", title:"The 5-Tree Challenge", prompt:"Find 5 trees in your yard, park, or walking route. Use a field guide (book or app like PlantNet) to identify each. Write their names + one feature you used to ID.", placeholder:"1. ___ (feature: ___)\n2. ___ (feature: ___)..." },
+  { icon:"🐦", title:"Bird Feeder Week", prompt:"Set up a bird feeder where you can see it. For 7 days, write down every bird you see. Who's a regular? Who's a rare visitor?", placeholder:"Day 1 visitors: ___\nDay 2 visitors: ___..." },
+  { icon:"🏠", title:"My Pet's Habitat Needs", prompt:"Pick any animal (your pet, a zoo favorite, a wild animal nearby). List all 4 needs (food, water, shelter, climate) with specifics. What would happen if even ONE was missing?", placeholder:"Animal: ___\nFood: ___\nWater: ___\nShelter: ___\nClimate: ___\nIf missing: ___" },
+  { icon:"🌱", title:"Plant Environment Detective", prompt:"Pick 3 plants around you (a tree, a houseplant, a wildflower). For each, figure out: sun or shade? Wet or dry soil? Big or small? Write what you observed.", placeholder:"Plant 1: ...\nPlant 2: ...\nPlant 3: ..." },
+  { icon:"🗺", title:"Habitat Map of Your Street", prompt:"Draw a bird's-eye-view map of your street or block. Mark: habitats for wildlife (parks, gardens, trees) and habitat killers (roads, pavement, empty walls). What could be added to help?", placeholder:"Describe your map or upload a photo..." }
+];
+
+const QUIZ = [
+  { type:"mcq", diff:"easy", q:"What is a 'naturalist'?", choices:["Someone who teaches yoga","A person who can identify and name living things in nature","A nature photographer only","A farmer"], correct:1, feedback:["Different kind of natural!","Yes!","Photographers can be naturalists, but the core skill is identification.","Farmers grow, naturalists identify."] },
+  { type:"fill", diff:"easy", q:"A book with pictures of local trees, birds, or flowers that helps you identify them is called a ______ guide.", correctText:["field"], feedback:"Field guide — your naturalist superpower." },
+  { type:"mcq", diff:"easy", q:"Which is NOT one of the 4 basic needs of an animal?", choices:["Food","Water","Shelter","TV"], correct:3, feedback:["Animals need food.","Animals need water.","Animals need shelter.","Correct! Animals are fine without TV 😄"] },
+  { type:"mcq", diff:"easy", q:"Which 4 clues help you identify a TREE?", choices:["Leaf shape, leaf edge, branch arrangement, bark","Color, smell, taste, age","Height only","Nothing — trees are all the same"], correct:0, feedback:["Yes!","Taste is not a good idea!","Tall or short tells you little.","They're very different!"] },
+  { type:"fill", diff:"easy", q:"The combination of food, water, shelter, and climate that an animal needs is called its ______.", correctText:["habitat"], feedback:"Habitat! Where the animal can thrive." },
+  { type:"mcq", diff:"easy", q:"Plants need which of these MORE than animals do?", choices:["Meat","Sunlight","Bones","Sleep"], correct:1, feedback:["Plants don't eat meat.","Yes! Sunlight is plant food.","Plants don't have bones.","Not really applicable."] },
+  { type:"mcq", diff:"easy", q:"To watch a lot of birds easily, you should:", choices:["Chase them","Set up a feeder near a window","Lay very still all day","Put on a bird costume"], correct:1, feedback:["They'll fly away!","Yes! They'll come to you.","Maybe for some, but feeders work better.","😂 probably won't help."] },
+  { type:"fill", diff:"easy", q:"When a young bird looks different from the adults, we call it a ______.", correctText:["juvenile","young","baby"], feedback:"A juvenile! Worth knowing — confuses lots of new birders." },
+  { type:"scenario", diff:"medium", q:"You see a tree that looks like an oak but not quite. Both have lobed leaves, but yours has smooth edges and your friend's has pointed 'teeth'. What's going on?", choices:["They're different oak species — there are 600+","Your friend is lying","Oaks don't have pointed leaves ever","One of them is a fake tree"], correct:0, feedback:["Yes! Live oaks are smooth-lobed, red/white oaks have points. Both oaks, different species.","Your friend's probably right.","Many oak species have pointed lobes!","Not a fake tree!"] },
+  { type:"mcq", diff:"medium", q:"A fish guide book isn't helping you identify a fish. What's the most likely explanation?", choices:["All fish look the same","The guide is for a different region — this fish lives elsewhere","Fish books are a waste","You're looking at a rock"], correct:1, misconception:true, feedback:["⚠️ Very different!","Yes! Always use a local guide.","⚠️ They're essential for ID.","Possible but unlikely."] },
+  { type:"scenario", diff:"medium", q:"Your friend says 'all oaks are the same kind of tree.' What's wrong with this?", choices:["Nothing — they are the same","Oaks come in 600+ different SPECIES — only the genus is the same","Oaks aren't real trees","Oaks only grow in one country"], correct:1, feedback:["⚠️ Not true.","Yes! 'Oak' is the genus; each species is different.","⚠️ Oaks are real!","⚠️ Oaks grow worldwide."] },
+  { type:"fill", diff:"medium", q:"A ______ is a part-color specific feature that changes how you notice things in nature — it helps identify.", correctText:["field mark","mark","feature"], feedback:"A 'field mark' is the technical term — a distinctive feature that helps ID. Accepted: any answer mentioning mark or feature." },
+  { type:"mcq", diff:"medium", q:"A camel gets most of its water from:", choices:["Drinking from oases","Its food","Breathing in air","Rain directly"], correct:1, misconception:true, feedback:["Drinks some, but not main source.","Yes! Camels eat moist plants — the water's inside.","⚠️ Not from air.","⚠️ Deserts don't have much rain."] },
+  { type:"scenario", diff:"medium", q:"You try to grow a cactus in your wet shady basement. What will most likely happen and why?", choices:["It will thrive","It will rot — cacti need dry conditions and lots of light","It will turn into a different plant","Nothing"], correct:1, feedback:["Cacti hate shade and wet.","Yes! Cacti are adapted to dry, sunny conditions.","Plants don't transform!","Something definitely happens."] },
+  { type:"mcq", diff:"medium", q:"Which of these is a PLANT need, not an animal need?", choices:["Meat","Specific soil conditions","Shelter to raise babies","A mate"], correct:1, feedback:["Not a plant thing.","Yes — soil type matters a lot!","Plants don't 'raise' babies that way.","Plants reproduce but not through dating."] },
+  { type:"scenario", diff:"medium", q:"A neighborhood cuts down all its big old trees. Which local wildlife will suffer MOST?", choices:["Squirrels, owls, and woodpeckers (tree-dwellers)","Dogs","Fish","Ants in the sidewalk"], correct:0, feedback:["Yes! They lose their shelter AND food.","House pets are fine.","Fish don't live in trees.","Ants don't really live in trees."] },
+  { type:"mcq", diff:"medium", q:"Why might a zoo penguin be sad or sick in a tropical city's zoo?", choices:["Penguins hate the color green","Wrong climate — they're built for cold","Zoos have bad food","Penguins love the tropics"], correct:1, feedback:["No.","Yes! Penguins need cold. Good tropical zoos build cold exhibits.","Not the main issue.","They don't."] },
+  { type:"mcq", diff:"medium", q:"Which animal has a VERY narrow habitat?", choices:["Raccoon","Crow","Panda","Cockroach"], correct:2, feedback:["Raccoons live almost anywhere.","Crows live almost anywhere.","Yes! Pandas need specific mountain bamboo forests.","Cockroaches live almost anywhere."] },
+  { type:"scenario", diff:"hard", q:"You start a vegetable garden. First year: amazing. Second year: terrible. The soil, water, and sun are the same. What's a possible cause?", choices:["The garden is haunted","Same plants in the same soil for 2 years exhausted specific nutrients (plants have specific needs!)","Plants don't like humans","You grew too tall"], correct:1, feedback:["😄 Not the science answer!","Yes! 'Plant environment' includes soil NUTRIENTS. Different plants need different nutrients. Farmers call this 'crop rotation'.","Plants don't care.","😄 No."] },
+  { type:"scenario", diff:"hard", q:"An invasive species of plant arrives from another country and takes over a local meadow. Why might local butterflies struggle?", choices:["Butterflies dislike foreign plants culturally","Native butterflies evolved to eat specific native plants — the new plant isn't the right food","Butterflies don't eat plants","Butterflies like variety"], correct:1, feedback:["Plants don't have cultures.","Yes! Species are adapted to specific food plants — invasive plants often can't feed local wildlife.","Butterfly caterpillars eat plants.","Variety isn't the issue."] },
+  { type:"mcq", diff:"hard", q:"Conservationists trying to save a species often focus more on:", choices:["Breeding the animal in zoos","Protecting the animal's HABITAT","Making the animal smarter","Giving the animal vitamins"], correct:1, feedback:["Zoo breeding helps but isn't the big answer.","Yes! Habitat IS home, food, water, and climate all in one. Protect habitat = protect species.","Species evolve on their own.","Not the main fix."] },
+  { type:"open", diff:"hard", q:"A birder tells you 'I know 200 species by sight in my region.' That's impressive. Describe a 6-month plan to start YOUR own species-ID journey. What group would you pick first, and why?", feedback:"Expected ideas: pick ONE group that's accessible — usually trees (easy, don't move) OR birds (motivated by feeder). Get one local field guide. Start with 5 species this month. Press leaves, take photos. Keep a running list. Add 5 more next month. After 6 months, 30 species known by sight is possible. Optional: use apps like Merlin Bird ID, iNaturalist, or PlantNet." },
+  { type:"experiment", diff:"hard", q:"HANDS-ON: Put birdseed in a small dish OUTSIDE and in the SAME dish INSIDE (near an open window). After 3 days, which gets visited? Write your observation — what does this tell you about habitat needs?", feedback:"Outside gets way more visits. Why? Birds want escape routes and safety. Inside = trapped feeling, predators can corner them. Habitat isn't just 'food available' — it's 'safe place to get food'. Good wildlife-friendly yards give birds cover (bushes, trees) near feeders." },
+  { type:"scenario", diff:"hard", q:"Your classroom's African violet plant dies no matter what. It was by a sunny south-facing window. You watered it often. What might be wrong?", choices:["Too much water AND too much direct sun — African violets like bright indirect light and moderate moisture","Plants hate being indoors","You weren't talking to it enough","It was too old"], correct:0, misconception:true, feedback:["Yes! Matching environmental needs is precise.","⚠️ Many houseplants thrive inside.","⚠️ Not scientific — plants don't hear you.","Possible but specific environment mismatch is likely."] },
+  { type:"mcq", diff:"hard", q:"A scientist studying habitats notices a local frog species' population is crashing. What question should she ask FIRST?", choices:["What color are the frogs?","What habitat changes happened here recently?","Do the frogs exercise enough?","Are the frogs happy?"], correct:1, feedback:["Not useful.","Yes! Habitat loss is the #1 cause of wildlife decline.","Frogs naturally exercise.","We can't really measure frog happiness easily."] },
+  { type:"open", diff:"hard", q:"You want to turn your backyard into a 'wildlife habitat'. Describe 4 specific changes you could make, matching the 4 habitat needs (food, water, shelter, climate).", feedback:"Strong answer includes:\n- Food: plant native flowers + fruit trees + avoid pesticides\n- Water: add a small dish / bird bath / small pond\n- Shelter: leave brush piles + plant dense bushes + put up nest boxes\n- Climate: don't need to change climate, but create microclimates (shade spots, sunny spots, sheltered corners for insects)." },
+  { type:"scenario", diff:"boss", q:"A small Pacific island has only one bird species that eats only one insect, and that insect eats only one plant. A storm wipes out 90% of the plant. Describe the chain of events over the next year.", choices:[
+    "Plant population drops → insect runs out of food → insect population drops → bird runs out of food → bird population drops. If plant doesn't recover, all 3 species could go extinct together.",
+    "All 3 species flourish",
+    "The storm will bring new species",
+    "Nothing changes"], correct:0, feedback:[
+    "Yes! This is called a 'trophic cascade' — dependent species fall together. Biodiversity matters because it provides backup food sources.",
+    "Opposite of what happens.",
+    "Possible but secondary.",
+    "Something must change."] },
+  { type:"open", diff:"boss", q:"Why might species with VERY specialized habitats (like pandas) be more at risk from climate change than species with broad habitats (like raccoons)? Explain using what you've learned about habitats and adaptation. (4–5 sentences.)", scenario:"Think about what 'specialized habitat' means when conditions shift.", feedback:"Specialized species depend on very specific conditions. Pandas need bamboo, which needs specific temperature + rainfall + elevation. If climate change shifts those conditions even slightly, the bamboo forests shrink or move. Pandas can't just move with them — they'd hit human development, roads, or unsuitable land. Raccoons, in contrast, eat nearly anything and live almost anywhere. When one food source fails, they switch. When one habitat fails, they move or adapt. Generalists tend to survive changes; specialists can vanish. This is why biologists worry about highly specialized species (koalas, snow leopards, mountain pygmy possums) far more than generalists." },
+  { type:"scenario", diff:"boss", q:"You're designing a new housing development. An environmental expert says 'leave wildlife corridors.' What are they, and why would YOU want them in YOUR neighborhood?", choices:[
+    "Strips of wild land connecting wild areas so animals can travel safely between them — important for genetic diversity and local wildlife survival",
+    "Hallways inside houses for pets",
+    "Roads for only wild animals",
+    "Another word for sidewalks"], correct:0, feedback:[
+    "Yes! Wildlife corridors let species move, mate, and find food. Real benefit to YOU: more birds, butterflies, and wildlife in your area — plus healthier ecosystem services (pollination, pest control, flood prevention).",
+    "Not outdoors.",
+    "Roads hurt wildlife!",
+    "Sidewalks are for humans."] },
+  { type:"open", diff:"boss", q:"BIG FINAL QUESTION: You're a detective. A forest is dying — trees brown, no birds. You need to find the cause. Describe the investigation you'd run step-by-step, using what you've learned about habitats, needs, and environmental factors. (5+ sentences.)", feedback:"Strong investigation:\n1. Check WATER: is the stream flowing normally? Has rainfall changed? Are there new dams or diversions?\n2. Check SOIL: test for pollution (nearby factory? road runoff?). Check nutrient levels.\n3. Check AIR: any recent nearby development releasing fumes? Acid rain?\n4. Check CLIMATE: has the region warmed or changed weather patterns?\n5. Check INVASIVE SPECIES: any new plants, insects, or diseases?\n6. Talk to locals: when did problems start? What happened before then?\n7. Compare to a HEALTHY nearby forest: what's different?\n\nThe detective principle: ecosystems fail when ONE habitat need is broken. Find the broken need by checking each systematically." }
+];
+
+let currentSlide = 1, TOTAL_SLIDES = 23;
+let quizIndex = 0, quizAnswers = {}, quizFlags = new Set(), quizStarted = false;
+let homework = {};
+let submissions = JSON.parse(localStorage.getItem('b4a_submissions') || '[]');
+let settings = JSON.parse(localStorage.getItem('b4a_settings') || '{}');
+let teacherMode = localStorage.getItem('b4a_teacher') === '1';
+
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
+  if (t.dataset.tab === 'teacher' && !teacherMode) return;
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(x => x.classList.remove('active'));
+  t.classList.add('active'); document.getElementById('panel-'+t.dataset.tab).classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}));
+
+function openTeacherLogin() {
+  if (teacherMode) { document.querySelector('.tab[data-tab="teacher"]').click(); return; }
+  openModal('🔒 Teacher Login', `<p>Password to unlock:</p><input type="password" id="teacherPwInput" placeholder="Password" autofocus /><p class="small">Default: <b>teacher</b> (or <b>sarah</b>)</p><div id="teacherPwMsg" class="small"></div>`, [{ label: '🔓 Unlock', cls: 'btn success', onClick: 'submitTeacherLogin()' }]);
+  setTimeout(() => { const i = document.getElementById('teacherPwInput'); if (i) i.onkeydown = e => { if (e.key === 'Enter') submitTeacherLogin(); }; }, 50);
+}
+function submitTeacherLogin() {
+  const pw = (document.getElementById('teacherPwInput') || {}).value || '';
+  if (pw === 'teacher' || pw === 'sarah') { teacherMode = true; localStorage.setItem('b4a_teacher', '1'); closeModal(); applyTeacherMode(); document.querySelector('.tab[data-tab="teacher"]').click(); showToast('✅ Unlocked'); }
+  else { const m = document.getElementById('teacherPwMsg'); if (m) m.innerHTML = '❌ Wrong password.'; }
+}
+function signOutTeacher() { if (!confirm('Sign out?')) return; teacherMode = false; localStorage.removeItem('b4a_teacher'); applyTeacherMode(); document.querySelector('.tab[data-tab="lesson"]').click(); }
+function applyTeacherMode() { const btn = document.getElementById('teacherToggle'); document.querySelectorAll('.teacher-only').forEach(x => x.classList.toggle('hide', !teacherMode)); btn.textContent = teacherMode ? '🔓 Teacher · open' : '🔒 Teacher'; btn.classList.toggle('teacher-badge', teacherMode); if (teacherMode) renderTeacher(); renderHomework(); }
+
+function allSlidesInOrder() { return Array.from(document.querySelectorAll('#slide-stage .slide')); }
+function showSlide(n) {
+  const slides = allSlidesInOrder(); TOTAL_SLIDES = slides.length;
+  currentSlide = Math.max(1, Math.min(TOTAL_SLIDES, n));
+  slides.forEach((s, i) => s.classList.toggle('active', i === currentSlide - 1));
+  document.getElementById('prevBtn').disabled = currentSlide === 1;
+  document.getElementById('nextBtn').textContent = currentSlide === TOTAL_SLIDES ? 'Finish 🎉' : 'Next →';
+  const active = slides[currentSlide - 1]; const part = active ? (active.dataset.part || '1') : '1';
+  const pm = document.getElementById('partMarker'); pm.className = 'part-marker p' + part; pm.textContent = 'PART ' + part;
+  document.getElementById('slideNum').textContent = `Slide ${currentSlide} / ${TOTAL_SLIDES}`;
+  document.getElementById('slideProgress').style.width = `${Math.round((currentSlide/TOTAL_SLIDES)*100)}%`;
+  const pc = document.getElementById('presentCounter'); if (pc) pc.textContent = `${currentSlide} / ${TOTAL_SLIDES}`;
+}
+function nextSlide() { if (currentSlide === TOTAL_SLIDES) { if (!document.body.classList.contains('presenting')) document.querySelector('.tab[data-tab="homework"]').click(); } else showSlide(currentSlide + 1); }
+function prevSlide() { showSlide(currentSlide - 1); }
+
+function enterPresentMode() { document.querySelector('.tab[data-tab="lesson"]').click(); document.body.classList.add('presenting'); try { (document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen).call(document.documentElement); } catch(e){} showSlide(currentSlide); }
+function exitPresentMode() { document.body.classList.remove('presenting'); try { if (document.fullscreenElement) document.exitFullscreen(); } catch(e){} }
+document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement) document.body.classList.remove('presenting'); });
+
+function renderHomework() {
+  const list = document.getElementById('homework-list'); list.innerHTML = '';
+  HOMEWORK.forEach((h, i) => { const c = document.createElement('div'); c.className='hw-card'; c.innerHTML = `<h3><span class="hw-num">${i+1}</span> ${h.icon} ${h.title}</h3><p>${h.prompt}</p><textarea placeholder="${h.placeholder||''}" oninput="homework[${i}]=this.value">${homework[i]||''}</textarea>`; list.appendChild(c); });
+  const note = document.getElementById('hwConfigNote'); if (settings.teacherEmail) note.textContent = '✓ Submits to ' + settings.teacherEmail; else note.textContent = '⚠️ Teacher: configure email in Teacher tab';
+}
+function homeworkPayload() { const n = document.getElementById('hw-student-name').value.trim(); const p = { type:'homework', chapter:'B-4A Identification', student:n, ts:new Date().toISOString(), answers:{} }; HOMEWORK.forEach((h,i)=>{p.answers[h.title]=homework[i]||'';}); return p; }
+async function submitHomework() { const p = homeworkPayload(); if (!p.student){alert('Name first!');return;} submissions.push(p); localStorage.setItem('b4a_submissions', JSON.stringify(submissions)); let sent=false; if (settings.webhookUrl) try{const r=await fetch(settings.webhookUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});sent=r.ok;}catch(e){} if (!sent && settings.teacherEmail) window.location.href=`mailto:${settings.teacherEmail}?subject=${encodeURIComponent('HW B-4A from '+p.student)}&body=${encodeURIComponent(JSON.stringify(p.answers,null,2))}`; document.getElementById('hwSubmitMsg').textContent = sent?'✅ Submitted!':(settings.teacherEmail?'📧 Email opened':'💾 Saved'); }
+function downloadHomework() { const p = homeworkPayload(); const b = new Blob([JSON.stringify(p, null, 2)], {type:'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `hw_B4A_${p.student||'student'}.json`; a.click(); }
+
+function startQuiz() { const n = document.getElementById('quiz-student-name').value.trim(); if (!n){alert('Name!');return;} quizIndex=0; quizAnswers={}; quizFlags=new Set(); quizStarted=true; document.getElementById('quizStart').classList.add('hide'); document.getElementById('quizArea').classList.remove('hide'); renderQuizLayout(); }
+function renderQuizLayout() { document.getElementById('quizArea').innerHTML = `<div class="quiz-layout"><div class="quiz-nav-sticky"><div class="quiz-navigator"><h4>📋 QUESTIONS</h4><div class="qn-grid" id="qnGrid"></div><div class="qn-legend"><span><span class="qn-dot answered"></span> done</span><span><span class="qn-dot wrong"></span> wrong</span><span><span class="qn-dot open"></span> open</span></div></div><div class="submit-row" style="margin-top:10px;"><button class="btn success" onclick="confirmFinishQuiz()">🏁 Finish</button></div></div><div id="quizMain"></div></div>`; renderQuizNav(); renderQ(); }
+function renderQuizNav() { const g = document.getElementById('qnGrid'); if (!g) return; g.innerHTML=''; QUIZ.forEach((q,i)=>{const b=document.createElement('button');b.className='qn';if(i===quizIndex)b.classList.add('current');const a=quizAnswers[i];if(a){if(a.type==='open'||a.type==='experiment')b.classList.add('open');else if(a.correct===true)b.classList.add('answered');else if(a.correct===false)b.classList.add('wrong');}if(quizFlags.has(i))b.classList.add('flagged');b.textContent=i+1;b.onclick=()=>{quizIndex=i;renderQuizNav();renderQ();};g.appendChild(b);}); }
+function renderQ() { const main = document.getElementById('quizMain'); if (!main) return; const q = QUIZ[quizIndex]; const ex = quizAnswers[quizIndex]; const isA = !!ex; const diffMap={easy:'WARM-UP',medium:'BRAIN-STRETCH',hard:'THINKER',boss:'BOSS LEVEL!'}; const scen = q.scenario?`<div class="q-scenario">${q.scenario}</div>`:''; let body=''; if (q.type==='mcq'||q.type==='scenario') body = `<div class="choice-list">${q.choices.map((c,i)=>{let k='choice';if(isA){if(i===q.correct)k+=' correct';else if(i===ex.selected)k+=' incorrect';}return `<button class="${k}" onclick="pick(${i})" ${isA?'disabled':''}>${String.fromCharCode(65+i)}. ${c}</button>`;}).join('')}</div>`; else if (q.type==='fill') { const v = ex?ex.raw:''; body = `<input type="text" id="fillInput" placeholder="Type…" value="${v.replace(/"/g,'&quot;')}" ${isA?'disabled':''} style="width:100%;padding:12px;font-size:16px;border:2px solid #eee;border-radius:10px;" onkeydown="if(event.key==='Enter')subFill()" />${isA?'':'<div class="submit-row"><button class="btn" onclick="subFill()">Submit</button></div>'}`; } else { const v = ex?ex.answer:''; body = `<textarea id="openInput" rows="4" ${isA?'disabled':''} style="width:100%;padding:12px;font-size:15px;border:2px solid #eee;border-radius:10px;">${v}</textarea>${isA?'':'<div class="submit-row"><button class="btn" onclick="subOpen()">Submit</button></div>'}`; } let fb=''; if (isA) { let cls='correct',lbl='✅ Nice!'; if (ex.type==='open'||ex.type==='experiment') { cls='info'; lbl='✨ Submitted!'; } else if (ex.correct===false) { cls='incorrect'; lbl='❌ Not quite.'; } let txt=''; if (q.type==='mcq'||q.type==='scenario') txt = q.feedback[ex.selected]||''; else if (q.type==='fill') txt = q.feedback; else txt = `Strong answer:<br><br>${(q.feedback||'').replace(/\n/g,'<br>')}`; fb = `<div class="q-feedback show ${cls}"><b>${lbl}</b> ${txt}</div>`; } const answered = Object.keys(quizAnswers).length; const pct = Math.round(((quizIndex+1)/QUIZ.length)*100); main.innerHTML = `<div class="quiz-progress"><span class="pill">Q ${quizIndex+1}/${QUIZ.length}</span><div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div><span class="small">${answered} done</span></div><div class="q-card"><div class="q-difficulty ${q.diff}">${diffMap[q.diff]}${q.misconception?' · 🚨':''}</div><div class="q-text">${q.q}</div>${scen}${body}${fb}<div class="q-controls"><div class="submit-row" style="margin:0;"><button class="btn ghost" onclick="prevQ()" ${quizIndex===0?'disabled':''}>← Prev</button><button class="btn secondary" onclick="skipQ()">Skip</button><button class="btn" onclick="nextQ()" ${quizIndex===QUIZ.length-1?'disabled':''}>Next →</button></div><button class="q-flag ${quizFlags.has(quizIndex)?'on':''}" onclick="flagQ()">${quizFlags.has(quizIndex)?'🚩 Flagged':'🏳 Flag'}</button></div></div>`; }
+function pick(i) { if (quizAnswers[quizIndex]) return; const q=QUIZ[quizIndex]; quizAnswers[quizIndex]={type:q.type,selected:i,correct:(i===q.correct)}; renderQuizNav(); renderQ(); }
+function subFill() { if (quizAnswers[quizIndex]) return; const q=QUIZ[quizIndex]; const raw=(document.getElementById('fillInput').value||'').trim(); if(!raw){alert('Type!');return;} const c=q.correctText.some(t=>raw.toLowerCase().includes(t.toLowerCase())); quizAnswers[quizIndex]={type:'fill',raw,correct:c}; renderQuizNav(); renderQ(); }
+function subOpen() { if (quizAnswers[quizIndex]) return; const q=QUIZ[quizIndex]; const a=(document.getElementById('openInput').value||'').trim(); if(a.length<5){alert('Try harder!');return;} quizAnswers[quizIndex]={type:q.type,answer:a,correct:null}; renderQuizNav(); renderQ(); }
+function prevQ() { if (quizIndex>0) { quizIndex--; renderQuizNav(); renderQ(); } }
+function nextQ() { if (quizIndex<QUIZ.length-1) { quizIndex++; renderQuizNav(); renderQ(); } }
+function skipQ() { if (quizIndex<QUIZ.length-1) quizIndex++; renderQuizNav(); renderQ(); }
+function flagQ() { if (quizFlags.has(quizIndex)) quizFlags.delete(quizIndex); else quizFlags.add(quizIndex); renderQuizNav(); renderQ(); }
+function confirmFinishQuiz() { const u=[]; for(let i=0;i<QUIZ.length;i++) if(!quizAnswers[i]) u.push(i+1); let h='<p>Finish?</p>'; if (u.length) h+=`<p class="small">⚠️ ${u.length} unanswered</p>`; openModal('🏁 Finish?', h, [{label:'Yes',cls:'btn success',onClick:'finishQuiz()'},{label:'Not yet',cls:'btn ghost',onClick:'closeModal()'}]); }
+async function finishQuiz() { closeModal(); const n = document.getElementById('quiz-student-name').value.trim(); const list = QUIZ.map((q,i)=>({q:q.q,...(quizAnswers[i]||{unanswered:true}),flagged:quizFlags.has(i)})); const auto = list.filter(a=>typeof a.correct==='boolean'); const ac = auto.filter(a=>a.correct).length; const oc = list.filter(a=>a.correct===null).length; const p = { type:'quiz', chapter:'B-4A', student:n, ts:new Date().toISOString(), autoCorrect:ac, autoTotal:auto.length, openCount:oc, answers:list }; submissions.push(p); localStorage.setItem('b4a_submissions', JSON.stringify(submissions)); let sent=false; if(settings.webhookUrl) try{const r=await fetch(settings.webhookUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)}); sent=r.ok;}catch(e){} const pct = auto.length?Math.round((ac/auto.length)*100):0; document.getElementById('quizArea').classList.add('hide'); document.getElementById('quizResult').classList.remove('hide'); const msg = pct===100?'🌟 PERFECT!':pct>=85?'🚀 Amazing!':pct>=70?'👏 Great!':pct>=50?'💪 Good effort!':'🌱 Keep growing!'; const emailLink = (!sent && settings.teacherEmail) ? `<a class="btn secondary" href="mailto:${settings.teacherEmail}?subject=${encodeURIComponent('Quiz B-4A from '+n)}&body=${encodeURIComponent(JSON.stringify(p,null,2))}">📧 Email teacher</a>` : ''; document.getElementById('quizResult').innerHTML = `<div class="quiz-result"><h2>${msg}</h2><div class="score-donut" style="--p:${pct}"><span>${ac}/${auto.length}</span></div>${oc?`<p>Plus ${oc} open answers.</p>`:''}<div class="submit-row" style="justify-content:center;">${emailLink}<button class="btn ghost" onclick="location.reload()">🔁 Retake</button></div></div>`; }
+
+function renderTeacher() { document.getElementById('apiKey').value = localStorage.getItem('b4a_apiKey') || ''; document.getElementById('apiStatus').textContent = localStorage.getItem('b4a_apiKey') ? '✓ Saved' : ''; document.getElementById('teacherEmail').value = settings.teacherEmail || ''; document.getElementById('webhookUrl').value = settings.webhookUrl || ''; const d = document.getElementById('submissionsTable'); if (!submissions.length) d.innerHTML='<p class="small">None yet.</p>'; else d.innerHTML = '<table class="submissions-table"><tr><th>When</th><th>Student</th><th>Type</th><th>Result</th></tr>' + submissions.map(s=>`<tr><td>${new Date(s.ts).toLocaleString()}</td><td>${s.student||'?'}</td><td>${s.type}</td><td>${s.type==='quiz'?s.autoCorrect+'/'+s.autoTotal:Object.values(s.answers||{}).filter(Boolean).length+' ans'}</td></tr>`).join('') + '</table>'; }
+function saveApiKey() { localStorage.setItem('b4a_apiKey', document.getElementById('apiKey').value.trim()); document.getElementById('apiStatus').textContent = '✓ Saved'; }
+function saveSubmitSettings() { settings.teacherEmail = document.getElementById('teacherEmail').value.trim(); settings.webhookUrl = document.getElementById('webhookUrl').value.trim(); localStorage.setItem('b4a_settings', JSON.stringify(settings)); openModal('✅ Saved','<p>Settings saved.</p>'); renderHomework(); }
+function exportSubmissions() { const b = new Blob([JSON.stringify(submissions, null, 2)], {type:'application/json'}); const a = document.createElement('a'); a.href=URL.createObjectURL(b); a.download='submissions_B4A.json'; a.click(); }
+function clearSubmissions() { if(confirm('Clear?')){submissions=[];localStorage.removeItem('b4a_submissions');renderTeacher();} }
+
+function openModal(title, body, actions) { document.getElementById('modal-title').textContent=title; document.getElementById('modal-body').innerHTML=body; const ab=document.getElementById('modal-actions'); ab.innerHTML=''; (actions||[]).forEach(a=>{const b=document.createElement('button');b.className=a.cls||'btn';b.textContent=a.label;b.setAttribute('onclick',a.onClick);ab.appendChild(b);}); const c=document.createElement('button');c.className='btn ghost';c.textContent='Close';c.setAttribute('onclick','closeModal()');ab.appendChild(c); document.getElementById('modal').classList.add('show'); }
+function closeModal() { document.getElementById('modal').classList.remove('show'); }
+document.getElementById('modal').addEventListener('click', e => { if (e.target.id==='modal') closeModal(); });
+function showToast(msg) { let t=document.getElementById('toast'); if(!t){t=document.createElement('div');t.id='toast';t.style.cssText='position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 22px;border-radius:999px;font-weight:700;z-index:200;';document.body.appendChild(t);} t.textContent=msg; setTimeout(()=>t.style.opacity='0',2800); }
+
+showSlide(1); renderHomework(); applyTeacherMode();
+document.addEventListener('keydown', e => { if (!document.getElementById('panel-lesson').classList.contains('active')) return; if (e.target.matches('input, textarea')) return; if (e.key==='ArrowRight') nextSlide(); if (e.key==='ArrowLeft') prevSlide(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chapter B-6 · Skeleton &amp; Muscle System · Science Adventure</title>
+<style>
+:root{--bg:#fff8f0;--ink:#1f2a44;--ink-soft:#4a5472;--paper:#fff;--sun:#ffb703;--leaf:#2a9d8f;--leaf-dark:#1f7a70;--animal:#e76f51;--sky:#8ecae6;--sky-dark:#219ebc;--berry:#c7477a;--shadow:0 10px 30px rgba(30,40,70,.12);--shadow-sm:0 4px 12px rgba(30,40,70,.08);--radius:18px;--font-display:"Fredoka",sans-serif;--font-body:"Nunito",sans-serif}
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap');
+*{box-sizing:border-box}html,body{margin:0;padding:0}
+body{font-family:var(--font-body);color:var(--ink);line-height:1.55;min-height:100vh;background:radial-gradient(1200px 600px at 10% -10%,#ffe8c4 0%,transparent 60%),radial-gradient(900px 500px at 110% 10%,#cdeadf 0%,transparent 60%),var(--bg)}
+h1,h2,h3{font-family:var(--font-display);margin:0 0 .4em}h1{font-size:clamp(28px,4vw,48px);line-height:1.1}h2{font-size:clamp(22px,3vw,34px)}p{margin:0 0 1em}button{font-family:inherit;cursor:pointer}a{color:var(--sky-dark)}
+.topnav{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:16px;padding:12px 22px;background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid #eee}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:700;font-size:20px}
+.brand .logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--sun),var(--animal));display:grid;place-items:center;color:#fff;font-size:22px}
+.nav-spacer{flex:1}.nav-btn{border:1px solid #e5e5e5;background:#fff;border-radius:999px;padding:8px 14px;font-weight:700;color:var(--ink-soft)}.nav-btn:hover{background:#fafafa}
+.teacher-badge{background:var(--berry);color:#fff;border-color:var(--berry)}
+.container{max-width:1180px;margin:0 auto;padding:26px 22px 80px}
+.chapter-header{background:var(--paper);border-radius:var(--radius);padding:22px 26px;box-shadow:var(--shadow);margin-bottom:18px}
+.chapter-meta{display:flex;gap:14px;align-items:center;flex-wrap:wrap;color:var(--ink-soft);font-size:14px}
+.pill{display:inline-block;padding:4px 10px;background:#f3efe9;border-radius:999px;font-weight:700;font-size:12px;color:var(--ink-soft)}
+.parts-preview{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}
+.parts-preview .pp{background:#fafaf4;border-radius:10px;padding:10px 12px;font-size:13px;border-left:4px solid var(--sun)}
+.parts-preview .pp.p2{border-color:var(--leaf)}
+.parts-preview .pp b{display:block;font-family:var(--font-display);color:var(--ink);font-size:14px}
+@media (max-width:700px){.parts-preview{grid-template-columns:1fr}}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;background:var(--paper);padding:8px;border-radius:14px;box-shadow:var(--shadow-sm);margin-bottom:18px;position:sticky;top:62px;z-index:40}
+.tab{border:none;background:transparent;padding:10px 16px;border-radius:10px;font-weight:800;color:var(--ink-soft)}
+.tab.active{background:var(--ink);color:#fff}.tab:not(.active):hover{background:#f3f0ea}
+.tab-panel{display:none}.tab-panel.active{display:block}
+.slide-wrap{background:var(--paper);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.slide-stage{padding:40px 46px;min-height:520px;position:relative;overflow:hidden}
+.slide{display:none;animation:fade .35s ease;position:relative}.slide.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.slide-controls{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 20px;border-top:1px solid #eee;background:#fcfbf7;flex-wrap:wrap}
+.slide-btn{background:var(--ink);color:#fff;border:none;padding:10px 18px;border-radius:10px;font-weight:800}
+.slide-btn.ghost{background:transparent;color:var(--ink-soft)}.slide-btn:disabled{opacity:.4;cursor:not-allowed}
+.slide-meta{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink-soft);flex-wrap:wrap}
+.part-marker{font-weight:800;font-family:var(--font-display);padding:4px 12px;border-radius:999px;font-size:12px;letter-spacing:.05em}
+.part-marker.p1{background:#fff3d6;color:#9a6a00}.part-marker.p2{background:#dff3ed;color:var(--leaf-dark)}
+.slide-progress{flex:1;min-width:140px;max-width:360px;height:8px;background:#eee;border-radius:999px;overflow:hidden;margin:0 6px}
+.slide-progress-fill{height:100%;background:linear-gradient(90deg,var(--sun),var(--animal));transition:width .3s}
+.big-q{font-family:var(--font-display);font-size:clamp(28px,4vw,44px);line-height:1.15;margin:0 0 14px}
+.lead{font-size:18px;color:var(--ink-soft);max-width:720px}
+.callout{background:#fff8e6;border-left:5px solid var(--sun);padding:14px 18px;border-radius:10px;margin:14px 0}
+.callout.leaf{background:#eaf7f2;border-color:var(--leaf)}.callout.animal{background:#fdefe9;border-color:var(--animal)}.callout.sky{background:#e6f4fb;border-color:var(--sky-dark)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:center}
+@media (max-width:760px){.two-col{grid-template-columns:1fr}}
+.part-banner{text-align:center;padding:20px 10px;border-radius:14px}
+.part-banner.p1{background:linear-gradient(135deg,#ffecb3,#fff6e0)}.part-banner.p2{background:linear-gradient(135deg,#d6efe7,#f0faf6)}
+.part-banner .pb-pill{display:inline-block;padding:6px 16px;background:rgba(0,0,0,.08);border-radius:999px;font-family:var(--font-display);font-weight:700;font-size:13px;letter-spacing:.1em;margin-bottom:16px}
+.part-banner h1{font-size:clamp(36px,6vw,64px);margin:6px 0}
+.part-banner .pb-sub{font-size:20px;color:var(--ink-soft);max-width:640px;margin:0 auto 20px}
+.part-banner .pb-meta{display:inline-flex;flex-wrap:wrap;gap:10px;justify-content:center;font-size:14px;color:var(--ink-soft);background:rgba(255,255,255,.7);padding:10px 16px;border-radius:999px}
+.part-banner .pb-emoji{font-size:100px;margin:10px 0}
+.video-wrap{background:#111;border-radius:14px;overflow:hidden;max-width:800px;margin:10px auto}
+.video-ratio{position:relative;width:100%;padding-top:56.25%}
+.video-ratio iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+.video-caption{background:#f8f4ec;padding:10px 14px;border-radius:10px;margin-top:10px;font-size:14px}
+.video-edit-row{display:flex;justify-content:space-between;align-items:center;margin-top:12px;flex-wrap:wrap;gap:10px}
+.beat{background:linear-gradient(180deg,#fffbf4,#fff);border-radius:14px;padding:20px;border:2px dashed #f0d9a6;margin:14px 0}
+.beat .beat-badge{display:inline-block;font-family:var(--font-display);font-weight:800;letter-spacing:.05em;font-size:12px;padding:4px 12px;border-radius:999px;margin-bottom:10px}
+.beat.activity .beat-badge{background:var(--sun);color:#fff}.beat.mystery .beat-badge{background:var(--berry);color:#fff}
+.mystery-answer{margin-top:10px;padding:12px;background:#f2faf5;border-radius:10px;border-left:4px solid var(--leaf);display:none}
+.mystery-open .mystery-answer{display:block}
+.reveal-btn{margin-top:10px;background:var(--berry);color:#fff;border:none;padding:10px 16px;border-radius:10px;font-weight:800}
+.mystery-open .reveal-btn{display:none}
+.reveal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:14px}
+.reveal-card{background:#fff;border-radius:14px;padding:16px;box-shadow:var(--shadow-sm);cursor:pointer;min-height:140px;border:2px solid #eee}
+.reveal-card .back{display:none}.reveal-card.open .front{display:none}.reveal-card.open .back{display:block}
+.reveal-card.open{background:linear-gradient(180deg,#fff9ea,#fff);border-color:var(--sun)}
+.session-break{background:linear-gradient(135deg,#fff5e0,#fff0d6);border-radius:14px;padding:16px 20px;margin-top:18px;border-left:6px solid var(--sun);display:flex;gap:14px;align-items:center}
+.session-break .icon{font-size:40px}.session-break h4{margin:0 0 4px;font-family:var(--font-display)}.session-break p{margin:0;font-size:14px;color:var(--ink-soft)}
+.teacher-note{margin-top:14px}
+.teacher-note summary{display:inline-flex;align-items:center;gap:6px;cursor:pointer;background:#fff4e1;border:1.5px solid #f3d48a;color:#8f6a15;padding:6px 14px;border-radius:999px;font-weight:700;font-size:13px;list-style:none}
+.teacher-note summary::-webkit-details-marker{display:none}
+.teacher-note .note-body{background:#fffbe6;border:1.5px solid #f3d48a;border-radius:12px;padding:12px 14px;font-size:14px;margin-top:8px;max-width:600px}
+.hw-intro{background:linear-gradient(135deg,#e9f6fd,#fff);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-sm);margin-bottom:16px}
+.hw-list{display:grid;gap:14px}
+.hw-card{background:var(--paper);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:20px;border-left:6px solid var(--sky-dark)}
+.hw-card h3{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.hw-num{width:34px;height:34px;border-radius:50%;background:var(--sky-dark);color:#fff;display:grid;place-items:center;font-family:var(--font-display);font-weight:800}
+.hw-card textarea{width:100%;border:2px solid #eee;border-radius:10px;padding:10px;font-family:inherit;font-size:15px;margin-top:6px;min-height:80px;resize:vertical}
+.btn{border:none;background:var(--ink);color:#fff;padding:10px 18px;border-radius:10px;font-weight:800;font-family:inherit}
+.btn.secondary{background:#fff;color:var(--ink);border:2px solid var(--ink)}.btn.success{background:var(--leaf)}.btn.warn{background:var(--animal)}
+.btn.ghost{background:transparent;color:var(--ink-soft);border:2px solid #eee}.btn.small{padding:6px 12px;font-size:13px}
+.submit-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;align-items:center}
+.quiz-start{background:linear-gradient(135deg,#fff0e0,#e8f7ef);border-radius:var(--radius);padding:26px;box-shadow:var(--shadow);text-align:center}
+.quiz-layout{display:grid;grid-template-columns:230px 1fr;gap:18px;align-items:start}
+@media (max-width:820px){.quiz-layout{grid-template-columns:1fr}}
+.quiz-nav-sticky{position:sticky;top:130px}
+.quiz-navigator{background:var(--paper);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow-sm)}
+.qn-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-bottom:10px}
+.qn{aspect-ratio:1;border-radius:6px;border:2px solid #eee;background:#fafaf4;color:var(--ink-soft);font-weight:800;font-size:12px;cursor:pointer;display:grid;place-items:center;padding:0;position:relative}
+.qn.current{border-color:var(--ink);box-shadow:0 0 0 2px rgba(31,42,68,.2);color:var(--ink)}
+.qn.answered{background:#e9f7ef;border-color:var(--leaf);color:var(--leaf-dark)}
+.qn.wrong{background:#fde8e1;border-color:var(--animal);color:var(--animal)}
+.qn.open{background:#eef7fc;border-color:var(--sky-dark);color:var(--sky-dark)}
+.qn.flagged::after{content:"🚩";position:absolute;top:-4px;right:-4px;font-size:10px}
+.qn-legend{font-size:11px;color:var(--ink-soft);padding-top:8px;margin-top:4px;border-top:1px solid #eee}
+.qn-legend span{display:inline-flex;align-items:center;gap:4px;margin-right:10px}
+.qn-dot{width:10px;height:10px;border-radius:3px;background:#fafaf4;border:1.5px solid #eee;display:inline-block}
+.qn-dot.answered{background:#e9f7ef;border-color:var(--leaf)}.qn-dot.wrong{background:#fde8e1;border-color:var(--animal)}.qn-dot.open{background:#eef7fc;border-color:var(--sky-dark)}
+.quiz-progress{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.progress-bar{flex:1;height:10px;background:#eee;border-radius:999px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--sun),var(--animal));transition:width .3s}
+.q-card{background:var(--paper);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);margin-bottom:16px}
+.q-difficulty{font-size:12px;font-weight:800;letter-spacing:.1em;margin-bottom:6px}
+.q-difficulty.easy{color:var(--leaf)}.q-difficulty.medium{color:var(--sun)}.q-difficulty.hard{color:var(--animal)}.q-difficulty.boss{color:var(--berry)}
+.q-text{font-family:var(--font-display);font-size:20px;margin:4px 0 16px}
+.q-scenario{background:#f8f4ec;padding:12px 14px;border-radius:10px;font-style:italic;margin-bottom:12px}
+.choice-list{display:grid;gap:8px}
+.choice{border:2px solid #eee;background:#fff;padding:12px 14px;border-radius:12px;text-align:left;font-weight:700;font-size:15px}
+.choice:hover:not(:disabled){border-color:var(--ink-soft)}
+.choice.correct{border-color:var(--leaf);background:#e9f7ef}.choice.incorrect{border-color:var(--animal);background:#fde8e1}
+.q-feedback{margin-top:12px;padding:12px 14px;border-radius:10px;display:none;font-size:15px}
+.q-feedback.show{display:block}
+.q-feedback.correct{background:#e9f7ef;border-left:4px solid var(--leaf)}
+.q-feedback.incorrect{background:#fde8e1;border-left:4px solid var(--animal)}
+.q-feedback.info{background:#eef7fc;border-left:4px solid var(--sky-dark)}
+.q-controls{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px}
+.q-flag{background:transparent;border:2px solid #eee;padding:8px 12px;border-radius:10px;font-weight:700;color:var(--ink-soft)}
+.q-flag.on{background:#fef0f5;border-color:var(--berry);color:var(--berry)}
+.quiz-result{background:var(--paper);border-radius:var(--radius);padding:30px;box-shadow:var(--shadow);text-align:center}
+.score-donut{width:160px;height:160px;border-radius:50%;margin:20px auto;display:grid;place-items:center;font-family:var(--font-display);font-size:40px;background:conic-gradient(var(--leaf) calc(var(--p,0)*1%),#eee 0);position:relative}
+.score-donut::after{content:"";position:absolute;inset:14px;border-radius:50%;background:#fff}
+.score-donut span{position:relative;z-index:1;color:var(--ink);font-weight:800}
+.teacher-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+.teacher-card{background:var(--paper);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-sm);border-top:6px solid var(--berry)}
+.teacher-card h3{display:flex;gap:8px;align-items:center;font-family:var(--font-display)}
+.teacher-card small{color:var(--ink-soft)}
+.teacher-card input{width:100%;padding:10px;border:2px solid #eee;border-radius:10px;font-family:inherit;font-size:14px;margin-top:6px}
+.submissions-table{width:100%;border-collapse:collapse;font-size:14px}
+.submissions-table th,.submissions-table td{text-align:left;padding:8px;border-bottom:1px solid #eee}
+.modal-back{position:fixed;inset:0;background:rgba(20,25,40,.5);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+.modal-back.show{display:flex}
+.modal{background:#fff;border-radius:var(--radius);padding:24px;max-width:520px;width:100%;box-shadow:var(--shadow)}
+.modal input{width:100%;padding:10px;border:2px solid #eee;border-radius:10px;margin:6px 0 10px}
+body.presenting{background:#0f1419}
+body.presenting .topnav,body.presenting .chapter-header,body.presenting .tabs,body.presenting .slide-controls{display:none!important}
+body.presenting .container{max-width:none;padding:0}
+body.presenting .tab-panel{display:none}body.presenting #panel-lesson{display:block}
+body.presenting .slide-wrap{position:fixed;inset:0;border-radius:0;box-shadow:none;background:linear-gradient(135deg,#fff 0%,#fdf7ec 100%);z-index:999;overflow:hidden}
+body.presenting .slide-stage{padding:0;min-height:100vh;height:100vh;display:block;overflow:hidden}
+body.presenting .slide.active{display:flex;flex-direction:column;justify-content:center;width:100%;height:100vh;padding:5vh 7vw;gap:1em;overflow-y:auto;position:relative}
+body.presenting .slide.active>*{width:100%;max-width:1600px;margin-left:auto;margin-right:auto}
+body.presenting .big-q{font-size:clamp(44px,5.2vw,82px);line-height:1.08}
+body.presenting .lead{font-size:clamp(22px,2.4vw,34px)}
+body.presenting p,body.presenting li{font-size:clamp(18px,1.7vw,24px)}
+body.presenting .callout{font-size:clamp(20px,2vw,28px);padding:20px 26px}
+body.presenting .part-banner{position:absolute;inset:0;width:100vw;height:100vh;max-width:none;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6vh 4vw;border-radius:0;z-index:1}
+body.presenting .part-banner h1{font-size:clamp(72px,9vw,160px);line-height:.95}
+body.presenting .part-banner .pb-emoji{font-size:clamp(110px,13vw,200px)}
+body.presenting .part-banner .pb-sub{font-size:clamp(26px,2.8vw,44px);max-width:1100px}
+body.presenting .beat{padding:5vh 6vw;border-radius:24px;border-width:3px;min-height:65vh;display:flex;flex-direction:column;justify-content:center}
+body.presenting .beat h3{font-size:clamp(40px,4vw,64px)}
+body.presenting .beat p,body.presenting .beat li{font-size:clamp(22px,2vw,30px)}
+body.presenting .reveal-grid{grid-template-columns:repeat(auto-fit,minmax(min(420px,100%),1fr));gap:26px}
+body.presenting .reveal-card{min-height:220px;padding:32px;font-size:1.25em}
+body.presenting .reveal-card b{font-size:clamp(26px,2.4vw,36px);display:block;margin-bottom:10px}
+body.presenting .video-wrap{max-width:min(1200px,88vw)}
+.present-bar{display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(20,25,40,.92);color:#fff;padding:10px 18px;border-radius:999px;gap:10px;align-items:center;z-index:1000;backdrop-filter:blur(10px);opacity:.4}
+body.presenting .present-bar{display:flex}
+.present-bar:hover{opacity:1}
+.present-bar button{background:transparent;border:1px solid rgba(255,255,255,.2);color:#fff;padding:6px 12px;border-radius:999px;font-weight:700}
+.present-bar .counter{font-weight:700;padding:0 8px}
+.present-bar .exit{background:var(--animal);border-color:var(--animal)}
+.hide{display:none!important}.small{font-size:13px;color:var(--ink-soft)}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="brand"><span class="logo">🔬</span> Science Adventure</div>
+  <span class="pill">Chapter 16 · B-6</span>
+  <div class="nav-spacer"></div>
+  <button class="nav-btn" onclick="window.location.href='index.html'">🏠 Home</button>
+  <button class="nav-btn" onclick="enterPresentMode()">🖥 Present</button>
+  <button class="nav-btn" id="teacherToggle" onclick="openTeacherLogin()">🔒 Teacher</button>
+  <button class="nav-btn teacher-only hide" onclick="signOutTeacher()" style="color:var(--animal);border-color:#fdcbbd;">🔒 Exit</button>
+</nav>
+
+<div class="container">
+
+<div class="chapter-header">
+  <div class="chapter-meta">
+    <span class="pill">Lesson B-6</span>
+    <span class="pill" style="background:#eaf7f2;color:var(--leaf-dark);">Life Science</span>
+    <span class="pill">⏱ ~1.5 hours · 2 sessions</span>
+  </div>
+  <h1 style="margin:10px 0 4px;">🦴 How Animals Move I: Skeleton &amp; Muscles 💪</h1>
+  <p class="lead">Right now, even sitting still, you're held up by 206 bones and powered by over 600 muscles. They work together so you can wave, walk, blink — even read this. Today we crack the inside story.</p>
+  <div class="parts-preview">
+    <div class="pp"><b>📅 Session 1 · The Skeleton · ~45 min</b>What bones do. Why we need them. The big bones to know.</div>
+    <div class="pp p2"><b>📅 Session 2 · The Muscles · ~50 min</b>How muscles pull bones. Why exercise makes muscles stronger. Smooth muscles you don't control.</div>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" data-tab="lesson">🎬 Lesson</button>
+  <button class="tab" data-tab="homework">📓 Homework</button>
+  <button class="tab" data-tab="quiz">🧠 Quiz</button>
+  <button class="tab teacher-only hide" data-tab="teacher">🧑‍🏫 Teacher</button>
+</div>
+
+<div class="tab-panel active" id="panel-lesson">
+  <div class="slide-wrap">
+    <div class="slide-stage" id="slide-stage">
+
+      <div class="slide active" data-slide="1" data-part="1">
+        <div class="part-banner p1"><span class="pb-pill">SESSION 1 · PART 1 OF 2</span><div class="pb-emoji">🦴 💀 🦴</div><h1>The Skeleton</h1><p class="pb-sub">A living scaffolding inside you. Stronger than steel for its weight.</p><div class="pb-meta">🎬 1 video · 🕵️ 3 mysteries · 🦴 Bone hunt</div></div>
+      </div>
+
+      <div class="slide" data-slide="2" data-part="1">
+        <div class="two-col">
+          <div>
+            <p class="pill">🔭 Today's puzzle</p>
+            <h2 class="big-q">If you took out ALL your bones, what would you look like?</h2>
+            <p class="lead">A weird question — but it tells us what bones DO. Without bones, you'd be a floppy bag of skin and muscle. You couldn't sit up. You couldn't move.</p>
+            <div class="callout">🤔 <b>Today's mission:</b> figure out what bones (and later, muscles) do to make our bodies WORK.</div>
+          </div>
+          <div style="font-size:140px;text-align:center;">💀</div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="3" data-part="1">
+        <h2 class="big-q">🦴 What does a skeleton do?</h2>
+        <div class="reveal-grid">
+          <div class="reveal-card open"><div class="back"><b>🏗 SHAPE</b><br>Holds your body up. Without it, you'd be a puddle.</div></div>
+          <div class="reveal-card open"><div class="back"><b>🛡 PROTECTION</b><br>Skull guards brain. Ribs guard heart and lungs. Spine guards spinal cord.</div></div>
+          <div class="reveal-card open"><div class="back"><b>🤸 MOVEMENT</b><br>Bones are levers. Muscles pull them to move you.</div></div>
+          <div class="reveal-card open"><div class="back"><b>🩸 BLOOD MAKER</b><br>Inside big bones, marrow makes new blood cells daily!</div></div>
+        </div>
+        <div class="callout"><b>🔑 Bones are alive!</b> They grow, heal when broken, and make blood. Not dead like a Halloween skeleton in a movie.</div>
+      </div>
+
+      <div class="slide" data-slide="4" data-part="1">
+        <h2 class="big-q">🔢 By the Numbers</h2>
+        <div class="reveal-grid">
+          <div class="reveal-card open"><div class="back"><b>👶 Babies have</b><br>~270 bones (some fuse together as they grow)</div></div>
+          <div class="reveal-card open"><div class="back"><b>🧒 Adults have</b><br>206 bones</div></div>
+          <div class="reveal-card open"><div class="back"><b>🦶 1 in 4 of YOUR bones</b><br>Are in your FEET. (52 bones in two feet alone!)</div></div>
+          <div class="reveal-card open"><div class="back"><b>👂 The smallest bone</b><br>Is in your EAR — smaller than a grain of rice (the stapes)</div></div>
+          <div class="reveal-card open"><div class="back"><b>🦵 The biggest bone</b><br>Is your femur (thigh bone) — and it's stronger than concrete!</div></div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="5" data-part="1">
+        <h2 class="big-q">🗺 The Big Bones to Know</h2>
+        <div class="reveal-grid">
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>💀 Skull</b></div><div class="back">Protects brain. Made of plates that fuse together.</div></div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🦴 Spine (vertebrae)</b></div><div class="back">33 stacked bones running down your back. Holds you upright.</div></div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🩻 Ribs</b></div><div class="back">12 pairs forming a cage to protect heart and lungs.</div></div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🦴 Femur</b></div><div class="back">Thigh bone — the longest, strongest bone in your body.</div></div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>✋ Hand bones</b></div><div class="back">27 bones per hand. Why? So fingers can be super-flexible!</div></div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="6" data-part="1" data-type="video" data-video-id="ywDOiNEdJVc">
+        <h2 class="big-q">🎬 Watch: All About Bones <span class="pill">~3 min</span></h2>
+        <p class="lead">Dr. Binocs explains what bones are made of and how they work.</p>
+        <div class="video-wrap"><div class="video-ratio"><iframe src="https://www.youtube.com/embed/ywDOiNEdJVc" title="Bones - Dr Binocs" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
+        <div class="video-edit-row"><span class="small">📽 Peekaboo Kidz · Dr. Binocs</span><a class="btn small secondary" href="https://www.youtube.com/watch?v=ywDOiNEdJVc" target="_blank">▶ Open on YouTube</a></div>
+        <div class="video-caption">🎯 <b>Listen for:</b> what makes bones STRONG? And what's INSIDE them?</div>
+      </div>
+
+      <div class="slide" data-slide="7" data-part="1">
+        <div class="beat mystery" id="mystery-7">
+          <span class="beat-badge">🕵️ MYSTERY #1 · THINK BEFORE YOU CLICK</span>
+          <h3>Why do bones heal but rocks don't?</h3>
+          <p>Drop a rock — it stays cracked forever. Break a bone — and within months, it's back to normal! How can bones heal themselves?</p>
+          <button class="reveal-btn" onclick="document.getElementById('mystery-7').classList.add('mystery-open')">🔍 Show answer</button>
+          <div class="mystery-answer">🎯 Because bones are <b>ALIVE</b>! Inside bones are living cells that build new bone material. When a bone breaks, special cells rush to the spot, build a "bone glue," then grow new bone cells to fill the crack. After a few months, the bone is back stronger than before. Rocks are just minerals — no living cells to repair them. Your body is constantly repairing itself everywhere.</div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="8" data-part="1">
+        <div class="beat mystery" id="mystery-8">
+          <span class="beat-badge">🕵️ MYSTERY #2 · THINK BEFORE YOU CLICK</span>
+          <h3>Why are the bones of birds HOLLOW?</h3>
+          <p>Bird bones look like ours but they're full of air pockets — almost hollow. If bones make us strong, why would birds want WEAKER bones?</p>
+          <button class="reveal-btn" onclick="document.getElementById('mystery-8').classList.add('mystery-open')">🔍 Show answer</button>
+          <div class="mystery-answer">🎯 To FLY! Solid bones = heavy. Heavy = can't fly. Birds evolved hollow bones with internal struts (like a building) — STRONG enough to support them, but LIGHT enough to lift in flight. It's an adaptation for flying. The trade-off: bird bones break more easily than ours. But it's worth it to fly!</div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="9" data-part="1">
+        <div class="beat mystery" id="mystery-9">
+          <span class="beat-badge">🕵️ MYSTERY #3 · THINK BEFORE YOU CLICK</span>
+          <h3>Astronauts in Space</h3>
+          <p>Astronauts in space lose BONE MASS — about 1-2% per month! Their bones get weaker. Why does space mess with bones?</p>
+          <button class="reveal-btn" onclick="document.getElementById('mystery-9').classList.add('mystery-open')">🔍 Show answer</button>
+          <div class="mystery-answer">🎯 On Earth, gravity constantly pulls down on you, and your bones have to "push back." This force keeps bones busy making themselves stronger. In SPACE (zero gravity), bones don't need to push back — so they stop building themselves up. Less use = less repair. Astronauts have to exercise 2-3 hours a day to slow this down. Bones LOVE being used!</div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="10" data-part="1">
+        <h2 class="big-q">🎉 End of Session 1</h2>
+        <div class="callout leaf">✅ What you nailed:<ul><li>🦴 Skeleton: shape, protection, movement, blood</li><li>👶 Babies: ~270 bones · 🧒 Adults: 206</li><li>🛡 Skull, spine, ribs are protective</li><li>🌱 Bones are ALIVE — they heal and grow</li><li>🐦 Hollow bones = adapted for flying</li></ul></div>
+        <div class="session-break"><div class="icon">🌟</div><div><h4>End of Session 1!</h4><p>Bones don't move themselves. Next: the powerful pulleys that move them — your muscles!</p></div></div>
+      </div>
+
+      <div class="slide" data-slide="11" data-part="2">
+        <div class="part-banner p2"><span class="pb-pill">SESSION 2 · PART 2 OF 2</span><div class="pb-emoji">💪 🏃 🤸</div><h1>The Muscles</h1><p class="pb-sub">Bones don't move themselves. Muscles do all the actual work.</p><div class="pb-meta">🎬 1 video · 🕵️ 3 mysteries · 💪 Flex demo</div></div>
+      </div>
+
+      <div class="slide" data-slide="12" data-part="2">
+        <h2 class="big-q">💪 What do muscles do?</h2>
+        <p class="lead">Muscles are the body's MOVERS. They pull on bones to make you walk, jump, smile, or even sit still.</p>
+        <div class="callout leaf"><b>🔑 Big idea:</b> a muscle can only PULL. Never push. So muscles work in PAIRS — one to bend a joint, another to straighten it. Pull-pull, never push.</div>
+        <div class="callout"><b>Demo:</b> Flex your arm hard. The bump (biceps) shortened to PULL your forearm up. To straighten your arm, the muscle on the BACK (triceps) pulls — making the biceps relax. Two-team pulling!</div>
+      </div>
+
+      <div class="slide" data-slide="13" data-part="2">
+        <h2 class="big-q">🔢 By the Numbers (muscles edition)</h2>
+        <div class="reveal-grid">
+          <div class="reveal-card open"><div class="back"><b>💪 You have</b><br>~600+ muscles in your body</div></div>
+          <div class="reveal-card open"><div class="back"><b>👅 Strongest muscle (for its size)</b><br>Your TONGUE — and your JAW muscle (the masseter)</div></div>
+          <div class="reveal-card open"><div class="back"><b>🦵 Biggest muscle</b><br>Your butt (gluteus maximus) — needed to keep you upright!</div></div>
+          <div class="reveal-card open"><div class="back"><b>👁 Fastest muscle</b><br>Your eye muscles — they shift focus 100,000+ times a day!</div></div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="14" data-part="2">
+        <h2 class="big-q">3 Kinds of Muscles in You 🧬</h2>
+        <div class="reveal-grid">
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>1. SKELETAL</b><br>(Things you control)</div><div class="back">Attached to bones. You decide when they move. Lifting, walking, smiling.</div></div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>2. SMOOTH</b><br>(Auto-pilot)</div><div class="back">In your stomach, blood vessels, intestines. Move food and blood — automatically. You don't control them.</div></div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>3. CARDIAC</b><br>(Heart muscle)</div><div class="back">Special muscle ONLY in your heart. Pumps non-stop your whole life — never tires!</div></div>
+        </div>
+        <div class="callout sky"><b>💡 Right now</b>, your skeletal muscles are mostly relaxed (you're sitting). Your smooth muscles are pushing food. Your cardiac muscle is pumping. All at once!</div>
+      </div>
+
+      <div class="slide" data-slide="15" data-part="2" data-type="video" data-video-id="Vnj9Ay6xmOk">
+        <h2 class="big-q">🎬 Watch: How Muscles Grow <span class="pill">~3 min</span></h2>
+        <p class="lead">Dr. Binocs explains how exercise makes muscles bigger AND stronger.</p>
+        <div class="video-wrap"><div class="video-ratio"><iframe src="https://www.youtube.com/embed/Vnj9Ay6xmOk" title="How Muscles Grow - Dr Binocs" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
+        <div class="video-edit-row"><span class="small">📽 Peekaboo Kidz · Dr. Binocs</span><a class="btn small secondary" href="https://www.youtube.com/watch?v=Vnj9Ay6xmOk" target="_blank">▶ Open on YouTube</a></div>
+        <div class="video-caption">🎯 <b>Listen for:</b> what HAPPENS inside muscles when you exercise?</div>
+      </div>
+
+      <div class="slide" data-slide="16" data-part="2">
+        <div class="beat mystery" id="mystery-16">
+          <span class="beat-badge">🕵️ MYSTERY #4 · THINK BEFORE YOU CLICK</span>
+          <h3>Why do muscles get sore the day AFTER exercise?</h3>
+          <p>You play a long soccer game. The next morning your legs ACHE. But why does the soreness wait a whole day?</p>
+          <button class="reveal-btn" onclick="document.getElementById('mystery-16').classList.add('mystery-open')">🔍 Show answer</button>
+          <div class="mystery-answer">🎯 During exercise, muscles get TINY tears in their fibers (this is normal, not bad). After the workout, your body sends repair cells to fix them — and that repair process causes inflammation, which hurts. The pain peaks 24-48 hours after. The clever part: when the muscle heals, it grows back STRONGER and BIGGER. That's why exercise builds muscle. Pain = growing!</div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="17" data-part="2">
+        <div class="beat mystery" id="mystery-17">
+          <span class="beat-badge">🕵️ MYSTERY #5 · THINK BEFORE YOU CLICK</span>
+          <h3>The Heart that Never Stops</h3>
+          <p>Your skeletal muscles get tired in minutes. Your heart pumps non-stop for 80+ years without a break. How is the heart muscle so different?</p>
+          <button class="reveal-btn" onclick="document.getElementById('mystery-17').classList.add('mystery-open')">🔍 Show answer</button>
+          <div class="mystery-answer">🎯 Cardiac muscle is built differently. It has a HUGE blood supply (constant fresh oxygen). It contracts in a special wave pattern that doesn't need rest. It uses energy efficiently. And it has its own electrical pacemaker — even taken out of the body, a heart muscle keeps beating! It's the world's best engine.</div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="18" data-part="2">
+        <div class="beat mystery" id="mystery-18">
+          <span class="beat-badge">🕵️ MYSTERY #6 · THINK BEFORE YOU CLICK</span>
+          <h3>The Bedridden Astronaut</h3>
+          <p>If a person stays in bed for a month (or floats in space), their muscles get WEAKER. But they're not damaged. What's happening?</p>
+          <button class="reveal-btn" onclick="document.getElementById('mystery-18').classList.add('mystery-open')">🔍 Show answer</button>
+          <div class="mystery-answer">🎯 Muscles follow the rule: USE IT OR LOSE IT. Cells in unused muscles get dismantled by the body to save energy. Within weeks, muscles SHRINK noticeably. The good news: with exercise, muscles regrow within weeks too. Astronauts work out HARD in space to slow this. The body is always optimizing — tearing down what isn't needed, building up what is.</div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="19" data-part="2">
+        <h2 class="big-q">✨ What you now know</h2>
+        <ul style="font-size:18px;">
+          <li>🦴 Skeleton: 206 bones (adults), holds shape, protects organs, makes blood</li>
+          <li>🌱 Bones are ALIVE — they heal and grow</li>
+          <li>💪 Muscles can only PULL (work in pairs)</li>
+          <li>🧬 Three kinds: skeletal (you control), smooth (auto), cardiac (heart)</li>
+          <li>🏋️ Exercise makes tiny tears → muscles grow back STRONGER</li>
+          <li>🛌 Unused muscles shrink (use it or lose it)</li>
+          <li>❤️ Your heart muscle never tires — it's the world's best engine</li>
+        </ul>
+        <div class="callout"><b>🎁 Coming up:</b> How DIFFERENT animal bodies are built — fish, insects, snakes — for VERY different ways of moving.</div>
+      </div>
+
+    </div>
+    <div class="slide-controls">
+      <button class="slide-btn ghost" onclick="prevSlide()" id="prevBtn">← Back</button>
+      <div class="slide-meta">
+        <span class="part-marker" id="partMarker">PART 1</span>
+        <span id="slideNum" class="small">Slide 1 / 19</span>
+        <div class="slide-progress"><div class="slide-progress-fill" id="slideProgress" style="width:0%"></div></div>
+        <button class="slide-btn ghost" onclick="enterPresentMode()" style="font-size:13px;padding:6px 12px;">🖥 Present</button>
+      </div>
+      <button class="slide-btn" onclick="nextSlide()" id="nextBtn">Next →</button>
+    </div>
+  </div>
+</div>
+
+<div class="tab-panel" id="panel-homework">
+  <div class="hw-intro"><h2 style="margin-top:0;">📓 Homework</h2><div class="small" id="hwConfigNote"></div></div>
+  <div class="hw-list" id="homework-list"></div>
+  <div class="q-card" style="text-align:center;"><h3>📤 Submit</h3><input type="text" id="hw-student-name" placeholder="Your name" style="width:260px;padding:10px;border:2px solid #eee;border-radius:10px;font-size:15px;" /><div class="submit-row" style="justify-content:center;"><button class="btn success" onclick="submitHomework()">📤 Submit</button><button class="btn secondary" onclick="downloadHomework()">💾 Save</button></div><div id="hwSubmitMsg" class="small" style="margin-top:10px;"></div></div>
+</div>
+
+<div class="tab-panel" id="panel-quiz">
+  <div id="quizStart" class="quiz-start"><div style="font-size: 80px;">🧠</div><h2>Ready for the Quiz?</h2><p class="lead" style="margin-left:auto;margin-right:auto;">30 questions on bones, muscles, and how they move you.</p><input type="text" id="quiz-student-name" placeholder="Your name" style="width:260px;padding:10px;border:2px solid #eee;border-radius:10px;font-size:15px;margin:10px;" /><div><button class="btn success" onclick="startQuiz()">🚀 Start</button></div></div>
+  <div id="quizArea" class="hide"></div>
+  <div id="quizResult" class="hide"></div>
+</div>
+
+<div class="tab-panel" id="panel-teacher">
+  <div class="hw-intro" style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;"><div style="flex:1;min-width:240px;"><h2 style="margin-top:0;">🧑‍🏫 Teacher Center</h2></div><button class="btn ghost" onclick="signOutTeacher()">🔒 Sign out</button></div>
+  <div class="teacher-grid">
+    <div class="teacher-card"><h3>🔑 API Key</h3><input type="password" id="apiKey" placeholder="sk-ant-..." /><div class="submit-row"><button class="btn" onclick="saveApiKey()">💾 Save</button></div><div class="small" id="apiStatus"></div></div>
+    <div class="teacher-card"><h3>📬 Submissions</h3><input type="email" id="teacherEmail" placeholder="teacher@example.com" /><input type="url" id="webhookUrl" placeholder="Formspree URL" /><div class="submit-row"><button class="btn" onclick="saveSubmitSettings()">💾 Save</button></div></div>
+    <div class="teacher-card" style="grid-column: span 2;"><h3>📥 Inbox</h3><div id="submissionsTable"></div><div class="submit-row"><button class="btn" onclick="exportSubmissions()">💾 Export</button><button class="btn ghost" onclick="clearSubmissions()">🗑 Clear</button></div></div>
+  </div>
+</div>
+
+</div>
+
+<div class="present-bar" id="presentBar"><button onclick="prevSlide()">◀</button><span class="counter" id="presentCounter">1 / 19</span><button onclick="nextSlide()">▶</button><button class="exit" onclick="exitPresentMode()">✕ Exit</button></div>
+
+<div class="modal-back" id="modal"><div class="modal"><h3 id="modal-title">Hello</h3><div id="modal-body"></div><div class="submit-row" style="justify-content:flex-end;" id="modal-actions"></div></div></div>
+
+<script>
+const HOMEWORK = [
+  { icon:"🦴", title:"Skeleton Self-Tour", prompt:"Feel along your own arm bones, ribs, and collar bones. Sketch what you can feel. Where do you find a JOINT (place where bones meet)?", placeholder:"Bones I felt:\nJoints I found:" },
+  { icon:"💪", title:"Pair Pull Demo", prompt:"Bend your arm. Feel both the front (biceps) and back (triceps). Now straighten. Which one tightened, which relaxed? Switch and feel again.", placeholder:"Bending: ___ tightens, ___ relaxes\nStraightening: ___ tightens, ___ relaxes" },
+  { icon:"🏃", title:"Use-It-Or-Lose-It Test", prompt:"How long can you hold your arm out straight? Try every day for a week. Does it get easier? Why?", placeholder:"Day 1: ___ sec\nDay 7: ___ sec\nWhy: ___" },
+  { icon:"🐾", title:"Pet Skeleton Spot", prompt:"Pet (or pet someone's pet). Feel a leg or back. What can you feel? Where are bones? Where are muscles? How does it differ from yours?", placeholder:"Pet: ___\nWhat I felt: ___" },
+  { icon:"❤️", title:"Heart Beat Lab", prompt:"Place 2 fingers on the inside of your wrist. Count beats for 1 minute (resting). Do 30 jumping jacks. Count again. Why is it faster?", placeholder:"Resting: ___ bpm\nAfter exercise: ___ bpm\nWhy: ___" }
+];
+
+const QUIZ = [
+  { type:"mcq", diff:"easy", q:"How many bones does an adult have?", choices:["100","206","500","1,000"], correct:1, feedback:["Less.","Yes!","Too many.","Way off."] },
+  { type:"fill", diff:"easy", q:"The hard structure inside your body that holds your shape is your ______.", correctText:["skeleton","skeletal system"], feedback:"Skeleton!" },
+  { type:"mcq", diff:"easy", q:"Bones are:", choices:["Dead","Alive","Made of plastic","Hollow only"], correct:1, misconception:true, feedback:["⚠️ Bones are alive!","Yes!","No.","Some — bird bones."] },
+  { type:"mcq", diff:"easy", q:"What protects your brain?", choices:["Skin","Skull","Lungs","Spine"], correct:1, feedback:["Some.","Yes!","No.","Spine protects spinal cord."] },
+  { type:"fill", diff:"easy", q:"The cage of bones around your heart and lungs is your ______.", correctText:["ribs","rib cage"], feedback:"Ribs (rib cage)!" },
+  { type:"mcq", diff:"easy", q:"Muscles can only:", choices:["Push","Pull","Stretch","Float"], correct:1, misconception:true, feedback:["⚠️ Cannot push!","Yes!","Stretch is passive.","No."] },
+  { type:"mcq", diff:"easy", q:"How many muscles does a person have?", choices:["About 50","About 200","About 600+","About 5"], correct:2, feedback:["Way fewer.","Closer.","Yes!","Way fewer."] },
+  { type:"fill", diff:"easy", q:"The muscle that pumps blood and never rests is the ______.", correctText:["heart","heart muscle","cardiac"], feedback:"Heart (cardiac muscle)!" },
+  { type:"scenario", diff:"medium", q:"Why do muscles work in pairs?", choices:[
+    "Coincidence","Because muscles can only pull (not push) — one pulls one way, the other pulls back","More fun","Backup"], correct:1, feedback:[
+    "No.","Yes!","No.","Just engineering."] },
+  { type:"mcq", diff:"medium", q:"You break your arm. After a month, the cast comes off. What happened?", choices:[
+    "Bone never healed","Living bone cells rebuilt and filled the crack with new bone","Doctor glued it","Calcium pills did it"], correct:1, feedback:[
+    "It healed!","Yes! Bones are alive.","No.","Helps but not the main mechanism."] },
+  { type:"scenario", diff:"medium", q:"Bird bones are HOLLOW. Why is that an adaptation?", choices:[
+    "Mistake","Hollow = lighter, so birds can fly","Birds eat less","Random"], correct:1, feedback:[
+    "It's a feature.","Yes!","Unrelated.","Adaptation."] },
+  { type:"mcq", diff:"medium", q:"You bend your arm. Which muscle is shortening (pulling)?", choices:["Triceps (back of arm)","Biceps (front of arm)","Heart","Tongue"], correct:1, feedback:["That straightens your arm.","Yes!","No.","No."] },
+  { type:"fill", diff:"medium", q:"A muscle you don't consciously control (like in your stomach) is called ______ muscle.", correctText:["smooth"], feedback:"Smooth muscle!" },
+  { type:"scenario", diff:"medium", q:"Why do muscles get bigger when you exercise?", choices:[
+    "Magic","Tiny tears in muscles get repaired stronger and bigger","Drink milk","Random"], correct:1, feedback:["No.","Yes! Exercise → tears → repair → growth.","Helps but not the cause.","Predictable."] },
+  { type:"mcq", diff:"medium", q:"Why do astronauts lose bone mass in space?",
+    choices:["Magic","No gravity = bones don't need to push back = they stop building themselves up","Bad food","Stress"], correct:1, misconception:true, feedback:["⚠️","Yes!","Some effect, but main reason is gravity.","Some, not main."] },
+  { type:"open", diff:"medium", q:"Why is your skull made of plates that fuse together as you grow? Why not one solid bone from birth?", feedback:"During birth, baby skulls need to be slightly squishable to fit through. Plus, baby brains grow rapidly — the un-fused plates allow the skull to expand. Once growth slows (around age 2), the plates start fusing solid for full protection." },
+  { type:"mcq", diff:"medium", q:"Which is the strongest bone in your body?",
+    choices:["Skull","Femur (thigh bone)","Spine","Big toe"], correct:1, feedback:["Strong but not strongest.","Yes! Stronger than concrete!","Important but not strongest.","Definitely not."] },
+  { type:"scenario", diff:"hard", q:"You're stuck in bed for 4 weeks. Your muscles look smaller and feel weaker. Did anything BAD happen to them?",
+    choices:[
+      "Yes — muscle disease","No — your body just dismantled unused muscle to save energy ('use it or lose it'). Exercise will rebuild it.",
+      "Permanent damage","Random"], correct:1, feedback:[
+      "Probably not.","Yes! Reversible.","Reversible with exercise.","Predictable."] },
+  { type:"experiment", diff:"hard", q:"HANDS-ON: Find your pulse on your wrist. Time 30 seconds, count beats, multiply by 2 = your resting heart rate. Now do 25 jumping jacks and check again. What changed and why?", feedback:"Heart rate jumps from ~70-90 (resting) up to 130-160+ (after exercise). Why? Muscles needed more oxygen and energy. Heart pumps faster to deliver oxygen-rich blood to working muscles. As soon as you stop, heart slowly returns to normal. The cardiac muscle responds in real-time to your body's needs!" },
+  { type:"open", diff:"hard", q:"A weightlifter's biceps look HUGE but a marathon runner's legs look slim. Both train hard. Why so different?", feedback:"Different exercises grow muscles differently. Heavy lifting (anaerobic) tears muscle fibers and builds BULK. Endurance running (aerobic) builds slow-twitch fibers that are LEANER but more efficient at long-duration work. Same body, different adaptation. Both are 'in shape' — just for different things." },
+  { type:"scenario", diff:"hard", q:"A person has a stroke and one side of their body becomes weak. The bones are fine. What's likely happened?",
+    choices:["Muscles lost connection to brain — without nerve signals, muscles can't move (or move much less)","Bones broke","Smooth muscles failed","Heart stopped"], correct:0, feedback:[
+    "Yes! Brain commands muscles via nerves.","Bones are fine.","Smooth still works.","Different problem."] },
+  { type:"mcq", diff:"hard", q:"A frog's tongue can shoot out and grab a fly faster than you can blink. What does this tell you?",
+    choices:["Frogs are magic","Their tongue muscle has very fast contraction — adapted for hunting","Flies are slow","Random"], correct:1, feedback:["No.","Yes!","Flies are fast.","Adaptation."] },
+  { type:"open", diff:"hard", q:"A person breaks the same bone twice — once at age 8, once at age 60. Which heals faster, and why?", feedback:"Age 8 — much faster. Younger bones are more active in cell production, blood supply is better, and the body's overall healing is faster. Older bones still heal but more slowly because cell renewal slows with age. This is also why elderly people are advised to be careful — slower healing means longer recovery." },
+  { type:"scenario", diff:"hard", q:"Why do animals with thick fur or feathers (like polar bears, owls) often have light bones underneath?",
+    choices:["Random","To balance their weight — heavy fur + heavy bones would be too much","Magic","Predator avoidance"], correct:1, feedback:["No.","Yes! Whole-body weight management.","No.","Indirect."] },
+  { type:"mcq", diff:"hard", q:"Which is TRUE about muscle growth?",
+    choices:["Muscles grow without rest","Muscles need exercise + rest + protein/food to grow","Eating only is enough","Sleeping only is enough"], correct:1, feedback:["⚠️ Need rest to repair!","Yes! All three.","Need exercise.","Need exercise."] },
+  { type:"open", diff:"hard", q:"Your friend says: 'Bones are like the steel beams of a building — strong but dead.' What's wrong with this idea? (2-3 sentences.)", feedback:"Bones are NOT dead. Steel beams stay the same forever — bones constantly remodel. Living cells inside bones build new bone material, repair fractures, and respond to use. Bones change every year (an adult's skeleton fully renews about every 10 years!). Steel doesn't do that. Bones are more like a self-repairing structure than dead steel." },
+  { type:"scenario", diff:"boss", q:"In 1972, weightless astronauts on Skylab lost about 1% bone mass per MONTH. NASA spends huge money preventing this. Why is bone loss so dangerous for long-term space missions?",
+    choices:[
+      "Astronauts get scared",
+      "Weak bones on a long mission could break easily; returning to Earth's gravity could be devastating; future missions to Mars need solutions",
+      "It's not really dangerous",
+      "Magic"], correct:1, feedback:[
+      "No.","Yes! It's a major obstacle to deep space travel.","Real danger!","No."] },
+  { type:"open", diff:"boss", q:"A fish has bones. So does a bird. So do you. But fish swim, birds fly, and you walk. How can the SAME body system (bones) support such different ways of moving? (4-5 sentences.)", feedback:"All three use bones, but the SHAPES of the bones are very different — adapted for different jobs. Fish bones are flexible and lightweight, with a flexible spine for swimming side-to-side. Bird bones are hollow but rigid, with a strong chest bone (sternum) to anchor flight muscles. Your bones are arranged for upright walking on two legs — a unique vertebrate solution. Same TYPE of structure (calcium bones), but ADAPTATIONS shape it into completely different tools. Evolution is the master toolmaker." },
+  { type:"open", diff:"boss", q:"BIG FINAL: Right now, even sitting still, lots of muscles are working. Describe at least 3 different muscles that are doing different jobs RIGHT THIS MOMENT in your body.", feedback:"Strong answer: (1) Heart — pumping non-stop. (2) Diaphragm + chest muscles — breathing in and out (you're not thinking about it!). (3) Stomach + intestine smooth muscles — pushing food through digestion. (4) Eye muscles — focusing on this text and shifting between words. (5) Postural muscles in your back and core — keeping you upright. (6) Tiny muscles in your face — making expressions. Even \"sitting still\" is a wild dance of dozens of muscles, most of which you don't consciously control." }
+];
+
+let currentSlide=1, TOTAL_SLIDES=19;
+let quizIndex=0, quizAnswers={}, quizFlags=new Set(), quizStarted=false;
+let homework={};
+let submissions = JSON.parse(localStorage.getItem('b6_submissions') || '[]');
+let settings = JSON.parse(localStorage.getItem('b6_settings') || '{}');
+let teacherMode = localStorage.getItem('b6_teacher') === '1';
+const PFX='b6_';
+
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{if(t.dataset.tab==='teacher'&&!teacherMode)return;document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.tab-panel').forEach(x=>x.classList.remove('active'));t.classList.add('active');document.getElementById('panel-'+t.dataset.tab).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}));
+
+function openTeacherLogin(){if(teacherMode){document.querySelector('.tab[data-tab="teacher"]').click();return;}openModal('🔒 Teacher Login',`<p>Password:</p><input type="password" id="teacherPwInput" autofocus /><p class="small">Default: <b>teacher</b></p><div id="teacherPwMsg" class="small"></div>`,[{label:'🔓 Unlock',cls:'btn success',onClick:'submitTeacherLogin()'}]);setTimeout(()=>{const i=document.getElementById('teacherPwInput');if(i)i.onkeydown=e=>{if(e.key==='Enter')submitTeacherLogin();};},50);}
+function submitTeacherLogin(){const pw=(document.getElementById('teacherPwInput')||{}).value||'';if(pw==='teacher'||pw==='sarah'){teacherMode=true;localStorage.setItem(PFX+'teacher','1');closeModal();applyTeacherMode();document.querySelector('.tab[data-tab="teacher"]').click();showToast('✅ Unlocked');}else{const m=document.getElementById('teacherPwMsg');if(m)m.innerHTML='❌ Wrong password.';}}
+function signOutTeacher(){if(!confirm('Sign out?'))return;teacherMode=false;localStorage.removeItem(PFX+'teacher');applyTeacherMode();document.querySelector('.tab[data-tab="lesson"]').click();}
+function applyTeacherMode(){const btn=document.getElementById('teacherToggle');document.querySelectorAll('.teacher-only').forEach(x=>x.classList.toggle('hide',!teacherMode));btn.textContent=teacherMode?'🔓 Teacher · open':'🔒 Teacher';btn.classList.toggle('teacher-badge',teacherMode);if(teacherMode)renderTeacher();renderHomework();}
+function allSlidesInOrder(){return Array.from(document.querySelectorAll('#slide-stage .slide'));}
+function showSlide(n){const slides=allSlidesInOrder();TOTAL_SLIDES=slides.length;currentSlide=Math.max(1,Math.min(TOTAL_SLIDES,n));slides.forEach((s,i)=>s.classList.toggle('active',i===currentSlide-1));document.getElementById('prevBtn').disabled=currentSlide===1;document.getElementById('nextBtn').textContent=currentSlide===TOTAL_SLIDES?'Finish 🎉':'Next →';const a=slides[currentSlide-1];const part=a?(a.dataset.part||'1'):'1';const pm=document.getElementById('partMarker');pm.className='part-marker p'+part;pm.textContent='PART '+part;document.getElementById('slideNum').textContent=`Slide ${currentSlide} / ${TOTAL_SLIDES}`;document.getElementById('slideProgress').style.width=`${Math.round((currentSlide/TOTAL_SLIDES)*100)}%`;const pc=document.getElementById('presentCounter');if(pc)pc.textContent=`${currentSlide} / ${TOTAL_SLIDES}`;}
+function nextSlide(){if(currentSlide===TOTAL_SLIDES){if(!document.body.classList.contains('presenting'))document.querySelector('.tab[data-tab="homework"]').click();}else showSlide(currentSlide+1);}
+function prevSlide(){showSlide(currentSlide-1);}
+function enterPresentMode(){document.querySelector('.tab[data-tab="lesson"]').click();document.body.classList.add('presenting');try{(document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen).call(document.documentElement);}catch(e){}showSlide(currentSlide);}
+function exitPresentMode(){document.body.classList.remove('presenting');try{if(document.fullscreenElement)document.exitFullscreen();}catch(e){}}
+document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement)document.body.classList.remove('presenting');});
+function renderHomework(){const list=document.getElementById('homework-list');list.innerHTML='';HOMEWORK.forEach((h,i)=>{const c=document.createElement('div');c.className='hw-card';c.innerHTML=`<h3><span class="hw-num">${i+1}</span> ${h.icon} ${h.title}</h3><p>${h.prompt}</p><textarea placeholder="${h.placeholder||''}" oninput="homework[${i}]=this.value">${homework[i]||''}</textarea>`;list.appendChild(c);});const note=document.getElementById('hwConfigNote');if(settings.teacherEmail)note.textContent='✓ Submits to '+settings.teacherEmail;else note.textContent='⚠️ Configure email in Teacher tab';}
+function homeworkPayload(){const n=document.getElementById('hw-student-name').value.trim();const p={type:'homework',chapter:'B-6 Skeleton Muscle',student:n,ts:new Date().toISOString(),answers:{}};HOMEWORK.forEach((h,i)=>{p.answers[h.title]=homework[i]||'';});return p;}
+async function submitHomework(){const p=homeworkPayload();if(!p.student){alert('Name!');return;}submissions.push(p);localStorage.setItem(PFX+'submissions',JSON.stringify(submissions));let sent=false;if(settings.webhookUrl)try{const r=await fetch(settings.webhookUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});sent=r.ok;}catch(e){}if(!sent&&settings.teacherEmail)window.location.href=`mailto:${settings.teacherEmail}?subject=${encodeURIComponent('HW B-6 from '+p.student)}&body=${encodeURIComponent(JSON.stringify(p.answers,null,2))}`;document.getElementById('hwSubmitMsg').textContent=sent?'✅ Submitted!':(settings.teacherEmail?'📧 Email opened':'💾 Saved');}
+function downloadHomework(){const p=homeworkPayload();const b=new Blob([JSON.stringify(p,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`hw_B6_${p.student||'student'}.json`;a.click();}
+function startQuiz(){const n=document.getElementById('quiz-student-name').value.trim();if(!n){alert('Name!');return;}quizIndex=0;quizAnswers={};quizFlags=new Set();quizStarted=true;document.getElementById('quizStart').classList.add('hide');document.getElementById('quizArea').classList.remove('hide');renderQuizLayout();}
+function renderQuizLayout(){document.getElementById('quizArea').innerHTML=`<div class="quiz-layout"><div class="quiz-nav-sticky"><div class="quiz-navigator"><h4>📋 QUESTIONS</h4><div class="qn-grid" id="qnGrid"></div><div class="qn-legend"><span><span class="qn-dot answered"></span> done</span><span><span class="qn-dot wrong"></span> wrong</span><span><span class="qn-dot open"></span> open</span></div></div><div class="submit-row" style="margin-top:10px;"><button class="btn success" onclick="confirmFinishQuiz()">🏁 Finish</button></div></div><div id="quizMain"></div></div>`;renderQuizNav();renderQ();}
+function renderQuizNav(){const g=document.getElementById('qnGrid');if(!g)return;g.innerHTML='';QUIZ.forEach((q,i)=>{const b=document.createElement('button');b.className='qn';if(i===quizIndex)b.classList.add('current');const a=quizAnswers[i];if(a){if(a.type==='open'||a.type==='experiment')b.classList.add('open');else if(a.correct===true)b.classList.add('answered');else if(a.correct===false)b.classList.add('wrong');}if(quizFlags.has(i))b.classList.add('flagged');b.textContent=i+1;b.onclick=()=>{quizIndex=i;renderQuizNav();renderQ();};g.appendChild(b);});}
+function renderQ(){const main=document.getElementById('quizMain');if(!main)return;const q=QUIZ[quizIndex];const ex=quizAnswers[quizIndex];const isA=!!ex;const diffMap={easy:'WARM-UP',medium:'BRAIN-STRETCH',hard:'THINKER',boss:'BOSS LEVEL!'};const scen=q.scenario?`<div class="q-scenario">${q.scenario}</div>`:'';let body='';if(q.type==='mcq'||q.type==='scenario')body=`<div class="choice-list">${q.choices.map((c,i)=>{let k='choice';if(isA){if(i===q.correct)k+=' correct';else if(i===ex.selected)k+=' incorrect';}return`<button class="${k}" onclick="pick(${i})" ${isA?'disabled':''}>${String.fromCharCode(65+i)}. ${c}</button>`;}).join('')}</div>`;else if(q.type==='fill'){const v=ex?ex.raw:'';body=`<input type="text" id="fillInput" placeholder="Type…" value="${v.replace(/"/g,'&quot;')}" ${isA?'disabled':''} style="width:100%;padding:12px;font-size:16px;border:2px solid #eee;border-radius:10px;" onkeydown="if(event.key==='Enter')subFill()" />${isA?'':'<div class="submit-row"><button class="btn" onclick="subFill()">Submit</button></div>'}`;}else{const v=ex?ex.answer:'';body=`<textarea id="openInput" rows="4" ${isA?'disabled':''} style="width:100%;padding:12px;font-size:15px;border:2px solid #eee;border-radius:10px;">${v}</textarea>${isA?'':'<div class="submit-row"><button class="btn" onclick="subOpen()">Submit</button></div>'}`;}let fb='';if(isA){let cls='correct',lbl='✅ Nice!';if(ex.type==='open'||ex.type==='experiment'){cls='info';lbl='✨ Submitted!';}else if(ex.correct===false){cls='incorrect';lbl='❌ Not quite.';}let txt='';if(q.type==='mcq'||q.type==='scenario')txt=q.feedback[ex.selected]||'';else if(q.type==='fill')txt=q.feedback;else txt=`Strong answer:<br><br>${(q.feedback||'').replace(/\n/g,'<br>')}`;fb=`<div class="q-feedback show ${cls}"><b>${lbl}</b> ${txt}</div>`;}const answered=Object.keys(quizAnswers).length;const pct=Math.round(((quizIndex+1)/QUIZ.length)*100);main.innerHTML=`<div class="quiz-progress"><span class="pill">Q ${quizIndex+1}/${QUIZ.length}</span><div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div><span class="small">${answered} done</span></div><div class="q-card"><div class="q-difficulty ${q.diff}">${diffMap[q.diff]}${q.misconception?' · 🚨':''}</div><div class="q-text">${q.q}</div>${scen}${body}${fb}<div class="q-controls"><div class="submit-row" style="margin:0;"><button class="btn ghost" onclick="prevQ()" ${quizIndex===0?'disabled':''}>← Prev</button><button class="btn secondary" onclick="skipQ()">Skip</button><button class="btn" onclick="nextQ()" ${quizIndex===QUIZ.length-1?'disabled':''}>Next →</button></div><button class="q-flag ${quizFlags.has(quizIndex)?'on':''}" onclick="flagQ()">${quizFlags.has(quizIndex)?'🚩 Flagged':'🏳 Flag'}</button></div></div>`;}
+function pick(i){if(quizAnswers[quizIndex])return;const q=QUIZ[quizIndex];quizAnswers[quizIndex]={type:q.type,selected:i,correct:(i===q.correct)};renderQuizNav();renderQ();}
+function subFill(){if(quizAnswers[quizIndex])return;const q=QUIZ[quizIndex];const raw=(document.getElementById('fillInput').value||'').trim();if(!raw){alert('Type!');return;}const c=q.correctText.some(t=>raw.toLowerCase().includes(t.toLowerCase()));quizAnswers[quizIndex]={type:'fill',raw,correct:c};renderQuizNav();renderQ();}
+function subOpen(){if(quizAnswers[quizIndex])return;const q=QUIZ[quizIndex];const a=(document.getElementById('openInput').value||'').trim();if(a.length<5){alert('Try harder!');return;}quizAnswers[quizIndex]={type:q.type,answer:a,correct:null};renderQuizNav();renderQ();}
+function prevQ(){if(quizIndex>0){quizIndex--;renderQuizNav();renderQ();}}
+function nextQ(){if(quizIndex<QUIZ.length-1){quizIndex++;renderQuizNav();renderQ();}}
+function skipQ(){if(quizIndex<QUIZ.length-1)quizIndex++;renderQuizNav();renderQ();}
+function flagQ(){if(quizFlags.has(quizIndex))quizFlags.delete(quizIndex);else quizFlags.add(quizIndex);renderQuizNav();renderQ();}
+function confirmFinishQuiz(){const u=[];for(let i=0;i<QUIZ.length;i++)if(!quizAnswers[i])u.push(i+1);let h='<p>Finish?</p>';if(u.length)h+=`<p class="small">⚠️ ${u.length} unanswered</p>`;openModal('🏁 Finish?',h,[{label:'Yes',cls:'btn success',onClick:'finishQuiz()'},{label:'Not yet',cls:'btn ghost',onClick:'closeModal()'}]);}
+async function finishQuiz(){closeModal();const n=document.getElementById('quiz-student-name').value.trim();const list=QUIZ.map((q,i)=>({q:q.q,...(quizAnswers[i]||{unanswered:true}),flagged:quizFlags.has(i)}));const auto=list.filter(a=>typeof a.correct==='boolean');const ac=auto.filter(a=>a.correct).length;const oc=list.filter(a=>a.correct===null).length;const p={type:'quiz',chapter:'B-6',student:n,ts:new Date().toISOString(),autoCorrect:ac,autoTotal:auto.length,openCount:oc,answers:list};submissions.push(p);localStorage.setItem(PFX+'submissions',JSON.stringify(submissions));let sent=false;if(settings.webhookUrl)try{const r=await fetch(settings.webhookUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});sent=r.ok;}catch(e){}const pct=auto.length?Math.round((ac/auto.length)*100):0;document.getElementById('quizArea').classList.add('hide');document.getElementById('quizResult').classList.remove('hide');const msg=pct===100?'🌟 PERFECT!':pct>=85?'🚀 Amazing!':pct>=70?'👏 Great!':pct>=50?'💪 Good!':'🌱 Keep going!';const emailLink=(!sent&&settings.teacherEmail)?`<a class="btn secondary" href="mailto:${settings.teacherEmail}?subject=${encodeURIComponent('Quiz B-6 from '+n)}&body=${encodeURIComponent(JSON.stringify(p,null,2))}">📧 Email</a>`:'';document.getElementById('quizResult').innerHTML=`<div class="quiz-result"><h2>${msg}</h2><div class="score-donut" style="--p:${pct}"><span>${ac}/${auto.length}</span></div>${oc?`<p>Plus ${oc} open answers.</p>`:''}<div class="submit-row" style="justify-content:center;">${emailLink}<button class="btn ghost" onclick="location.reload()">🔁 Retake</button></div></div>`;}
+function renderTeacher(){document.getElementById('apiKey').value=localStorage.getItem(PFX+'apiKey')||'';document.getElementById('apiStatus').textContent=localStorage.getItem(PFX+'apiKey')?'✓ Saved':'';document.getElementById('teacherEmail').value=settings.teacherEmail||'';document.getElementById('webhookUrl').value=settings.webhookUrl||'';const d=document.getElementById('submissionsTable');if(!submissions.length)d.innerHTML='<p class="small">None yet.</p>';else d.innerHTML='<table class="submissions-table"><tr><th>When</th><th>Student</th><th>Type</th><th>Result</th></tr>'+submissions.map(s=>`<tr><td>${new Date(s.ts).toLocaleString()}</td><td>${s.student||'?'}</td><td>${s.type}</td><td>${s.type==='quiz'?s.autoCorrect+'/'+s.autoTotal:Object.values(s.answers||{}).filter(Boolean).length+' ans'}</td></tr>`).join('')+'</table>';}
+function saveApiKey(){localStorage.setItem(PFX+'apiKey',document.getElementById('apiKey').value.trim());document.getElementById('apiStatus').textContent='✓ Saved';}
+function saveSubmitSettings(){settings.teacherEmail=document.getElementById('teacherEmail').value.trim();settings.webhookUrl=document.getElementById('webhookUrl').value.trim();localStorage.setItem(PFX+'settings',JSON.stringify(settings));openModal('✅ Saved','<p>Settings saved.</p>');renderHomework();}
+function exportSubmissions(){const b=new Blob([JSON.stringify(submissions,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='submissions_B6.json';a.click();}
+function clearSubmissions(){if(confirm('Clear?')){submissions=[];localStorage.removeItem(PFX+'submissions');renderTeacher();}}
+function openModal(title,body,actions){document.getElementById('modal-title').textContent=title;document.getElementById('modal-body').innerHTML=body;const ab=document.getElementById('modal-actions');ab.innerHTML='';(actions||[]).forEach(a=>{const b=document.createElement('button');b.className=a.cls||'btn';b.textContent=a.label;b.setAttribute('onclick',a.onClick);ab.appendChild(b);});const c=document.createElement('button');c.className='btn ghost';c.textContent='Close';c.setAttribute('onclick','closeModal()');ab.appendChild(c);document.getElementById('modal').classList.add('show');}
+function closeModal(){document.getElementById('modal').classList.remove('show');}
+document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal();});
+function showToast(msg){let t=document.getElementById('toast');if(!t){t=document.createElement('div');t.id='toast';t.style.cssText='position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 22px;border-radius:999px;font-weight:700;z-index:200;';document.body.appendChild(t);}t.textContent=msg;setTimeout(()=>t.style.opacity='0',2800);}
+showSlide(1);renderHomework();applyTeacherMode();
+document.addEventListener('keydown',e=>{if(!document.getElementById('panel-lesson').classList.contains('active'))return;if(e.target.matches('input, textarea'))return;if(e.key==='ArrowRight')nextSlide();if(e.key==='ArrowLeft')prevSlide();});
+</script>
+</body>
+</html>

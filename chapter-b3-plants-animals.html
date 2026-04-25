@@ -1,0 +1,3085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BFSU Chapter B-3 · The Plant & Animal Kingdoms · Science Adventure</title>
+<style>
+/* ============ DESIGN TOKENS ============ */
+:root {
+  --bg: #fff8f0;
+  --ink: #1f2a44;
+  --ink-soft: #4a5472;
+  --paper: #ffffff;
+  --sun: #ffb703;
+  --leaf: #2a9d8f;
+  --leaf-dark: #1f7a70;
+  --animal: #e76f51;
+  --sky: #8ecae6;
+  --sky-dark: #219ebc;
+  --berry: #c7477a;
+  --cloud: #f1faee;
+  --shadow: 0 10px 30px rgba(30,40,70,.12);
+  --shadow-sm: 0 4px 12px rgba(30,40,70,.08);
+  --radius: 18px;
+  --radius-sm: 10px;
+  --font-display: "Fredoka", "Baloo 2", "Nunito", system-ui, sans-serif;
+  --font-body: "Nunito", system-ui, -apple-system, Segoe UI, sans-serif;
+}
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap');
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font-body);
+  color: var(--ink);
+  background:
+    radial-gradient(1200px 600px at 10% -10%, #ffe8c4 0%, transparent 60%),
+    radial-gradient(900px 500px at 110% 10%, #cdeadf 0%, transparent 60%),
+    var(--bg);
+  min-height: 100vh;
+  line-height: 1.55;
+}
+h1, h2, h3, h4 { font-family: var(--font-display); color: var(--ink); margin: 0 0 .4em; }
+h1 { font-size: clamp(28px, 4vw, 48px); line-height: 1.1; }
+h2 { font-size: clamp(22px, 3vw, 34px); }
+h3 { font-size: clamp(18px, 2vw, 24px); }
+p { margin: 0 0 1em; }
+button { font-family: inherit; cursor: pointer; }
+a { color: var(--sky-dark); }
+
+/* ============ TOP NAV ============ */
+.topnav {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; gap: 16px;
+  padding: 12px 22px;
+  background: rgba(255,255,255,.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #eee;
+}
+.brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 700; font-size: 20px; }
+.brand .logo { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--sun), var(--animal)); display: grid; place-items: center; color: #fff; font-size: 22px; }
+.nav-spacer { flex: 1; }
+.nav-btn {
+  border: 1px solid #e5e5e5; background: #fff; border-radius: 999px; padding: 8px 14px; font-weight: 700; color: var(--ink-soft); display:inline-flex; gap:8px; align-items:center;
+}
+.nav-btn:hover { background: #fafafa; }
+.nav-btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+.teacher-badge { background: var(--berry); color:#fff; border-color: var(--berry); }
+.teacher-hint { font-size: 11px; color: var(--ink-soft); margin-left: 4px; }
+
+/* ============ LAYOUT ============ */
+.container { max-width: 1180px; margin: 0 auto; padding: 26px 22px 80px; }
+.page { display: none; }
+.page.active { display: block; }
+
+/* ============ HOME / CHAPTER GRID ============ */
+.hero {
+  display: grid; grid-template-columns: 1fr 300px; gap: 22px;
+  background: linear-gradient(135deg, #fff7e6, #e8f7ef);
+  border-radius: var(--radius);
+  padding: 28px;
+  box-shadow: var(--shadow);
+  margin-bottom: 26px;
+}
+.hero h1 span { background: linear-gradient(90deg, var(--animal), var(--sun), var(--leaf)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero-img { font-size: 120px; text-align: center; align-self: center; }
+
+.prog-section { margin-top: 22px; }
+.prog-title { display:flex; align-items:center; gap:10px; margin-bottom: 14px; }
+.prog-dot { width: 14px; height: 14px; border-radius: 50%; display:inline-block; }
+.chapter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+.ch-card {
+  background: var(--paper); border-radius: 14px; padding: 16px; box-shadow: var(--shadow-sm);
+  border: 2px solid transparent; cursor: pointer; transition: transform .15s, box-shadow .15s, border-color .15s;
+  display: flex; flex-direction: column; gap: 8px; text-align: left;
+}
+.ch-card:hover:not(.locked) { transform: translateY(-2px); box-shadow: var(--shadow); }
+.ch-card.current { border-color: var(--animal); background: linear-gradient(180deg,#fff1e6,#fff); }
+.ch-card.done { background: #f3faf4; }
+.ch-card.locked { opacity: .55; cursor: not-allowed; }
+.ch-code { font-family: var(--font-display); font-weight: 700; font-size: 12px; letter-spacing: .05em; color: var(--ink-soft); }
+.ch-title { font-weight: 800; color: var(--ink); }
+.ch-badge { font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 999px; display: inline-block; align-self: flex-start; }
+.ch-badge.now { background: var(--animal); color: #fff; }
+.ch-badge.done { background: var(--leaf); color: #fff; }
+.ch-badge.soon { background: #eee; color: #777; }
+
+/* ============ CHAPTER HEADER + TABS ============ */
+.chapter-header {
+  background: var(--paper); border-radius: var(--radius); padding: 22px 26px; box-shadow: var(--shadow);
+  margin-bottom: 18px;
+}
+.chapter-meta { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; color: var(--ink-soft); font-size: 14px; }
+.tag { background: #f3efe9; padding: 4px 10px; border-radius: 999px; font-weight: 700; }
+
+/* Lesson overview card on chapter header */
+.parts-preview { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px; }
+.parts-preview .pp { background: #fafaf4; border-radius: 10px; padding: 10px 12px; font-size: 13px; border-left: 4px solid var(--sun); }
+.parts-preview .pp.p2 { border-color: var(--leaf); }
+.parts-preview .pp.p3 { border-color: var(--animal); }
+.parts-preview .pp b { display: block; font-family: var(--font-display); color: var(--ink); font-size: 14px; }
+@media (max-width: 700px){ .parts-preview { grid-template-columns: 1fr; } }
+
+.tabs {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  background: var(--paper); padding: 8px; border-radius: 14px; box-shadow: var(--shadow-sm);
+  margin-bottom: 18px; position: sticky; top: 62px; z-index: 40;
+}
+.tab {
+  border: none; background: transparent; padding: 10px 16px; border-radius: 10px;
+  font-weight: 800; color: var(--ink-soft); letter-spacing: .02em;
+}
+.tab.active { background: var(--ink); color: #fff; }
+.tab:not(.active):hover { background: #f3f0ea; }
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ============ SLIDES (LESSON) ============ */
+.slide-wrap { background: var(--paper); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+.slide-stage { padding: 40px 46px; min-height: 520px; position: relative; overflow: hidden; }
+.slide { display: none; animation: fade .35s ease; }
+.slide.active { display: block; }
+@keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+.slide-controls {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 14px 20px; border-top: 1px solid #eee; background: #fcfbf7; flex-wrap: wrap;
+}
+.slide-btn {
+  background: var(--ink); color: #fff; border: none; padding: 10px 18px;
+  border-radius: 10px; font-weight: 800;
+}
+.slide-btn.ghost { background: transparent; color: var(--ink-soft); }
+.slide-btn:disabled { opacity: .4; cursor: not-allowed; }
+.slide-meta { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--ink-soft); flex-wrap: wrap; }
+.part-marker { font-weight: 800; font-family: var(--font-display); padding: 4px 12px; border-radius: 999px; font-size: 12px; letter-spacing: .05em; }
+.part-marker.p1 { background: #fff3d6; color: #9a6a00; }
+.part-marker.p2 { background: #dff3ed; color: var(--leaf-dark); }
+.part-marker.p3 { background: #fdddcf; color: #a0442b; }
+.slide-progress { flex: 1; min-width: 140px; max-width: 360px; height: 8px; background: #eee; border-radius: 999px; overflow: hidden; margin: 0 6px; }
+.slide-progress-fill { height: 100%; background: linear-gradient(90deg, var(--sun), var(--animal)); transition: width .3s; }
+
+.big-q { font-family: var(--font-display); font-size: clamp(28px, 4vw, 44px); line-height: 1.15; margin: 0 0 14px; }
+.lead { font-size: 18px; color: var(--ink-soft); max-width: 720px; }
+.callout { background: #fff8e6; border-left: 5px solid var(--sun); padding: 14px 18px; border-radius: 10px; margin: 14px 0; }
+.callout.leaf { background: #eaf7f2; border-color: var(--leaf); }
+.callout.animal { background: #fdefe9; border-color: var(--animal); }
+.callout.sky { background: #e6f4fb; border-color: var(--sky-dark); }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items: center; }
+@media (max-width: 760px){ .two-col { grid-template-columns: 1fr; } }
+
+/* Part banner slides */
+.part-banner { text-align: center; padding: 20px 10px; border-radius: 14px; }
+.part-banner.p1 { background: linear-gradient(135deg, #ffecb3, #fff6e0); }
+.part-banner.p2 { background: linear-gradient(135deg, #d6efe7, #f0faf6); }
+.part-banner.p3 { background: linear-gradient(135deg, #fde1d3, #fff1e8); }
+.part-banner .pb-pill { display: inline-block; padding: 6px 16px; background: rgba(0,0,0,.08); border-radius: 999px; font-family: var(--font-display); font-weight: 700; font-size: 13px; letter-spacing: .1em; color: var(--ink); margin-bottom: 16px; }
+.part-banner h1 { font-size: clamp(36px, 6vw, 64px); margin: 6px 0; }
+.part-banner .pb-sub { font-size: 20px; color: var(--ink-soft); max-width: 640px; margin: 0 auto 20px; }
+.part-banner .pb-meta { display: inline-flex; flex-wrap: wrap; gap: 10px; justify-content: center; font-size: 14px; color: var(--ink-soft); background: rgba(255,255,255,.7); padding: 10px 16px; border-radius: 999px; }
+.part-banner .pb-emoji { font-size: 100px; margin: 10px 0; }
+
+/* Video embed */
+.video-wrap { background: #111; border-radius: 14px; overflow: hidden; position: relative; max-width: 800px; margin: 10px auto; }
+.video-ratio { position: relative; width: 100%; padding-top: 56.25%; }
+.video-ratio iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+.video-caption { background: #f8f4ec; padding: 10px 14px; border-radius: 10px; margin-top: 10px; font-size: 14px; }
+.video-caption b { color: var(--animal); }
+.video-edit-row { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; flex-wrap: wrap; gap: 10px; }
+.video-meta { font-size: 13px; color: var(--ink-soft); }
+
+/* Activity / Mystery slide styles */
+.beat {
+  background: linear-gradient(180deg, #fffbf4, #fff);
+  border-radius: 14px; padding: 20px; border: 2px dashed #f0d9a6;
+  margin: 14px 0;
+}
+.beat .beat-badge {
+  display: inline-block; font-family: var(--font-display); font-weight: 800; letter-spacing: .05em; font-size: 12px;
+  padding: 4px 12px; border-radius: 999px; margin-bottom: 10px;
+}
+.beat.activity .beat-badge { background: var(--sun); color: #fff; }
+.beat.mystery .beat-badge { background: var(--berry); color: #fff; }
+.beat.mythbuster .beat-badge { background: var(--animal); color: #fff; }
+.beat h3 { margin-top: 4px; }
+/* Collapsible teacher note bubble */
+.teacher-note { margin-top: 14px; }
+.teacher-note summary {
+  display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
+  background: #fff4e1; border: 1.5px solid #f3d48a; color: #8f6a15;
+  padding: 6px 14px; border-radius: 999px; font-weight: 700; font-size: 13px;
+  list-style: none; user-select: none;
+  transition: background .15s;
+}
+.teacher-note summary::-webkit-details-marker { display: none; }
+.teacher-note summary:hover { background: #ffe9b8; }
+.teacher-note[open] summary { background: #ffdf99; border-color: #e4b95e; }
+.teacher-note .note-body {
+  position: relative; background: #fffbe6; border: 1.5px solid #f3d48a;
+  border-radius: 12px; padding: 12px 14px; font-size: 14px; margin-top: 8px;
+  max-width: 600px;
+}
+.teacher-note .note-body::before {
+  content: ""; position: absolute; top: -8px; left: 20px;
+  width: 14px; height: 14px; background: #fffbe6;
+  border-top: 1.5px solid #f3d48a; border-left: 1.5px solid #f3d48a;
+  transform: rotate(45deg);
+}
+.teacher-note .note-body b { color: #8f6a15; }
+
+/* Inline edit buttons (teacher mode only) */
+.edit-chip {
+  background: #fff; border: 1.5px solid #e5d6f0; color: var(--berry);
+  padding: 5px 12px; border-radius: 999px; font-weight: 700; font-size: 12px;
+  cursor: pointer; box-shadow: 0 2px 6px rgba(199,71,122,.15);
+  display: inline-flex; align-items: center; gap: 5px;
+  transition: background .15s, border-color .15s;
+}
+.edit-chip:hover { background: #fdeef5; border-color: var(--berry); }
+.slide-edit { position: absolute; top: 16px; right: 20px; z-index: 10; }
+.hw-card .edit-chip, .q-card .edit-chip { margin-left: auto; }
+.hw-card h3, .q-card .q-header { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+/* Add-new buttons */
+.add-new-row {
+  display: flex; justify-content: center; padding: 18px;
+  border: 2px dashed #e5d6f0; border-radius: 14px; margin: 18px 0;
+  background: #fcf7fa;
+}
+.add-new-row:hover { border-color: var(--berry); background: #fef3f8; }
+.add-new-row button { background: transparent; border: none; color: var(--berry); font-family: var(--font-display); font-weight: 700; font-size: 16px; cursor: pointer; }
+
+/* Edit modal — bigger than default */
+.modal.wide { max-width: 760px; }
+.modal.wide textarea { width: 100%; padding: 10px; border: 2px solid #eee; border-radius: 10px; font-family: monospace; font-size: 13px; min-height: 100px; resize: vertical; }
+.modal.wide .field-label { font-family: var(--font-display); font-weight: 700; color: var(--ink-soft); font-size: 13px; letter-spacing: .05em; margin-top: 14px; margin-bottom: 4px; display: block; }
+.modal.wide input[type=text], .modal.wide select { width: 100%; padding: 8px 10px; border: 2px solid #eee; border-radius: 8px; font-family: inherit; font-size: 14px; }
+.modal.wide .choice-edit { display: flex; gap: 6px; margin-bottom: 6px; align-items: center; }
+.modal.wide .choice-edit input[type=radio] { margin: 0; }
+.modal.wide .choice-edit input[type=text] { flex: 1; }
+.modal.wide .claude-section {
+  background: #faf5ff; border: 1.5px solid #e5d6f0; border-radius: 12px;
+  padding: 12px 14px; margin-top: 14px;
+}
+.modal.wide .claude-section textarea { background: #fff; }
+.modal.wide .claude-response {
+  background: #fff; border: 1px solid #ddd; border-radius: 8px;
+  padding: 10px 12px; font-size: 13px; max-height: 200px; overflow-y: auto;
+  margin-top: 8px; white-space: pre-wrap;
+}
+.modal.wide .preview-box {
+  border: 1px solid #eee; border-radius: 10px; padding: 14px;
+  background: #fafaf6; margin-top: 8px; max-height: 220px; overflow: auto; font-size: 13px;
+}
+.modal.wide .tabs-mini {
+  display: flex; gap: 4px; border-bottom: 2px solid #eee; margin: 12px 0 10px;
+}
+.modal.wide .tabs-mini button {
+  background: transparent; border: none; padding: 8px 14px; font-weight: 700;
+  color: var(--ink-soft); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px;
+}
+.modal.wide .tabs-mini button.active { color: var(--berry); border-color: var(--berry); }
+.modal.wide .mini-tab { display: none; }
+.modal.wide .mini-tab.active { display: block; }
+.mod-indicator {
+  display: inline-block; background: var(--berry); color:#fff; font-size: 10px;
+  padding: 2px 6px; border-radius: 999px; font-weight: 800; letter-spacing: .05em;
+}
+
+/* Session break banner */
+.session-break {
+  background: linear-gradient(135deg, #fff5e0, #fff0d6);
+  border-radius: 14px; padding: 16px 20px; margin-top: 18px;
+  border-left: 6px solid var(--sun); display: flex; gap: 14px; align-items: center;
+}
+.session-break .icon { font-size: 40px; }
+.session-break h4 { margin: 0 0 4px; font-family: var(--font-display); }
+.session-break p { margin: 0; font-size: 14px; color: var(--ink-soft); }
+
+/* Mystery reveal */
+.mystery-answer { margin-top: 10px; padding: 12px; background: #f2faf5; border-radius: 10px; border-left: 4px solid var(--leaf); display: none; }
+.mystery-open .mystery-answer { display: block; animation: fade .3s; }
+.reveal-btn { margin-top: 10px; background: var(--berry); color: #fff; border: none; padding: 10px 16px; border-radius: 10px; font-weight: 800; }
+.mystery-open .reveal-btn { display: none; }
+
+/* Sort game */
+.sort-game { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 12px; }
+.sort-box { border: 3px dashed #ddd; border-radius: 14px; min-height: 180px; padding: 14px; transition: border-color .15s, background .15s; }
+.sort-box.plant { border-color: var(--leaf); background: #f1f9f5; }
+.sort-box.animal { border-color: var(--animal); background: #fef3ed; }
+.sort-box h4 { font-size: 18px; }
+.sort-pool { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0; }
+.chip {
+  background: #fff; border: 2px solid #eee; padding: 8px 14px; border-radius: 12px;
+  font-weight: 700; cursor: grab; user-select: none; font-size: 15px;
+}
+.chip.dragging { opacity: .5; }
+.chip.right { border-color: var(--leaf); background: #e9f7ef; }
+.chip.wrong { border-color: var(--animal); background: #fde8e1; animation: shake .4s; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+
+/* Reveal cards */
+.reveal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin-top: 14px; }
+.reveal-card {
+  background: #fff; border-radius: 14px; padding: 16px; box-shadow: var(--shadow-sm);
+  cursor: pointer; min-height: 140px; position: relative; transition: transform .2s;
+  border: 2px solid #eee;
+}
+.reveal-card:hover { transform: translateY(-2px); }
+.reveal-card .front, .reveal-card .back { transition: opacity .2s; }
+.reveal-card .back { display: none; color: var(--ink); }
+.reveal-card.open .front { display: none; }
+.reveal-card.open .back { display: block; }
+.reveal-card.open { background: linear-gradient(180deg, #fff9ea, #fff); border-color: var(--sun); }
+
+/* Energy flow diagram */
+.flow { display: flex; align-items: center; justify-content: space-around; gap: 10px; font-size: 56px; margin: 20px 0; flex-wrap: wrap;}
+.flow .arrow { font-size: 32px; color: var(--ink-soft); }
+.flow .label { font-size: 13px; font-family: var(--font-display); color: var(--ink-soft); display: block; text-align: center; }
+
+/* ============ HOMEWORK ============ */
+.hw-intro { background: linear-gradient(135deg, #e9f6fd, #fff); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow-sm); margin-bottom: 16px;}
+.hw-list { display: grid; gap: 14px; }
+.hw-card {
+  background: var(--paper); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 20px;
+  border-left: 6px solid var(--sky-dark);
+}
+.hw-card h3 { display: flex; align-items: center; gap: 10px; }
+.hw-num {
+  width: 34px; height: 34px; border-radius: 50%; background: var(--sky-dark); color: #fff;
+  display: grid; place-items: center; font-family: var(--font-display); font-weight: 800;
+}
+.hw-card textarea, .hw-card input[type=text] {
+  width: 100%; border: 2px solid #eee; border-radius: 10px; padding: 10px; font-family: inherit; font-size: 15px;
+  margin-top: 6px;
+}
+.hw-card textarea { min-height: 80px; resize: vertical; }
+.hw-card .file-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 8px;}
+.btn {
+  border: none; background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 10px;
+  font-weight: 800; font-family: inherit;
+}
+.btn.secondary { background: #fff; color: var(--ink); border: 2px solid var(--ink); }
+.btn.success { background: var(--leaf); }
+.btn.warn { background: var(--animal); }
+.btn.ghost { background: transparent; color: var(--ink-soft); border: 2px solid #eee;}
+.btn:disabled { opacity: .55; cursor: not-allowed; }
+.btn.small { padding: 6px 12px; font-size: 13px; }
+.submit-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; align-items: center; }
+
+/* ============ QUIZ ============ */
+.quiz-start {
+  background: linear-gradient(135deg, #fff0e0, #e8f7ef); border-radius: var(--radius); padding: 26px; box-shadow: var(--shadow);
+  text-align: center;
+}
+.quiz-layout { display: grid; grid-template-columns: 230px 1fr; gap: 18px; align-items: start; }
+@media (max-width: 820px){ .quiz-layout { grid-template-columns: 1fr; } .quiz-nav-sticky { position: static !important; } }
+.quiz-nav-sticky { position: sticky; top: 130px; }
+.quiz-navigator {
+  background: var(--paper); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow-sm);
+}
+.quiz-navigator h4 { margin: 0 0 10px; font-size: 14px; letter-spacing: .05em; color: var(--ink-soft); }
+.qn-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; margin-bottom: 10px; }
+@media (max-width: 820px){ .qn-grid { grid-template-columns: repeat(10, 1fr); } }
+.qn {
+  aspect-ratio: 1; border-radius: 6px; border: 2px solid #eee; background: #fafaf4; color: var(--ink-soft);
+  font-weight: 800; font-size: 12px; cursor: pointer; position: relative; padding: 0;
+  display: grid; place-items: center;
+}
+.qn.current { border-color: var(--ink); box-shadow: 0 0 0 2px rgba(31,42,68,.2); color: var(--ink); }
+.qn.answered { background: #e9f7ef; border-color: var(--leaf); color: var(--leaf-dark); }
+.qn.wrong { background: #fde8e1; border-color: var(--animal); color: var(--animal); }
+.qn.open { background: #eef7fc; border-color: var(--sky-dark); color: var(--sky-dark); }
+.qn.flagged::after { content: "🚩"; position: absolute; top: -4px; right: -4px; font-size: 10px; }
+.qn-legend { font-size: 11px; color: var(--ink-soft); line-height: 1.5; border-top: 1px solid #eee; padding-top: 8px; margin-top: 4px; }
+.qn-legend span { display: inline-flex; align-items: center; gap: 4px; margin-right: 10px; }
+.qn-dot { width: 10px; height: 10px; border-radius: 3px; background: #fafaf4; border: 1.5px solid #eee; display: inline-block; }
+.qn-dot.answered { background: #e9f7ef; border-color: var(--leaf); }
+.qn-dot.wrong { background: #fde8e1; border-color: var(--animal); }
+.qn-dot.open { background: #eef7fc; border-color: var(--sky-dark); }
+.qn-dot.flagged { background: #fff; border-color: var(--berry); }
+
+.quiz-progress {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+}
+.progress-bar { flex: 1; height: 10px; background: #eee; border-radius: 999px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--sun), var(--animal)); transition: width .3s; }
+.q-card {
+  background: var(--paper); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); margin-bottom: 16px;
+}
+.q-difficulty { font-size: 12px; font-weight: 800; letter-spacing: .1em; margin-bottom: 6px; }
+.q-difficulty.easy { color: var(--leaf); }
+.q-difficulty.medium { color: var(--sun); }
+.q-difficulty.hard { color: var(--animal); }
+.q-difficulty.boss { color: var(--berry); }
+.q-text { font-family: var(--font-display); font-size: 20px; margin: 4px 0 16px; }
+.q-scenario { background: #f8f4ec; padding: 12px 14px; border-radius: 10px; font-style: italic; margin-bottom: 12px; }
+.choice-list { display: grid; gap: 8px; }
+.choice {
+  border: 2px solid #eee; background: #fff; padding: 12px 14px; border-radius: 12px;
+  text-align: left; font-weight: 700; font-size: 15px;
+}
+.choice:hover:not(:disabled) { border-color: var(--ink-soft); }
+.choice.selected { border-color: var(--sky-dark); background: #eef7fc;}
+.choice.correct { border-color: var(--leaf); background: #e9f7ef; }
+.choice.incorrect { border-color: var(--animal); background: #fde8e1; }
+.choice:disabled { cursor: default; }
+.q-feedback { margin-top: 12px; padding: 12px 14px; border-radius: 10px; display: none; font-size: 15px; }
+.q-feedback.show { display: block; animation: fade .25s; }
+.q-feedback.correct { background: #e9f7ef; border-left: 4px solid var(--leaf); }
+.q-feedback.incorrect { background: #fde8e1; border-left: 4px solid var(--animal); }
+.q-feedback.info { background: #eef7fc; border-left: 4px solid var(--sky-dark); }
+.q-controls { display: flex; justify-content: space-between; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 14px; }
+.q-flag { background: transparent; border: 2px solid #eee; padding: 8px 12px; border-radius: 10px; font-weight: 700; color: var(--ink-soft); }
+.q-flag.on { background: #fef0f5; border-color: var(--berry); color: var(--berry); }
+
+.quiz-result {
+  background: var(--paper); border-radius: var(--radius); padding: 30px; box-shadow: var(--shadow); text-align: center;
+}
+.score-donut {
+  width: 160px; height: 160px; border-radius: 50%; margin: 20px auto;
+  display: grid; place-items: center; font-family: var(--font-display); font-size: 40px; color: #fff;
+  background: conic-gradient(var(--leaf) calc(var(--p,0)*1%), #eee 0);
+  position: relative;
+}
+.score-donut::after { content:""; position: absolute; inset: 14px; border-radius: 50%; background: #fff;}
+.score-donut span { position: relative; z-index: 1; color: var(--ink); font-weight: 800; }
+
+/* ============ TEACHER ============ */
+.teacher-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+.teacher-card {
+  background: var(--paper); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow-sm);
+  border-top: 6px solid var(--berry);
+}
+.teacher-card h3 { display: flex; gap: 8px; align-items: center; font-family: var(--font-display); }
+.teacher-card small { color: var(--ink-soft); }
+.teacher-card input[type=text], .teacher-card input[type=password], .teacher-card input[type=email], .teacher-card input[type=url], .teacher-card textarea, .teacher-card select {
+  width: 100%; padding: 10px; border: 2px solid #eee; border-radius: 10px; font-family: inherit; font-size: 14px; margin-top: 6px;
+}
+.upload-list, .url-list { margin: 10px 0; padding: 0; list-style: none; }
+.upload-list li, .url-list li {
+  display: flex; justify-content: space-between; align-items: center; gap: 8px;
+  padding: 8px; border: 1px solid #eee; border-radius: 8px; margin-bottom: 6px; font-size: 14px;
+}
+.upload-list li button, .url-list li button { background: transparent; border: none; color: var(--animal); font-weight: 800; }
+
+.ai-chat { display: flex; flex-direction: column; gap: 10px; max-height: 360px; overflow-y: auto; padding: 8px; background: #fafaf6; border-radius: 10px; margin: 10px 0;}
+.ai-msg { padding: 10px 12px; border-radius: 12px; font-size: 14px; }
+.ai-msg.user { background: #e6f4fb; align-self: flex-end; max-width: 85%; }
+.ai-msg.bot { background: #fff; align-self: flex-start; max-width: 90%; border: 1px solid #eee; }
+.ai-msg.system { background: #fff4e1; font-size: 13px; font-style: italic; }
+
+.submissions-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.submissions-table th, .submissions-table td { text-align: left; padding: 8px; border-bottom: 1px solid #eee; vertical-align: top; }
+.submissions-table th { background: #fafaf6; font-family: var(--font-display); }
+
+/* Modal */
+.modal-back { position: fixed; inset: 0; background: rgba(20,25,40,.5); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px;}
+.modal-back.show { display: flex; animation: fade .2s; }
+.modal { background: #fff; border-radius: var(--radius); padding: 24px; max-width: 520px; width: 100%; box-shadow: var(--shadow);}
+.modal h3 { margin-top: 0; }
+.modal input { width: 100%; padding: 10px; border: 2px solid #eee; border-radius: 10px; font-family: inherit; font-size: 15px; margin: 6px 0 10px; }
+
+/* video-edit button */
+.video-edit-btn { background: transparent; border: 2px solid #eee; color: var(--ink-soft); padding: 6px 12px; border-radius: 999px; font-weight: 700; font-size: 13px; }
+
+/* ============ PRESENT / FULLSCREEN MODE ============ */
+body.presenting { background: #0f1419; }
+body.presenting .topnav,
+body.presenting .chapter-header,
+body.presenting .tabs,
+body.presenting .slide-controls { display: none !important; }
+body.presenting .container { max-width: none; padding: 0; margin: 0; }
+body.presenting .page { display: none; }
+body.presenting #chapter.active { display: block; }
+body.presenting .tab-panel { display: none; }
+body.presenting #panel-lesson { display: block; }
+body.presenting .slide-wrap {
+  position: fixed; inset: 0; border-radius: 0; box-shadow: none;
+  background: linear-gradient(135deg, #fff 0%, #fdf7ec 100%);
+  z-index: 999; overflow: hidden;
+}
+body.presenting .slide-stage {
+  padding: 0;
+  min-height: 100vh; height: 100vh;
+  display: block; overflow: hidden;
+}
+body.presenting .slide.active {
+  display: flex; flex-direction: column; justify-content: center;
+  width: 100%; height: 100vh;
+  padding: 5vh 7vw;
+  gap: 1em;
+  overflow-y: auto;
+}
+body.presenting .slide.active > * { width: 100%; max-width: 1600px; margin-left: auto; margin-right: auto; }
+
+/* Typography: big, balanced, readable from the back of the room */
+body.presenting .big-q {
+  font-size: clamp(44px, 5.2vw, 82px);
+  line-height: 1.08; margin-bottom: 0.3em;
+}
+body.presenting .lead {
+  font-size: clamp(22px, 2.4vw, 34px);
+  line-height: 1.35; max-width: 95%;
+}
+body.presenting p { font-size: clamp(18px, 1.7vw, 24px); line-height: 1.5; }
+body.presenting li { font-size: clamp(18px, 1.7vw, 24px); margin: 0.3em 0; }
+body.presenting .pill { font-size: 16px; padding: 6px 14px; }
+body.presenting .small { font-size: 16px; }
+
+/* Two-column layouts get more breathing room */
+body.presenting .two-col { gap: 40px; }
+body.presenting .two-col > div { font-size: 1.05em; }
+
+/* Callouts — louder, punchier */
+body.presenting .callout {
+  font-size: clamp(20px, 2vw, 28px);
+  padding: 20px 26px; border-left-width: 8px; border-radius: 14px;
+  margin: 14px 0;
+}
+body.presenting .callout h3 { font-size: clamp(26px, 2.4vw, 36px); margin-bottom: 6px; }
+
+/* Reveal cards — larger, better fill */
+body.presenting .reveal-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr));
+  gap: 26px; margin-top: 24px;
+}
+body.presenting .reveal-card {
+  min-height: 220px; padding: 32px; font-size: 1.25em;
+  border-radius: 20px;
+}
+body.presenting .reveal-card b { font-size: clamp(26px, 2.4vw, 36px); display: block; margin-bottom: 10px; }
+body.presenting .reveal-card .small { font-size: 20px; }
+body.presenting .reveal-card .back { font-size: 22px; line-height: 1.5; }
+
+/* Part banners — true hero slides, full-bleed via absolute positioning */
+body.presenting .slide.active { position: relative; }
+body.presenting .part-banner {
+  position: absolute; inset: 0;
+  width: 100vw; height: 100vh; max-width: none;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 6vh 4vw; text-align: center; border-radius: 0;
+  gap: 0.3em; z-index: 1;
+}
+body.presenting .part-banner h1 {
+  font-size: clamp(72px, 9vw, 160px);
+  margin: 0.15em 0; line-height: 0.95;
+}
+body.presenting .part-banner .pb-emoji { font-size: clamp(110px, 13vw, 200px); margin: 0; line-height: 1; }
+body.presenting .part-banner .pb-sub { font-size: clamp(26px, 2.8vw, 44px); max-width: 1100px; margin: 0.3em auto 0.8em; }
+body.presenting .part-banner .pb-pill { font-size: 18px; padding: 10px 22px; }
+body.presenting .part-banner .pb-meta { font-size: 20px; padding: 14px 24px; }
+
+/* Video slides — centered, large */
+body.presenting .video-wrap {
+  max-width: min(1200px, 88vw);
+  margin: 0 auto;
+}
+body.presenting .video-caption { font-size: 20px; padding: 14px 18px; }
+body.presenting .video-edit-row { font-size: 16px; }
+
+/* Activity / Mystery / Myth "beat" blocks — hero-style, fill most of the slide */
+body.presenting .beat {
+  padding: 5vh 6vw; border-radius: 24px; margin: 0;
+  border-width: 3px; min-height: 65vh;
+  display: flex; flex-direction: column; justify-content: center;
+}
+body.presenting .beat .beat-badge { font-size: 16px; padding: 8px 18px; align-self: flex-start; margin-bottom: 18px; }
+body.presenting .beat h3 { font-size: clamp(40px, 4vw, 64px); margin: 10px 0 20px; line-height: 1.1; }
+body.presenting .beat p, body.presenting .beat li { font-size: clamp(22px, 2vw, 30px); line-height: 1.5; }
+body.presenting .beat ul, body.presenting .beat ol { margin: 12px 0; }
+body.presenting .reveal-btn { font-size: 22px; padding: 16px 28px; margin-top: 20px; align-self: flex-start; }
+body.presenting .mystery-answer { font-size: clamp(22px, 2vw, 30px); padding: 22px 26px; border-radius: 14px; margin-top: 20px; }
+
+/* Sort game */
+body.presenting .sort-pool { gap: 12px; }
+body.presenting .chip { font-size: 20px; padding: 10px 18px; }
+body.presenting .sort-box { min-height: 220px; }
+body.presenting .sort-box h4 { font-size: 26px; }
+
+/* Energy flow */
+body.presenting .flow { font-size: 90px; gap: 16px; }
+body.presenting .flow .label { font-size: 18px; }
+body.presenting .flow .arrow { font-size: 48px; }
+
+/* Teacher notes — still collapsed, just sized nicely */
+body.presenting .teacher-note summary { font-size: 15px; }
+body.presenting .teacher-note .note-body { font-size: 17px; }
+
+/* Session break banner scales up */
+body.presenting .session-break { padding: 22px 28px; }
+body.presenting .session-break .icon { font-size: 56px; }
+body.presenting .session-break h4 { font-size: 28px; }
+body.presenting .session-break p { font-size: 20px; }
+
+/* Hide teacher-edit affordances while presenting */
+body.presenting .slide-edit, body.presenting .mod-indicator { display: none !important; }
+
+/* Present control bar — small floating bar at bottom of screen */
+.present-bar {
+  display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  background: rgba(20,25,40,.92); color: #fff; padding: 10px 18px; border-radius: 999px;
+  gap: 10px; align-items: center; z-index: 1000; backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.3); font-size: 14px;
+  opacity: 0.4; transition: opacity .2s;
+}
+body.presenting .present-bar { display: flex; }
+.present-bar:hover { opacity: 1; }
+.present-bar button { background: transparent; border: 1px solid rgba(255,255,255,.2); color: #fff; padding: 6px 12px; border-radius: 999px; cursor: pointer; font-family: inherit; font-weight: 700; font-size: 14px; }
+.present-bar button:hover { background: rgba(255,255,255,.15); }
+.present-bar button:disabled { opacity: .4; cursor: not-allowed; }
+.present-bar .counter { font-weight: 700; padding: 0 8px; min-width: 70px; text-align: center; font-family: var(--font-display); }
+.present-bar .exit { background: var(--animal); border-color: var(--animal); }
+
+/* print */
+@media print {
+  .topnav, .tabs, .slide-controls, .nav-btn, .submit-row, .teacher-badge, .quiz-nav-sticky { display: none !important; }
+  .tab-panel { display: block !important; page-break-before: always; }
+  .slide { display: block !important; page-break-after: always; }
+}
+
+/* utility */
+.mt-0 { margin-top: 0; }
+.mt-2 { margin-top: 16px; }
+.hide { display: none !important; }
+.text-center { text-align: center; }
+.small { font-size: 13px; color: var(--ink-soft); }
+.pill { display: inline-block; padding: 4px 10px; background: #f3efe9; border-radius: 999px; font-weight: 700; font-size: 12px; color: var(--ink-soft); }
+</style>
+</head>
+<body>
+
+<!-- =================== TOP NAV =================== -->
+<nav class="topnav">
+  <div class="brand"><span class="logo">🔬</span> Science Adventure</div>
+  <span class="pill" id="chapter-pill" style="display:none;">Chapter B-3</span>
+  <div class="nav-spacer"></div>
+  <button class="nav-btn" onclick="window.location.href='index.html'">🏠 Home</button>
+  <button class="nav-btn" id="presentBtn" onclick="enterPresentMode()" title="Full-screen for projection">🖥 Present</button>
+  <button class="nav-btn" id="teacherToggle" onclick="openTeacherLogin()">🔒 Teacher</button>
+  <button class="nav-btn teacher-only hide" id="teacherExitBtn" onclick="signOutTeacher()" title="Exit teacher mode" style="color:var(--animal);border-color:#fdcbbd;">🔒 Exit</button>
+</nav>
+
+<div class="container">
+
+<!-- =================== HOME PAGE =================== -->
+<section id="home" class="page active">
+  <div class="hero">
+    <div>
+      <h1>Welcome back, <span>scientist!</span> 👋</h1>
+      <p class="lead">Pick a chapter below to jump in. The one in orange is what you'll explore next.</p>
+      <p class="small">Using the BFSU curriculum by Dr. Bernard Nebel · Volume I · Grades K–2</p>
+    </div>
+    <div class="hero-img">🌱🦋🐠🌞🐰🌳</div>
+  </div>
+
+  <div class="prog-section">
+    <div class="prog-title"><span class="prog-dot" style="background:#ffb703"></span><h3 class="mt-0">A · Nature of Matter</h3></div>
+    <div class="chapter-grid" id="grid-A"></div>
+  </div>
+  <div class="prog-section">
+    <div class="prog-title"><span class="prog-dot" style="background:#2a9d8f"></span><h3 class="mt-0">B · Life Science</h3></div>
+    <div class="chapter-grid" id="grid-B"></div>
+  </div>
+  <div class="prog-section">
+    <div class="prog-title"><span class="prog-dot" style="background:#e76f51"></span><h3 class="mt-0">C · Physical Science, Engineering & Technology</h3></div>
+    <div class="chapter-grid" id="grid-C"></div>
+  </div>
+  <div class="prog-section">
+    <div class="prog-title"><span class="prog-dot" style="background:#219ebc"></span><h3 class="mt-0">D · Earth & Space Science</h3></div>
+    <div class="chapter-grid" id="grid-D"></div>
+  </div>
+</section>
+
+<!-- =================== CHAPTER PAGE =================== -->
+<section id="chapter" class="page">
+
+  <div class="chapter-header">
+    <div class="chapter-meta">
+      <span class="pill">Lesson B-3</span>
+      <span class="pill" style="background:#eaf7f2;color:var(--leaf-dark);">Life Science</span>
+      <span class="pill">⏱ ~2 hours · 2 sessions</span>
+      <span class="pill">🎯 Age 8</span>
+    </div>
+    <h1 style="margin:10px 0 4px;">🌿 The Plant & Animal Kingdoms 🐰</h1>
+    <p class="lead">How do scientists split every living thing on Earth into just two big teams? And what does a leaf have to do with lunch?</p>
+    <div class="parts-preview">
+      <div class="pp"><b>📅 Session 1 · Parts 1 + 2 · ~60–75 min</b>Sort into kingdoms, then discover the ONE rule that tells a plant from an animal every time.</div>
+      <div class="pp p3"><b>📅 Session 2 · Part 3 · ~50 min</b>The big reveal — all energy on Earth comes from the Sun. Plus 2 myth-busters and the burn test demo.</div>
+    </div>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-tab="lesson">🎬 Lesson</button>
+    <button class="tab" data-tab="homework">📓 Homework</button>
+    <button class="tab" data-tab="quiz">🧠 Quiz</button>
+    <button class="tab teacher-only hide" data-tab="teacher">🧑‍🏫 Teacher</button>
+  </div>
+
+  <!-- ================ LESSON ================ -->
+  <div class="tab-panel active" id="panel-lesson">
+    <div class="slide-wrap">
+      <div class="slide-stage" id="slide-stage">
+
+        <!-- ========================== PART 1 ========================== -->
+
+        <!-- Slide 1: PART 1 BANNER -->
+        <div class="slide active" data-slide="1" data-part="1">
+          <div class="part-banner p1">
+            <span class="pb-pill">SESSION 1 · PART 1 OF 3</span>
+            <div class="pb-emoji">🌿 🐰</div>
+            <h1>The Two Kingdoms</h1>
+            <p class="pb-sub">Can we really split every single living thing on Earth into just two teams?</p>
+            <div class="pb-meta">🎬 2 videos · 🎲 Shuffle Sort · 🕵️ Cave mystery</div>
+          </div>
+        </div>
+
+        <!-- Slide 2: warm-up hook -->
+        <div class="slide" data-slide="2" data-part="1">
+          <div class="two-col">
+            <div>
+              <p class="pill">🔭 Today's adventure</p>
+              <h2 class="big-q">There are MILLIONS of living things on Earth.</h2>
+              <p class="lead">Whales. Worms. Watermelons. Wolves. Woodpeckers. And you!</p>
+              <div class="callout">🤔 <b>Weird idea:</b> scientists say we can put every single one into just <b>two big groups</b>. Wild, right? Let's find out if they're right.</div>
+            </div>
+            <div style="font-size: 180px; text-align:center;">🌳🐯</div>
+          </div>
+        </div>
+
+        <!-- Slide 3: warm-up puzzle -->
+        <div class="slide" data-slide="3" data-part="1">
+          <h2 class="big-q">Warm-up: plant or animal? 🧩</h2>
+          <p class="lead">I'll name 6 living things. Before we click each card, whisper to yourself: <b>plant or animal?</b></p>
+          <div class="reveal-grid">
+            <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🌵 A cactus</b><div class="small">Plant or animal?</div></div><div class="back">🌱 <b>Plant.</b> No mouth, big green stem that soaks up sunlight.</div></div>
+            <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🦐 A shrimp</b><div class="small">Plant or animal?</div></div><div class="back">🐾 <b>Animal.</b> It has a mouth and swims around hunting food.</div></div>
+            <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🌿 Moss on a rock</b><div class="small">Plant or animal?</div></div><div class="back">🌱 <b>Plant.</b> All green and flat — that's leafy surface for catching sun.</div></div>
+            <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🪱 A worm</b><div class="small">Plant or animal?</div></div><div class="back">🐾 <b>Animal.</b> No legs, no eyes… but YES, it has a mouth.</div></div>
+            <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🌲 A giant redwood tree</b><div class="small">Plant or animal?</div></div><div class="back">🌱 <b>Plant.</b> Huge! And every bit of it grew from sunlight + air + water.</div></div>
+            <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🪸 A coral</b><div class="small">Plant or animal?</div></div><div class="back">🐾 <b>Animal!</b> Tricky one — coral looks like a rock or plant, but it's a tiny animal with a mouth.</div></div>
+          </div>
+        </div>
+
+        <!-- Slide 4: intro the two kingdoms -->
+        <div class="slide" data-slide="4" data-part="1">
+          <h2 class="big-q">The Two Kingdoms 👑</h2>
+          <div class="two-col">
+            <div class="callout leaf">
+              <h3>🌱 Plant Kingdom</h3>
+              <p>Trees, grass, moss, ferns, cacti, flowers, seaweed — anything green-ish that stays put.</p>
+            </div>
+            <div class="callout animal">
+              <h3>🐾 Animal Kingdom</h3>
+              <p>Mammals, fish, birds, insects, worms, crabs, jellyfish, corals — anything that eats other things.</p>
+            </div>
+          </div>
+          <p class="lead">Quick brain buzz: scientists now also use <b>fungi</b> (mushrooms), <b>bacteria</b>, and <b>protozoa</b> as separate kingdoms. We'll save those for another day — today is <b>Plants vs. Animals</b>.</p>
+        </div>
+
+        <!-- Slide 5: VIDEO — What is a Plant? -->
+        <div class="slide" data-slide="5" data-part="1" data-type="video" data-video-id="qULkjDccCeY">
+          <h2 class="big-q">🎬 Watch: What IS a plant? <span class="pill">~9 min</span></h2>
+          <p class="lead">Free School takes you on a tour of the Plant Kingdom. Watch for leaves, roots, and that magic word: <b>photosynthesis</b>.</p>
+          <div class="video-wrap" id="video-5"><div class="video-ratio"><iframe src="https://www.youtube.com/embed/qULkjDccCeY" title="What is a Plant? - FreeSchool" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
+          <div class="video-edit-row"><span class="video-meta">📽 Free School · Ask your teacher to pause if something's confusing.</span><span><a class="btn small secondary" href="https://www.youtube.com/watch?v=qULkjDccCeY" target="_blank" rel="noopener">▶ Open on YouTube</a> <button class="video-edit-btn teacher-only hide" onclick="editVideoSlide(5)">✏️ Swap</button></span></div>
+          <div class="video-caption">🎯 <b>Listen for:</b> what do plants need to grow? Keep counting on your fingers.</div>
+        </div>
+
+        <!-- Slide 6: VIDEO — Animal Kingdom -->
+        <div class="slide" data-slide="6" data-part="1" data-type="video" data-video-id="LGxmZqQBOdU">
+          <h2 class="big-q">🎬 Watch: The Animal Kingdom <span class="pill">~4 min</span></h2>
+          <p class="lead">Happy Learning shows how many different KINDS of animals exist — and what they all share.</p>
+          <div class="video-wrap" id="video-6"><div class="video-ratio"><iframe src="https://www.youtube.com/embed/LGxmZqQBOdU" title="The Animal Kingdom - Happy Learning" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
+          <div class="video-edit-row"><span class="video-meta">📽 Happy Learning English</span><span><a class="btn small secondary" href="https://www.youtube.com/watch?v=LGxmZqQBOdU" target="_blank" rel="noopener">▶ Open on YouTube</a> <button class="video-edit-btn teacher-only hide" onclick="editVideoSlide(6)">✏️ Swap</button></span></div>
+          <div class="video-caption">🎯 <b>Listen for:</b> the word "vertebrates" (with spines) and "invertebrates" (without spines). Can you think of an example of each?</div>
+        </div>
+
+        <!-- Slide 7: ACTIVITY — Shuffle Sort (off-screen) -->
+        <div class="slide" data-slide="7" data-part="1">
+          <div class="beat activity">
+            <span class="beat-badge">🎲 ACTIVITY · OFF-SCREEN · 15 MIN</span>
+            <h3>The Shuffle Sort</h3>
+            <p>Your teacher has a stack of <b>picture cards</b> with different living things on them. Some are easy (tiger, rose). Some are tricky (jellyfish, moss, Venus fly trap!).</p>
+            <p><b>Your job:</b></p>
+            <ol>
+              <li>Draw one card from the top of the stack.</li>
+              <li>Without peeking at the back, decide: <b>Plant or Animal?</b></li>
+              <li>Drop it in the right box on the floor.</li>
+              <li>Your teacher might challenge you — "Are you SURE?" — and ask why.</li>
+            </ol>
+            <details class="teacher-note"><summary>👩‍🏫 Teacher note</summary><div class="note-body"><b>Teacher:</b> Shuffle 15–20 diverse cards. Include 2–3 "oddballs" (a mushroom, Venus fly trap, or coral). When the student hits one, don't rescue — let them struggle. Flag the mushroom as "we'll come back to this one."</div></details>
+          </div>
+        </div>
+
+        <!-- Slide 8: on-screen practice -->
+        <div class="slide" data-slide="8" data-part="1">
+          <h2 class="big-q">🖱 Practice on-screen: drag & drop!</h2>
+          <p class="lead">Drag each card into the right Kingdom box. Wrong picks wiggle — try again!</p>
+          <div class="sort-pool" id="sort-pool"></div>
+          <div class="sort-game">
+            <div class="sort-box plant" data-target="plant" ondragover="event.preventDefault()" ondrop="dropChip(event,'plant')">
+              <h4>🌱 Plant Kingdom</h4>
+              <div class="sort-placed" data-target="plant"></div>
+            </div>
+            <div class="sort-box animal" data-target="animal" ondragover="event.preventDefault()" ondrop="dropChip(event,'animal')">
+              <h4>🐾 Animal Kingdom</h4>
+              <div class="sort-placed" data-target="animal"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 9: MYSTERY — Cave Mushrooms -->
+        <div class="slide" data-slide="9" data-part="1">
+          <div class="beat mystery" id="mystery-9">
+            <span class="beat-badge">🕵️ MYSTERY #1 · THINK BEFORE YOU CLICK</span>
+            <h3>The Cave Mushrooms</h3>
+            <p>Deep inside a pitch-black cave, there are mushrooms growing. <b>No sunlight ever reaches down there.</b> If plants need sun, how are these 'plants' surviving in the dark?</p>
+            <p class="small">💭 Take 30 seconds. Tell your teacher what you think first. <i>Then</i> click below to see the answer.</p>
+            <button class="reveal-btn" onclick="document.getElementById('mystery-9').classList.add('mystery-open')">🔍 Show answer</button>
+            <div class="mystery-answer">🎯 <b>Gotcha!</b> Mushrooms aren't plants — they belong to the <b>fungus kingdom</b>, a third team we'll study later. Fungi don't have leaves and don't photosynthesize. They get food by breaking down dead plant and animal stuff. No sunshine required. So the clue isn't just "green = plant" — it's also "no leaves + not an animal + grows like this = something else entirely."</div>
+          </div>
+        </div>
+
+        <!-- Slide 10: PART 1 recap -->
+        <div class="slide" data-slide="10" data-part="1">
+          <h2 class="big-q">🎉 Part 1 done!</h2>
+          <p class="lead">You can now split living things into Plant Kingdom or Animal Kingdom. You even know when to say "hmm, that one might be a fungus!"</p>
+          <div class="callout leaf">✅ What you nailed today:<ul style="margin:6px 0;">
+            <li>Two main kingdoms: Plant and Animal</li>
+            <li>Tricky ones (coral, moss, jellyfish) can still be sorted</li>
+            <li>Mushrooms are neither — they're fungi!</li>
+          </ul></div>
+          <div class="callout"><b>💡 Coming up next in Part 2:</b> the ONE clue that tells every plant from every animal. (It might not be what you think!)</div>
+          <details class="teacher-note"><summary>👩‍🏫 Teacher note</summary><div class="note-body"><b>Teacher:</b> Part 2 flows straight on from Part 1 — stay in the same session. Take a stretch break if needed and keep going.</div></details>
+        </div>
+
+        <!-- ========================== PART 2 ========================== -->
+
+        <!-- Slide 11: PART 2 BANNER -->
+        <div class="slide" data-slide="11" data-part="2">
+          <div class="part-banner p2">
+            <span class="pb-pill">SESSION 1 · PART 2 OF 3</span>
+            <div class="pb-emoji">👄 🍃</div>
+            <h1>The One Big Difference</h1>
+            <p class="pb-sub">Every single animal has it. No plant does. What is it?</p>
+            <div class="pb-meta">🎲 Leaf Detective · 🕵️ Cactus mystery</div>
+          </div>
+        </div>
+
+        <!-- Slide 12: What makes an animal? -->
+        <div class="slide" data-slide="12" data-part="2">
+          <h2 class="big-q">🐾 What makes an ANIMAL an animal?</h2>
+          <p class="lead">Think about ALL the animals from Part 1 (tigers, fish, worms, jellyfish, coral). Do they ALL have…</p>
+          <div class="reveal-grid">
+            <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🦵 Legs?</b></div><div class="back"><b>Nope!</b> Worms and fish don't have legs.</div></div>
+            <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>👀 Eyes?</b></div><div class="back"><b>Nope!</b> Clams and sponges don't really have eyes.</div></div>
+            <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🧠 A brain?</b></div><div class="back"><b>Nope — sort of.</b> Jellyfish have nerves but no real brain.</div></div>
+            <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>👄 A mouth?</b></div><div class="back"><b>YES. Every single one.</b> Every animal has a mouth and some way to take food in. This is the BIG CLUE!</div></div>
+          </div>
+          <div class="callout animal"><b>👄 The Animal Rule:</b> If it has a mouth and eats other living things → it's an animal. Every time.</div>
+        </div>
+
+        <!-- Slide 13: What makes a plant? -->
+        <div class="slide" data-slide="13" data-part="2">
+          <h2 class="big-q">🌱 What makes a PLANT a plant?</h2>
+          <p class="lead">Same game with plants. Do they ALL have…</p>
+          <div class="reveal-grid">
+            <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🌸 Flowers?</b></div><div class="back"><b>No.</b> Ferns, moss, and pine trees don't make flowers.</div></div>
+            <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🌳 A trunk?</b></div><div class="back"><b>No.</b> Grass and moss have no trunk.</div></div>
+            <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🍃 Leaves or green surfaces?</b></div><div class="back"><b>YES!</b> Every plant has some kind of flat, green, sunny-side-up surface — leaves, needles, or a thick green stem.</div></div>
+          </div>
+          <div class="callout leaf"><b>🍃 The Plant Rule:</b> If it has green leafy/leaf-like surfaces and no mouth → it's a plant.</div>
+          <p class="small">🎨 Fun fact: in cartoons, plants have eyes and mouths. Real plants don't — that's just for fun!</p>
+        </div>
+
+        <!-- Slide 14: Both rules together -->
+        <div class="slide" data-slide="14" data-part="2">
+          <h2 class="big-q">The Two Rules, side by side 📋</h2>
+          <div class="two-col">
+            <div class="callout animal">
+              <h3>🐾 Animal =</h3>
+              <p style="font-size:22px;font-weight:800;"><span style="font-size:28px;">👄</span> has a MOUTH<br>+ eats other living things</p>
+            </div>
+            <div class="callout leaf">
+              <h3>🌱 Plant =</h3>
+              <p style="font-size:22px;font-weight:800;"><span style="font-size:28px;">🍃</span> has LEAVES or green surfaces<br>+ no mouth</p>
+            </div>
+          </div>
+          <p class="lead">These two rules work for every plant and every animal ever. (Even the weird ones!)</p>
+        </div>
+
+        <!-- Slide 15: ACTIVITY — Leaf Detective -->
+        <div class="slide" data-slide="15" data-part="2">
+          <div class="beat activity">
+            <span class="beat-badge">🎲 ACTIVITY · 15 MIN · INSIDE OR OUTSIDE</span>
+            <h3>Leaf Detective 🔍</h3>
+            <p>Find <b>3 different leaves</b> — from different plants. They can be from a classroom plant, the garden, or even fallen leaves outside. For each leaf, write down:</p>
+            <ul>
+              <li>🎨 <b>Colour</b> — how green is it? Any spots?</li>
+              <li>📏 <b>Size</b> — tiny or huge?</li>
+              <li>📐 <b>Shape</b> — skinny needle? Big flat paddle? Furry? Waxy?</li>
+            </ul>
+            <p>Then the detective question: <b>Why is each leaf THIS shape?</b></p>
+            <details class="teacher-note"><summary>👩‍🏫 Teacher note</summary><div class="note-body"><b>Teacher:</b> Nudge with: "Big flat leaves = max sunlight for shady plants." "Skinny needles = conserve water, so pine trees survive winter." "Cactus = the whole body became the leaf." Kids love this one.</div></details>
+          </div>
+        </div>
+
+        <!-- Slide 16: MYSTERY — Desert Cactus -->
+        <div class="slide" data-slide="16" data-part="2">
+          <div class="beat mystery" id="mystery-16">
+            <span class="beat-badge">🕵️ MYSTERY #2 · THINK BEFORE YOU CLICK</span>
+            <h3>The Desert Cactus</h3>
+            <p>A giant cactus in the Arizona desert has <b>no leaves at all</b> — just a fat green trunk with spikes. If our Plant Rule says plants need leaves → is a cactus… not a plant?!</p>
+            <p class="small">💭 Before you click: tell your teacher what colour the cactus is and where it stores its water.</p>
+            <button class="reveal-btn" onclick="document.getElementById('mystery-16').classList.add('mystery-open')">🔍 Show answer</button>
+            <div class="mystery-answer">🎯 <b>Yes it's still a plant!</b> Look again: the whole cactus body is <b>green</b>. That thick green trunk IS the leaf — just reshaped! Flat leaves would lose too much water in the desert, so evolution grew the leaves into the stem. And the spikes? Millions of years ago, those used to be leaves too. Now they just protect from animals. Clever desert plant! 🌵</div>
+          </div>
+        </div>
+
+        <!-- Slide 17: PART 2 recap -->
+        <div class="slide" data-slide="17" data-part="2">
+          <h2 class="big-q">🎉 Part 2 done!</h2>
+          <div class="callout leaf">✅ What you nailed:<ul style="margin:6px 0;">
+            <li>🐾 Animal = mouth + eats food</li>
+            <li>🌱 Plant = leaves or green surfaces</li>
+            <li>These two rules work EVERY time — even on the weird ones</li>
+          </ul></div>
+          <div class="callout animal"><b>💡 Coming next in Part 3:</b> <b>WHY</b> do animals have mouths and plants have leaves? Turns out, the answer is the biggest idea in science. 🤯</div>
+          <div class="session-break">
+            <div class="icon">🌟</div>
+            <div>
+              <h4>End of Session 1!</h4>
+              <p>Great work today — you've nailed the two kingdoms and the rule that sorts them. Next time (Session 2), we'll dig into the <b>why</b>.</p>
+            </div>
+          </div>
+          <details class="teacher-note"><summary>👩‍🏫 Teacher note</summary><div class="note-body"><b>Teacher:</b> Natural end of Session 1. Resume with Part 3 in the next session. If the student is still buzzing with energy, you can push on to Slide 20 (the photosynthesis video) and pause there — but 2 sessions is the recommended split.</div></details>
+        </div>
+
+        <!-- ========================== PART 3 ========================== -->
+
+        <!-- Slide 18: PART 3 BANNER -->
+        <div class="slide" data-slide="18" data-part="3">
+          <div class="part-banner p3">
+            <span class="pb-pill">SESSION 2 · PART 3 OF 3</span>
+            <div class="pb-emoji">☀️ 🌿 🐰</div>
+            <h1>All Energy Comes From the Sun</h1>
+            <p class="pb-sub">Your lunch. Your dog's lunch. A whale's lunch. It ALL traces back to the same place.</p>
+            <div class="pb-meta">🎬 2 videos · 🎲 Burn test + Grocery tour · 🕵️ 4 mysteries · 🚨 Myth busters</div>
+          </div>
+        </div>
+
+        <!-- Slide 19: Why the mouth vs leaf? -->
+        <div class="slide" data-slide="19" data-part="3">
+          <h2 class="big-q">Why mouths vs. leaves? 🤔</h2>
+          <p class="lead">Here's the wild part. That one difference is about one thing: <b>how they get ENERGY</b>.</p>
+          <div class="two-col">
+            <div class="callout leaf">
+              <h3>🌞 Plants drink the sun</h3>
+              <p>Leaves are like solar panels! They soak up light energy right out of the sky. No mouth needed.</p>
+            </div>
+            <div class="callout animal">
+              <h3>🍽 Animals eat their energy</h3>
+              <p>Animals can't catch sunlight, so they have to eat other living things to get energy. That's what mouths are for.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 20: VIDEO — Photosynthesis -->
+        <div class="slide" data-slide="20" data-part="3" data-type="video" data-video-id="D1Ymc311XS8">
+          <h2 class="big-q">🎬 Watch: How plants eat sunlight <span class="pill">~3 min</span></h2>
+          <p class="lead">Dr. Binocs explains the magic word: <b>photosynthesis</b>. It's how plants turn sunlight + water + air into their own food.</p>
+          <div class="video-wrap" id="video-20"><div class="video-ratio"><iframe src="https://www.youtube.com/embed/D1Ymc311XS8" title="Photosynthesis - Dr. Binocs Show" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
+          <div class="video-edit-row"><span class="video-meta">📽 Peekaboo Kidz · Dr. Binocs Show</span><span><a class="btn small secondary" href="https://www.youtube.com/watch?v=D1Ymc311XS8" target="_blank" rel="noopener">▶ Open on YouTube</a> <button class="video-edit-btn teacher-only hide" onclick="editVideoSlide(20)">✏️ Swap</button></span></div>
+          <div class="video-caption">🎯 <b>Listen for:</b> three ingredients plants need. (Hint: one is a gas from the air, one falls from the sky, one you drink!)</div>
+        </div>
+
+        <!-- Slide 21: Food trace-back -->
+        <div class="slide" data-slide="21" data-part="3">
+          <h2 class="big-q">🍕 Where does YOUR pizza come from?</h2>
+          <p class="lead">Let's trace it backwards, step by step…</p>
+          <div class="flow">
+            <div>🍕<span class="label">Pizza</span></div>
+            <span class="arrow">←</span>
+            <div>🧀🍞🍅<span class="label">Cheese, bread, tomato</span></div>
+            <span class="arrow">←</span>
+            <div>🐄🌾🌱<span class="label">Cow, wheat, plant</span></div>
+            <span class="arrow">←</span>
+            <div>🌿<span class="label">Grass & plants</span></div>
+            <span class="arrow">←</span>
+            <div>🌞<span class="label">Sunlight!</span></div>
+          </div>
+          <div class="callout sky"><b>Trace ANY food backward and you always land on a plant.</b> Always. That's not a trick — it's how life works on Earth.</div>
+        </div>
+
+        <!-- Slide 22: VIDEO — Food Chain -->
+        <div class="slide" data-slide="22" data-part="3" data-type="video" data-video-id="YuO4WB4SwCg">
+          <h2 class="big-q">🎬 Watch: The Food Chain <span class="pill">~3 min</span></h2>
+          <p class="lead">Dr. Binocs explains how energy flows from the sun, through plants, up to animals.</p>
+          <div class="video-wrap" id="video-22"><div class="video-ratio"><iframe src="https://www.youtube.com/embed/YuO4WB4SwCg" title="Food Chain - Dr. Binocs Show" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
+          <div class="video-edit-row"><span class="video-meta">📽 Peekaboo Kidz · Dr. Binocs Show</span><span><a class="btn small secondary" href="https://www.youtube.com/watch?v=YuO4WB4SwCg" target="_blank" rel="noopener">▶ Open on YouTube</a> <button class="video-edit-btn teacher-only hide" onclick="editVideoSlide(22)">✏️ Swap</button></span></div>
+          <div class="video-caption">🎯 <b>Listen for:</b> the words "producer" (plants) and "consumer" (animals). Who are they?</div>
+        </div>
+
+        <!-- Slide 23: ACTIVITY — Grocery Store Tour -->
+        <div class="slide" data-slide="23" data-part="3">
+          <div class="beat activity">
+            <span class="beat-badge">🎲 ACTIVITY · 10 MIN · ON-SCREEN</span>
+            <h3>Grocery Store Detective 🛒</h3>
+            <p>Your teacher will pull up pictures of 5 grocery items: <b>pasta, milk, cheese, a burger, fish sticks</b>.</p>
+            <p>For each one, the team's job is to trace it backwards — step by step — until you land on a <b>plant + the sun</b>.</p>
+            <p class="small">⚡ Challenge: can you find ONE food in the entire grocery store that doesn't trace back to a plant? (Spoiler: even honey comes from bees who drink from flowers!)</p>
+            <details class="teacher-note"><summary>👩‍🏫 Teacher note</summary><div class="note-body"><b>Teacher:</b> For tougher ones like cheese: cheese ← milk ← cow ← grass ← sunlight. Keep nudging past the first answer — the chain has to reach the sun.</div></details>
+          </div>
+        </div>
+
+        <!-- Slide 24: MYSTERY — Wolf's Salad -->
+        <div class="slide" data-slide="24" data-part="3">
+          <div class="beat mystery" id="mystery-24">
+            <span class="beat-badge">🕵️ MYSTERY #3 · THINK BEFORE YOU CLICK</span>
+            <h3>The Wolf's Salad</h3>
+            <p>A wolf only eats <b>meat</b>. A cow only eats <b>grass</b>. If ALL energy on Earth comes from plants… how does the wolf fit in? He never touches a single plant!</p>
+            <p class="small">💭 Draw it out! What did the cow eat before the wolf ate the cow?</p>
+            <button class="reveal-btn" onclick="document.getElementById('mystery-24').classList.add('mystery-open')">🔍 Show answer</button>
+            <div class="mystery-answer">🎯 Follow the chain backwards: 🌾 grass (plant) ← 🐄 cow eats grass ← 🐺 wolf eats cow. The energy in the wolf's muscles was actually <b>sunshine → grass → cow → wolf</b>. Every bite of meat started as a plant, even if the meat-eater never touched one.</div>
+          </div>
+        </div>
+
+        <!-- Slide 25: BIG IDEA -->
+        <div class="slide" data-slide="25" data-part="3">
+          <h2 class="big-q">🌞 The Big Big Idea</h2>
+          <p class="lead">Every drop of energy used by every single living thing on planet Earth originally came from…</p>
+          <div style="font-size: 160px; text-align:center; animation: fade .6s;">☀️</div>
+          <div class="callout"><b>Energy flow:</b> Sun ➔ Plants (trap it in leaves) ➔ Animals (eat plants or eat animals that ate plants) ➔ exits as 🔥 <b>heat</b> into space. Energy can't be recycled — we need fresh sunlight every day.</div>
+        </div>
+
+        <!-- Slide 26: MYTH BUSTER #1 -->
+        <div class="slide" data-slide="26" data-part="3">
+          <div class="beat mythbuster">
+            <span class="beat-badge">🚨 MYTH BUSTER #1</span>
+            <h3>"Plants eat soil." ❌</h3>
+            <p>Lots of kids (and adults!) think plants eat dirt the way we eat pizza. Let's check…</p>
+            <div class="callout animal"><b>If trees ate soil,</b> shouldn't we see a giant hole under every old tree where the soil got eaten? 🤔 Go outside and look — no holes!</div>
+            <div class="callout leaf"><b>The real truth:</b> most of a plant's body is built from <b>water</b> + <b>carbon dioxide gas</b> from the air. Light just powers the machine that glues them together. Plants <i>barely</i> touch soil for food.</div>
+          </div>
+        </div>
+
+        <!-- Slide 27: ACTIVITY — Burn Test -->
+        <div class="slide" data-slide="27" data-part="3">
+          <div class="beat activity">
+            <span class="beat-badge">🔥 ACTIVITY · 10 MIN · TEACHER DEMO</span>
+            <h3>The Burn Test</h3>
+            <p>This is the proof. Your teacher will (very carefully) try to burn three things on a metal tray outside:</p>
+            <ul>
+              <li>🍊 A dried orange peel (dried plant material)</li>
+              <li>🪨 A spoonful of dry soil</li>
+              <li>🧂 A pinch of "plant food" (fertilizer)</li>
+            </ul>
+            <p>Your job: predict which one(s) will burn. Then watch!</p>
+            <details class="teacher-note"><summary>👩‍🏫 Teacher safety note</summary><div class="note-body"><b>Safety:</b> adult-only with flame, outdoor/ventilated, metal tray. <b>Expected results:</b> only the orange peel burns — it has stored energy from sunlight. Dirt and fertilizer don't burn → they have no energy → they can't be plant food. This demo will stick with your student for weeks.</div></details>
+          </div>
+        </div>
+
+        <!-- Slide 28: MYSTERY — Hungry Window Plant -->
+        <div class="slide" data-slide="28" data-part="3">
+          <div class="beat mystery" id="mystery-28">
+            <span class="beat-badge">🕵️ MYSTERY #4 · THINK BEFORE YOU CLICK</span>
+            <h3>The Hungry Window Plant</h3>
+            <p>Grandma's big houseplant sits near the window, growing happily. She <b>never</b> puts food in its pot — just waters it. But it keeps getting bigger. Where is all that new plant coming from? It can't be magic!</p>
+            <p class="small">💭 The soil in the pot isn't disappearing… so where's the new plant coming from?</p>
+            <button class="reveal-btn" onclick="document.getElementById('mystery-28').classList.add('mystery-open')">🔍 Show answer</button>
+            <div class="mystery-answer">🎯 From the <b>AIR</b> and <b>WATER</b>! Leaves pull carbon dioxide (a gas in the air) out of the sky, and roots pull up water. Grandma's plant is literally built from <b>air and water</b>, powered by sunlight from the window. Soil is just a place to stand!</div>
+          </div>
+        </div>
+
+        <!-- Slide 29: MYTH BUSTER #2 -->
+        <div class="slide" data-slide="29" data-part="3">
+          <div class="beat mythbuster">
+            <span class="beat-badge">🚨 MYTH BUSTER #2</span>
+            <h3>"That bag of 'Plant Food' is plant food." ❌</h3>
+            <div class="two-col">
+              <div>
+                <p>Stores sell bags labeled <b>"Plant Food"</b>. It looks like plant lunch, right?</p>
+                <p>Remember the burn test: plant food <b>doesn't burn</b>. So it has no energy. So it's not fuel, and not food!</p>
+              </div>
+              <div style="font-size:120px; text-align:center;">🧂➡️🌱</div>
+            </div>
+            <div class="callout leaf"><b>The truth:</b> "plant food" is a tiny mix of <b>minerals</b> (like salt + a vitamin for plants). Plants <i>do</i> need them in small amounts — but those minerals are NOT their energy. Real plant food = sunlight + water + air. A better name is <b>FERTILIZER</b>.</div>
+          </div>
+        </div>
+
+        <!-- Slide 30: MYSTERY — Fish Tank Puzzle -->
+        <div class="slide" data-slide="30" data-part="3">
+          <div class="beat mystery" id="mystery-30">
+            <span class="beat-badge">🕵️ MYSTERY #5 · THINK BEFORE YOU CLICK</span>
+            <h3>The Fish Tank Puzzle</h3>
+            <p>A fish tank has no fish food, no water plants — just a few fish. After a week, the fish are getting thin and tired. Suddenly Dad drops in some <b>"plant food"</b> from the garden shed. The fish STILL don't get better. Why not?</p>
+            <p class="small">💭 Two things are wrong here! Can you spot both?</p>
+            <button class="reveal-btn" onclick="document.getElementById('mystery-30').classList.add('mystery-open')">🔍 Show answer</button>
+            <div class="mystery-answer">🎯 <b>Two problems!</b><br>(1) "Plant food" isn't really food at all — it's fertilizer (minerals). No energy in it.<br>(2) Fish are <b>animals</b> — they need biological food, like fish flakes (made from plants and tiny sea creatures). Plant food is not fish food, OR even real plant food. Poor fish!</div>
+          </div>
+        </div>
+
+        <!-- Slide 31: Water -->
+        <div class="slide" data-slide="31" data-part="3">
+          <h2 class="big-q">💧 The one thing EVERYONE needs</h2>
+          <p class="lead">Plants and animals are pretty different — but both teams agree on one thing. Guess?</p>
+          <div style="font-size:100px; text-align:center;">💧</div>
+          <div class="callout sky"><b>Water.</b> No living thing on Earth can live without it. That's why when scientists look at Mars, their first question isn't "any aliens?" — it's "<b>is there water?</b>"</div>
+        </div>
+
+        <!-- Slide 32: MYSTERY — Mars -->
+        <div class="slide" data-slide="32" data-part="3">
+          <div class="beat mystery" id="mystery-32">
+            <span class="beat-badge">🕵️ MYSTERY #6 · THINK BEFORE YOU CLICK</span>
+            <h3>Astronauts on Mars 🚀</h3>
+            <p>Astronauts land on Mars and find a rock that seems like it might have the tiniest living thing inside. Before they test for aliens, they do ONE other test first. What are they testing for — and why is THAT the first question?</p>
+            <button class="reveal-btn" onclick="document.getElementById('mystery-32').classList.add('mystery-open')">🔍 Show answer</button>
+            <div class="mystery-answer">🎯 They test for <b>WATER</b>. Every living thing on Earth — every plant, every animal, every bug, every tree — needs water. Scientists can't imagine any form of life without it. If the rock has water (or used to), aliens become possible. No water = not worth digging further. Water is the bouncer at the club of Life!</div>
+          </div>
+        </div>
+
+        <!-- Slide 33: Humans are animals -->
+        <div class="slide" data-slide="33" data-part="3">
+          <h2 class="big-q">🧒 Last twist: YOU are an animal.</h2>
+          <div class="two-col">
+            <div>
+              <p>You have a mouth. You eat other living things. Your body works almost exactly like a dog's or a monkey's.</p>
+              <p class="lead">Congratulations — you're officially in the Animal Kingdom! 🏆</p>
+              <div class="callout animal">🤔 Think about it: you and a worm are in the same kingdom. Cool or weird? Both!</div>
+            </div>
+            <div style="font-size:160px; text-align:center;">🧒🐕🐒🪱</div>
+          </div>
+        </div>
+
+        <!-- Slide 34: Solar Hat puzzle -->
+        <div class="slide" data-slide="34" data-part="3">
+          <h2 class="big-q">🧠 Bonus brain puzzle: The Solar Hat</h2>
+          <div class="two-col">
+            <div>
+              <p>"Plants get energy from the sun. What if I wore a <b>solar hat</b>? Then I'd never need to eat lunch again!"</p>
+              <p>Tell your teacher: why would this <b>not work</b>? Think of TWO reasons.</p>
+              <div class="callout"><b>Hints:</b><br>🧪 Our bodies don't have plant chemistry.<br>📏 A whole tree of leaves, just to stay alive sitting still. Now think about how much YOU move in a day…</div>
+            </div>
+            <div style="font-size: 140px; text-align:center;">🎩☀️🤔</div>
+          </div>
+        </div>
+
+        <!-- Slide 35: Final recap -->
+        <div class="slide" data-slide="35" data-part="3">
+          <h2 class="big-q">✨ What you now know</h2>
+          <ul style="font-size:18px;">
+            <li>🌱 Every living thing is a <b>plant</b> or an <b>animal</b> (or a fungus/bacteria/protozoa — for later!)</li>
+            <li>👄 Animals = <b>mouth + eat food</b></li>
+            <li>🍃 Plants = <b>leaves or green surfaces + drink sunlight</b></li>
+            <li>☀️ All energy for life comes from the <b>Sun</b></li>
+            <li>🧃 Plants don't eat soil. "Plant food" is just minerals (fertilizer)</li>
+            <li>💧 Everything needs water</li>
+            <li>🙋 You are in the Animal Kingdom. Officially!</li>
+          </ul>
+          <div class="callout">🎁 <b>Next up:</b> head to the <span class="pill">📓 Homework</span> tab for 5 fun missions this week, and the <span class="pill">🧠 Quiz</span> tab when you're ready to put it all together!</div>
+        </div>
+
+      </div>
+      <div class="slide-controls">
+        <button class="slide-btn ghost" onclick="prevSlide()" id="prevBtn">← Back</button>
+        <div class="slide-meta">
+          <span class="part-marker" id="partMarker">PART 1</span>
+          <span id="slideNum" class="small">Slide 1 / 35</span>
+          <div class="slide-progress"><div class="slide-progress-fill" id="slideProgress" style="width:0%"></div></div>
+          <button class="slide-btn ghost" onclick="enterPresentMode()" title="Full-screen presentation (Esc to exit)" style="font-size:13px;padding:6px 12px;">🖥 Present</button>
+          <button class="slide-btn ghost teacher-only hide" onclick="addNewSlideAfter(currentSlide)" title="Add a new slide after this one" style="font-size:13px;padding:6px 12px;color:var(--berry);">➕ Add slide</button>
+        </div>
+        <button class="slide-btn" onclick="nextSlide()" id="nextBtn">Next →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================ HOMEWORK ================ -->
+  <div class="tab-panel" id="panel-homework">
+    <div class="hw-intro">
+      <h2 class="mt-0">📓 Homework Missions</h2>
+      <p>5 little missions for this week. Fill in what you did, attach a photo if you want, and submit at the bottom. Your teacher will get your work!</p>
+      <div class="small" id="hwConfigNote"></div>
+    </div>
+    <div class="hw-list" id="homework-list"></div>
+    <div class="q-card" style="text-align:center;">
+      <h3>📤 Submit all homework</h3>
+      <p class="small">Type your name, then click Submit. Your answers will go to your teacher.</p>
+      <input type="text" id="hw-student-name" placeholder="Your name" style="width:260px;padding:10px;border:2px solid #eee;border-radius:10px;font-size:15px;" />
+      <div class="submit-row" style="justify-content:center;">
+        <button class="btn success" onclick="submitHomework()">📤 Submit Homework</button>
+        <button class="btn secondary" onclick="downloadHomework()">💾 Save as file</button>
+        <button class="btn ghost" onclick="clearHomework()">🗑 Clear</button>
+      </div>
+      <div id="hwSubmitMsg" class="small" style="margin-top:10px;"></div>
+    </div>
+  </div>
+
+  <!-- ================ QUIZ ================ -->
+  <div class="tab-panel" id="panel-quiz">
+    <div id="quizStart" class="quiz-start">
+      <div style="font-size: 80px;">🧠</div>
+      <h2>Ready for the Big Quiz?</h2>
+      <p class="lead" style="margin-left:auto;margin-right:auto;">30 questions. Some are easy, some are sneaky, the last two might stump a grown-up!<br>You can <b>skip</b>, <b>flag</b>, and <b>go back</b> to any question. Take your time.</p>
+      <input type="text" id="quiz-student-name" placeholder="Your name" style="width:260px;padding:10px;border:2px solid #eee;border-radius:10px;font-size:15px;margin:10px;" />
+      <div>
+        <button class="btn success" onclick="startQuiz()">🚀 Start the quiz!</button>
+      </div>
+      <p class="small" id="quizConfigNote" style="margin-top:14px;"></p>
+    </div>
+    <div id="quizArea" class="hide"></div>
+    <div id="quizResult" class="hide"></div>
+  </div>
+
+  <!-- ================ TEACHER ================ -->
+  <div class="tab-panel" id="panel-teacher">
+    <div class="hw-intro" style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;">
+      <div style="flex:1;min-width:240px;">
+        <h2 class="mt-0">🧑‍🏫 Teacher Command Center</h2>
+        <p>Edit the lesson, add resources, change links, and see what your student has submitted. Every change is saved to this browser only — use "Export changes" to back it up.</p>
+      </div>
+      <button class="btn ghost" onclick="signOutTeacher()" style="white-space:nowrap;">🔒 Sign out</button>
+    </div>
+    <div class="teacher-grid">
+
+      <div class="teacher-card">
+        <h3>📚 Teacher Notes</h3>
+        <small>Full lesson plan, answer keys, timing, and commentary.</small>
+        <div style="margin-top:10px;">
+          <a class="btn" href="chapter-b3-teacher-notes.html" target="_blank">📖 Open Teacher Notes</a>
+        </div>
+      </div>
+
+      <div class="teacher-card">
+        <h3>🔑 Claude API Key</h3>
+        <small>Paste your Anthropic key to enable conversational edits. Stored only in this browser.</small>
+        <input type="password" id="apiKey" placeholder="sk-ant-..." />
+        <label class="small" style="display:flex;gap:6px;align-items:center;margin-top:6px;">
+          <input type="checkbox" id="apiRemember" checked /> Remember in this browser
+        </label>
+        <div class="submit-row"><button class="btn" onclick="saveApiKey()">💾 Save key</button><button class="btn ghost" onclick="clearApiKey()">Clear</button></div>
+        <div class="small" id="apiStatus"></div>
+      </div>
+
+      <div class="teacher-card" style="grid-column: span 2; background: linear-gradient(135deg,#faf5ff,#fff);">
+        <h3>✨ Edit anywhere — inline</h3>
+        <small>Every slide, homework item, and quiz question now has an <b>✏️ Edit</b> button when teacher mode is on. Click it where the content lives:</small>
+        <ul style="margin:10px 0 0;padding-left:18px;font-size:14px;">
+          <li><b>Lesson tab</b> — each slide shows "✏️ Edit slide" in the top-right corner. Describe your change or edit directly.</li>
+          <li><b>Homework tab</b> — "✏️ Edit" on each card, and "➕ Add homework" at the bottom.</li>
+          <li><b>Quiz tab</b> — "✏️" next to each question (use the navigator to find it), and "➕ Add question" at the bottom.</li>
+        </ul>
+        <p class="small" style="margin-top:10px;">Every edit supports a <b>conversational mode</b> ("Make this simpler", "Add an example about rabbits") — Claude suggests the change, you review, you apply.</p>
+      </div>
+
+      <div class="teacher-card">
+        <h3>🎬 Lesson Videos</h3>
+        <small>Swap any video in the lesson flow. The new video ID will be saved in this browser.</small>
+        <ul class="url-list" id="videoList"></ul>
+      </div>
+
+      <div class="teacher-card">
+        <h3>📎 Upload Resources</h3>
+        <small>Attach any file (PDF, image, worksheet) — stored in this browser.</small>
+        <input type="file" id="resUpload" />
+        <input type="text" id="resLabel" placeholder="Short label (e.g. 'Coloring sheet')" />
+        <div class="submit-row"><button class="btn" onclick="saveUpload()">➕ Add</button></div>
+        <ul class="upload-list" id="uploadList"></ul>
+      </div>
+
+      <div class="teacher-card">
+        <h3>🔗 Add URL / Video / Wayground quiz</h3>
+        <small>Drop in a YouTube link, Wayground game, Google Form, slide deck — anything. Links show up for the student.</small>
+        <input type="text" id="linkLabel" placeholder="Label (e.g. 'Bill Nye video')" />
+        <input type="url" id="linkUrl" placeholder="https://…" />
+        <select id="linkType">
+          <option value="video">🎬 Video</option>
+          <option value="quiz">📝 Quiz / Wayground</option>
+          <option value="doc">📄 Document / Worksheet</option>
+          <option value="other">🔗 Other</option>
+        </select>
+        <div class="submit-row"><button class="btn" onclick="saveLink()">➕ Add link</button></div>
+        <ul class="url-list" id="linkList"></ul>
+      </div>
+
+      <div class="teacher-card">
+        <h3>📬 Submission settings</h3>
+        <small>Where should student homework / quiz submissions go?</small>
+        <label class="small">Teacher email (for mailto: fallback)</label>
+        <input type="email" id="teacherEmail" placeholder="teacher@example.com" />
+        <label class="small">Formspree / webhook POST URL (optional)</label>
+        <input type="url" id="webhookUrl" placeholder="https://formspree.io/f/xxxxxxx" />
+        <label class="small">Wayground quiz link (optional)</label>
+        <input type="url" id="waygroundUrl" placeholder="https://wayground.com/join/..." />
+        <div class="submit-row"><button class="btn" onclick="saveSubmitSettings()">💾 Save</button></div>
+      </div>
+
+      <div class="teacher-card" style="grid-column: span 2;">
+        <h3>📥 Student submissions</h3>
+        <small>All submissions saved in this browser. Export or email yourself to keep them.</small>
+        <div id="submissionsTable"></div>
+        <div class="submit-row"><button class="btn" onclick="exportSubmissions()">💾 Export JSON</button><button class="btn ghost" onclick="clearSubmissions()">🗑 Clear all</button></div>
+      </div>
+
+      <div class="teacher-card">
+        <h3>📦 Backup / Restore</h3>
+        <small>Export all your edits before you close this tab.</small>
+        <div class="submit-row"><button class="btn" onclick="exportAll()">📤 Export all</button><button class="btn secondary" onclick="document.getElementById('importFile').click()">📥 Import</button><input type="file" id="importFile" class="hide" onchange="importAll(event)" /></div>
+      </div>
+
+    </div>
+  </div>
+
+</section>
+</div>
+
+<!-- =================== PRESENT BAR =================== -->
+<div class="present-bar" id="presentBar">
+  <button onclick="prevSlide()" title="Previous (←)">◀</button>
+  <span class="counter" id="presentCounter">1 / 35</span>
+  <button onclick="nextSlide()" title="Next (→)">▶</button>
+  <button class="exit" onclick="exitPresentMode()" title="Exit (Esc)">✕ Exit</button>
+</div>
+
+<!-- =================== MODAL =================== -->
+<div class="modal-back" id="modal">
+  <div class="modal">
+    <h3 id="modal-title">Hello</h3>
+    <div id="modal-body"></div>
+    <div class="submit-row" style="justify-content:flex-end;" id="modal-actions">
+      <button class="btn ghost" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- =================== JAVASCRIPT =================== -->
+<script>
+/* ============ DATA: CHAPTERS ============ */
+const CHAPTERS = {
+  A: [
+    { code:"A/B-1", title:"Organizing Things into Categories", done:true },
+    { code:"A-2", title:"Solids, Liquids, and Gases", done:true },
+    { code:"A-3", title:"Air Is a Substance / The Atmosphere" },
+    { code:"A-4", title:"Matter I: Its Particulate Nature" },
+    { code:"A-5", title:"Distinguishing Materials" },
+    { code:"A-5A", title:"Magnets and Magnetic Fields" },
+    { code:"A-6", title:"Matter II: Air Pressure & Vacuums" },
+    { code:"A-7", title:"Air: A Mixture of Gases" },
+    { code:"A-8", title:"Matter III: Evaporation & Condensation" },
+    { code:"A-9", title:"Matter IV: Dissolving & Solutions" },
+    { code:"A-10", title:"Rocks, Minerals, Crystals, Dirt, and Soil" },
+  ],
+  B: [
+    { code:"B-2", title:"Living vs. Natural Earth vs. Human-Made", done:true },
+    { code:"B-3", title:"Plant & Animal Kingdoms", current:true },
+    { code:"B-4", title:"Life Cycles" },
+    { code:"B-4A", title:"Why Plants & Animals Live Where They Do" },
+    { code:"B-4B", title:"What Is a Species?" },
+    { code:"B-5", title:"Adaptations, Food Chains & Energy Flow" },
+    { code:"B-5A", title:"Adaptations and Survival" },
+    { code:"B-6", title:"How Animals Move I: Skeleton & Muscle" },
+    { code:"B-7", title:"How Animals Move II: Body Designs" },
+    { code:"B-8", title:"How Animals Move III: Nervous System" },
+    { code:"B-9", title:"How Animals Move IV: Energy to Run the Body" },
+    { code:"B-10", title:"Plant Science I: Structure & Reproduction" },
+    { code:"B-11", title:"Plant Science II: Germination & Growth" },
+    { code:"B-12", title:"Plants, Soil, Water & Erosion" },
+  ],
+  C: [
+    { code:"C-1", title:"Concepts of Energy I: Making Things Go" },
+    { code:"C-2", title:"Sound, Vibrations & Energy" },
+    { code:"C-3", title:"Kinetic & Potential Energy" },
+    { code:"C-3A", title:"Energy and Force" },
+    { code:"C-4", title:"Matter vs. Energy" },
+    { code:"C-5", title:"Inertia" },
+    { code:"C-6", title:"Friction" },
+    { code:"C-7", title:"Push Pushes Back" },
+  ],
+  D: [
+    { code:"D-1", title:"Gravity I: Earth's Gravity" },
+    { code:"D-2", title:"Day, Night & the Earth's Rotation" },
+    { code:"D-3", title:"Reading and Drawing Maps" },
+    { code:"D-3A", title:"North, East, South, West" },
+    { code:"D-4", title:"Land Forms and Major Biomes" },
+    { code:"D-5", title:"Time and the Earth's Turning" },
+    { code:"D-6", title:"Seasonal Changes & Orbit" },
+    { code:"D-7", title:"Gravity II: Rate of Fall & Weightlessness" },
+    { code:"D-8", title:"Rocks and Fossils" },
+    { code:"E-1", title:"Resources: An Overview" },
+  ]
+};
+
+/* ============ DATA: SORT GAME ============ */
+const SORT_ITEMS = [
+  { label:"🐝 Honey bee", type:"animal" },
+  { label:"🍄 Mushroom", type:"plant", note:"Wait! Actually mushrooms are in their OWN kingdom — fungi. We'll learn about them later. For now you can park it here." },
+  { label:"🌲 Pine tree", type:"plant" },
+  { label:"🐍 Snake", type:"animal" },
+  { label:"🌾 Wheat", type:"plant" },
+  { label:"🪼 Jellyfish", type:"animal" },
+  { label:"🌻 Sunflower", type:"plant" },
+  { label:"🐙 Octopus", type:"animal" },
+  { label:"🌿 Moss", type:"plant" },
+  { label:"🦕 Dinosaur", type:"animal" },
+];
+
+/* ============ DATA: HOMEWORK ============ */
+const HOMEWORK = [
+  {
+    icon:"🍽",
+    title:"Dinner Table Detective",
+    prompt:"At dinner tonight, pick 3 foods on your plate. For each one, work backwards and write down every step that got it onto your plate — all the way back to sunlight. Try to stump your family!",
+    placeholder:"Example: my burger → beef → cow → grass → sunshine"
+  },
+  {
+    icon:"🛁",
+    title:"Bathroom Water Count",
+    prompt:"Count everywhere water is used in your bathroom in one whole day (taps, toilet, shower, toothbrush, etc.). Then write: if you were an astronaut on Mars, how would this be different?",
+    placeholder:"Total uses of water: ___ . What I learned: ..."
+  },
+  {
+    icon:"🔭",
+    title:"Window Observation Diary (3 days)",
+    prompt:"Pick a plant you can see from a window. For 3 days, write down: does it look different in the morning vs. evening? Does it turn toward the sun? Any leaves drop? Note anything surprising.",
+    placeholder:"Day 1: ...\nDay 2: ...\nDay 3: ..."
+  },
+  {
+    icon:"🎲",
+    title:"Family Game: Stump the Grownup",
+    prompt:"Challenge a grownup: 'Name one food you eat that did NOT start as a plant.' Whatever they say, trace it back with them. Write what they guessed and what the real answer was.",
+    placeholder:"Grownup I asked: ___\nTheir guess: ___\nReal answer: ___"
+  },
+  {
+    icon:"🎨",
+    title:"Draw the Energy Flow",
+    prompt:"Draw a picture that shows: sun ➔ plant ➔ animal ➔ heat. Make it as wild or silly as you want. Upload a photo below (optional) or just describe it in words.",
+    placeholder:"Describe your drawing here, or just upload a photo!"
+  }
+];
+
+/* ============ DATA: QUIZ (30 questions, progressive) ============ */
+const QUIZ = [
+  { type:"mcq", diff:"easy", q:"Which of these is an animal?",
+    choices:["🌳 Oak tree","🌻 Sunflower","🐟 Fish","🌾 Wheat"], correct:2,
+    feedback:["Oak trees are plants — no mouth!","Sunflowers are plants — leaves!","Yes! Fish have mouths and eat other living things.","Wheat is a plant."] },
+
+  { type:"mcq", diff:"easy", q:"What one body part does EVERY animal have?",
+    choices:["Legs","Eyes","A mouth","Hair"], correct:2, misconception:true,
+    feedback:["⚠️ Not every animal has legs — worms and fish don't.","⚠️ Not every animal has eyes — clams and sponges don't really have them.","Correct! Every single animal has a mouth and a way to take in food.","⚠️ Not every animal has hair — fish and insects don't."] },
+
+  { type:"fill", diff:"easy", q:"Plants get their energy directly from the ______.",
+    correctText:["sun","sunlight","the sun"],
+    feedback:"The sun (sunlight). Leaves are like tiny solar panels." },
+
+  { type:"mcq", diff:"easy", q:"Which is the one thing EVERY living thing needs (plants and animals)?",
+    choices:["Meat","Sunshine every hour","Water","Fresh air at all times"], correct:2,
+    feedback:["Only animals eat things, not plants.","Plants need lots of sun, but not animals like deep-sea fish.","Yes! Every living thing on Earth needs water.","Air matters, but water is the one nobody lives without — which is why we ask it first on Mars."] },
+
+  { type:"fill", diff:"easy", q:"The body part plants use to catch sunlight is their ______.",
+    correctText:["leaves","leaf","green leaves"],
+    feedback:"Leaves (or leaf-like green surfaces like needles and cactus stems)." },
+
+  { type:"mcq", diff:"easy", q:"Which of these is NOT a plant?",
+    choices:["Grass","Moss","Jellyfish","Fern"], correct:2,
+    feedback:["Grass is a plant.","Moss is a plant.","Correct! Jellyfish has a mouth — it's an animal, even though it looks plant-ish.","Ferns are plants."] },
+
+  { type:"mcq", diff:"easy", q:"A cow eats grass. A lion eats the cow. Where did the lion's energy REALLY come from?",
+    choices:["The cow","The grass","The sun","The soil"], correct:2,
+    feedback:["Only the last step — keep going!","Closer — keep going further back.","Yes! Grass ate sunlight. Cow ate grass. Lion ate cow. Original energy = sun.","Not soil — soil isn't food for plants."] },
+
+  { type:"fill", diff:"easy", q:"Scientists call the group that includes all animals the Animal ______.",
+    correctText:["kingdom"],
+    feedback:"Kingdom! Plants = Plant Kingdom, Animals = Animal Kingdom." },
+
+  { type:"scenario", diff:"medium", q:"You see a green gooey thing sticking to a rock at the beach. It doesn't move. It has no mouth. What kingdom does it probably belong to?",
+    choices:["Plant Kingdom","Animal Kingdom","Rock Kingdom","Can't tell"], correct:0,
+    scenario:"No mouth + green + stuck to something = big clue.",
+    feedback:["Yes! Green + no mouth = plant. Probably seaweed or algae.","Animals need a mouth. This one doesn't have one.","There's no rock kingdom in biology!","There's enough info — green + no mouth is a strong plant signal."] },
+
+  { type:"mcq", diff:"medium", q:"Your friend says 'Plants eat soil — that's why we put them in dirt!' Why is your friend wrong?",
+    choices:[
+      "Plants don't grow in soil",
+      "If plants ate soil, the pot would have a big hole under the plant as it grew. Plants are mostly made from air (CO₂) and water",
+      "Plants eat sunlight only, they don't need soil at all",
+      "Actually your friend is right"
+    ], correct:1, misconception:true,
+    feedback:["⚠️ Plants DO grow in soil — that part is true.","Yes! Great reasoning. Plants pull carbon dioxide from air and water from soil, but they don't eat the soil itself.","⚠️ Plants do use a tiny bit of stuff from the soil (minerals) — just not as food.","⚠️ Careful! This is a common misconception. Plants don't eat soil — they use mainly air and water."] },
+
+  { type:"scenario", diff:"medium", q:"You find a Venus fly trap at a plant shop. It eats flies! Does that make it an animal?",
+    choices:["Yes, because it eats","No, it's still a plant","It's a fungus","It's its own kingdom"], correct:1,
+    scenario:"Look carefully: does it have leaves? Is it green? Can it walk?",
+    feedback:["⚠️ Being able to catch bugs doesn't make it an animal.","Right! Venus fly traps are plants — they have leaves and make their own food from sunlight. Flies are just a bonus of extra minerals. Still a plant!","No, it has real leaves.","Nope — it's a plant."] },
+
+  { type:"mcq", diff:"medium", q:"Why do we call the stuff in the 'Plant Food' bag at the store FERTILIZER, not actual food?",
+    choices:[
+      "Because plants don't like food",
+      "Because it wouldn't burn — it has no energy in it. Plants get energy from the sun, not from fertilizer",
+      "Because plants eat food but from a different bag",
+      "Because it's too expensive"
+    ], correct:1,
+    feedback:["Not really why.","Yes! The burn test proves fertilizer has no energy. It's just a few extra minerals, like a vitamin, not food.","Not the reason.","Price isn't the science here."] },
+
+  { type:"fill", diff:"medium", q:"Energy flows from the sun, to plants, then to animals, and finally exits as ______.",
+    correctText:["heat"],
+    feedback:"Heat! That's why your body stays warm. The energy enters as light and leaves as heat, into space." },
+
+  { type:"scenario", diff:"medium", q:"You fill a jar with pure water and a cut sunflower stem. Days later, the sunflower starts to wilt, even though it has plenty of water. Why?",
+    choices:[
+      "Because plants don't actually need water",
+      "Because there's no sunlight",
+      "Because the cut stem can't reach the ground",
+      "Because plants need more than just water — they need light, and the flower was cut so it can't make new parts forever"
+    ], correct:3,
+    scenario:"Remember what plants need BESIDES water.",
+    feedback:["Plants do need water.","They might — but even with sun, a cut flower still wilts.","Not really the reason — ground isn't food.","Yes — a cut flower can't keep living without its full system, even with light and water."] },
+
+  { type:"mcq", diff:"medium", q:"Which of these came from the Animal Kingdom? (Pick the best answer.)",
+    choices:["Cotton t-shirt","Wooden pencil","Leather belt","Paper book"], correct:2,
+    feedback:["Cotton is a plant.","Wood is from a tree — plant.","Yes! Leather comes from cow skin — animal.","Paper is made from trees — plant."] },
+
+  { type:"scenario", diff:"medium", q:"Kids in a cartoon movie see a carrot with eyes and a smiling mouth. In real life, do carrots have eyes and mouths?",
+    choices:["Yes, but tiny ones","No — only animals have mouths and eyes","Only if you watch carefully","Sometimes, in the dark"], correct:1, misconception:true,
+    feedback:["⚠️ No — cartoons trick us! Real plants don't have eyes or mouths.","Correct! Real plants never have mouths or eyes. Cartoons give plants faces just for fun.","⚠️ Nope — it's 100% a cartoon trick.","⚠️ Plants never grow eyes or mouths, ever."] },
+
+  { type:"fill", diff:"medium", q:"Scientists classify humans as members of the ______ kingdom.",
+    correctText:["animal"],
+    feedback:"Animal kingdom! We have mouths, eat other living things, and work like other mammals." },
+
+  { type:"mcq", diff:"medium", q:"Why do coral reefs get counted as animals even though they don't move around much?",
+    choices:[
+      "Because they're red",
+      "Because each tiny coral polyp has a mouth and eats tiny things from the water",
+      "Because they live in water",
+      "They aren't animals — they're plants"
+    ], correct:1,
+    feedback:["Color isn't the rule.","Yes! The mouth is the animal test. Coral polyps have tiny mouths and eat plankton.","Lots of plants also live in water (seaweed).","⚠️ Misconception — corals are animals."] },
+
+  { type:"scenario", diff:"hard", q:"You read this label on a cereal box: 'Made from 100% natural corn, cooked with love.' Is this food in the Biological category, the Natural Earth category, or the Human-Made category?",
+    choices:["Biological","Natural Earth","Human-Made","A mix of all three"], correct:0,
+    scenario:"Think about where corn comes from, even though the box looks processed.",
+    feedback:["Yes! Every food — even super-processed ones — starts as plant or animal (biological). Boxes and packaging are human-made, but the food itself is biological.","Not the cereal itself — corn is living.","⚠️ Misconception — even factory-made foods start from plants or animals.","Only the box is human-made; the food inside is biological."] },
+
+  { type:"scenario", diff:"hard", q:"If a new planet had no sunlight at all — total darkness forever — could plants like Earth's plants live there?",
+    choices:[
+      "Yes, as long as there's water",
+      "Yes, if the soil is good",
+      "No, because plants need sunlight to get energy",
+      "Yes, because plants could just eat the soil for energy"
+    ], correct:2, misconception:true,
+    feedback:["Water alone isn't enough.","Soil doesn't give energy.","Right! Without sunlight, plants can't get energy. Everything falls apart because plants feed everyone else too.","⚠️ Soil isn't food — this is a common mix-up."] },
+
+  { type:"scenario", diff:"hard", q:"A wheat field and a cow pasture are side by side. The wheat field produces 10x more food than the pasture. Why?",
+    choices:[
+      "Cows are smaller than wheat",
+      "Wheat plants are right at the start of the food chain (they use sunlight directly), so less energy is wasted before we eat it",
+      "The farmer waters the wheat more",
+      "Cows are lazier"
+    ], correct:1,
+    feedback:["Not the main reason.","Yes! Every time energy goes from one step to the next, lots is lost as heat. Fewer steps = more energy left for us.","Watering isn't why.","Energy loss at each step is the real reason."] },
+
+  { type:"open", diff:"hard", q:"A friend says: 'My bread isn't alive anymore, and it came from a factory — so it's not biological, it's human-made.' Write what you would say back. (2–3 sentences.)",
+    scenario:"Think about where bread started out.",
+    feedback:"Strong answers explain: bread comes from wheat → wheat is a plant → so bread is biological material (just processed). Only the factory and oven are human-made." },
+
+  { type:"experiment", diff:"hard", q:"HANDS-ON: Ask a grownup for 3 dry things: a dried leaf, a spoon of soil, and a pinch of 'plant food' (fertilizer). With supervision, try to burn each one on a safe surface. Write down which ones burn and what that tells you.",
+    feedback:"Only the dried leaf burns — it has stored energy from sunshine. Soil and fertilizer don't burn — they have no energy. Big lesson: real plant energy comes from light, not dirt." },
+
+  { type:"mcq", diff:"hard", q:"A farmer notices their lettuce plants are not growing well even in good soil. They add extra fertilizer but only a little more growth. What's the MOST LIKELY missing ingredient?",
+    choices:[
+      "More soil",
+      "Sunlight or water",
+      "More fertilizer (double it!)",
+      "More animals around the plants"
+    ], correct:1,
+    feedback:["Plants aren't eating soil.","Yes! Fertilizer is just extra minerals. Without enough sun or water, plants can't photosynthesize — that's the real food. Always check the basics.","⚠️ More fertilizer won't help — minerals aren't energy.","Animals won't help."] },
+
+  { type:"scenario", diff:"hard", q:"A 100-year-old oak tree weighs about 10,000 kg. The soil in its pot has barely gone down. Where did all the mass of the tree come from?",
+    choices:[
+      "From eating the soil bit by bit",
+      "Mostly from carbon dioxide gas (from air) + water",
+      "From the roots pulling up rocks",
+      "From sunlight turning into wood"
+    ], correct:1, misconception:true,
+    feedback:["⚠️ Classic misconception — soil didn't disappear.","Yes! Most of that 10,000 kg came from air (CO₂) and water, arranged by sunlight energy. Wild, right?","Roots don't eat rocks.","⚠️ Sunlight is energy, not matter. Light doesn't turn into wood — it powers the process."] },
+
+  { type:"open", diff:"hard", q:"A bird eats worms. The worms eat dead leaves. Write the full path of the bird's energy — start at the SUN.",
+    feedback:"Expected answer: Sun → plants (green leaves catch sunlight) → leaves fall and rot → worms eat the decaying leaves → birds eat the worms. Every step = energy lost as heat. Start is always the Sun." },
+
+  { type:"scenario", diff:"boss", q:"Think BIG: if every plant on Earth suddenly disappeared overnight, how long would ALL animals (including humans) last?",
+    choices:[
+      "Forever, because we could make food in factories",
+      "A few months to years, because the food chain collapses — no more plants means no more animals that eat plants, which means nothing for meat-eaters either",
+      "Only 1 day",
+      "Humans would be fine because we're smart"
+    ], correct:1, misconception:true,
+    feedback:["⚠️ Factories can't make food from nothing — they need crops.","Yes! Even factory food starts with plants. Without plants, EVERY animal eventually runs out. This is why plants are called 'producers' — they produce food for the whole planet.","Not 1 day — we'd have stored food for a while.","⚠️ Being smart doesn't give us energy. Our bodies still need biological food, which starts with plants."] },
+
+  { type:"open", diff:"boss", q:"You invent a 'solar hat' that turns sunlight into energy for your body. Explain TWO reasons why this wouldn't actually work for humans, even if the technology was perfect. (Use what you learned today.)",
+    scenario:"Think about size of plants, and think about how your body works compared to a plant.",
+    feedback:"Expected ideas: (1) Our bodies use different chemistry than plants — we can't 'plug' light energy into animal cells like plants do with photosynthesis. (2) A hat is tiny compared to all the leaves a plant uses. Plants sit still all day to soak up sun; humans run, play, and think, using 100x more energy. You'd need leaves the size of a backyard." },
+
+  { type:"scenario", diff:"boss", q:"Design an experiment: You want to prove to a doubter that soil is NOT plant food. You have plants, water, sunlight, soil, and two empty jars. What do you do? (Choose the best plan.)",
+    choices:[
+      "Grow one plant in soil and one in just sand/glass beads with water + sunlight. If the sand one also grows, soil isn't 'food'.",
+      "Bury the plant deeper and see if it disappears",
+      "Feed the plant plant food every day and see if it gets fatter",
+      "Ask the soil if it feels hungry"
+    ], correct:0,
+    feedback:["Perfect scientific thinking! If a plant grows in sand (which has no 'nutrition' to eat) with just sunlight + water, it proves the soil wasn't the food. This is basically the famous Van Helmont experiment from 1648!","That doesn't test the idea.","Fertilizer isn't food either, so this doesn't prove anything.","😂 Soil doesn't talk, but good for thinking outside the box!"] },
+
+  { type:"open", diff:"boss", q:"BIG FINAL QUESTION: Pick one kingdom — plant OR animal — and make the strongest argument you can that your kingdom is more important to life on Earth. Then write what the other kingdom would argue back. (3–4 sentences per side.)",
+    scenario:"There's no single right answer — this question is about REASONING. Use what you know.",
+    feedback:"Strong PLANT argument: Plants are the only team that catches sunlight. Without plants, no energy for anyone. Plants make ALL the food and most of the oxygen in the air. Every single animal depends on plants.\n\nStrong ANIMAL argument: Animals spread plant seeds, bring water in poop and bodies, pollinate flowers, and break down dead stuff. Without animals, many plants couldn't reproduce or spread. Both sides actually need each other — that's the real answer. 🌍" }
+];
+
+/* ============ STATE ============ */
+let currentSlide = 1;
+let TOTAL_SLIDES = 35;
+let quizIndex = 0;
+let quizAnswers = {};        // indexed by question index
+let quizFlags = new Set();
+let quizStarted = false;
+let homework = {};
+let resources = JSON.parse(localStorage.getItem('b3_resources') || '[]');
+let links = JSON.parse(localStorage.getItem('b3_links') || '[]');
+let submissions = JSON.parse(localStorage.getItem('b3_submissions') || '[]');
+let settings = JSON.parse(localStorage.getItem('b3_settings') || '{}');
+let videoOverrides = JSON.parse(localStorage.getItem('b3_videos') || '{}');
+let teacherMode = localStorage.getItem('b3_teacher') === '1';
+
+/* ============ RENDER HOME ============ */
+function renderHome() {
+  for (const key of ['A','B','C','D']) {
+    const grid = document.getElementById('grid-'+key);
+    grid.innerHTML = '';
+    CHAPTERS[key].forEach(ch => {
+      const card = document.createElement('div');
+      card.className = 'ch-card' + (ch.current ? ' current' : '') + (ch.done ? ' done' : '') + (!ch.current && !ch.done ? ' locked' : '');
+      card.onclick = () => {
+        if (ch.current) openChapter();
+        else if (ch.done) openModal('Already covered', '<p>You\'ve already completed this chapter. Ask your teacher to unlock review mode.</p>');
+        else openModal('Coming soon', '<p>📚 This chapter is being prepared — check back soon!</p>');
+      };
+      card.innerHTML = `
+        <div>${ch.current ? '<span class="ch-badge now">NOW PLAYING</span>' : ch.done ? '<span class="ch-badge done">✓ DONE</span>' : '<span class="ch-badge soon">COMING SOON</span>'}</div>
+        <div class="ch-code">${ch.code}</div>
+        <div class="ch-title">${ch.title}</div>
+      `;
+      grid.appendChild(card);
+    });
+  }
+}
+
+function openChapter() {
+  document.getElementById('home').classList.remove('active');
+  document.getElementById('chapter').classList.add('active');
+  document.getElementById('chapter-pill').style.display = 'inline-block';
+  window.scrollTo(0,0);
+}
+function goHome() {
+  document.getElementById('chapter').classList.remove('active');
+  document.getElementById('home').classList.add('active');
+  document.getElementById('chapter-pill').style.display = 'none';
+  window.scrollTo(0,0);
+}
+
+/* ============ TABS ============ */
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => {
+    if (t.dataset.tab === 'teacher' && !teacherMode) return;
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById('panel-'+t.dataset.tab).classList.add('active');
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  });
+});
+
+/* ============ TEACHER MODE ============ */
+function openTeacherLogin() {
+  // If already unlocked → just jump to the teacher tab (don't toggle off!)
+  if (teacherMode) {
+    const tab = document.querySelector('.tab[data-tab="teacher"]');
+    if (tab) tab.click();
+    return;
+  }
+  const html = `
+    <p>Enter the teacher password to unlock editing, uploads, AI assistant, and submissions inbox.</p>
+    <input type="password" id="teacherPwInput" placeholder="Password" autofocus />
+    <p class="small">Default password: <b>teacher</b> <span style="color:var(--ink-soft);">(or <b>sarah</b>)</span> — you can change it from inside the Teacher tab.</p>
+    <div id="teacherPwMsg" class="small"></div>
+  `;
+  openModal('🔒 Teacher Login', html, [
+    { label: '🔓 Unlock', cls: 'btn success', onClick: 'submitTeacherLogin()' }
+  ]);
+  setTimeout(() => {
+    const inp = document.getElementById('teacherPwInput');
+    if (inp) {
+      inp.focus();
+      inp.addEventListener('keydown', e => { if (e.key === 'Enter') submitTeacherLogin(); });
+    }
+  }, 50);
+}
+function submitTeacherLogin() {
+  const pw = (document.getElementById('teacherPwInput') || {}).value || '';
+  const expected = settings.teacherPw || 'teacher';
+  // Accept default + 'sarah' for backwards compat
+  if (pw === expected || pw === 'teacher' || pw === 'sarah') {
+    teacherMode = true;
+    localStorage.setItem('b3_teacher', '1');
+    closeModal();
+    applyTeacherMode();
+    // Auto-navigate to teacher tab so the user SEES it worked
+    const tab = document.querySelector('.tab[data-tab="teacher"]');
+    if (tab) tab.click();
+    // Brief success flash
+    showToast('✅ Teacher mode unlocked — scroll down for tools!');
+  } else {
+    const msg = document.getElementById('teacherPwMsg');
+    if (msg) msg.innerHTML = '❌ Wrong password. Try <b>teacher</b> or <b>sarah</b>.';
+  }
+}
+function signOutTeacher() {
+  if (!confirm('Sign out of teacher mode? Your saved settings will remain, you\'ll just need the password again next time.')) return;
+  teacherMode = false;
+  localStorage.removeItem('b3_teacher');
+  applyTeacherMode();
+  // Send them back to the Lesson tab since the Teacher tab is now hidden
+  document.querySelector('.tab[data-tab="lesson"]').click();
+  showToast('🔒 Signed out of teacher mode');
+}
+function applyTeacherMode() {
+  const btn = document.getElementById('teacherToggle');
+  document.querySelectorAll('.teacher-only').forEach(x => x.classList.toggle('hide', !teacherMode));
+  btn.textContent = teacherMode ? '🔓 Teacher · open' : '🔒 Teacher';
+  btn.title = teacherMode ? 'Click to open the teacher panel' : 'Click to unlock teacher mode';
+  btn.classList.toggle('teacher-badge', teacherMode);
+  if (teacherMode) renderTeacher();
+  // Re-render homework so edit buttons on each card show/hide correctly
+  if (typeof renderHomework === 'function') renderHomework();
+  // Re-render quiz if it's been started
+  if (quizStarted) renderQuizLayout();
+  // Re-apply slide edit buttons
+  if (typeof addSlideEditButtons === 'function') addSlideEditButtons();
+}
+
+/* Simple toast (success feedback) */
+function showToast(msg) {
+  let t = document.getElementById('toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'toast';
+    t.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 22px;border-radius:999px;font-weight:700;box-shadow:var(--shadow);z-index:200;opacity:0;transition:opacity .25s;';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => { t.style.opacity = '0'; }, 2800);
+}
+
+/* ============ SLIDES ============ */
+function applyVideoOverrides() {
+  document.querySelectorAll('[data-type=video]').forEach(slide => {
+    const id = slide.dataset.slide;
+    const override = videoOverrides[id];
+    if (override && override.videoId) {
+      const iframe = slide.querySelector('iframe');
+      if (iframe) iframe.src = 'https://www.youtube.com/embed/' + override.videoId;
+      slide.dataset.videoId = override.videoId;
+    }
+  });
+}
+/* Get all slides in current DOM order (handles inserted added slides). */
+function allSlidesInOrder() {
+  return Array.from(document.querySelectorAll('#slide-stage .slide'));
+}
+function showSlide(n) {
+  const slides = allSlidesInOrder();
+  TOTAL_SLIDES = slides.length;
+  currentSlide = Math.max(1, Math.min(TOTAL_SLIDES, n));
+  slides.forEach((s, i) => s.classList.toggle('active', i === currentSlide - 1));
+  document.getElementById('prevBtn').disabled = currentSlide === 1;
+  document.getElementById('nextBtn').textContent = currentSlide === TOTAL_SLIDES ? 'Finish 🎉' : 'Next →';
+  const active = slides[currentSlide - 1];
+  const part = active ? (active.dataset.part || '1') : '1';
+  const pm = document.getElementById('partMarker');
+  pm.className = 'part-marker p' + part;
+  pm.textContent = 'PART ' + part;
+  document.getElementById('slideNum').textContent = `Slide ${currentSlide} / ${TOTAL_SLIDES}`;
+  document.getElementById('slideProgress').style.width = `${Math.round((currentSlide/TOTAL_SLIDES)*100)}%`;
+  // Update present-bar counter too
+  const pc = document.getElementById('presentCounter');
+  if (pc) pc.textContent = `${currentSlide} / ${TOTAL_SLIDES}`;
+}
+function nextSlide() {
+  if (currentSlide === TOTAL_SLIDES) {
+    if (document.body.classList.contains('presenting')) return; // stay in present mode
+    document.querySelector('.tab[data-tab="homework"]').click();
+  } else showSlide(currentSlide + 1);
+}
+function prevSlide() { showSlide(currentSlide - 1); }
+
+/* ============ PRESENT / FULLSCREEN ============ */
+function enterPresentMode() {
+  // Make sure we're on chapter page + lesson tab
+  if (!document.getElementById('chapter').classList.contains('active')) openChapter();
+  document.querySelector('.tab[data-tab="lesson"]').click();
+  document.body.classList.add('presenting');
+  const el = document.documentElement;
+  try {
+    (el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen).call(el);
+  } catch(e) {}
+  // Re-render to update counter
+  showSlide(currentSlide);
+}
+function exitPresentMode() {
+  document.body.classList.remove('presenting');
+  try {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else if (document.webkitFullscreenElement) document.webkitExitFullscreen();
+  } catch(e) {}
+}
+document.addEventListener('fullscreenchange', () => {
+  if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+    document.body.classList.remove('presenting');
+  }
+});
+document.addEventListener('webkitfullscreenchange', () => {
+  if (!document.webkitFullscreenElement) document.body.classList.remove('presenting');
+});
+
+/* ============ VIDEO EDIT ============ */
+function editVideoSlide(slideNum) {
+  if (!teacherMode) return;
+  const slide = document.querySelector(`.slide[data-slide="${slideNum}"]`);
+  const currentId = slide.dataset.videoId || '';
+  const html = `
+    <p>Replace the YouTube video for slide ${slideNum}. Paste a YouTube URL or just the video ID.</p>
+    <input type="text" id="newVideoUrl" placeholder="https://www.youtube.com/watch?v=..." value="https://www.youtube.com/watch?v=${currentId}" />
+    <p class="small">Tip: pick an educational channel (Free School, SciShow Kids, Peekaboo Kidz, Crash Course Kids).</p>
+  `;
+  openModal('✏️ Swap Video', html, [
+    { label: 'Save', cls: 'btn success', onClick: `saveVideoOverride(${slideNum})` },
+    { label: 'Reset to default', cls: 'btn ghost', onClick: `resetVideoOverride(${slideNum})` }
+  ]);
+}
+function saveVideoOverride(slideNum) {
+  const url = (document.getElementById('newVideoUrl') || {}).value || '';
+  let id = url.trim();
+  const match = id.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/);
+  if (match) id = match[1];
+  if (!/^[a-zA-Z0-9_-]{11}$/.test(id)) {
+    alert('Could not find a valid YouTube video ID.');
+    return;
+  }
+  videoOverrides[slideNum] = { videoId: id };
+  localStorage.setItem('b3_videos', JSON.stringify(videoOverrides));
+  closeModal();
+  applyVideoOverrides();
+  renderTeacher();
+}
+function resetVideoOverride(slideNum) {
+  delete videoOverrides[slideNum];
+  localStorage.setItem('b3_videos', JSON.stringify(videoOverrides));
+  closeModal();
+  // reload page to restore default iframes
+  location.reload();
+}
+
+/* ============ SORT GAME ============ */
+function renderSortGame() {
+  const pool = document.getElementById('sort-pool');
+  pool.innerHTML = '';
+  SORT_ITEMS.forEach((item, i) => {
+    const chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.draggable = true;
+    chip.dataset.type = item.type;
+    chip.dataset.idx = i;
+    chip.textContent = item.label;
+    chip.addEventListener('dragstart', (e) => { e.dataTransfer.setData('text', i); chip.classList.add('dragging'); });
+    chip.addEventListener('dragend', () => chip.classList.remove('dragging'));
+    pool.appendChild(chip);
+  });
+}
+function dropChip(e, target) {
+  const idx = e.dataTransfer.getData('text');
+  const chip = document.querySelector(`.chip[data-idx="${idx}"]`);
+  if (!chip) return;
+  const item = SORT_ITEMS[+idx];
+  if (chip.dataset.type === target) {
+    chip.classList.remove('wrong'); chip.classList.add('right');
+    e.currentTarget.querySelector('.sort-placed').appendChild(chip);
+    if (item.note) setTimeout(()=>openModal('🍄 Oddball!', '<p>'+item.note+'</p>'), 200);
+  } else {
+    chip.classList.add('wrong');
+    setTimeout(()=>chip.classList.remove('wrong'), 500);
+  }
+  e.preventDefault();
+}
+
+/* ============ HOMEWORK ============ */
+function renderHomework() {
+  const list = document.getElementById('homework-list');
+  list.innerHTML = '';
+  HOMEWORK.forEach((h, i) => {
+    const c = document.createElement('div');
+    c.className = 'hw-card';
+    c.innerHTML = `
+      <h3><span class="hw-num">${i+1}</span> ${h.icon} ${h.title}</h3>
+      <p>${h.prompt}</p>
+      <textarea placeholder="${h.placeholder}" data-hw="${i}" oninput="homework[${i}]=this.value">${homework[i]||''}</textarea>
+      <div class="file-row">
+        <input type="file" accept="image/*" data-hw-file="${i}" onchange="attachHwFile(event,${i})" />
+        <span class="small" id="hw-file-${i}"></span>
+      </div>
+    `;
+    list.appendChild(c);
+  });
+  const note = document.getElementById('hwConfigNote');
+  if (settings.webhookUrl) note.textContent = '✓ Submissions will be sent to your teacher\'s system.';
+  else if (settings.teacherEmail) note.textContent = '✓ Submit opens an email pre-filled for your teacher (' + settings.teacherEmail + ').';
+  else note.textContent = '⚠️ Teacher: please configure a submission email or webhook in the Teacher tab.';
+}
+function attachHwFile(e, i) {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    homework['file_'+i] = { name: f.name, size: f.size, dataUrl: r.result };
+    document.getElementById('hw-file-'+i).textContent = '📎 ' + f.name + ' (' + Math.round(f.size/1024) + ' KB)';
+  };
+  r.readAsDataURL(f);
+}
+function homeworkPayload() {
+  const name = document.getElementById('hw-student-name').value.trim();
+  const payload = { type:'homework', chapter:'B-3 Plant & Animal Kingdoms', student:name, ts:new Date().toISOString(), answers:{} };
+  HOMEWORK.forEach((h, i) => {
+    payload.answers[h.title] = homework[i] || '';
+    if (homework['file_'+i]) payload.answers[h.title + ' (file)'] = homework['file_'+i].name;
+  });
+  return payload;
+}
+async function submitHomework() {
+  const payload = homeworkPayload();
+  if (!payload.student) { alert('Please type your name first.'); return; }
+  const hasAnswer = Object.values(payload.answers).some(x => (x||'').trim().length > 0);
+  if (!hasAnswer) { alert('Please fill in at least one homework before submitting.'); return; }
+  submissions.push(payload); localStorage.setItem('b3_submissions', JSON.stringify(submissions));
+  let sent = false;
+  if (settings.webhookUrl) {
+    try { const r = await fetch(settings.webhookUrl, { method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body: JSON.stringify(payload) }); sent = r.ok; } catch(e) {}
+  }
+  if (!sent && settings.teacherEmail) {
+    const body = encodeURIComponent(JSON.stringify(payload.answers, null, 2));
+    window.location.href = `mailto:${settings.teacherEmail}?subject=${encodeURIComponent('Homework B-3 from '+payload.student)}&body=${body}`;
+  }
+  document.getElementById('hwSubmitMsg').innerHTML = sent ? '✅ Submitted to teacher. Great job!' : (settings.teacherEmail ? '📧 Email opened — just hit Send!' : '💾 Saved locally (teacher hasn\'t set up online submission yet).');
+}
+function downloadHomework() {
+  const p = homeworkPayload();
+  const blob = new Blob([JSON.stringify(p, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `homework_B3_${p.student||'student'}.json`; a.click();
+}
+function clearHomework() {
+  if (!confirm('Clear all homework answers?')) return;
+  homework = {};
+  document.querySelectorAll('[data-hw]').forEach(t => t.value = '');
+  document.querySelectorAll('[id^=hw-file-]').forEach(s => s.textContent = '');
+}
+
+/* ============ QUIZ ENGINE (with navigation) ============ */
+function startQuiz() {
+  const name = document.getElementById('quiz-student-name').value.trim();
+  if (!name) { alert('Please type your name first.'); return; }
+  quizIndex = 0; quizAnswers = {}; quizFlags = new Set(); quizStarted = true;
+  document.getElementById('quizStart').classList.add('hide');
+  document.getElementById('quizArea').classList.remove('hide');
+  document.getElementById('quizResult').classList.add('hide');
+  renderQuizLayout();
+}
+function renderQuizLayout() {
+  const area = document.getElementById('quizArea');
+  area.innerHTML = `
+    <div class="quiz-layout">
+      <div class="quiz-nav-sticky">
+        <div class="quiz-navigator">
+          <h4>📋 ALL QUESTIONS</h4>
+          <div class="qn-grid" id="qnGrid"></div>
+          <div class="qn-legend">
+            <span><span class="qn-dot answered"></span> answered</span>
+            <span><span class="qn-dot wrong"></span> wrong</span>
+            <span><span class="qn-dot open"></span> open</span>
+            <span><span class="qn-dot flagged"></span> 🚩 flagged</span>
+          </div>
+        </div>
+        <div class="submit-row" style="margin-top:10px;">
+          <button class="btn success" onclick="confirmFinishQuiz()" id="finishBtn">🏁 Finish</button>
+        </div>
+        <div class="add-new-row teacher-only ${teacherMode?'':'hide'}" style="margin-top:10px;">
+          <button onclick="addNewQuizQuestion()">➕ Add question</button>
+        </div>
+      </div>
+      <div id="quizMain"></div>
+    </div>
+  `;
+  renderQuizNavigator();
+  renderCurrentQuestion();
+}
+function renderQuizNavigator() {
+  const grid = document.getElementById('qnGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  const quizList = getQuizList();
+  quizList.forEach((q, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'qn';
+    if (i === quizIndex) btn.classList.add('current');
+    const a = quizAnswers[i];
+    if (a) {
+      if (a.type === 'open' || a.type === 'experiment') btn.classList.add('open');
+      else if (a.correct === true) btn.classList.add('answered');
+      else if (a.correct === false) btn.classList.add('wrong');
+    }
+    if (quizFlags.has(i)) btn.classList.add('flagged');
+    btn.textContent = i+1;
+    btn.onclick = () => { quizIndex = i; renderQuizNavigator(); renderCurrentQuestion(); };
+    grid.appendChild(btn);
+  });
+}
+function renderCurrentQuestion() {
+  const main = document.getElementById('quizMain');
+  if (!main) return;
+  const quizList = getQuizList();
+  const q = quizList[quizIndex];
+  if (!q) return;
+  const diffMap = { easy:'WARM-UP', medium:'BRAIN-STRETCH', hard:'THINKER', boss:'BOSS LEVEL!' };
+  const existing = quizAnswers[quizIndex];
+  const isAnswered = !!existing;
+  const scenario = q.scenario ? `<div class="q-scenario">${q.scenario}</div>` : '';
+  let body = '';
+  if (q.type === 'mcq' || q.type === 'scenario') {
+    body = `<div class="choice-list">${q.choices.map((c,i)=>{
+      let klass = 'choice';
+      if (isAnswered) {
+        if (i === q.correct) klass += ' correct';
+        else if (i === existing.selected) klass += ' incorrect';
+      } else if (existing && existing.selected === i) klass += ' selected';
+      const disabled = isAnswered ? 'disabled' : '';
+      return `<button class="${klass}" onclick="pickChoice(${i})" ${disabled}>${String.fromCharCode(65+i)}. ${c}</button>`;
+    }).join('')}</div>`;
+  } else if (q.type === 'fill') {
+    const val = existing ? existing.raw : '';
+    body = `<input type="text" id="fillInput" placeholder="Type your answer…" value="${val.replace(/"/g,'&quot;')}" ${isAnswered?'disabled':''} style="width:100%;padding:12px;font-size:16px;border:2px solid #eee;border-radius:10px;" onkeydown="if(event.key==='Enter')submitFill()" />${isAnswered?'':'<div class="submit-row"><button class="btn" onclick="submitFill()">Submit</button></div>'}`;
+  } else if (q.type === 'open') {
+    const val = existing ? existing.answer : '';
+    body = `<textarea id="openInput" rows="4" placeholder="Write your answer here…" ${isAnswered?'disabled':''} style="width:100%;padding:12px;font-size:15px;border:2px solid #eee;border-radius:10px;">${val}</textarea>${isAnswered?'':'<div class="submit-row"><button class="btn" onclick="submitOpen()">Submit my answer</button><span class="small">This one\'s judged by your teacher, not the computer.</span></div>'}`;
+  } else if (q.type === 'experiment') {
+    const val = existing ? existing.answer : '';
+    body = `<textarea id="openInput" rows="5" placeholder="Describe what you did and what you saw…" ${isAnswered?'disabled':''} style="width:100%;padding:12px;font-size:15px;border:2px solid #eee;border-radius:10px;">${val}</textarea>${isAnswered?'':'<div class="submit-row"><button class="btn" onclick="submitOpen()">I did the experiment! Submit</button><span class="small">🧪 Real-world experiment — teacher will review.</span></div>'}`;
+  }
+  let feedbackHtml = '';
+  if (isAnswered) {
+    let cls = 'correct', label = '✅ Nice!';
+    if (existing.type === 'open' || existing.type === 'experiment') { cls = 'info'; label = '✨ Submitted!'; }
+    else if (existing.correct === false) { cls = 'incorrect'; label = '❌ Not quite.'; }
+    let fb = '';
+    if (q.type === 'mcq' || q.type === 'scenario') fb = q.feedback[existing.selected] || '';
+    else if (q.type === 'fill') fb = q.feedback;
+    else fb = `Here's what a strong answer might include:<br><br>${(q.feedback||'').replace(/\n/g,'<br>')}`;
+    feedbackHtml = `<div class="q-feedback show ${cls}"><b>${label}</b> ${fb}</div>`;
+  }
+  // Count status
+  const answered = Object.keys(quizAnswers).length;
+  const flagCount = quizFlags.size;
+  const pct = Math.round(((quizIndex+1)/quizList.length)*100);
+  const isEditedQ = quizIndex < QUIZ.length && overrides.quiz[quizIndex];
+  const isAddedQ = quizIndex >= QUIZ.length;
+  const editBtn = `<button class="edit-chip teacher-only ${teacherMode?'':'hide'}" style="margin-left:auto;" onclick="editQuizQuestion(${quizIndex})">✏️ Edit</button>`;
+  main.innerHTML = `
+    <div class="quiz-progress">
+      <span class="pill">Q ${quizIndex+1} / ${quizList.length}</span>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <span class="small">${answered} done · ${flagCount} flagged</span>
+    </div>
+    <div class="q-card">
+      <div class="q-header" style="display:flex;align-items:center;gap:8px;">
+        <div class="q-difficulty ${q.diff}">${diffMap[q.diff]}${q.misconception?' · 🚨 watch the trap':''}${isEditedQ?' · <span class="mod-indicator">EDITED</span>':''}${isAddedQ?' · <span class="mod-indicator">ADDED</span>':''}</div>
+        ${editBtn}
+      </div>
+      <div class="q-text">${q.q}</div>
+      ${scenario}
+      ${body}
+      ${feedbackHtml}
+      <div class="q-controls">
+        <div class="submit-row" style="margin:0;">
+          <button class="btn ghost" onclick="prevQuestion()" ${quizIndex===0?'disabled':''}>← Previous</button>
+          <button class="btn secondary" onclick="skipQuestion()">Skip ⏭</button>
+          <button class="btn" onclick="nextQuestion()" ${quizIndex===quizList.length-1?'disabled':''}>Next →</button>
+        </div>
+        <button class="q-flag ${quizFlags.has(quizIndex)?'on':''}" onclick="toggleFlag()">${quizFlags.has(quizIndex) ? '🚩 Flagged' : '🏳 Flag for review'}</button>
+      </div>
+    </div>
+  `;
+}
+function pickChoice(i) {
+  const q = quizQ(quizIndex);
+  if (quizAnswers[quizIndex]) return;
+  quizAnswers[quizIndex] = { type: q.type, selected: i, correct: (i === q.correct) };
+  renderQuizNavigator();
+  renderCurrentQuestion();
+}
+function submitFill() {
+  const q = quizQ(quizIndex);
+  if (quizAnswers[quizIndex]) return;
+  const raw = (document.getElementById('fillInput').value || '').trim();
+  if (!raw) { alert('Type an answer first!'); return; }
+  const ans = raw.toLowerCase();
+  const correct = (q.correctText||[]).some(t => ans.includes(t.toLowerCase()));
+  quizAnswers[quizIndex] = { type:'fill', raw, correct };
+  renderQuizNavigator();
+  renderCurrentQuestion();
+}
+function submitOpen() {
+  const q = quizQ(quizIndex);
+  if (quizAnswers[quizIndex]) return;
+  const ans = (document.getElementById('openInput').value || '').trim();
+  if (ans.length < 5) { alert("Give it a real try — at least a sentence!"); return; }
+  quizAnswers[quizIndex] = { type: q.type, answer: ans, correct: null };
+  renderQuizNavigator();
+  renderCurrentQuestion();
+}
+function prevQuestion() { if (quizIndex>0) { quizIndex--; renderQuizNavigator(); renderCurrentQuestion(); } }
+function nextQuestion() { const L = getQuizList().length; if (quizIndex<L-1) { quizIndex++; renderQuizNavigator(); renderCurrentQuestion(); } }
+function skipQuestion() {
+  const L = getQuizList().length;
+  if (quizIndex < L-1) { quizIndex++; }
+  else {
+    for (let i=0;i<L;i++) if (!quizAnswers[i]) { quizIndex = i; break; }
+  }
+  renderQuizNavigator(); renderCurrentQuestion();
+}
+function toggleFlag() {
+  if (quizFlags.has(quizIndex)) quizFlags.delete(quizIndex);
+  else quizFlags.add(quizIndex);
+  renderQuizNavigator(); renderCurrentQuestion();
+}
+function confirmFinishQuiz() {
+  const L = getQuizList().length;
+  const unanswered = [];
+  for (let i=0;i<L;i++) if (!quizAnswers[i]) unanswered.push(i+1);
+  let html = '<p>Ready to finish the quiz and send your results to your teacher?</p>';
+  if (unanswered.length) html += `<p class="small">⚠️ You have <b>${unanswered.length}</b> unanswered: ${unanswered.join(', ')}</p>`;
+  if (quizFlags.size) html += `<p class="small">🚩 You flagged <b>${quizFlags.size}</b> for review.</p>`;
+  openModal('🏁 Finish quiz?', html, [
+    { label: 'Yes, finish!', cls: 'btn success', onClick: 'finishQuiz()' },
+    { label: 'Not yet', cls: 'btn ghost', onClick: 'closeModal()' }
+  ]);
+}
+async function finishQuiz() {
+  closeModal();
+  const name = document.getElementById('quiz-student-name').value.trim();
+  const quizList = getQuizList();
+  const answerList = quizList.map((q, i) => ({ q: q.q, ...(quizAnswers[i] || { unanswered: true }), flagged: quizFlags.has(i) }));
+  const auto = answerList.filter(a => typeof a.correct === 'boolean');
+  const autoCorrect = auto.filter(a => a.correct).length;
+  const openCount = answerList.filter(a => a.correct === null).length;
+  const unanswered = answerList.filter(a => a.unanswered).length;
+  const pct = auto.length ? Math.round((autoCorrect / auto.length) * 100) : 0;
+  const payload = { type:'quiz', chapter:'B-3', student:name, ts:new Date().toISOString(), autoCorrect, autoTotal: auto.length, openCount, unanswered, answers: answerList };
+  submissions.push(payload); localStorage.setItem('b3_submissions', JSON.stringify(submissions));
+  let sent = false;
+  if (settings.webhookUrl) {
+    try { const r = await fetch(settings.webhookUrl, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) }); sent = r.ok; } catch(e) {}
+  }
+  document.getElementById('quizArea').classList.add('hide');
+  document.getElementById('quizResult').classList.remove('hide');
+  const msg = autoCorrect === auto.length && auto.length > 0 ? '🌟 PERFECT! You are a scientist!' :
+              pct >= 85 ? '🚀 Amazing work!' :
+              pct >= 70 ? '👏 Great job!' :
+              pct >= 50 ? '💪 Good effort — review the lesson and try again!' :
+              '🌱 Growing those science muscles — let\'s review together!';
+  const emailLink = (!sent && settings.teacherEmail) ?
+    `<a class="btn secondary" href="mailto:${settings.teacherEmail}?subject=${encodeURIComponent('Quiz B-3 from '+name)}&body=${encodeURIComponent(JSON.stringify(payload, null, 2))}">📧 Email results to teacher</a>` : '';
+  document.getElementById('quizResult').innerHTML = `
+    <div class="quiz-result">
+      <h2>${msg}</h2>
+      <div class="score-donut" style="--p:${pct}"><span>${autoCorrect}/${auto.length}</span></div>
+      <p>${openCount > 0 ? `Plus <b>${openCount}</b> open questions saved for your teacher.` : ''}${unanswered > 0 ? ` · ${unanswered} unanswered.` : ''}</p>
+      <p class="small">${sent ? '✅ Automatically sent to teacher.' : settings.teacherEmail ? '👇 Click below to email your results.' : '💾 Saved locally. Ask teacher to set up email/webhook.'}</p>
+      <div class="submit-row" style="justify-content:center;">
+        ${emailLink}
+        <button class="btn" onclick="downloadQuiz()">💾 Download results</button>
+        <button class="btn ghost" onclick="location.reload()">🔁 Retake</button>
+      </div>
+    </div>
+  `;
+}
+function downloadQuiz() {
+  const last = submissions.filter(s => s.type==='quiz').slice(-1)[0];
+  if (!last) return;
+  const blob = new Blob([JSON.stringify(last, null, 2)], { type:'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `quiz_B3_${last.student}.json`; a.click();
+}
+
+/* ============ TEACHER FUNCTIONS ============ */
+function renderTeacher() {
+  document.getElementById('apiKey').value = localStorage.getItem('b3_apiKey') || '';
+  document.getElementById('apiStatus').textContent = localStorage.getItem('b3_apiKey') ? '✓ API key saved' : '';
+  document.getElementById('teacherEmail').value = settings.teacherEmail || '';
+  document.getElementById('webhookUrl').value = settings.webhookUrl || '';
+  document.getElementById('waygroundUrl').value = settings.waygroundUrl || '';
+  renderUploadList(); renderLinkList(); renderSubmissions(); renderVideoList();
+  const qc = document.getElementById('quizConfigNote');
+  if (settings.waygroundUrl) qc.innerHTML = `Also available: <a href="${settings.waygroundUrl}" target="_blank">🎮 Take this quiz on Wayground</a>`;
+}
+function renderVideoList() {
+  const ul = document.getElementById('videoList'); if (!ul) return;
+  const defaults = { '5': 'qULkjDccCeY (What is a Plant?)', '6': 'LGxmZqQBOdU (Animal Kingdom)', '20': 'D1Ymc311XS8 (Photosynthesis)', '22': 'YuO4WB4SwCg (Food Chain)' };
+  ul.innerHTML = Object.entries(defaults).map(([slide, label]) => {
+    const id = (videoOverrides[slide] && videoOverrides[slide].videoId) || label.split(' ')[0];
+    const modified = videoOverrides[slide] ? ' (edited)' : '';
+    return `<li><span>🎬 Slide ${slide}: ${id.substring(0,11)}${modified}</span><button onclick="editVideoSlide(${slide})">✏️ Edit</button></li>`;
+  }).join('');
+}
+function saveApiKey() {
+  const k = document.getElementById('apiKey').value.trim();
+  const r = document.getElementById('apiRemember').checked;
+  if (r) localStorage.setItem('b3_apiKey', k); else sessionStorage.setItem('b3_apiKey', k);
+  document.getElementById('apiStatus').textContent = '✓ Saved';
+}
+function clearApiKey() { localStorage.removeItem('b3_apiKey'); sessionStorage.removeItem('b3_apiKey'); document.getElementById('apiKey').value=''; document.getElementById('apiStatus').textContent = 'Cleared'; }
+function saveUpload() {
+  const f = document.getElementById('resUpload').files[0];
+  const label = document.getElementById('resLabel').value.trim() || (f && f.name) || 'Resource';
+  if (!f) { alert('Choose a file first'); return; }
+  if (f.size > 500*1024) { if (!confirm('Large file — this will take up browser space. Continue?')) return; }
+  const r = new FileReader();
+  r.onload = () => {
+    resources.push({ label, name: f.name, size: f.size, type: f.type, dataUrl: r.result, ts: Date.now() });
+    localStorage.setItem('b3_resources', JSON.stringify(resources));
+    document.getElementById('resUpload').value=''; document.getElementById('resLabel').value='';
+    renderUploadList();
+  };
+  r.readAsDataURL(f);
+}
+function renderUploadList() {
+  const ul = document.getElementById('uploadList'); if (!ul) return;
+  ul.innerHTML = resources.map((r, i) => `<li><span>📎 ${r.label} <small>(${Math.round(r.size/1024)} KB)</small></span><span><a href="${r.dataUrl}" download="${r.name}">download</a> · <button onclick="removeUpload(${i})">✕</button></span></li>`).join('') || '<li class="small">No resources yet.</li>';
+}
+function removeUpload(i) { resources.splice(i,1); localStorage.setItem('b3_resources', JSON.stringify(resources)); renderUploadList(); }
+function saveLink() {
+  const label = document.getElementById('linkLabel').value.trim();
+  const url = document.getElementById('linkUrl').value.trim();
+  const type = document.getElementById('linkType').value;
+  if (!label || !url) { alert('Fill both label and URL'); return; }
+  links.push({ label, url, type, ts: Date.now() });
+  localStorage.setItem('b3_links', JSON.stringify(links));
+  document.getElementById('linkLabel').value=''; document.getElementById('linkUrl').value='';
+  renderLinkList();
+}
+function renderLinkList() {
+  const ul = document.getElementById('linkList'); if (!ul) return;
+  const icons = { video:'🎬', quiz:'📝', doc:'📄', other:'🔗' };
+  ul.innerHTML = links.map((l, i) => `<li><span>${icons[l.type]||'🔗'} <a href="${l.url}" target="_blank">${l.label}</a></span><button onclick="removeLink(${i})">✕</button></li>`).join('') || '<li class="small">No links yet.</li>';
+}
+function removeLink(i) { links.splice(i,1); localStorage.setItem('b3_links', JSON.stringify(links)); renderLinkList(); }
+function saveSubmitSettings() {
+  settings.teacherEmail = document.getElementById('teacherEmail').value.trim();
+  settings.webhookUrl = document.getElementById('webhookUrl').value.trim();
+  settings.waygroundUrl = document.getElementById('waygroundUrl').value.trim();
+  localStorage.setItem('b3_settings', JSON.stringify(settings));
+  openModal('✅ Saved', '<p>Submission settings updated.</p>');
+  renderTeacher(); renderHomework();
+}
+function renderSubmissions() {
+  const d = document.getElementById('submissionsTable'); if (!d) return;
+  if (!submissions.length) { d.innerHTML = '<p class="small">No submissions yet.</p>'; return; }
+  d.innerHTML = '<table class="submissions-table"><thead><tr><th>When</th><th>Student</th><th>Type</th><th>Result</th><th></th></tr></thead><tbody>' +
+    submissions.map((s,i) => `<tr><td>${new Date(s.ts).toLocaleString()}</td><td>${s.student||'?'}</td><td>${s.type}</td><td>${s.type==='quiz' ? s.autoCorrect+'/'+s.autoTotal + (s.openCount?` + ${s.openCount} open`:''): Object.values(s.answers||{}).filter(Boolean).length + ' answers'}</td><td><button class="btn ghost" onclick="viewSub(${i})">View</button></td></tr>`).join('') +
+    '</tbody></table>';
+}
+function viewSub(i) {
+  const s = submissions[i];
+  openModal('Submission · ' + (s.student||'?'), '<pre style="white-space:pre-wrap;max-height:400px;overflow:auto;background:#fafaf6;padding:12px;border-radius:8px;font-size:13px;">' + JSON.stringify(s, null, 2) + '</pre>');
+}
+function exportSubmissions() {
+  const blob = new Blob([JSON.stringify(submissions, null, 2)], { type:'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'submissions_B3.json'; a.click();
+}
+function clearSubmissions() { if (!confirm('Clear all submissions?')) return; submissions = []; localStorage.removeItem('b3_submissions'); renderSubmissions(); }
+function exportAll() {
+  const data = { resources, links, settings, submissions, videoOverrides, ts: Date.now() };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type:'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'chapter_B3_backup.json'; a.click();
+}
+function importAll(e) {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try {
+      const d = JSON.parse(r.result);
+      if (d.resources) resources = d.resources;
+      if (d.links) links = d.links;
+      if (d.settings) settings = d.settings;
+      if (d.submissions) submissions = d.submissions;
+      if (d.videoOverrides) videoOverrides = d.videoOverrides;
+      localStorage.setItem('b3_resources', JSON.stringify(resources));
+      localStorage.setItem('b3_links', JSON.stringify(links));
+      localStorage.setItem('b3_settings', JSON.stringify(settings));
+      localStorage.setItem('b3_submissions', JSON.stringify(submissions));
+      localStorage.setItem('b3_videos', JSON.stringify(videoOverrides));
+      renderTeacher(); renderHomework(); applyVideoOverrides();
+      openModal('✅ Imported', '<p>Your backup has been restored.</p>');
+    } catch(err) { alert('Bad file: '+err.message); }
+  };
+  r.readAsText(f);
+}
+
+/* (Old standalone AI chat removed — edits are now contextual per slide/HW/quiz.) */
+
+/* ============ MODAL ============ */
+function openModal(title, body, actions, wide) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-body').innerHTML = body;
+  const modalEl = document.querySelector('#modal .modal');
+  modalEl.classList.toggle('wide', !!wide);
+  const actBar = document.getElementById('modal-actions');
+  actBar.innerHTML = '';
+  if (actions && actions.length) {
+    actions.forEach(a => {
+      const b = document.createElement('button');
+      b.className = a.cls || 'btn';
+      b.textContent = a.label;
+      b.setAttribute('onclick', a.onClick);
+      actBar.appendChild(b);
+    });
+  }
+  const close = document.createElement('button');
+  close.className = 'btn ghost';
+  close.textContent = 'Close';
+  close.setAttribute('onclick', 'closeModal()');
+  actBar.appendChild(close);
+  document.getElementById('modal').classList.add('show');
+}
+function closeModal() { document.getElementById('modal').classList.remove('show'); }
+document.getElementById('modal').addEventListener('click', e => { if (e.target.id==='modal') closeModal(); });
+
+/* ============ OVERRIDES (inline editing) ============ */
+let overrides = JSON.parse(localStorage.getItem('b3_overrides') || '{"slides":{},"homework":{},"quiz":{},"addedSlides":[],"addedHomework":[],"addedQuiz":[]}');
+function saveOverrides() { localStorage.setItem('b3_overrides', JSON.stringify(overrides)); }
+
+/* Apply slide overrides on load. An override replaces the inner HTML of the slide content. */
+function applySlideOverrides() {
+  document.querySelectorAll('.slide').forEach(slide => {
+    const id = slide.dataset.slide;
+    const ov = overrides.slides[id];
+    if (ov && ov.html !== undefined) {
+      slide.innerHTML = ov.html;
+      // add indicator
+      if (!slide.querySelector('.mod-indicator')) {
+        const ind = document.createElement('div');
+        ind.className = 'mod-indicator';
+        ind.textContent = 'EDITED';
+        ind.style.cssText = 'position:absolute;top:14px;left:20px;';
+        slide.style.position = 'relative';
+        slide.appendChild(ind);
+      }
+    }
+  });
+  // Handle added slides — support `insertAfter` to position anywhere
+  if (overrides.addedSlides && overrides.addedSlides.length) {
+    const stage = document.getElementById('slide-stage');
+    stage.querySelectorAll('.slide.added').forEach(s => s.remove());
+    overrides.addedSlides.forEach((s, i) => {
+      const div = document.createElement('div');
+      div.className = 'slide added';
+      div.dataset.slide = 'added_' + i;     // unique identifier
+      div.dataset.addedIndex = i;            // index into addedSlides array
+      div.dataset.part = s.part || '3';
+      div.dataset.added = '1';
+      div.style.position = 'relative';
+      div.innerHTML = s.html;
+      const ind = document.createElement('div');
+      ind.className = 'mod-indicator';
+      ind.textContent = 'ADDED';
+      ind.style.cssText = 'position:absolute;top:14px;left:20px;';
+      div.appendChild(ind);
+      // Position: after specific slide, or at end
+      if (s.insertAfter) {
+        // insertAfter is either a default slide number "1"-"35" or "added_N"
+        const target = stage.querySelector(`.slide[data-slide="${s.insertAfter}"]`);
+        if (target && target.nextSibling) stage.insertBefore(div, target.nextSibling);
+        else if (target) stage.appendChild(div);
+        else stage.appendChild(div);
+      } else {
+        stage.appendChild(div);
+      }
+    });
+  }
+  TOTAL_SLIDES = document.querySelectorAll('#slide-stage .slide').length;
+  addSlideEditButtons();
+}
+function addSlideEditButtons() {
+  document.querySelectorAll('.slide').forEach(slide => {
+    if (slide.querySelector('.slide-edit')) return;
+    const btn = document.createElement('button');
+    btn.className = 'edit-chip slide-edit teacher-only' + (teacherMode ? '' : ' hide');
+    btn.innerHTML = '✏️ Edit slide';
+    btn.onclick = (e) => { e.stopPropagation(); editSlide(slide.dataset.slide); };
+    slide.style.position = 'relative';
+    slide.appendChild(btn);
+  });
+}
+
+/* ============ EDIT MODAL (unified) ============ */
+function editSlide(slideNum) {
+  const slide = document.querySelector(`.slide[data-slide="${slideNum}"]`);
+  if (!slide) return;
+  // Pull out everything except the edit button + mod indicator (the true content)
+  const clone = slide.cloneNode(true);
+  clone.querySelectorAll('.slide-edit, .mod-indicator').forEach(el => el.remove());
+  const currentHtml = clone.innerHTML.trim();
+  const isModified = !!(overrides.slides[slideNum] && overrides.slides[slideNum].html !== undefined);
+  const isAdded = slide.dataset.added === '1';
+  const body = `
+    <div class="tabs-mini">
+      <button class="active" onclick="switchMiniTab(event,'claude')">💬 Ask Claude</button>
+      <button onclick="switchMiniTab(event,'direct')">✏️ Edit HTML directly</button>
+    </div>
+    <div class="mini-tab active" data-tab="claude">
+      <p class="small">Describe what you want to change. Examples: "Make this simpler", "Add a funny example about my dog", "Remove the second bullet", "Rewrite this for a 6-year-old".</p>
+      <textarea id="claudeInstruction" rows="3" placeholder="e.g. Add a line at the end about how plants help us breathe"></textarea>
+      <div class="submit-row" style="margin-top:10px;">
+        <button class="btn" onclick="askClaudeForSlide('${slideNum}')">✨ Ask Claude</button>
+      </div>
+      <div id="claudeResponseArea" class="hide">
+        <span class="field-label">Claude's suggestion:</span>
+        <div id="claudeResponse" class="claude-response"></div>
+        <div class="submit-row">
+          <button class="btn success" onclick="applyClaudeSlide('${slideNum}')">✅ Apply this</button>
+          <button class="btn ghost" onclick="askClaudeForSlide('${slideNum}', true)">🔄 Try again</button>
+        </div>
+      </div>
+    </div>
+    <div class="mini-tab" data-tab="direct">
+      <span class="field-label">Slide HTML (advanced)</span>
+      <textarea id="slideHtmlEdit" rows="14">${escapeHtml(currentHtml)}</textarea>
+    </div>
+  `;
+  const actions = [
+    { label: '💾 Apply HTML', cls: 'btn success', onClick: `applyDirectSlideEdit('${slideNum}')` },
+    { label: '➕ Insert new slide after', cls: 'btn', onClick: `addNewSlideAfter(currentSlide)` }
+  ];
+  if (isModified && !isAdded) actions.push({ label: '↺ Reset to default', cls: 'btn warn', onClick: `resetSlide('${slideNum}')` });
+  if (isAdded) actions.push({ label: '🗑 Delete this slide', cls: 'btn warn', onClick: `deleteAddedSlide('${slideNum}')` });
+  const displayLabel = isAdded ? `Added slide (position ${currentSlide})` : `slide ${slideNum}`;
+  openModal(`✏️ Edit ${displayLabel}${isModified?' · EDITED':''}`, body, actions, true);
+}
+function escapeHtml(s) { return s.replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+function unescapeHtml(s) { return s.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&'); }
+function switchMiniTab(e, name) {
+  const modal = e.target.closest('.modal');
+  modal.querySelectorAll('.tabs-mini button').forEach(b => b.classList.remove('active'));
+  e.target.classList.add('active');
+  modal.querySelectorAll('.mini-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+}
+async function askClaudeForSlide(slideNum, regenerate) {
+  const instruction = (document.getElementById('claudeInstruction') || {}).value || '';
+  if (!instruction.trim() && !regenerate) { alert('Describe the change first.'); return; }
+  const slide = document.querySelector(`.slide[data-slide="${slideNum}"]`);
+  const clone = slide.cloneNode(true);
+  clone.querySelectorAll('.slide-edit, .mod-indicator').forEach(el => el.remove());
+  const currentHtml = clone.innerHTML.trim();
+  document.getElementById('claudeResponseArea').classList.remove('hide');
+  document.getElementById('claudeResponse').textContent = '⏳ Thinking…';
+  try {
+    const result = await callClaudeEdit({
+      type: 'slide',
+      currentContent: currentHtml,
+      instruction,
+      context: `This is slide ${slideNum} of a BFSU Chapter B-3 lesson for an 8-year-old (Plant & Animal Kingdoms, split into 3 Parts).`
+    });
+    document.getElementById('claudeResponse').textContent = result;
+  } catch (e) {
+    document.getElementById('claudeResponse').textContent = '❌ ' + e.message;
+  }
+}
+function applyClaudeSlide(slideNum) {
+  const html = document.getElementById('claudeResponse').textContent;
+  if (!html || html.startsWith('⏳') || html.startsWith('❌')) { alert('Nothing to apply yet.'); return; }
+  overrides.slides[slideNum] = { html };
+  saveOverrides();
+  applySlideOverrides();
+  showSlide(+slideNum);
+  closeModal();
+  showToast('✅ Slide updated');
+}
+function applyDirectSlideEdit(slideNum) {
+  const html = (document.getElementById('slideHtmlEdit') || {}).value;
+  if (!html) return;
+  const slide = document.querySelector(`.slide[data-slide="${slideNum}"]`);
+  if (slide && slide.dataset.added === '1') {
+    const idx = +slide.dataset.addedIndex;
+    if (overrides.addedSlides[idx]) overrides.addedSlides[idx].html = html;
+  } else {
+    overrides.slides[slideNum] = { html };
+  }
+  saveOverrides();
+  applySlideOverrides();
+  // Navigate to the same DOM position
+  const slides = allSlidesInOrder();
+  for (let i=0;i<slides.length;i++) if (slides[i].dataset.slide === String(slideNum)) { showSlide(i+1); break; }
+  closeModal();
+  showToast('✅ Slide updated');
+}
+function resetSlide(slideNum) {
+  if (!confirm('Reset this slide to the original version?')) return;
+  delete overrides.slides[slideNum];
+  saveOverrides();
+  closeModal();
+  location.reload(); // easiest way to restore original HTML
+}
+function deleteAddedSlide(slideNum) {
+  if (!confirm('Delete this added slide?')) return;
+  const slide = document.querySelector(`.slide[data-slide="${slideNum}"]`);
+  const index = slide ? +slide.dataset.addedIndex : NaN;
+  if (!isNaN(index)) {
+    overrides.addedSlides.splice(index, 1);
+    saveOverrides();
+  }
+  closeModal();
+  location.reload();
+}
+
+/* State: where to insert the next new slide (null = at end) */
+let pendingInsertPosition = null;
+
+function addNewSlide() {
+  pendingInsertPosition = null;
+  openAddSlideModal();
+}
+/* Insert new slide immediately AFTER the given position (1-indexed, DOM order). */
+function addNewSlideAfter(positionIndex) {
+  pendingInsertPosition = positionIndex;
+  // Close any open modal first (e.g. edit modal)
+  closeModal();
+  setTimeout(openAddSlideModal, 50);
+}
+function openAddSlideModal() {
+  const slides = allSlidesInOrder();
+  const positionOptions = ['<option value="">📎 At the very end</option>']
+    .concat(slides.map((s, i) => {
+      const label = s.dataset.added === '1' ? `Added slide (current pos ${i+1})` : `After slide ${i+1}`;
+      const inferredPart = s.dataset.part || '3';
+      const selected = pendingInsertPosition === (i+1) ? 'selected' : '';
+      // insertAfter value: use slide identifier from data-slide (either "N" or "added_N")
+      return `<option value="${s.dataset.slide}" data-part="${inferredPart}" ${selected}>${label}</option>`;
+    }))
+    .join('');
+  const body = `
+    <div class="tabs-mini">
+      <button class="active" onclick="switchMiniTab(event,'claude')">💬 Ask Claude to generate</button>
+      <button onclick="switchMiniTab(event,'blank')">📝 Start from blank</button>
+    </div>
+    <span class="field-label">📍 Insert position</span>
+    <select id="newSlideInsertAfter">${positionOptions}</select>
+    <span class="field-label">🎨 Which Part? (for the colored header)</span>
+    <select id="newSlidePart"><option value="1">Part 1 — Two Kingdoms</option><option value="2">Part 2 — One Big Difference</option><option value="3" selected>Part 3 — Energy from Sun</option></select>
+    <div class="mini-tab active" data-tab="claude">
+      <span class="field-label">What should this slide teach?</span>
+      <textarea id="claudeInstruction" rows="3" placeholder="e.g. A slide about why bees are important for plants"></textarea>
+      <div class="submit-row" style="margin-top:10px;"><button class="btn" onclick="askClaudeForNewSlide()">✨ Generate</button></div>
+      <div id="claudeResponseArea" class="hide">
+        <span class="field-label">Claude's draft:</span>
+        <div id="claudeResponse" class="claude-response"></div>
+        <div class="submit-row">
+          <button class="btn success" onclick="applyNewSlide()">✅ Add this slide</button>
+          <button class="btn ghost" onclick="askClaudeForNewSlide(true)">🔄 Regenerate</button>
+        </div>
+      </div>
+    </div>
+    <div class="mini-tab" data-tab="blank">
+      <span class="field-label">Slide HTML</span>
+      <textarea id="slideHtmlEdit" rows="10" placeholder="&lt;h2 class=&quot;big-q&quot;&gt;Your title&lt;/h2&gt;&lt;p class=&quot;lead&quot;&gt;Your lead text…&lt;/p&gt;"></textarea>
+      <div class="submit-row"><button class="btn success" onclick="applyBlankNewSlide()">➕ Add slide</button></div>
+    </div>
+  `;
+  openModal('➕ Add new slide', body, [], true);
+  // Preselect the insert position if set
+  setTimeout(() => {
+    const sel = document.getElementById('newSlideInsertAfter');
+    if (sel && pendingInsertPosition) {
+      const slides = allSlidesInOrder();
+      const target = slides[pendingInsertPosition - 1];
+      if (target) sel.value = target.dataset.slide;
+      // Also auto-pick the Part
+      const partSel = document.getElementById('newSlidePart');
+      if (partSel && target && target.dataset.part) partSel.value = target.dataset.part;
+    }
+  }, 80);
+}
+function getInsertAfterValue() {
+  const sel = document.getElementById('newSlideInsertAfter');
+  return sel && sel.value ? sel.value : null;
+}
+async function askClaudeForNewSlide(regenerate) {
+  const instruction = (document.getElementById('claudeInstruction') || {}).value || '';
+  if (!instruction.trim()) { alert('Describe what this slide should cover first.'); return; }
+  document.getElementById('claudeResponseArea').classList.remove('hide');
+  document.getElementById('claudeResponse').textContent = '⏳ Thinking…';
+  try {
+    const result = await callClaudeEdit({
+      type: 'new-slide',
+      instruction,
+      context: `Create new slide HTML for BFSU Chapter B-3 (Plant & Animal Kingdoms) for an 8-year-old. Use existing CSS classes: .big-q for headings, .lead for subtitle, .callout/.callout.leaf/.callout.animal/.callout.sky for highlight boxes, .two-col for 2-column layouts, .reveal-grid/.reveal-card for click-to-reveal cards, .beat.activity/.beat.mystery/.beat.mythbuster for those special blocks. Keep it warm, curious, and kid-friendly. Return only HTML, no markdown fences.`
+    });
+    document.getElementById('claudeResponse').textContent = result;
+  } catch (e) {
+    document.getElementById('claudeResponse').textContent = '❌ ' + e.message;
+  }
+}
+function applyNewSlide() {
+  const html = document.getElementById('claudeResponse').textContent;
+  const part = document.getElementById('newSlidePart').value;
+  if (!html || html.startsWith('⏳') || html.startsWith('❌')) return;
+  const insertAfter = getInsertAfterValue();
+  overrides.addedSlides.push({ html, part, insertAfter });
+  saveOverrides();
+  applySlideOverrides();
+  closeModal();
+  // Jump to the newly inserted slide position
+  const newPos = locateAddedSlidePosition(overrides.addedSlides.length - 1);
+  showSlide(newPos);
+  showToast('✅ Slide added at position ' + newPos);
+}
+function applyBlankNewSlide() {
+  const html = (document.getElementById('slideHtmlEdit') || {}).value;
+  const part = document.getElementById('newSlidePart').value;
+  if (!html.trim()) return;
+  const insertAfter = getInsertAfterValue();
+  overrides.addedSlides.push({ html, part, insertAfter });
+  saveOverrides();
+  applySlideOverrides();
+  closeModal();
+  const newPos = locateAddedSlidePosition(overrides.addedSlides.length - 1);
+  showSlide(newPos);
+  showToast('✅ Slide added at position ' + newPos);
+}
+function locateAddedSlidePosition(addedIndex) {
+  const slides = allSlidesInOrder();
+  for (let i = 0; i < slides.length; i++) {
+    if (slides[i].dataset.addedIndex === String(addedIndex)) return i + 1;
+  }
+  return slides.length;
+}
+
+/* ============ HOMEWORK EDITING ============ */
+// Rebuild HOMEWORK at runtime merging overrides + added items
+function getHomeworkList() {
+  const merged = HOMEWORK.map((h, i) => overrides.homework[i] ? { ...h, ...overrides.homework[i] } : h);
+  if (overrides.addedHomework) merged.push(...overrides.addedHomework);
+  return merged;
+}
+function renderHomework() {
+  const list = document.getElementById('homework-list');
+  list.innerHTML = '';
+  const hw = getHomeworkList();
+  hw.forEach((h, i) => {
+    const c = document.createElement('div');
+    c.className = 'hw-card';
+    const isModified = i < HOMEWORK.length && overrides.homework[i];
+    const isAdded = i >= HOMEWORK.length;
+    c.innerHTML = `
+      <h3><span class="hw-num">${i+1}</span> ${h.icon||'📝'} ${h.title}${isModified ? ' <span class="mod-indicator">EDITED</span>' : ''}${isAdded ? ' <span class="mod-indicator">ADDED</span>' : ''}<button class="edit-chip teacher-only ${teacherMode?'':'hide'}" onclick="editHomework(${i})">✏️ Edit</button></h3>
+      <p>${h.prompt}</p>
+      <textarea placeholder="${h.placeholder||''}" data-hw="${i}" oninput="homework[${i}]=this.value">${homework[i]||''}</textarea>
+      <div class="file-row">
+        <input type="file" accept="image/*" data-hw-file="${i}" onchange="attachHwFile(event,${i})" />
+        <span class="small" id="hw-file-${i}"></span>
+      </div>
+    `;
+    list.appendChild(c);
+  });
+  // Add "Add homework" button at bottom
+  const addRow = document.createElement('div');
+  addRow.className = 'add-new-row teacher-only ' + (teacherMode?'':'hide');
+  addRow.innerHTML = '<button onclick="addNewHomework()">➕ Add new homework task</button>';
+  list.appendChild(addRow);
+  const note = document.getElementById('hwConfigNote');
+  if (settings.webhookUrl) note.textContent = '✓ Submissions will be sent to your teacher\'s system.';
+  else if (settings.teacherEmail) note.textContent = '✓ Submit opens an email pre-filled for your teacher (' + settings.teacherEmail + ').';
+  else note.textContent = '⚠️ Teacher: please configure a submission email or webhook in the Teacher tab.';
+}
+function editHomework(i) {
+  const hw = getHomeworkList()[i];
+  const isAdded = i >= HOMEWORK.length;
+  const body = `
+    <div class="tabs-mini">
+      <button class="active" onclick="switchMiniTab(event,'fields')">📝 Edit fields</button>
+      <button onclick="switchMiniTab(event,'claude')">💬 Ask Claude</button>
+    </div>
+    <div class="mini-tab active" data-tab="fields">
+      <span class="field-label">Icon (emoji)</span>
+      <input type="text" id="hwIcon" value="${(hw.icon||'').replace(/"/g,'&quot;')}" />
+      <span class="field-label">Title</span>
+      <input type="text" id="hwTitle" value="${(hw.title||'').replace(/"/g,'&quot;')}" />
+      <span class="field-label">Prompt (what the student should do)</span>
+      <textarea id="hwPrompt" rows="3">${hw.prompt||''}</textarea>
+      <span class="field-label">Placeholder (hint in the answer box)</span>
+      <textarea id="hwPlaceholder" rows="2">${hw.placeholder||''}</textarea>
+    </div>
+    <div class="mini-tab" data-tab="claude">
+      <p class="small">Describe the change: "Make this simpler", "Rewrite for a 6-year-old", "Add a family twist".</p>
+      <textarea id="claudeInstruction" rows="3"></textarea>
+      <div class="submit-row"><button class="btn" onclick="askClaudeForHomework(${i})">✨ Ask Claude</button></div>
+      <div id="claudeResponseArea" class="hide">
+        <span class="field-label">Claude's suggestion:</span>
+        <div id="claudeResponse" class="claude-response"></div>
+        <div class="submit-row"><button class="btn success" onclick="applyClaudeHomework(${i})">✅ Apply</button><button class="btn ghost" onclick="askClaudeForHomework(${i}, true)">🔄 Try again</button></div>
+      </div>
+    </div>
+  `;
+  const actions = [
+    { label: '💾 Save', cls: 'btn success', onClick: `saveHomeworkEdit(${i})` }
+  ];
+  if (isAdded) actions.push({ label: '🗑 Delete', cls: 'btn warn', onClick: `deleteAddedHomework(${i})` });
+  else if (overrides.homework[i]) actions.push({ label: '↺ Reset', cls: 'btn warn', onClick: `resetHomework(${i})` });
+  openModal(`✏️ Edit homework ${i+1}`, body, actions, true);
+}
+function saveHomeworkEdit(i) {
+  const data = {
+    icon: document.getElementById('hwIcon').value,
+    title: document.getElementById('hwTitle').value,
+    prompt: document.getElementById('hwPrompt').value,
+    placeholder: document.getElementById('hwPlaceholder').value
+  };
+  if (i >= HOMEWORK.length) {
+    overrides.addedHomework[i - HOMEWORK.length] = data;
+  } else {
+    overrides.homework[i] = data;
+  }
+  saveOverrides();
+  renderHomework();
+  closeModal();
+  showToast('✅ Homework saved');
+}
+function resetHomework(i) {
+  if (!confirm('Reset this homework to original?')) return;
+  delete overrides.homework[i];
+  saveOverrides();
+  renderHomework();
+  closeModal();
+}
+function deleteAddedHomework(i) {
+  if (!confirm('Delete this added homework?')) return;
+  overrides.addedHomework.splice(i - HOMEWORK.length, 1);
+  saveOverrides();
+  renderHomework();
+  closeModal();
+}
+async function askClaudeForHomework(i, regen) {
+  const instruction = (document.getElementById('claudeInstruction') || {}).value || '';
+  if (!instruction.trim() && !regen) { alert('Describe the change first.'); return; }
+  const hw = getHomeworkList()[i];
+  document.getElementById('claudeResponseArea').classList.remove('hide');
+  document.getElementById('claudeResponse').textContent = '⏳ Thinking…';
+  try {
+    const result = await callClaudeEdit({
+      type: 'homework',
+      currentContent: JSON.stringify(hw, null, 2),
+      instruction,
+      context: 'This is homework item for an 8-year-old in BFSU Chapter B-3. Return JSON with keys: icon (emoji), title, prompt, placeholder. Only JSON, no fences.'
+    });
+    document.getElementById('claudeResponse').textContent = result;
+  } catch(e) {
+    document.getElementById('claudeResponse').textContent = '❌ ' + e.message;
+  }
+}
+function applyClaudeHomework(i) {
+  const txt = document.getElementById('claudeResponse').textContent;
+  try {
+    const parsed = JSON.parse(txt.replace(/^```json\s*|\s*```$/g,'').trim());
+    if (i >= HOMEWORK.length) overrides.addedHomework[i - HOMEWORK.length] = parsed;
+    else overrides.homework[i] = parsed;
+    saveOverrides();
+    renderHomework();
+    closeModal();
+    showToast('✅ Homework updated by Claude');
+  } catch(e) { alert("Couldn't parse Claude's response as JSON. Try again or edit fields directly."); }
+}
+function addNewHomework() {
+  const body = `
+    <div class="tabs-mini">
+      <button class="active" onclick="switchMiniTab(event,'fields')">📝 Fill fields</button>
+      <button onclick="switchMiniTab(event,'claude')">💬 Ask Claude</button>
+    </div>
+    <div class="mini-tab active" data-tab="fields">
+      <span class="field-label">Icon</span><input type="text" id="hwIcon" value="📝" />
+      <span class="field-label">Title</span><input type="text" id="hwTitle" placeholder="e.g. Bird Watch Journal" />
+      <span class="field-label">Prompt</span><textarea id="hwPrompt" rows="3" placeholder="What should the student do?"></textarea>
+      <span class="field-label">Placeholder</span><textarea id="hwPlaceholder" rows="2" placeholder="Hint text inside the answer box"></textarea>
+    </div>
+    <div class="mini-tab" data-tab="claude">
+      <textarea id="claudeInstruction" rows="3" placeholder="Describe the new homework: e.g. 'A homework about watching birds in the garden for 10 min'"></textarea>
+      <div class="submit-row"><button class="btn" onclick="askClaudeForNewHomework()">✨ Generate</button></div>
+      <div id="claudeResponseArea" class="hide"><div id="claudeResponse" class="claude-response"></div><div class="submit-row"><button class="btn success" onclick="applyNewClaudeHomework()">✅ Add this</button></div></div>
+    </div>
+  `;
+  openModal('➕ Add new homework', body, [
+    { label: '➕ Add from fields', cls: 'btn success', onClick: 'addHomeworkFromFields()' }
+  ], true);
+}
+function addHomeworkFromFields() {
+  const data = {
+    icon: document.getElementById('hwIcon').value || '📝',
+    title: document.getElementById('hwTitle').value,
+    prompt: document.getElementById('hwPrompt').value,
+    placeholder: document.getElementById('hwPlaceholder').value
+  };
+  if (!data.title || !data.prompt) { alert('Title and prompt required.'); return; }
+  overrides.addedHomework.push(data);
+  saveOverrides();
+  renderHomework();
+  closeModal();
+  showToast('✅ Homework added');
+}
+async function askClaudeForNewHomework() {
+  const instruction = (document.getElementById('claudeInstruction') || {}).value || '';
+  if (!instruction.trim()) return;
+  document.getElementById('claudeResponseArea').classList.remove('hide');
+  document.getElementById('claudeResponse').textContent = '⏳ Thinking…';
+  try {
+    const result = await callClaudeEdit({
+      type: 'new-homework',
+      instruction,
+      context: 'Create a homework item for 8-year-old on BFSU Chapter B-3 (Plant & Animal Kingdoms). Return JSON: {icon, title, prompt, placeholder}. Only JSON.'
+    });
+    document.getElementById('claudeResponse').textContent = result;
+  } catch(e) { document.getElementById('claudeResponse').textContent = '❌ ' + e.message; }
+}
+function applyNewClaudeHomework() {
+  const txt = document.getElementById('claudeResponse').textContent;
+  try {
+    const parsed = JSON.parse(txt.replace(/^```json\s*|\s*```$/g,'').trim());
+    overrides.addedHomework.push(parsed);
+    saveOverrides();
+    renderHomework();
+    closeModal();
+    showToast('✅ Homework added');
+  } catch(e) { alert("Couldn't parse Claude's response. Try again."); }
+}
+
+/* ============ QUIZ EDITING ============ */
+function getQuizList() {
+  const merged = QUIZ.map((q, i) => overrides.quiz[i] ? { ...q, ...overrides.quiz[i] } : q);
+  if (overrides.addedQuiz) merged.push(...overrides.addedQuiz);
+  return merged;
+}
+// Override QUIZ getter: when quiz renders, it uses getQuizList()
+function quizQ(i) { return getQuizList()[i]; }
+
+function editQuizQuestion(i) {
+  const q = quizQ(i);
+  const isAdded = i >= QUIZ.length;
+  const isMod = !isAdded && overrides.quiz[i];
+  let choicesHtml = '';
+  if (q.type === 'mcq' || q.type === 'scenario') {
+    choicesHtml = '<span class="field-label">Choices (select the correct one)</span>';
+    (q.choices||['','','','']).forEach((c, idx) => {
+      choicesHtml += `<div class="choice-edit"><input type="radio" name="qcorrect" ${q.correct===idx?'checked':''} value="${idx}" /><input type="text" id="qchoice${idx}" value="${(c||'').replace(/"/g,'&quot;')}" placeholder="Choice ${String.fromCharCode(65+idx)}" /></div>`;
+    });
+    choicesHtml += '<span class="field-label">Feedback per choice (optional)</span>';
+    (q.feedback||['','','','']).forEach((f, idx) => {
+      choicesHtml += `<input type="text" id="qfb${idx}" value="${(f||'').replace(/"/g,'&quot;')}" placeholder="Feedback for choice ${String.fromCharCode(65+idx)}" style="margin-bottom:4px;" />`;
+    });
+  } else if (q.type === 'fill') {
+    choicesHtml = `<span class="field-label">Correct answer keywords (comma-separated)</span><input type="text" id="qcorrectText" value="${(q.correctText||[]).join(', ').replace(/"/g,'&quot;')}" /><span class="field-label">Feedback</span><textarea id="qfeedback" rows="2">${q.feedback||''}</textarea>`;
+  } else {
+    choicesHtml = `<span class="field-label">Teacher's model answer (for open/experiment)</span><textarea id="qfeedback" rows="3">${q.feedback||''}</textarea>`;
+  }
+  const body = `
+    <div class="tabs-mini">
+      <button class="active" onclick="switchMiniTab(event,'fields')">📝 Edit fields</button>
+      <button onclick="switchMiniTab(event,'claude')">💬 Ask Claude</button>
+    </div>
+    <div class="mini-tab active" data-tab="fields">
+      <span class="field-label">Type</span>
+      <select id="qtype"><option value="mcq" ${q.type==='mcq'?'selected':''}>Multiple choice</option><option value="scenario" ${q.type==='scenario'?'selected':''}>Scenario MCQ</option><option value="fill" ${q.type==='fill'?'selected':''}>Fill in blank</option><option value="open" ${q.type==='open'?'selected':''}>Open-ended</option><option value="experiment" ${q.type==='experiment'?'selected':''}>Experiment</option></select>
+      <span class="field-label">Difficulty</span>
+      <select id="qdiff"><option value="easy" ${q.diff==='easy'?'selected':''}>Easy</option><option value="medium" ${q.diff==='medium'?'selected':''}>Medium</option><option value="hard" ${q.diff==='hard'?'selected':''}>Hard</option><option value="boss" ${q.diff==='boss'?'selected':''}>Boss</option></select>
+      <span class="field-label">Question</span>
+      <textarea id="qtext" rows="2">${q.q||''}</textarea>
+      <span class="field-label">Scenario context (optional)</span>
+      <input type="text" id="qscenario" value="${(q.scenario||'').replace(/"/g,'&quot;')}" />
+      ${choicesHtml}
+      <label class="small" style="margin-top:10px;display:block;"><input type="checkbox" id="qmisconception" ${q.misconception?'checked':''}/> Mark as a "watch the trap" misconception question</label>
+    </div>
+    <div class="mini-tab" data-tab="claude">
+      <p class="small">Tell Claude how to change this question. Example: "Make this harder", "Add a real-world scenario", "Rewrite with a different misconception trap".</p>
+      <textarea id="claudeInstruction" rows="3"></textarea>
+      <div class="submit-row"><button class="btn" onclick="askClaudeForQuiz(${i})">✨ Ask Claude</button></div>
+      <div id="claudeResponseArea" class="hide"><div id="claudeResponse" class="claude-response"></div><div class="submit-row"><button class="btn success" onclick="applyClaudeQuiz(${i})">✅ Apply</button></div></div>
+    </div>
+  `;
+  const actions = [{ label: '💾 Save', cls: 'btn success', onClick: `saveQuizEdit(${i})` }];
+  if (isAdded) actions.push({ label: '🗑 Delete', cls: 'btn warn', onClick: `deleteAddedQuiz(${i})` });
+  else if (isMod) actions.push({ label: '↺ Reset', cls: 'btn warn', onClick: `resetQuiz(${i})` });
+  openModal(`✏️ Edit question ${i+1}${isMod?' · EDITED':''}${isAdded?' · ADDED':''}`, body, actions, true);
+}
+function saveQuizEdit(i) {
+  const type = document.getElementById('qtype').value;
+  const data = {
+    type,
+    diff: document.getElementById('qdiff').value,
+    q: document.getElementById('qtext').value,
+    scenario: document.getElementById('qscenario').value || undefined,
+    misconception: document.getElementById('qmisconception').checked || undefined
+  };
+  if (type === 'mcq' || type === 'scenario') {
+    data.choices = [0,1,2,3].map(n => document.getElementById(`qchoice${n}`).value);
+    const checkedRadio = document.querySelector('input[name=qcorrect]:checked');
+    data.correct = checkedRadio ? +checkedRadio.value : 0;
+    data.feedback = [0,1,2,3].map(n => document.getElementById(`qfb${n}`).value);
+  } else if (type === 'fill') {
+    data.correctText = document.getElementById('qcorrectText').value.split(',').map(s => s.trim()).filter(Boolean);
+    data.feedback = document.getElementById('qfeedback').value;
+  } else {
+    data.feedback = document.getElementById('qfeedback').value;
+  }
+  if (i >= QUIZ.length) overrides.addedQuiz[i - QUIZ.length] = data;
+  else overrides.quiz[i] = data;
+  saveOverrides();
+  closeModal();
+  showToast('✅ Question saved');
+  if (quizStarted) renderQuizNavigator();
+}
+function resetQuiz(i) { if (!confirm('Reset?')) return; delete overrides.quiz[i]; saveOverrides(); closeModal(); if (quizStarted) renderQuizLayout(); }
+function deleteAddedQuiz(i) { if (!confirm('Delete?')) return; overrides.addedQuiz.splice(i - QUIZ.length, 1); saveOverrides(); closeModal(); if (quizStarted) renderQuizLayout(); }
+async function askClaudeForQuiz(i, regen) {
+  const instruction = (document.getElementById('claudeInstruction') || {}).value || '';
+  if (!instruction.trim() && !regen) return;
+  const q = quizQ(i);
+  document.getElementById('claudeResponseArea').classList.remove('hide');
+  document.getElementById('claudeResponse').textContent = '⏳ Thinking…';
+  try {
+    const result = await callClaudeEdit({
+      type: 'quiz',
+      currentContent: JSON.stringify(q, null, 2),
+      instruction,
+      context: 'Quiz question for 8-year-old, BFSU B-3. Return JSON with exactly these keys matching the input: type ("mcq"|"scenario"|"fill"|"open"|"experiment"), diff ("easy"|"medium"|"hard"|"boss"), q (question text), choices (array of 4, for mcq/scenario), correct (0-3), feedback (array of 4 per-choice or single string for fill/open), correctText (array, for fill), scenario (optional), misconception (optional bool). Only JSON.'
+    });
+    document.getElementById('claudeResponse').textContent = result;
+  } catch(e) { document.getElementById('claudeResponse').textContent = '❌ ' + e.message; }
+}
+function applyClaudeQuiz(i) {
+  try {
+    const txt = document.getElementById('claudeResponse').textContent;
+    const parsed = JSON.parse(txt.replace(/^```json\s*|\s*```$/g,'').trim());
+    if (i >= QUIZ.length) overrides.addedQuiz[i - QUIZ.length] = parsed;
+    else overrides.quiz[i] = parsed;
+    saveOverrides(); closeModal(); showToast('✅ Question updated');
+    if (quizStarted) renderQuizLayout();
+  } catch(e) { alert("Couldn't parse JSON. Try again."); }
+}
+function addNewQuizQuestion() {
+  const body = `
+    <div class="tabs-mini">
+      <button class="active" onclick="switchMiniTab(event,'fields')">📝 Blank template</button>
+      <button onclick="switchMiniTab(event,'claude')">💬 Ask Claude</button>
+    </div>
+    <div class="mini-tab active" data-tab="fields"><p class="small">Fill out the fields like you would for any question. Defaults to MCQ.</p><button class="btn" onclick="openBlankQuizTemplate()">📝 Open blank template</button></div>
+    <div class="mini-tab" data-tab="claude">
+      <textarea id="claudeInstruction" rows="3" placeholder="e.g. 'A hard scenario question about why you can't grow plants in a dark basement'"></textarea>
+      <span class="field-label">Difficulty hint</span>
+      <select id="qdiff"><option value="easy">Easy</option><option value="medium" selected>Medium</option><option value="hard">Hard</option><option value="boss">Boss</option></select>
+      <div class="submit-row"><button class="btn" onclick="askClaudeForNewQuiz()">✨ Generate</button></div>
+      <div id="claudeResponseArea" class="hide"><div id="claudeResponse" class="claude-response"></div><div class="submit-row"><button class="btn success" onclick="applyNewClaudeQuiz()">✅ Add</button></div></div>
+    </div>
+  `;
+  openModal('➕ Add new quiz question', body, [], true);
+}
+function openBlankQuizTemplate() {
+  const blank = { type: 'mcq', diff: 'medium', q: '', choices: ['','','',''], correct: 0, feedback: ['','','',''] };
+  overrides.addedQuiz.push(blank);
+  saveOverrides();
+  closeModal();
+  // Open edit on the freshly added question
+  editQuizQuestion(QUIZ.length + overrides.addedQuiz.length - 1);
+}
+async function askClaudeForNewQuiz() {
+  const instruction = (document.getElementById('claudeInstruction') || {}).value || '';
+  if (!instruction.trim()) return;
+  const diff = document.getElementById('qdiff').value;
+  document.getElementById('claudeResponseArea').classList.remove('hide');
+  document.getElementById('claudeResponse').textContent = '⏳ Thinking…';
+  try {
+    const result = await callClaudeEdit({
+      type: 'new-quiz',
+      instruction: `Difficulty: ${diff}. ${instruction}`,
+      context: 'Create one quiz question for an 8-year-old, BFSU B-3. Return JSON: {type: "mcq"|"scenario"|"fill"|"open", diff, q, choices (4-item array for mcq), correct (0-3), feedback (4-item array)}. Only JSON.'
+    });
+    document.getElementById('claudeResponse').textContent = result;
+  } catch(e) { document.getElementById('claudeResponse').textContent = '❌ ' + e.message; }
+}
+function applyNewClaudeQuiz() {
+  try {
+    const txt = document.getElementById('claudeResponse').textContent;
+    const parsed = JSON.parse(txt.replace(/^```json\s*|\s*```$/g,'').trim());
+    overrides.addedQuiz.push(parsed);
+    saveOverrides(); closeModal(); showToast('✅ Question added');
+    if (quizStarted) renderQuizLayout();
+  } catch(e) { alert("Couldn't parse JSON."); }
+}
+
+/* Helper: generic Claude call used by all edit flows */
+async function callClaudeEdit({ type, currentContent, instruction, context }) {
+  const apiKey = localStorage.getItem('b3_apiKey') || sessionStorage.getItem('b3_apiKey');
+  if (!apiKey) throw new Error('No Claude API key set. Add one in the Teacher tab → Claude API Key.');
+  const systemPrompt = `${context}\n\nThe teacher wants to edit/create content. Apply their instruction carefully. Keep an 8-year-old voice: warm, curious, lots of real-world hooks. Return ONLY the requested output format (HTML or JSON), no explanations, no markdown code fences.`;
+  const userMsg = currentContent
+    ? `Current content:\n\n${currentContent}\n\n--- Instruction ---\n${instruction}`
+    : `Create new content. Instruction:\n${instruction}`;
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-5',
+      max_tokens: 2048,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: userMsg }]
+    })
+  });
+  const data = await res.json();
+  if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
+  const text = (data.content && data.content[0] && data.content[0].text) || '';
+  return text.replace(/^```(?:html|json)?\s*|\s*```$/g, '').trim();
+}
+
+/* ============ INIT ============ */
+renderHome();
+renderSortGame();
+renderHomework();
+showSlide(1);
+applyVideoOverrides();
+applySlideOverrides();
+applyTeacherMode();
+
+document.addEventListener('keydown', (e) => {
+  if (!document.getElementById('panel-lesson').classList.contains('active')) return;
+  if (e.target.matches('input, textarea')) return;
+  if (e.key === 'ArrowRight') nextSlide();
+  if (e.key === 'ArrowLeft') prevSlide();
+});
+</script>
+</body>
+</html>

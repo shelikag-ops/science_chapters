@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chapter B-4 · Life Cycles · Science Adventure</title>
+<style>
+:root {
+  --bg: #fff8f0; --ink: #1f2a44; --ink-soft: #4a5472; --paper: #fff;
+  --sun: #ffb703; --leaf: #2a9d8f; --leaf-dark: #1f7a70; --animal: #e76f51;
+  --sky: #8ecae6; --sky-dark: #219ebc; --berry: #c7477a;
+  --shadow: 0 10px 30px rgba(30,40,70,.12); --shadow-sm: 0 4px 12px rgba(30,40,70,.08);
+  --radius: 18px; --radius-sm: 10px;
+  --font-display: "Fredoka", "Nunito", system-ui, sans-serif;
+  --font-body: "Nunito", system-ui, sans-serif;
+}
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap');
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font-body); color: var(--ink); line-height: 1.55; min-height: 100vh;
+  background: radial-gradient(1200px 600px at 10% -10%, #ffe8c4 0%, transparent 60%),
+              radial-gradient(900px 500px at 110% 10%, #cdeadf 0%, transparent 60%), var(--bg);
+}
+h1, h2, h3, h4 { font-family: var(--font-display); margin: 0 0 .4em; }
+h1 { font-size: clamp(28px, 4vw, 48px); line-height: 1.1; }
+h2 { font-size: clamp(22px, 3vw, 34px); }
+p { margin: 0 0 1em; }
+button { font-family: inherit; cursor: pointer; }
+a { color: var(--sky-dark); }
+
+.topnav {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; gap: 16px;
+  padding: 12px 22px; background: rgba(255,255,255,.85);
+  backdrop-filter: blur(10px); border-bottom: 1px solid #eee;
+}
+.brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 700; font-size: 20px; }
+.brand .logo { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--sun), var(--animal)); display: grid; place-items: center; color: #fff; font-size: 22px; }
+.nav-spacer { flex: 1; }
+.nav-btn { border: 1px solid #e5e5e5; background: #fff; border-radius: 999px; padding: 8px 14px; font-weight: 700; color: var(--ink-soft); }
+.nav-btn:hover { background: #fafafa; }
+.teacher-badge { background: var(--berry); color:#fff; border-color: var(--berry); }
+
+.container { max-width: 1180px; margin: 0 auto; padding: 26px 22px 80px; }
+
+.chapter-header {
+  background: var(--paper); border-radius: var(--radius); padding: 22px 26px; box-shadow: var(--shadow);
+  margin-bottom: 18px;
+}
+.chapter-meta { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; color: var(--ink-soft); font-size: 14px; }
+.pill { display: inline-block; padding: 4px 10px; background: #f3efe9; border-radius: 999px; font-weight: 700; font-size: 12px; color: var(--ink-soft); }
+.parts-preview { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 14px; }
+.parts-preview .pp { background: #fafaf4; border-radius: 10px; padding: 10px 12px; font-size: 13px; border-left: 4px solid var(--sun); }
+.parts-preview .pp.p2 { border-color: var(--leaf); }
+.parts-preview .pp b { display: block; font-family: var(--font-display); color: var(--ink); font-size: 14px; }
+@media (max-width: 700px){ .parts-preview { grid-template-columns: 1fr; } }
+
+.tabs {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  background: var(--paper); padding: 8px; border-radius: 14px; box-shadow: var(--shadow-sm);
+  margin-bottom: 18px; position: sticky; top: 62px; z-index: 40;
+}
+.tab { border: none; background: transparent; padding: 10px 16px; border-radius: 10px; font-weight: 800; color: var(--ink-soft); }
+.tab.active { background: var(--ink); color: #fff; }
+.tab:not(.active):hover { background: #f3f0ea; }
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+.slide-wrap { background: var(--paper); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+.slide-stage { padding: 40px 46px; min-height: 520px; position: relative; overflow: hidden; }
+.slide { display: none; animation: fade .35s ease; position: relative; }
+.slide.active { display: block; }
+@keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+.slide-controls {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 14px 20px; border-top: 1px solid #eee; background: #fcfbf7; flex-wrap: wrap;
+}
+.slide-btn { background: var(--ink); color: #fff; border: none; padding: 10px 18px; border-radius: 10px; font-weight: 800; }
+.slide-btn.ghost { background: transparent; color: var(--ink-soft); }
+.slide-btn:disabled { opacity: .4; cursor: not-allowed; }
+.slide-meta { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--ink-soft); flex-wrap: wrap; }
+.part-marker { font-weight: 800; font-family: var(--font-display); padding: 4px 12px; border-radius: 999px; font-size: 12px; letter-spacing: .05em; }
+.part-marker.p1 { background: #fff3d6; color: #9a6a00; }
+.part-marker.p2 { background: #dff3ed; color: var(--leaf-dark); }
+.slide-progress { flex: 1; min-width: 140px; max-width: 360px; height: 8px; background: #eee; border-radius: 999px; overflow: hidden; margin: 0 6px; }
+.slide-progress-fill { height: 100%; background: linear-gradient(90deg, var(--sun), var(--animal)); transition: width .3s; }
+
+.big-q { font-family: var(--font-display); font-size: clamp(28px, 4vw, 44px); line-height: 1.15; margin: 0 0 14px; }
+.lead { font-size: 18px; color: var(--ink-soft); max-width: 720px; }
+.callout { background: #fff8e6; border-left: 5px solid var(--sun); padding: 14px 18px; border-radius: 10px; margin: 14px 0; }
+.callout.leaf { background: #eaf7f2; border-color: var(--leaf); }
+.callout.animal { background: #fdefe9; border-color: var(--animal); }
+.callout.sky { background: #e6f4fb; border-color: var(--sky-dark); }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items: center; }
+@media (max-width: 760px){ .two-col { grid-template-columns: 1fr; } }
+
+.part-banner { text-align: center; padding: 20px 10px; border-radius: 14px; }
+.part-banner.p1 { background: linear-gradient(135deg, #ffecb3, #fff6e0); }
+.part-banner.p2 { background: linear-gradient(135deg, #d6efe7, #f0faf6); }
+.part-banner .pb-pill { display: inline-block; padding: 6px 16px; background: rgba(0,0,0,.08); border-radius: 999px; font-family: var(--font-display); font-weight: 700; font-size: 13px; letter-spacing: .1em; color: var(--ink); margin-bottom: 16px; }
+.part-banner h1 { font-size: clamp(36px, 6vw, 64px); margin: 6px 0; }
+.part-banner .pb-sub { font-size: 20px; color: var(--ink-soft); max-width: 640px; margin: 0 auto 20px; }
+.part-banner .pb-meta { display: inline-flex; flex-wrap: wrap; gap: 10px; justify-content: center; font-size: 14px; color: var(--ink-soft); background: rgba(255,255,255,.7); padding: 10px 16px; border-radius: 999px; }
+.part-banner .pb-emoji { font-size: 100px; margin: 10px 0; }
+
+.video-wrap { background: #111; border-radius: 14px; overflow: hidden; position: relative; max-width: 800px; margin: 10px auto; }
+.video-ratio { position: relative; width: 100%; padding-top: 56.25%; }
+.video-ratio iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+.video-caption { background: #f8f4ec; padding: 10px 14px; border-radius: 10px; margin-top: 10px; font-size: 14px; }
+.video-caption b { color: var(--animal); }
+.video-edit-row { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; flex-wrap: wrap; gap: 10px; }
+.video-meta { font-size: 13px; color: var(--ink-soft); }
+
+.beat { background: linear-gradient(180deg, #fffbf4, #fff); border-radius: 14px; padding: 20px; border: 2px dashed #f0d9a6; margin: 14px 0; }
+.beat .beat-badge { display: inline-block; font-family: var(--font-display); font-weight: 800; letter-spacing: .05em; font-size: 12px; padding: 4px 12px; border-radius: 999px; margin-bottom: 10px; }
+.beat.activity .beat-badge { background: var(--sun); color: #fff; }
+.beat.mystery .beat-badge { background: var(--berry); color: #fff; }
+.beat.mythbuster .beat-badge { background: var(--animal); color: #fff; }
+.beat h3 { margin-top: 4px; }
+.mystery-answer { margin-top: 10px; padding: 12px; background: #f2faf5; border-radius: 10px; border-left: 4px solid var(--leaf); display: none; }
+.mystery-open .mystery-answer { display: block; animation: fade .3s; }
+.reveal-btn { margin-top: 10px; background: var(--berry); color: #fff; border: none; padding: 10px 16px; border-radius: 10px; font-weight: 800; }
+.mystery-open .reveal-btn { display: none; }
+
+.reveal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin-top: 14px; }
+.reveal-card { background: #fff; border-radius: 14px; padding: 16px; box-shadow: var(--shadow-sm); cursor: pointer; min-height: 140px; transition: transform .2s; border: 2px solid #eee; }
+.reveal-card:hover { transform: translateY(-2px); }
+.reveal-card .back { display: none; }
+.reveal-card.open .front { display: none; }
+.reveal-card.open .back { display: block; }
+.reveal-card.open { background: linear-gradient(180deg, #fff9ea, #fff); border-color: var(--sun); }
+
+.flow { display: flex; align-items: center; justify-content: space-around; gap: 10px; font-size: 56px; margin: 20px 0; flex-wrap: wrap;}
+.flow .arrow { font-size: 32px; color: var(--ink-soft); }
+.flow .label { font-size: 13px; font-family: var(--font-display); color: var(--ink-soft); display: block; text-align: center; }
+
+.teacher-note { margin-top: 14px; }
+.teacher-note summary { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; background: #fff4e1; border: 1.5px solid #f3d48a; color: #8f6a15; padding: 6px 14px; border-radius: 999px; font-weight: 700; font-size: 13px; list-style: none; }
+.teacher-note summary::-webkit-details-marker { display: none; }
+.teacher-note summary:hover { background: #ffe9b8; }
+.teacher-note .note-body { background: #fffbe6; border: 1.5px solid #f3d48a; border-radius: 12px; padding: 12px 14px; font-size: 14px; margin-top: 8px; max-width: 600px; }
+.session-break { background: linear-gradient(135deg, #fff5e0, #fff0d6); border-radius: 14px; padding: 16px 20px; margin-top: 18px; border-left: 6px solid var(--sun); display: flex; gap: 14px; align-items: center; }
+.session-break .icon { font-size: 40px; }
+.session-break h4 { margin: 0 0 4px; font-family: var(--font-display); }
+.session-break p { margin: 0; font-size: 14px; color: var(--ink-soft); }
+
+.edit-chip { background: #fff; border: 1.5px solid #e5d6f0; color: var(--berry); padding: 5px 12px; border-radius: 999px; font-weight: 700; font-size: 12px; cursor: pointer; box-shadow: 0 2px 6px rgba(199,71,122,.15); display: inline-flex; gap: 5px; }
+.edit-chip:hover { background: #fdeef5; }
+.slide-edit { position: absolute; top: 16px; right: 20px; z-index: 10; }
+.mod-indicator { display: inline-block; background: var(--berry); color:#fff; font-size: 10px; padding: 2px 6px; border-radius: 999px; font-weight: 800; letter-spacing: .05em; }
+
+/* HOMEWORK */
+.hw-intro { background: linear-gradient(135deg, #e9f6fd, #fff); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow-sm); margin-bottom: 16px;}
+.hw-list { display: grid; gap: 14px; }
+.hw-card { background: var(--paper); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 20px; border-left: 6px solid var(--sky-dark); }
+.hw-card h3 { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.hw-num { width: 34px; height: 34px; border-radius: 50%; background: var(--sky-dark); color: #fff; display: grid; place-items: center; font-family: var(--font-display); font-weight: 800; }
+.hw-card textarea, .hw-card input[type=text] { width: 100%; border: 2px solid #eee; border-radius: 10px; padding: 10px; font-family: inherit; font-size: 15px; margin-top: 6px; }
+.hw-card textarea { min-height: 80px; resize: vertical; }
+.btn { border: none; background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 10px; font-weight: 800; font-family: inherit; }
+.btn.secondary { background: #fff; color: var(--ink); border: 2px solid var(--ink); }
+.btn.success { background: var(--leaf); }
+.btn.warn { background: var(--animal); }
+.btn.ghost { background: transparent; color: var(--ink-soft); border: 2px solid #eee;}
+.btn.small { padding: 6px 12px; font-size: 13px; }
+.submit-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; align-items: center; }
+.add-new-row { display: flex; justify-content: center; padding: 18px; border: 2px dashed #e5d6f0; border-radius: 14px; margin: 18px 0; background: #fcf7fa; }
+.add-new-row button { background: transparent; border: none; color: var(--berry); font-family: var(--font-display); font-weight: 700; font-size: 16px; cursor: pointer; }
+
+/* QUIZ */
+.quiz-start { background: linear-gradient(135deg, #fff0e0, #e8f7ef); border-radius: var(--radius); padding: 26px; box-shadow: var(--shadow); text-align: center; }
+.quiz-layout { display: grid; grid-template-columns: 230px 1fr; gap: 18px; align-items: start; }
+@media (max-width: 820px){ .quiz-layout { grid-template-columns: 1fr; } }
+.quiz-nav-sticky { position: sticky; top: 130px; }
+.quiz-navigator { background: var(--paper); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow-sm); }
+.qn-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; margin-bottom: 10px; }
+.qn { aspect-ratio: 1; border-radius: 6px; border: 2px solid #eee; background: #fafaf4; color: var(--ink-soft); font-weight: 800; font-size: 12px; cursor: pointer; display: grid; place-items: center; padding: 0; position: relative; }
+.qn.current { border-color: var(--ink); box-shadow: 0 0 0 2px rgba(31,42,68,.2); color: var(--ink); }
+.qn.answered { background: #e9f7ef; border-color: var(--leaf); color: var(--leaf-dark); }
+.qn.wrong { background: #fde8e1; border-color: var(--animal); color: var(--animal); }
+.qn.open { background: #eef7fc; border-color: var(--sky-dark); color: var(--sky-dark); }
+.qn.flagged::after { content: "🚩"; position: absolute; top: -4px; right: -4px; font-size: 10px; }
+.qn-legend { font-size: 11px; color: var(--ink-soft); line-height: 1.5; border-top: 1px solid #eee; padding-top: 8px; margin-top: 4px; }
+.qn-legend span { display: inline-flex; align-items: center; gap: 4px; margin-right: 10px; }
+.qn-dot { width: 10px; height: 10px; border-radius: 3px; background: #fafaf4; border: 1.5px solid #eee; display: inline-block; }
+.qn-dot.answered { background: #e9f7ef; border-color: var(--leaf); }
+.qn-dot.wrong { background: #fde8e1; border-color: var(--animal); }
+.qn-dot.open { background: #eef7fc; border-color: var(--sky-dark); }
+.quiz-progress { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.progress-bar { flex: 1; height: 10px; background: #eee; border-radius: 999px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--sun), var(--animal)); transition: width .3s; }
+.q-card { background: var(--paper); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); margin-bottom: 16px; }
+.q-difficulty { font-size: 12px; font-weight: 800; letter-spacing: .1em; margin-bottom: 6px; }
+.q-difficulty.easy { color: var(--leaf); } .q-difficulty.medium { color: var(--sun); } .q-difficulty.hard { color: var(--animal); } .q-difficulty.boss { color: var(--berry); }
+.q-text { font-family: var(--font-display); font-size: 20px; margin: 4px 0 16px; }
+.q-scenario { background: #f8f4ec; padding: 12px 14px; border-radius: 10px; font-style: italic; margin-bottom: 12px; }
+.choice-list { display: grid; gap: 8px; }
+.choice { border: 2px solid #eee; background: #fff; padding: 12px 14px; border-radius: 12px; text-align: left; font-weight: 700; font-size: 15px; }
+.choice:hover:not(:disabled) { border-color: var(--ink-soft); }
+.choice.correct { border-color: var(--leaf); background: #e9f7ef; }
+.choice.incorrect { border-color: var(--animal); background: #fde8e1; }
+.q-feedback { margin-top: 12px; padding: 12px 14px; border-radius: 10px; display: none; font-size: 15px; }
+.q-feedback.show { display: block; }
+.q-feedback.correct { background: #e9f7ef; border-left: 4px solid var(--leaf); }
+.q-feedback.incorrect { background: #fde8e1; border-left: 4px solid var(--animal); }
+.q-feedback.info { background: #eef7fc; border-left: 4px solid var(--sky-dark); }
+.q-controls { display: flex; justify-content: space-between; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 14px; }
+.q-flag { background: transparent; border: 2px solid #eee; padding: 8px 12px; border-radius: 10px; font-weight: 700; color: var(--ink-soft); }
+.q-flag.on { background: #fef0f5; border-color: var(--berry); color: var(--berry); }
+.quiz-result { background: var(--paper); border-radius: var(--radius); padding: 30px; box-shadow: var(--shadow); text-align: center; }
+.score-donut { width: 160px; height: 160px; border-radius: 50%; margin: 20px auto; display: grid; place-items: center; font-family: var(--font-display); font-size: 40px; background: conic-gradient(var(--leaf) calc(var(--p,0)*1%), #eee 0); position: relative; }
+.score-donut::after { content:""; position: absolute; inset: 14px; border-radius: 50%; background: #fff;}
+.score-donut span { position: relative; z-index: 1; color: var(--ink); font-weight: 800; }
+
+/* TEACHER */
+.teacher-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+.teacher-card { background: var(--paper); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow-sm); border-top: 6px solid var(--berry); }
+.teacher-card h3 { display: flex; gap: 8px; align-items: center; font-family: var(--font-display); }
+.teacher-card small { color: var(--ink-soft); }
+.teacher-card input, .teacher-card textarea, .teacher-card select { width: 100%; padding: 10px; border: 2px solid #eee; border-radius: 10px; font-family: inherit; font-size: 14px; margin-top: 6px; }
+.upload-list, .url-list { margin: 10px 0; padding: 0; list-style: none; }
+.upload-list li, .url-list li { display: flex; justify-content: space-between; padding: 8px; border: 1px solid #eee; border-radius: 8px; margin-bottom: 6px; font-size: 14px; align-items: center; }
+.submissions-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.submissions-table th, .submissions-table td { text-align: left; padding: 8px; border-bottom: 1px solid #eee; }
+
+/* MODAL */
+.modal-back { position: fixed; inset: 0; background: rgba(20,25,40,.5); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px;}
+.modal-back.show { display: flex; }
+.modal { background: #fff; border-radius: var(--radius); padding: 24px; max-width: 520px; width: 100%; box-shadow: var(--shadow);}
+.modal.wide { max-width: 760px; }
+.modal input { width: 100%; padding: 10px; border: 2px solid #eee; border-radius: 10px; margin: 6px 0 10px; }
+.modal.wide textarea { width: 100%; padding: 10px; border: 2px solid #eee; border-radius: 10px; font-family: monospace; font-size: 13px; min-height: 100px; }
+.modal.wide .field-label { font-family: var(--font-display); font-weight: 700; color: var(--ink-soft); font-size: 13px; margin-top: 14px; margin-bottom: 4px; display: block; }
+.modal.wide .tabs-mini { display: flex; gap: 4px; border-bottom: 2px solid #eee; margin: 12px 0 10px; }
+.modal.wide .tabs-mini button { background: transparent; border: none; padding: 8px 14px; font-weight: 700; color: var(--ink-soft); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; }
+.modal.wide .tabs-mini button.active { color: var(--berry); border-color: var(--berry); }
+.modal.wide .mini-tab { display: none; }
+.modal.wide .mini-tab.active { display: block; }
+.modal.wide .claude-response { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 10px 12px; font-size: 13px; max-height: 200px; overflow-y: auto; margin-top: 8px; white-space: pre-wrap; }
+
+/* PRESENT MODE */
+body.presenting { background: #0f1419; }
+body.presenting .topnav, body.presenting .chapter-header, body.presenting .tabs, body.presenting .slide-controls { display: none !important; }
+body.presenting .container { max-width: none; padding: 0; margin: 0; }
+body.presenting .tab-panel { display: none; }
+body.presenting #panel-lesson { display: block; }
+body.presenting .slide-wrap { position: fixed; inset: 0; border-radius: 0; box-shadow: none; background: linear-gradient(135deg, #fff 0%, #fdf7ec 100%); z-index: 999; overflow: hidden; }
+body.presenting .slide-stage { padding: 0; min-height: 100vh; height: 100vh; display: block; overflow: hidden; }
+body.presenting .slide.active { display: flex; flex-direction: column; justify-content: center; width: 100%; height: 100vh; padding: 5vh 7vw; gap: 1em; overflow-y: auto; position: relative; }
+body.presenting .slide.active > * { width: 100%; max-width: 1600px; margin-left: auto; margin-right: auto; }
+body.presenting .big-q { font-size: clamp(44px, 5.2vw, 82px); line-height: 1.08; }
+body.presenting .lead { font-size: clamp(22px, 2.4vw, 34px); }
+body.presenting p, body.presenting li { font-size: clamp(18px, 1.7vw, 24px); }
+body.presenting .callout { font-size: clamp(20px, 2vw, 28px); padding: 20px 26px; border-left-width: 8px; }
+body.presenting .part-banner { position: absolute; inset: 0; width: 100vw; height: 100vh; max-width: none; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 6vh 4vw; border-radius: 0; z-index: 1; }
+body.presenting .part-banner h1 { font-size: clamp(72px, 9vw, 160px); line-height: 0.95; }
+body.presenting .part-banner .pb-emoji { font-size: clamp(110px, 13vw, 200px); }
+body.presenting .part-banner .pb-sub { font-size: clamp(26px, 2.8vw, 44px); max-width: 1100px; }
+body.presenting .beat { padding: 5vh 6vw; border-radius: 24px; border-width: 3px; min-height: 65vh; display: flex; flex-direction: column; justify-content: center; }
+body.presenting .beat h3 { font-size: clamp(40px, 4vw, 64px); }
+body.presenting .beat p, body.presenting .beat li { font-size: clamp(22px, 2vw, 30px); }
+body.presenting .reveal-grid { grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 26px; }
+body.presenting .reveal-card { min-height: 220px; padding: 32px; font-size: 1.25em; }
+body.presenting .reveal-card b { font-size: clamp(26px, 2.4vw, 36px); display: block; margin-bottom: 10px; }
+body.presenting .video-wrap { max-width: min(1200px, 88vw); }
+body.presenting .slide-edit, body.presenting .mod-indicator { display: none !important; }
+
+.present-bar { display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(20,25,40,.92); color: #fff; padding: 10px 18px; border-radius: 999px; gap: 10px; align-items: center; z-index: 1000; backdrop-filter: blur(10px); opacity: 0.4; transition: opacity .2s; }
+body.presenting .present-bar { display: flex; }
+.present-bar:hover { opacity: 1; }
+.present-bar button { background: transparent; border: 1px solid rgba(255,255,255,.2); color: #fff; padding: 6px 12px; border-radius: 999px; font-weight: 700; }
+.present-bar .counter { font-weight: 700; padding: 0 8px; }
+.present-bar .exit { background: var(--animal); border-color: var(--animal); }
+
+.hide { display: none !important; }
+.text-center { text-align: center; }
+.small { font-size: 13px; color: var(--ink-soft); }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="brand"><span class="logo">🔬</span> Science Adventure</div>
+  <span class="pill">Chapter 6 · B-4</span>
+  <div class="nav-spacer"></div>
+  <button class="nav-btn" onclick="window.location.href='index.html'">🏠 Home</button>
+  <button class="nav-btn" id="presentBtn" onclick="enterPresentMode()">🖥 Present</button>
+  <button class="nav-btn" id="teacherToggle" onclick="openTeacherLogin()">🔒 Teacher</button>
+  <button class="nav-btn teacher-only hide" id="teacherExitBtn" onclick="signOutTeacher()" style="color:var(--animal);border-color:#fdcbbd;">🔒 Exit</button>
+</nav>
+
+<div class="container">
+
+<div class="chapter-header">
+  <div class="chapter-meta">
+    <span class="pill">Lesson B-4</span>
+    <span class="pill" style="background:#eaf7f2;color:var(--leaf-dark);">Life Science</span>
+    <span class="pill">⏱ ~2 hours · 2 sessions</span>
+    <span class="pill">🎯 Age 8</span>
+  </div>
+  <h1 style="margin:10px 0 4px;">🔄 Life Cycles 🐸🦋🌱</h1>
+  <p class="lead">Every living thing goes through the same kind of journey — but with WILD variations. Today we'll crack the pattern, from butterflies to babies to baby plants.</p>
+  <div class="parts-preview">
+    <div class="pp"><b>📅 Session 1 · Parts 1 + 2 · ~55–70 min</b>The universal life cycle pattern + examples from mammals, birds, frogs, insects, and plants.</div>
+    <div class="pp p2"><b>📅 Session 2 · Parts 3 + 4 · ~45–60 min</b>Why offspring are all a little different, and how "the survival math" shapes every species.</div>
+  </div>
+</div>
+
+<div class="tabs" role="tablist">
+  <button class="tab active" data-tab="lesson">🎬 Lesson</button>
+  <button class="tab" data-tab="homework">📓 Homework</button>
+  <button class="tab" data-tab="quiz">🧠 Quiz</button>
+  <button class="tab teacher-only hide" data-tab="teacher">🧑‍🏫 Teacher</button>
+</div>
+
+<!-- ================ LESSON ================ -->
+<div class="tab-panel active" id="panel-lesson">
+  <div class="slide-wrap">
+    <div class="slide-stage" id="slide-stage">
+
+      <!-- PART 1 BANNER -->
+      <div class="slide active" data-slide="1" data-part="1">
+        <div class="part-banner p1">
+          <span class="pb-pill">SESSION 1 · PART 1 OF 2</span>
+          <div class="pb-emoji">🐣 → 🐥 → 🐔</div>
+          <h1>The Circle of Life</h1>
+          <p class="pb-sub">Every living thing is on the same journey. Let's map it.</p>
+          <div class="pb-meta">🎬 2 videos · 🎲 Fruit fly observation · 🕵️ 2 mysteries</div>
+        </div>
+      </div>
+
+      <!-- Slide 2: Hook -->
+      <div class="slide" data-slide="2" data-part="1">
+        <div class="two-col">
+          <div>
+            <p class="pill">🔭 Today's adventure</p>
+            <h2 class="big-q">What do YOU and a jellyfish and a dandelion all have in common?</h2>
+            <p class="lead">Weird question. But here's the crazy answer: you're all on the same kind of journey — birth, grow up, have babies, pass on.</p>
+            <div class="callout">🤔 <b>Today's mission:</b> figure out the pattern that every single living thing on Earth shares, and spot the wild variations.</div>
+          </div>
+          <div style="font-size: 180px; text-align:center;">🧒🪼🌼</div>
+        </div>
+      </div>
+
+      <!-- Slide 3: What is a life cycle -->
+      <div class="slide" data-slide="3" data-part="1">
+        <h2 class="big-q">A life cycle is… ♻️</h2>
+        <p class="lead">It's the whole journey from <b>baby → grown-up → baby-maker → back to baby</b>. Then it starts over. That's why we call it a CYCLE — it goes in a loop.</p>
+        <div class="flow">
+          <div>👶<span class="label">Baby</span></div>
+          <span class="arrow">→</span>
+          <div>🧒<span class="label">Kid</span></div>
+          <span class="arrow">→</span>
+          <div>🧑<span class="label">Grown-up</span></div>
+          <span class="arrow">→</span>
+          <div>👨‍👩‍👦<span class="label">Has baby</span></div>
+          <span class="arrow">↩</span>
+        </div>
+        <div class="callout leaf"><b>🌱 The pattern:</b> this cycle happens for YOU, your cat, a butterfly, a tomato plant, and every single living thing. Different shapes — same deal.</div>
+      </div>
+
+      <!-- Slide 4: Tiny start -->
+      <div class="slide" data-slide="4" data-part="1">
+        <h2 class="big-q">Guess how BIG every living thing starts? 🔍</h2>
+        <div class="reveal-grid">
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🐘 An elephant?</b><div class="small">Click to reveal</div></div><div class="back"><b>ONE TINY CELL.</b> Smaller than a speck of dust!</div></div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🐋 A blue whale?</b><div class="small">Click to reveal</div></div><div class="back"><b>ONE TINY CELL.</b> The biggest animal ever starts invisible.</div></div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🌳 A giant oak tree?</b><div class="small">Click to reveal</div></div><div class="back"><b>ONE TINY CELL</b> inside a tiny seed!</div></div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🙋 You?</b><div class="small">Click to reveal</div></div><div class="back"><b>ONE TINY CELL</b> too. Mind. Blown.</div></div>
+        </div>
+        <div class="callout"><b>💡 Every living thing</b> — no matter how giant — starts as a single cell that gets the message "go grow a body!"</div>
+      </div>
+
+      <!-- Slide 5: The universal pattern -->
+      <div class="slide" data-slide="5" data-part="1">
+        <h2 class="big-q">The universal recipe 📜</h2>
+        <p class="lead">No matter the species, this is the recipe:</p>
+        <ol style="font-size:18px;">
+          <li>🚺 A female makes an <b>egg</b>.</li>
+          <li>🚹 A male makes a <b>sperm</b>.</li>
+          <li>🤝 They meet — this is called <b>fertilization</b>.</li>
+          <li>🧫 The fertilized egg becomes the first cell of a new baby.</li>
+          <li>📈 Cell divides → again → again → grows into a whole body.</li>
+          <li>🌞 Baby grows up, and the cycle starts over.</li>
+        </ol>
+        <div class="callout animal"><b>🐱 Cats do this. 🌻 Sunflowers do this. 🦋 Butterflies do this.</b> The bodies look different, but the recipe is the same.</div>
+      </div>
+
+      <!-- PART 2 in-place (combined slides for session 1) -->
+      <!-- Slide 6: mammals -->
+      <div class="slide" data-slide="6" data-part="1">
+        <h2 class="big-q">🐰 Mammals — live births</h2>
+        <div class="two-col">
+          <div>
+            <p>Mammals (humans, dogs, rabbits, whales, bats) grow their babies <b>inside the mom's body</b>. When the baby is ready, it's born alive and kicking.</p>
+            <div class="callout"><b>Special mammal trick:</b> mom's body makes <b>milk</b> to feed the baby. Only mammals do this!</div>
+          </div>
+          <div style="font-size:120px;text-align:center;">🤱🐶🐘🐳</div>
+        </div>
+      </div>
+
+      <!-- Slide 7: birds -->
+      <div class="slide" data-slide="7" data-part="1">
+        <h2 class="big-q">🐥 Birds — eggs with lunch packed in</h2>
+        <div class="two-col">
+          <div>
+            <p>Birds lay <b>eggs</b>. Inside the egg: a tiny speck of baby + a giant food supply called the <b>yolk</b>. The baby eats the yolk while it's growing!</p>
+            <div class="callout"><b>🏠 Reptiles and fish often lay eggs too</b> — it's a very popular strategy.</div>
+            <p class="small">🛒 Fun fact: grocery store eggs usually aren't fertilized, so no baby chick to worry about.</p>
+          </div>
+          <div style="font-size:120px;text-align:center;">🥚🐣🐤</div>
+        </div>
+      </div>
+
+      <!-- Slide 8: VIDEO - butterfly -->
+      <div class="slide" data-slide="8" data-part="1" data-type="video" data-video-id="dM71jKNuk-M">
+        <h2 class="big-q">🎬 Watch: Life of a Butterfly <span class="pill">~3 min</span></h2>
+        <p class="lead">Dr. Binocs explains the wildest trick in biology: <b>metamorphosis</b>. A crawling caterpillar becomes a flying butterfly. How?!</p>
+        <div class="video-wrap"><div class="video-ratio"><iframe src="https://www.youtube.com/embed/dM71jKNuk-M" title="Life of a Butterfly - Dr Binocs" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
+        <div class="video-edit-row"><span class="video-meta">📽 Peekaboo Kidz · Dr. Binocs Show</span><a class="btn small secondary" href="https://www.youtube.com/watch?v=dM71jKNuk-M" target="_blank">▶ Open on YouTube</a></div>
+        <div class="video-caption">🎯 <b>Listen for:</b> the four stages — egg, caterpillar (larva), chrysalis (pupa), butterfly.</div>
+      </div>
+
+      <!-- Slide 9: insects metamorphosis -->
+      <div class="slide" data-slide="9" data-part="1">
+        <h2 class="big-q">🦋 Insects — the magic trick</h2>
+        <p class="lead">Most insects do something ALIEN: they <b>completely rebuild their body</b> inside a pupa. The caterpillar isn't growing a butterfly — it's <i>dissolving into soup</i> and re-forming. Wild!</p>
+        <div class="flow">
+          <div>🥚<span class="label">Egg</span></div>
+          <span class="arrow">→</span>
+          <div>🐛<span class="label">Caterpillar (larva)</span></div>
+          <span class="arrow">→</span>
+          <div>📦<span class="label">Pupa</span></div>
+          <span class="arrow">→</span>
+          <div>🦋<span class="label">Adult</span></div>
+        </div>
+        <div class="callout"><b>⚠️ Key word to remember:</b> <b>METAMORPHOSIS</b> — big change of body shape.</div>
+      </div>
+
+      <!-- Slide 10: activity fruit fly -->
+      <div class="slide" data-slide="10" data-part="1">
+        <div class="beat activity">
+          <span class="beat-badge">🎲 OPTIONAL HOME ACTIVITY · TAKES 2 WEEKS</span>
+          <h3>The Fruit Fly Farm</h3>
+          <p>Want to watch a whole life cycle <b>yourself</b> in 2 weeks? Ask a grown-up!</p>
+          <ol>
+            <li>Put a ripe banana piece in an open jar outside for a day.</li>
+            <li>Cover it with cloth + rubber band. Put somewhere warm (~25°C).</li>
+            <li>In a few days — tiny worm-like <b>larvae</b> on the banana!</li>
+            <li>In a week — they climb up and become <b>pupae</b>.</li>
+            <li>In ~14 days — new fruit flies emerge! Then they lay eggs and… cycle!</li>
+          </ol>
+          <details class="teacher-note"><summary>👩‍🏫 Teacher note</summary><div class="note-body"><b>Teacher:</b> This is an amazing hands-on demo — kids never forget it. If fruit flies aren't handy, butterfly kits from butterfly farms work too. Google "butterfly rearing kit".</div></details>
+        </div>
+      </div>
+
+      <!-- Slide 11: VIDEO frog -->
+      <div class="slide" data-slide="11" data-part="1" data-type="video" data-video-id="F3ElGMVU6SY">
+        <h2 class="big-q">🎬 Watch: Frog Life Cycle <span class="pill">~3 min</span></h2>
+        <p class="lead">Dr. Binocs shows how a tiny black egg becomes a tadpole, grows legs, and hops out of the water!</p>
+        <div class="video-wrap"><div class="video-ratio"><iframe src="https://www.youtube.com/embed/F3ElGMVU6SY" title="Life Cycle of a Frog - Dr Binocs" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
+        <div class="video-edit-row"><span class="video-meta">📽 Peekaboo Kidz · Dr. Binocs Show</span><a class="btn small secondary" href="https://www.youtube.com/watch?v=F3ElGMVU6SY" target="_blank">▶ Open on YouTube</a></div>
+        <div class="video-caption">🎯 <b>Listen for:</b> when do the legs appear? Front or back legs first?</div>
+      </div>
+
+      <!-- Slide 12: frogs -->
+      <div class="slide" data-slide="12" data-part="1">
+        <h2 class="big-q">🐸 Frogs — water babies</h2>
+        <p class="lead">Frogs lay hundreds of tiny black eggs in water (usually in <b>jelly blobs</b>). They hatch into <b>tadpoles</b> — fish-looking babies with tails. Then legs grow, the tail disappears, lungs form, and — frog!</p>
+        <div class="flow">
+          <div>🥚<span class="label">Eggs in jelly</span></div>
+          <span class="arrow">→</span>
+          <div>🐟<span class="label">Tadpole</span></div>
+          <span class="arrow">→</span>
+          <div>🐸<span class="label">Froglet</span></div>
+          <span class="arrow">→</span>
+          <div>🐸<span class="label">Adult frog</span></div>
+        </div>
+      </div>
+
+      <!-- Slide 13: plants -->
+      <div class="slide" data-slide="13" data-part="1">
+        <h2 class="big-q">🌻 Plants — sleeping babies in seeds</h2>
+        <div class="two-col">
+          <div>
+            <p>Plants have a trick: the flower has <b>both male and female parts</b>! Pollen (male) + egg (female) meet inside the flower. The fertilized egg becomes a <b>seed</b>.</p>
+            <p>A seed = a tiny baby plant + a packed lunch, <b>asleep</b>. It can sleep for <b>years</b> waiting for the right moment (warm + wet) to wake up and grow. 😴</p>
+            <div class="callout leaf"><b>🌱 Amazing:</b> seeds found in 2,000-year-old Egyptian tombs have been planted and grown! Longest nap ever.</div>
+          </div>
+          <div style="font-size:120px;text-align:center;">🌸🌱🌳</div>
+        </div>
+      </div>
+
+      <!-- Slide 14: Mystery #1 -->
+      <div class="slide" data-slide="14" data-part="1">
+        <div class="beat mystery" id="mystery-14">
+          <span class="beat-badge">🕵️ MYSTERY #1 · THINK BEFORE YOU CLICK</span>
+          <h3>Where's the baby kangaroo hiding?</h3>
+          <p>A kangaroo is a mammal. But here's a weird fact: a newborn kangaroo is the size of a jellybean! It's born WAY too early. Where does it go? How does such a tiny baby survive?</p>
+          <p class="small">💭 Tell your teacher your theory first, then click!</p>
+          <button class="reveal-btn" onclick="document.getElementById('mystery-14').classList.add('mystery-open')">🔍 Show answer</button>
+          <div class="mystery-answer">🎯 The tiny jellybean-sized baby <b>crawls up to mom's pouch</b> — a special pocket on her belly! It lives in the pouch for ~8 months, drinking milk, growing safe and warm. Then it starts peeking out, then hopping out, then staying out. Kangaroos + koalas + possums are called <b>marsupials</b> — mammals with this unusual "pouch" life cycle. Cool variation on the mammal recipe!</div>
+        </div>
+      </div>
+
+      <!-- Slide 15: pattern recap -->
+      <div class="slide" data-slide="15" data-part="1">
+        <h2 class="big-q">🧩 Same recipe, different shapes</h2>
+        <p class="lead">Look at all of them side by side:</p>
+        <div class="reveal-grid">
+          <div class="reveal-card open"><div class="back"><b>🐕 Dog</b> → baby inside mom → live birth → milk → grows up</div></div>
+          <div class="reveal-card open"><div class="back"><b>🐦 Bird</b> → egg with yolk → hatches → parents feed → flies</div></div>
+          <div class="reveal-card open"><div class="back"><b>🦋 Butterfly</b> → egg → caterpillar → pupa → butterfly</div></div>
+          <div class="reveal-card open"><div class="back"><b>🐸 Frog</b> → eggs in water → tadpole → froglet → frog</div></div>
+          <div class="reveal-card open"><div class="back"><b>🌻 Sunflower</b> → seed → seedling → plant → flower → seed</div></div>
+        </div>
+        <div class="callout"><b>Spot the pattern?</b> Every journey has: male + female + fertilization + baby + growing + adult + making more babies. Just the packaging is different!</div>
+      </div>
+
+      <!-- Slide 16: Part 1 recap + session break -->
+      <div class="slide" data-slide="16" data-part="1">
+        <h2 class="big-q">🎉 Part 1 + 2 done!</h2>
+        <div class="callout leaf">✅ What you nailed:<ul style="margin:6px 0;">
+          <li>Every living thing has a <b>life cycle</b> — baby → grown-up → makes more</li>
+          <li>Recipe: male + female + fertilization + offspring</li>
+          <li>Mammals give live birth. Birds lay eggs with yolk. Insects do metamorphosis. Frogs go egg→tadpole→frog. Plants make seeds.</li>
+          <li>Metamorphosis = rebuilding the whole body!</li>
+        </ul></div>
+        <div class="session-break">
+          <div class="icon">🌟</div>
+          <div>
+            <h4>End of Session 1!</h4>
+            <p>Great start, scientist. Next session we dig into <b>why offspring are all a little different</b>, and a crazy math rule about survival.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- PART 2 BANNER -->
+      <div class="slide" data-slide="17" data-part="2">
+        <div class="part-banner p2">
+          <span class="pb-pill">SESSION 2 · PART 2 OF 2</span>
+          <div class="pb-emoji">👯 🧬 🔢</div>
+          <h1>Same but Different</h1>
+          <p class="pb-sub">Why is every puppy in the litter different? And the survival math that rules every species.</p>
+          <div class="pb-meta">🕵️ 4 mysteries · 🧠 Critical thinking</div>
+        </div>
+      </div>
+
+      <!-- Slide 18: hook -->
+      <div class="slide" data-slide="18" data-part="2">
+        <h2 class="big-q">Why don't we see "do-ats"? 🤔</h2>
+        <div class="two-col">
+          <div>
+            <p class="lead">Imagine a dog and a cat had babies. What would you get? A "do-at"? A "ca-og"? 😂</p>
+            <p>Here's the weird thing: <b>it never happens in real life</b>. Dogs only have dogs. Cats only have cats. Why is that a hard rule?</p>
+            <div class="callout"><b>Rule #1:</b> A species only mates with its own species. Dog + dog = puppy. Dog + cat = nothing at all.</div>
+          </div>
+          <div style="font-size:140px;text-align:center;">🐕❌🐈</div>
+        </div>
+      </div>
+
+      <!-- Slide 19: sameness yet variation -->
+      <div class="slide" data-slide="19" data-part="2">
+        <h2 class="big-q">But wait… puppies are all different! 🐶🐕‍🦺🐩</h2>
+        <p class="lead">Look at a litter of puppies. Same mom, same dad, same day. But each one is unique — different colors, sizes, tiny personalities.</p>
+        <div class="reveal-grid">
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>Why are they DIFFERENT?</b></div><div class="back">Each puppy gets a different mix of mom's and dad's genes. Like shuffling cards — every hand is unique.</div></div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>Why are they SIMILAR?</b></div><div class="back">They all got dog genes from two dogs. No cat parts in the mix! So they're all dogs — but different dogs.</div></div>
+        </div>
+        <div class="callout animal"><b>Rule #2:</b> Inside one species, every offspring is a little different. "Sameness yet variation."</div>
+      </div>
+
+      <!-- Slide 20: Mystery #2 -->
+      <div class="slide" data-slide="20" data-part="2">
+        <div class="beat mystery" id="mystery-20">
+          <span class="beat-badge">🕵️ MYSTERY #2 · THINK BEFORE YOU CLICK</span>
+          <h3>The Identical Twins</h3>
+          <p>Your friend Anya has an identical twin. They look exactly the same. How does this fit with "every offspring is different"? Is it cheating?!</p>
+          <button class="reveal-btn" onclick="document.getElementById('mystery-20').classList.add('mystery-open')">🔍 Show answer</button>
+          <div class="mystery-answer">🎯 Identical twins come from <b>ONE fertilized egg</b> that accidentally split into TWO. So they share the exact same genes — that's why they look the same. <b>Fraternal twins</b> (the more common kind) come from TWO different eggs fertilized at the same time — they're like regular siblings born on the same day, with different genes. Twin-making is a rare wrinkle, but the "every offspring is different" rule still holds: one-egg twins are really just one person's genes expressing twice.</div>
+        </div>
+      </div>
+
+      <!-- Slide 21: Number of offspring -->
+      <div class="slide" data-slide="21" data-part="2">
+        <h2 class="big-q">How many babies does a ___ have? 🔢</h2>
+        <p class="lead">Compare:</p>
+        <div class="reveal-grid">
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🐘 Elephant</b><div class="small">How many?</div></div><div class="back"><b>1 baby</b> every 4–5 years. Mom raises it for years!</div></div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🐕 Dog</b><div class="small">How many?</div></div><div class="back"><b>4–8 puppies</b> per litter.</div></div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🐸 Frog</b><div class="small">How many?</div></div><div class="back"><b>Hundreds to thousands</b> of eggs at once!</div></div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🎃 Pumpkin</b><div class="small">How many?</div></div><div class="back"><b>500+ seeds</b> in one pumpkin!</div></div>
+        </div>
+        <div class="callout"><b>Spot the pattern?</b> Animals that <b>care</b> for their babies have FEW. Plants and frogs that leave their babies to fend for themselves have TONS.</div>
+      </div>
+
+      <!-- Slide 22: The math of survival -->
+      <div class="slide" data-slide="22" data-part="2">
+        <h2 class="big-q">🧮 The Crazy Math of Survival</h2>
+        <p class="lead">Brain question: <b>if a pair of frogs has 1,000 tadpoles, and frogs don't go extinct every year…</b> how many of those tadpoles MUST survive to grow up and have babies?</p>
+        <div class="reveal-grid">
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🤔 Guess first!</b></div><div class="back">Try to figure it out before peeking at the next card.</div></div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>Click for the answer</b></div><div class="back"><b>Only TWO!</b> (A boy and a girl.) Those 2 replace their parents. Population stays stable. The other 998… don't make it. 😳</div></div>
+        </div>
+        <div class="callout animal"><b>Wild truth:</b> only 2 offspring per couple need to survive. Everything extra? "Over-reproduction." Most babies don't make it — they become food for other animals or die for other reasons.</div>
+      </div>
+
+      <!-- Slide 23: Mystery #3 -->
+      <div class="slide" data-slide="23" data-part="2">
+        <div class="beat mystery" id="mystery-23">
+          <span class="beat-badge">🕵️ MYSTERY #3 · THINK BEFORE YOU CLICK</span>
+          <h3>Why isn't Earth covered in bunnies?</h3>
+          <p>A pair of rabbits can have <b>40 babies a year</b>. If every baby rabbit lived and had 40 more, after 10 years there would be literally TRILLIONS of rabbits. But there aren't. Why not?</p>
+          <button class="reveal-btn" onclick="document.getElementById('mystery-23').classList.add('mystery-open')">🔍 Show answer</button>
+          <div class="mystery-answer">🎯 Most baby rabbits <b>don't survive</b>. Foxes, hawks, owls, snakes, disease, cold winters, lack of food, cars — all of these knock the numbers down. Only about 2 of every 40 babies grow up to have babies themselves. This isn't sad — it's how nature stays balanced. If all bunnies lived, they'd eat every plant on Earth. The "over-production" is what feeds all the other animals (and keeps plants around too!).</div>
+        </div>
+      </div>
+
+      <!-- Slide 24: environmental factors -->
+      <div class="slide" data-slide="24" data-part="2">
+        <h2 class="big-q">🌍 What decides who makes it?</h2>
+        <p class="lead">The things that decide if a baby survives are called <b>environmental factors</b>. Like:</p>
+        <div class="reveal-grid">
+          <div class="reveal-card open"><div class="back"><b>🍽 Food</b> — is there enough to eat?</div></div>
+          <div class="reveal-card open"><div class="back"><b>💧 Water</b> — and not too much!</div></div>
+          <div class="reveal-card open"><div class="back"><b>🌡 Temperature</b> — not too hot, not too cold</div></div>
+          <div class="reveal-card open"><div class="back"><b>🏠 Shelter</b> — safe places to sleep/nest</div></div>
+          <div class="reveal-card open"><div class="back"><b>🦊 Predators</b> — things trying to eat them</div></div>
+          <div class="reveal-card open"><div class="back"><b>🦠 Disease</b> — germs and illness</div></div>
+        </div>
+        <div class="callout leaf"><b>💡 The rule:</b> if these factors are GOOD, the population grows. If BAD, population shrinks. If terrible — the species can go extinct.</div>
+      </div>
+
+      <!-- Slide 25: Mystery #4 -->
+      <div class="slide" data-slide="25" data-part="2">
+        <div class="beat mystery" id="mystery-25">
+          <span class="beat-badge">🕵️ MYSTERY #4 · THINK BEFORE YOU CLICK</span>
+          <h3>What happened to the dinosaurs? 🦖</h3>
+          <p>Dinosaurs ruled Earth for 165 MILLION years. Then — poof — all gone (except birds, which came from them!). What could wipe out something so successful?</p>
+          <button class="reveal-btn" onclick="document.getElementById('mystery-25').classList.add('mystery-open')">🔍 Show answer</button>
+          <div class="mystery-answer">🎯 Most scientists think a <b>giant asteroid</b> smashed into Earth 66 million years ago. It threw so much dust into the air that sunlight got blocked for years. Plants died → plant-eaters starved → meat-eaters starved. <b>Environmental factors went TERRIBLE</b>, and not enough dinosaurs could survive to reproduce. Some small, feathery dinosaurs made it — we call their descendants BIRDS. So every time you see a sparrow, you're looking at a surviving dinosaur! 🐦</div>
+        </div>
+      </div>
+
+      <!-- Slide 26: Mystery #5 — endangered -->
+      <div class="slide" data-slide="26" data-part="2">
+        <div class="beat mystery" id="mystery-26">
+          <span class="beat-badge">🕵️ MYSTERY #5 · THINK BEFORE YOU CLICK</span>
+          <h3>Why are pandas so rare? 🐼</h3>
+          <p>There are only about 1,800 giant pandas left in the wild. They have been around forever. What's going wrong for them?</p>
+          <button class="reveal-btn" onclick="document.getElementById('mystery-26').classList.add('mystery-open')">🔍 Show answer</button>
+          <div class="mystery-answer">🎯 Two big environmental factor problems: (1) <b>Habitat loss</b> — humans are cutting down the bamboo forests where pandas live. (2) <b>Food</b> — pandas only eat bamboo, and less forest means less food. Also, pandas have only 1 cub every 2 years (low reproduction). If even a few more adults die than 2 babies survive, the population shrinks. Humans now protect panda habitats + run breeding programs — numbers are slowly climbing back up!</div>
+        </div>
+      </div>
+
+      <!-- Slide 27: Mystery #6 -->
+      <div class="slide" data-slide="27" data-part="2">
+        <div class="beat mystery" id="mystery-27">
+          <span class="beat-badge">🕵️ MYSTERY #6 · THINK BEFORE YOU CLICK</span>
+          <h3>Where do seeds sleep?</h3>
+          <p>Scientists planted some 2,000-year-old seeds from a dead tree in an ancient Egyptian pyramid. The seeds <b>sprouted</b> and grew into healthy trees. How can a baby plant be "alive" for 2,000 years without eating, drinking, or breathing?!</p>
+          <button class="reveal-btn" onclick="document.getElementById('mystery-27').classList.add('mystery-open')">🔍 Show answer</button>
+          <div class="mystery-answer">🎯 Seeds can enter a state called <b>DORMANCY</b> — like super-deep sleep where almost nothing happens inside. The baby plant is alive but paused. Its "food pack" sits there untouched. The moment conditions are right (warm + wet), the seed wakes up and says "Oh hi, let's grow!" Seeds are nature's time machines for plants. 🌱⏳</div>
+        </div>
+      </div>
+
+      <!-- Slide 28: recap -->
+      <div class="slide" data-slide="28" data-part="2">
+        <h2 class="big-q">✨ What you now know</h2>
+        <ul style="font-size:18px;">
+          <li>🔄 Every living thing has a <b>life cycle</b>: baby → grown-up → makes babies → loop</li>
+          <li>🥚 Universal recipe: male + female + fertilization + offspring</li>
+          <li>🎭 Variations: live birth, eggs, metamorphosis, seeds — same recipe, different packaging</li>
+          <li>👯 Sameness yet variation: offspring are like parents but each one's a little different</li>
+          <li>🔢 Only <b>2 offspring per couple</b> need to survive to keep a species going</li>
+          <li>🌍 <b>Environmental factors</b> (food, water, shelter, temperature, predators) decide who makes it</li>
+          <li>🦖 Big environmental changes = extinctions</li>
+        </ul>
+        <div class="callout"><b>🎁 Coming up next:</b> we'll get real-world — identifying the plants and animals YOU see every day (Chapter 7), and then cracking what a "species" really is (Chapter 8).</div>
+      </div>
+
+    </div>
+    <div class="slide-controls">
+      <button class="slide-btn ghost" onclick="prevSlide()" id="prevBtn">← Back</button>
+      <div class="slide-meta">
+        <span class="part-marker" id="partMarker">PART 1</span>
+        <span id="slideNum" class="small">Slide 1 / 28</span>
+        <div class="slide-progress"><div class="slide-progress-fill" id="slideProgress" style="width:0%"></div></div>
+        <button class="slide-btn ghost" onclick="enterPresentMode()" style="font-size:13px;padding:6px 12px;">🖥 Present</button>
+        <button class="slide-btn ghost teacher-only hide" onclick="addNewSlideAfter(currentSlide)" style="font-size:13px;padding:6px 12px;color:var(--berry);">➕ Add slide</button>
+      </div>
+      <button class="slide-btn" onclick="nextSlide()" id="nextBtn">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================ HOMEWORK ================ -->
+<div class="tab-panel" id="panel-homework">
+  <div class="hw-intro">
+    <h2 style="margin-top:0;">📓 Homework Missions</h2>
+    <p>Five missions this week — mix of observation and family fun.</p>
+    <div class="small" id="hwConfigNote"></div>
+  </div>
+  <div class="hw-list" id="homework-list"></div>
+  <div class="q-card" style="text-align:center;">
+    <h3>📤 Submit all homework</h3>
+    <input type="text" id="hw-student-name" placeholder="Your name" style="width:260px;padding:10px;border:2px solid #eee;border-radius:10px;font-size:15px;" />
+    <div class="submit-row" style="justify-content:center;">
+      <button class="btn success" onclick="submitHomework()">📤 Submit</button>
+      <button class="btn secondary" onclick="downloadHomework()">💾 Save as file</button>
+      <button class="btn ghost" onclick="clearHomework()">🗑 Clear</button>
+    </div>
+    <div id="hwSubmitMsg" class="small" style="margin-top:10px;"></div>
+  </div>
+</div>
+
+<!-- ================ QUIZ ================ -->
+<div class="tab-panel" id="panel-quiz">
+  <div id="quizStart" class="quiz-start">
+    <div style="font-size: 80px;">🧠</div>
+    <h2>Ready for the Big Quiz?</h2>
+    <p class="lead" style="margin-left:auto;margin-right:auto;">30 questions. You can skip, flag, and navigate freely. Take your time!</p>
+    <input type="text" id="quiz-student-name" placeholder="Your name" style="width:260px;padding:10px;border:2px solid #eee;border-radius:10px;font-size:15px;margin:10px;" />
+    <div><button class="btn success" onclick="startQuiz()">🚀 Start the quiz!</button></div>
+  </div>
+  <div id="quizArea" class="hide"></div>
+  <div id="quizResult" class="hide"></div>
+</div>
+
+<!-- ================ TEACHER ================ -->
+<div class="tab-panel" id="panel-teacher">
+  <div class="hw-intro" style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;">
+    <div style="flex:1;min-width:240px;">
+      <h2 style="margin-top:0;">🧑‍🏫 Teacher Command Center</h2>
+      <p>Edit inline from Lesson, Homework, or Quiz tabs. Use this panel for settings, API key, submissions, and backups.</p>
+    </div>
+    <button class="btn ghost" onclick="signOutTeacher()" style="white-space:nowrap;">🔒 Sign out</button>
+  </div>
+  <div class="teacher-grid">
+    <div class="teacher-card">
+      <h3>📚 Teacher Notes</h3>
+      <small>Lesson plan, answer keys, timing.</small>
+      <div style="margin-top:10px;"><a class="btn" href="chapter-b4-teacher-notes.html" target="_blank">📖 Open Teacher Notes</a></div>
+    </div>
+    <div class="teacher-card">
+      <h3>🔑 Claude API Key</h3>
+      <small>Unlocks inline conversational editing.</small>
+      <input type="password" id="apiKey" placeholder="sk-ant-..." />
+      <div class="submit-row"><button class="btn" onclick="saveApiKey()">💾 Save</button><button class="btn ghost" onclick="clearApiKey()">Clear</button></div>
+      <div class="small" id="apiStatus"></div>
+    </div>
+    <div class="teacher-card">
+      <h3>📬 Submission settings</h3>
+      <input type="email" id="teacherEmail" placeholder="teacher@example.com" />
+      <input type="url" id="webhookUrl" placeholder="Formspree URL (optional)" />
+      <div class="submit-row"><button class="btn" onclick="saveSubmitSettings()">💾 Save</button></div>
+    </div>
+    <div class="teacher-card" style="grid-column: span 2;">
+      <h3>📥 Student submissions</h3>
+      <div id="submissionsTable"></div>
+      <div class="submit-row"><button class="btn" onclick="exportSubmissions()">💾 Export</button><button class="btn ghost" onclick="clearSubmissions()">🗑 Clear</button></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- PRESENT BAR -->
+<div class="present-bar" id="presentBar">
+  <button onclick="prevSlide()">◀</button>
+  <span class="counter" id="presentCounter">1 / 28</span>
+  <button onclick="nextSlide()">▶</button>
+  <button class="exit" onclick="exitPresentMode()">✕ Exit</button>
+</div>
+
+<!-- MODAL -->
+<div class="modal-back" id="modal">
+  <div class="modal">
+    <h3 id="modal-title">Hello</h3>
+    <div id="modal-body"></div>
+    <div class="submit-row" style="justify-content:flex-end;" id="modal-actions"></div>
+  </div>
+</div>
+
+<script>
+/* ========== DATA ========== */
+const HOMEWORK = [
+  { icon:"🐛", title:"The Backyard Life-Cycle Hunt", prompt:"Go outside (backyard, park, or even the sidewalk). Find 3 living things at DIFFERENT stages of their life cycle (a seed + a flower + old dry stalks; a baby bird nest + an adult bird; caterpillar + butterfly). Write down what you found.", placeholder:"Thing 1 stage:\nThing 2 stage:\nThing 3 stage:" },
+  { icon:"📸", title:"Baby Photo vs. Now", prompt:"Ask a grown-up for YOUR baby photo. Then look at yourself in a mirror. Write 3 things that changed and 3 things that stayed the same. What does this tell you about your life cycle?", placeholder:"Changed: ...\nSame: ..." },
+  { icon:"🥜", title:"Seed Sleep Experiment (take 1 week)", prompt:"Soak 5 dry beans in water overnight. Next day, put them on a damp paper towel. Check daily for a week — what happens? Write or draw what you see each day.", placeholder:"Day 1: ...\nDay 2: ...\nDay 7: ..." },
+  { icon:"🎲", title:"Family Life-Cycle Game", prompt:"Pick 5 animals (your pet, a grandparent's pet, a zoo animal, etc.). Ask family members how many babies each has at once. Who has the MOST? Who has the FEWEST? Is there a pattern?", placeholder:"Animal | Babies | Notes..." },
+  { icon:"🎨", title:"Draw Your Own Life Cycle", prompt:"Draw a circle with 4 stages of YOUR life: baby → kid (now) → teenager → grown-up. Include something you CAN do at each stage that you can't at the others. Upload a photo or describe it.", placeholder:"Describe your drawing here..." }
+];
+
+const QUIZ = [
+  { type:"mcq", diff:"easy", q:"What is a life cycle?", choices:["A machine that makes babies","The journey from baby to grown-up and back to baby","A bicycle for life","A special kind of weather"], correct:1, feedback:["Nope!","Yes! It's the whole circle.","Cute, but no.","Different kind of cycle."] },
+  { type:"fill", diff:"easy", q:"The baby of a butterfly is called a ______.", correctText:["caterpillar","larva"], feedback:"A caterpillar (also called a larva)!" },
+  { type:"mcq", diff:"easy", q:"Which group feeds their babies milk?", choices:["Birds","Mammals","Frogs","Plants"], correct:1, feedback:["Birds lay eggs, no milk.","Yes! Only mammals make milk.","Frogs don't.","Plants definitely don't."] },
+  { type:"fill", diff:"easy", q:"The big word for 'caterpillar turns into butterfly' is ______.", correctText:["metamorphosis"], feedback:"Metamorphosis — means 'big body change'!" },
+  { type:"mcq", diff:"easy", q:"How many cells does every living thing START as?", choices:["Billions","Thousands","One","None"], correct:2, feedback:["It grows to billions, but starts smaller.","Still way too many.","Correct! Just ONE tiny cell.","Then it wouldn't be alive!"] },
+  { type:"mcq", diff:"easy", q:"A seed contains:", choices:["Just a baby plant","Just food","A baby plant + packed food","Dirt"], correct:2, feedback:["There's more inside!","Not just food.","Yes! Baby plant + snack pack for its journey.","Nope — seeds don't contain dirt."] },
+  { type:"fill", diff:"easy", q:"When a seed 'sleeps' for years waiting to grow, it is ______.", correctText:["dormant","asleep","sleeping"], feedback:"Dormant! Like super-deep sleep." },
+  { type:"mcq", diff:"easy", q:"Which animals lay eggs in water?", choices:["Elephants","Dogs","Frogs","Horses"], correct:2, feedback:["Live birth.","Live birth.","Yes! Frogs lay eggs in ponds.","Live birth."] },
+  { type:"scenario", diff:"medium", q:"You find a small black ball of jelly in a pond. A few days later, you see wiggling fish-like things with tails. What life cycle are you watching?", choices:["Fish","Frog","Turtle","Butterfly"], correct:1, scenario:"The 'fish-like thing with a tail' gives it away.", feedback:["Fish hatch as tiny fish, not tadpoles.","Yes! Those are tadpoles — baby frogs.","Turtles hatch with shells.","Butterflies don't live in water."] },
+  { type:"mcq", diff:"medium", q:"Why does a mother dog have 6 puppies but an elephant has just 1 baby?",
+    choices:["Elephants are lazy","Because elephants care for their babies for years, so they don't need to make many; dogs need extras because fewer survive","Because dogs are smaller","It's random"], correct:1, feedback:["Nope.","Yes! Fewer babies = more parent care. More babies = less care.","Size isn't the rule.","There's a real pattern."] },
+  { type:"scenario", diff:"medium", q:"You see a pupa hanging from a branch. What stage of life cycle comes BEFORE this?", choices:["Adult butterfly","Caterpillar","Egg","Flower"], correct:1, scenario:"Think through the butterfly cycle.", feedback:["That comes after!","Yes! Caterpillar → pupa → butterfly.","Egg comes before the caterpillar.","Flowers aren't butterflies."] },
+  { type:"mcq", diff:"medium", q:"A friend says 'my cat gave birth to a puppy.' Why is this impossible?", choices:["Cats can't have babies","Different species can't make babies together","Puppies aren't real","Cats are too small"], correct:1, misconception:true, feedback:["⚠️ Cats absolutely have babies.","Yes! Rule #1 of life cycles: only same species can reproduce together.","⚠️ Puppies are very real!","⚠️ Size isn't the issue."] },
+  { type:"fill", diff:"medium", q:"Every life cycle starts when a male's sperm meets a female's egg — this meeting is called ______.", correctText:["fertilization","fertilisation"], feedback:"Fertilization! The moment the cycle begins." },
+  { type:"mcq", diff:"medium", q:"A frog lays 2,000 eggs. On average, how many must grow up and have babies to keep the frog population stable?", choices:["2,000","200","20","2"], correct:3, misconception:true, feedback:["⚠️ That would double the population every year!","⚠️ Still way too many.","⚠️ Too many.","Correct! Just 2 — one boy, one girl to replace the parents."] },
+  { type:"scenario", diff:"medium", q:"You open a pumpkin and count 600 seeds. If every single seed grew into a new pumpkin plant that also had 600 seeds, after just 3 years, Earth would be covered in pumpkins. Why isn't it?", choices:["Pumpkins are fake","Most seeds never grow — they're eaten, rot, or land somewhere bad","Pumpkins are small","We eat them all"], correct:1, feedback:["Pumpkins are real.","Yes! Over-production exists because most don't make it.","Nope.","We eat some, but that's not the main reason."] },
+  { type:"mcq", diff:"medium", q:"Which is a mammal life cycle feature that's UNIQUE to mammals?", choices:["Hatches from egg","Drinks milk from mom","Has legs","Breathes air"], correct:1, feedback:["Some mammals (platypus!) lay eggs, but the MILK is the key.","Yes! Only mammals make milk.","Lots of animals have legs.","Lots of animals breathe air."] },
+  { type:"fill", diff:"medium", q:"Identical twins start as ______ fertilized egg that splits in two.", correctText:["one","1"], feedback:"One! That's why they share identical genes." },
+  { type:"mcq", diff:"medium", q:"Which is NOT usually an 'environmental factor' that decides survival?",
+    choices:["Food availability","Predators","Color of the sky","Temperature"], correct:2, feedback:["Food matters!","Predators matter!","Correct — sky color doesn't affect survival.","Temperature matters big time."] },
+  { type:"scenario", diff:"hard", q:"Gardens with one type of plant (like all corn) are called monocultures. A disease hits corn and spreads fast. Why does it spread so well when all the plants are identical?", choices:["Plants are dumb","When all plants are nearly identical, a germ that beats one can beat them all","The plants fight each other","Disease likes tall plants"], correct:1, feedback:["Not the answer.","Yes! Variation helps populations survive disease. Monoculture = no variation = disaster risk.","They don't fight.","Not about height."] },
+  { type:"scenario", diff:"hard", q:"A pair of rabbits has 40 babies. Normally the population stays stable. If this year a new highway kills a lot of adult rabbits, what will you likely see NEXT year?", choices:["More babies survive to adulthood, population tries to bounce back","All rabbits disappear","Rabbits grow wings","Nothing changes"], correct:0, feedback:["Yes! Over-production is a safety net — when times are tough, more babies survive to fill gaps. This is how nature recovers.","Not necessarily.","😂 No.","Something changes!"] },
+  { type:"mcq", diff:"hard", q:"Which life-cycle strategy makes more sense for a species with MANY predators?",
+    choices:["Have 1 baby and protect it forever","Have tons of babies, hope some survive","Never reproduce","Eat predators"], correct:1, misconception:true, feedback:["⚠️ With tons of predators, 1 baby is very risky — it might get eaten.","Yes! Frogs, fish, insects do this — the 'many eggs' strategy.","Then the species ends.","⚠️ Many prey animals aren't big enough to eat predators."] },
+  { type:"open", diff:"hard", q:"Penguins lay 1 egg a year. Salmon lay 7,000 eggs a year. Both species are still around. Explain WHY both strategies work. (2–3 sentences.)", scenario:"Think about what parent penguins do vs. parent salmon.", feedback:"Expected: Penguins invest HEAVILY in their one baby — both parents take turns keeping the egg warm, then protecting and feeding the chick. High parent care = few babies needed. Salmon lay eggs and swim away. Most eggs get eaten, but with 7,000, at least 2 usually survive. Low parent care = many babies needed. Both strategies work because they balance the equation in different ways." },
+  { type:"experiment", diff:"hard", q:"HANDS-ON: Plant 3 beans — one in bright light, one in a dark cupboard, one in the fridge. Water them all the same. Check each day for 1 week. Which sprouts first? Write your observation and what it tells you about environmental factors.", feedback:"The bright-light one usually sprouts first; the fridge one likely doesn't sprout at all (too cold = seed stays dormant); the dark one may sprout but look pale. This shows temperature + light affect whether life cycles even START." },
+  { type:"scenario", diff:"hard", q:"A species of bird lays only 2 eggs per pair per year. A disease kills the adults, and the bird population drops 80%. Will this species recover quickly, slowly, or maybe not at all?", choices:["Very quickly","Slowly — because they only make 2 offspring per year, there's little 'extra' to rebuild from","Never","Instantly"], correct:1, misconception:true, feedback:["⚠️ With low reproduction rates, recovery is slow.","Yes! Species with few offspring are vulnerable to disasters. This is why we worry about pandas, elephants, whales.","Not necessarily — some might still survive.","⚠️ Not instant!"] },
+  { type:"mcq", diff:"hard", q:"Why are identical twins an EXCEPTION to the rule 'every offspring is a little different'?",
+    choices:["Because they're magic","Because they came from the same single fertilized egg","Because they were born at the same time","Because they eat the same food"], correct:1, feedback:["Not magic.","Right! Single egg split = same genes = near-identical twins.","Same birthday, different eggs = fraternal twins (different).","Environment shapes lots, but not identical-ness."] },
+  { type:"open", diff:"hard", q:"Imagine all frogs in one pond lay 500 eggs each year and the pond holds 100 frogs stably. Roughly how many of those eggs eventually grow up to have babies? Why do you think that number is specifically that?", feedback:"Expected answer: each pair (2 frogs) needs to produce just 2 replacement adults. So if there are 50 pairs laying 500 × 50 = 25,000 eggs, only about 100 survive to become breeding adults — roughly 0.4% of all eggs. The rest die from predation, disease, dry pond, or just bad luck. This is the 'over-reproduction' principle in action." },
+  { type:"scenario", diff:"boss", q:"A new invasive insect arrives and starts eating all the baby frogs in a pond. The adult frogs still lay thousands of eggs, but fewer and fewer tadpoles are making it. Predict what happens to the frog population over the next 5 years, and explain WHY.", choices:[
+    "Frog population shrinks rapidly — without enough babies reaching adulthood, replacement falls below 2 per couple, so the population decreases each year until extinct or new balance",
+    "Nothing changes",
+    "Frogs evolve poison",
+    "Insects get tired and leave"], correct:0, feedback:[
+    "Yes! This is the exact mechanism of endangerment and extinction — not that adults die, but that offspring stop surviving. Real-world examples: chytrid fungus in frogs, habitat loss in pandas.",
+    "With broken survival math, things MUST change.",
+    "Adaptations happen slowly (many generations), too slow here.",
+    "Not reliable!"] },
+  { type:"open", diff:"boss", q:"Humans on Earth have gone from 1 billion people (1800) to 8 billion (today) in just 200 years. Using what you learned about life cycles and environmental factors, why did this happen? Do you think it will keep going like this forever? Explain your reasoning. (4–5 sentences.)", scenario:"Think: what changed about humans' environmental factors — food, disease, medicine — over the last 200 years?", feedback:"Expected reasoning: Humans didn't start having more babies per couple — actually, we have FEWER. The population exploded because our environmental factors got MUCH better. Vaccines and medicine mean far fewer children die. Farming produces enormous amounts of food. Safer shelter, cleaner water. So more of every couple's children survive to have children of their own — way more than just 2. That shifts the math: instead of 2 replacing 2, maybe 5 replace 2, and the population grows fast.\n\nWhether it keeps going: probably not forever. Already, birth rates are dropping in many countries, and environmental factors (space, food, climate) put limits on how many people Earth can support. Scientists estimate we might peak around 10–11 billion this century. Eventually, just like any species, our population stabilizes when environmental factors balance out." },
+  { type:"scenario", diff:"boss", q:"Imagine you're a scientist asked to SAVE a nearly-extinct species of parrot (only 200 left). What THREE things would you try, based on what you've learned about life cycles? Pick the best combination:", choices:[
+    "Make them reproduce faster by injecting them with hormones",
+    "Protect their habitat + breed them in captivity + prevent predators near nests",
+    "Catch all of them and put them in a zoo",
+    "Feed them human food"], correct:1, feedback:[
+    "Not safe or reliable.",
+    "Yes! This is exactly what real conservation programs do — fix environmental factors (habitat, predators) + boost reproductive success (captive breeding). Both sides of the life-cycle equation.",
+    "Would end natural reproduction and habitat adaptation.",
+    "Could hurt them."] },
+  { type:"open", diff:"boss", q:"BIG FINAL QUESTION: A species' life cycle strategy is like a 'bet' — either bet on MANY offspring with little care, OR FEW offspring with lots of care. Pick one strategy and defend why it's 'safer' in an unpredictable world. Then explain what the other side would argue. (3–4 sentences per side.)", scenario:"No wrong answer — this is about reasoning.", feedback:"MANY-offspring argument: when the environment is unpredictable (storms, droughts, disease), most babies will die anyway — so having a huge number is insurance. Even if 99.9% die, enough survive to continue. Frogs, fish, insects thrive this way.\n\nFEW-offspring argument: when parents can protect and teach their young, investment pays off. Elephants, humans, penguins survive because their careful parenting ensures the babies that ARE made survive and learn. In stable environments, this beats 'many' because you waste less energy.\n\nThe best answer: BOTH strategies work — evolution figured out they're equally good bets, just suited to different environments and body plans. 🌍" }
+];
+
+/* STATE */
+let currentSlide = 1, TOTAL_SLIDES = 28;
+let quizIndex = 0, quizAnswers = {}, quizFlags = new Set(), quizStarted = false;
+let homework = {};
+let submissions = JSON.parse(localStorage.getItem('b4_submissions') || '[]');
+let settings = JSON.parse(localStorage.getItem('b4_settings') || '{}');
+let teacherMode = localStorage.getItem('b4_teacher') === '1';
+
+/* TABS */
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => {
+    if (t.dataset.tab === 'teacher' && !teacherMode) return;
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById('panel-'+t.dataset.tab).classList.add('active');
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  });
+});
+
+/* TEACHER MODE */
+function openTeacherLogin() {
+  if (teacherMode) { document.querySelector('.tab[data-tab="teacher"]').click(); return; }
+  const html = `<p>Password to unlock:</p><input type="password" id="teacherPwInput" placeholder="Password" autofocus /><p class="small">Default: <b>teacher</b> (or <b>sarah</b>)</p><div id="teacherPwMsg" class="small"></div>`;
+  openModal('🔒 Teacher Login', html, [{ label: '🔓 Unlock', cls: 'btn success', onClick: 'submitTeacherLogin()' }]);
+  setTimeout(() => { const i = document.getElementById('teacherPwInput'); if (i) { i.focus(); i.onkeydown = e => { if (e.key === 'Enter') submitTeacherLogin(); }; } }, 50);
+}
+function submitTeacherLogin() {
+  const pw = (document.getElementById('teacherPwInput') || {}).value || '';
+  if (pw === (settings.teacherPw || 'teacher') || pw === 'teacher' || pw === 'sarah') {
+    teacherMode = true; localStorage.setItem('b4_teacher', '1'); closeModal(); applyTeacherMode();
+    document.querySelector('.tab[data-tab="teacher"]').click();
+    showToast('✅ Teacher mode unlocked');
+  } else {
+    const m = document.getElementById('teacherPwMsg'); if (m) m.innerHTML = '❌ Wrong password.';
+  }
+}
+function signOutTeacher() {
+  if (!confirm('Sign out of teacher mode?')) return;
+  teacherMode = false; localStorage.removeItem('b4_teacher'); applyTeacherMode();
+  document.querySelector('.tab[data-tab="lesson"]').click();
+  showToast('🔒 Signed out');
+}
+function applyTeacherMode() {
+  const btn = document.getElementById('teacherToggle');
+  document.querySelectorAll('.teacher-only').forEach(x => x.classList.toggle('hide', !teacherMode));
+  btn.textContent = teacherMode ? '🔓 Teacher · open' : '🔒 Teacher';
+  btn.classList.toggle('teacher-badge', teacherMode);
+  if (teacherMode) renderTeacher();
+  renderHomework();
+}
+
+/* SLIDES */
+function allSlidesInOrder() { return Array.from(document.querySelectorAll('#slide-stage .slide')); }
+function showSlide(n) {
+  const slides = allSlidesInOrder();
+  TOTAL_SLIDES = slides.length;
+  currentSlide = Math.max(1, Math.min(TOTAL_SLIDES, n));
+  slides.forEach((s, i) => s.classList.toggle('active', i === currentSlide - 1));
+  document.getElementById('prevBtn').disabled = currentSlide === 1;
+  document.getElementById('nextBtn').textContent = currentSlide === TOTAL_SLIDES ? 'Finish 🎉' : 'Next →';
+  const active = slides[currentSlide - 1];
+  const part = active ? (active.dataset.part || '1') : '1';
+  const pm = document.getElementById('partMarker');
+  pm.className = 'part-marker p' + part; pm.textContent = 'PART ' + part;
+  document.getElementById('slideNum').textContent = `Slide ${currentSlide} / ${TOTAL_SLIDES}`;
+  document.getElementById('slideProgress').style.width = `${Math.round((currentSlide/TOTAL_SLIDES)*100)}%`;
+  const pc = document.getElementById('presentCounter'); if (pc) pc.textContent = `${currentSlide} / ${TOTAL_SLIDES}`;
+}
+function nextSlide() { if (currentSlide === TOTAL_SLIDES) { if (!document.body.classList.contains('presenting')) document.querySelector('.tab[data-tab="homework"]').click(); } else showSlide(currentSlide + 1); }
+function prevSlide() { showSlide(currentSlide - 1); }
+
+/* PRESENT MODE */
+function enterPresentMode() {
+  document.querySelector('.tab[data-tab="lesson"]').click();
+  document.body.classList.add('presenting');
+  try { (document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen).call(document.documentElement); } catch(e){}
+  showSlide(currentSlide);
+}
+function exitPresentMode() {
+  document.body.classList.remove('presenting');
+  try { if (document.fullscreenElement) document.exitFullscreen(); } catch(e){}
+}
+document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement) document.body.classList.remove('presenting'); });
+
+/* HOMEWORK */
+function renderHomework() {
+  const list = document.getElementById('homework-list');
+  list.innerHTML = '';
+  HOMEWORK.forEach((h, i) => {
+    const c = document.createElement('div'); c.className = 'hw-card';
+    c.innerHTML = `<h3><span class="hw-num">${i+1}</span> ${h.icon} ${h.title}</h3><p>${h.prompt}</p><textarea placeholder="${h.placeholder||''}" oninput="homework[${i}]=this.value">${homework[i]||''}</textarea>`;
+    list.appendChild(c);
+  });
+  const note = document.getElementById('hwConfigNote');
+  if (settings.teacherEmail) note.textContent = '✓ Submit goes to ' + settings.teacherEmail;
+  else note.textContent = '⚠️ Teacher: configure email in Teacher tab';
+}
+function homeworkPayload() {
+  const name = document.getElementById('hw-student-name').value.trim();
+  const payload = { type:'homework', chapter:'B-4 Life Cycles', student:name, ts:new Date().toISOString(), answers:{} };
+  HOMEWORK.forEach((h, i) => { payload.answers[h.title] = homework[i] || ''; });
+  return payload;
+}
+async function submitHomework() {
+  const p = homeworkPayload();
+  if (!p.student) { alert('Name first!'); return; }
+  submissions.push(p); localStorage.setItem('b4_submissions', JSON.stringify(submissions));
+  let sent = false;
+  if (settings.webhookUrl) try { const r = await fetch(settings.webhookUrl, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)}); sent = r.ok; } catch(e){}
+  if (!sent && settings.teacherEmail) window.location.href = `mailto:${settings.teacherEmail}?subject=${encodeURIComponent('Homework B-4 from '+p.student)}&body=${encodeURIComponent(JSON.stringify(p.answers, null, 2))}`;
+  document.getElementById('hwSubmitMsg').textContent = sent ? '✅ Submitted!' : (settings.teacherEmail ? '📧 Email opened' : '💾 Saved');
+}
+function downloadHomework() { const p = homeworkPayload(); const b = new Blob([JSON.stringify(p, null, 2)], {type:'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `hw_B4_${p.student||'student'}.json`; a.click(); }
+function clearHomework() { if (confirm('Clear?')) { homework = {}; renderHomework(); } }
+
+/* QUIZ */
+function startQuiz() {
+  const name = document.getElementById('quiz-student-name').value.trim();
+  if (!name) { alert('Name first!'); return; }
+  quizIndex = 0; quizAnswers = {}; quizFlags = new Set(); quizStarted = true;
+  document.getElementById('quizStart').classList.add('hide');
+  document.getElementById('quizArea').classList.remove('hide');
+  renderQuizLayout();
+}
+function renderQuizLayout() {
+  document.getElementById('quizArea').innerHTML = `
+    <div class="quiz-layout">
+      <div class="quiz-nav-sticky">
+        <div class="quiz-navigator"><h4>📋 QUESTIONS</h4><div class="qn-grid" id="qnGrid"></div>
+        <div class="qn-legend"><span><span class="qn-dot answered"></span> done</span><span><span class="qn-dot wrong"></span> wrong</span><span><span class="qn-dot open"></span> open</span></div></div>
+        <div class="submit-row" style="margin-top:10px;"><button class="btn success" onclick="confirmFinishQuiz()">🏁 Finish</button></div>
+      </div>
+      <div id="quizMain"></div>
+    </div>`;
+  renderQuizNav(); renderQ();
+}
+function renderQuizNav() {
+  const g = document.getElementById('qnGrid'); if (!g) return; g.innerHTML = '';
+  QUIZ.forEach((q, i) => {
+    const b = document.createElement('button'); b.className = 'qn';
+    if (i === quizIndex) b.classList.add('current');
+    const a = quizAnswers[i];
+    if (a) { if (a.type==='open'||a.type==='experiment') b.classList.add('open'); else if (a.correct===true) b.classList.add('answered'); else if (a.correct===false) b.classList.add('wrong'); }
+    if (quizFlags.has(i)) b.classList.add('flagged');
+    b.textContent = i+1; b.onclick = () => { quizIndex = i; renderQuizNav(); renderQ(); };
+    g.appendChild(b);
+  });
+}
+function renderQ() {
+  const main = document.getElementById('quizMain'); if (!main) return;
+  const q = QUIZ[quizIndex]; const ex = quizAnswers[quizIndex]; const isA = !!ex;
+  const diffMap = { easy:'WARM-UP', medium:'BRAIN-STRETCH', hard:'THINKER', boss:'BOSS LEVEL!' };
+  const scen = q.scenario ? `<div class="q-scenario">${q.scenario}</div>` : '';
+  let body = '';
+  if (q.type==='mcq' || q.type==='scenario') {
+    body = `<div class="choice-list">${q.choices.map((c,i)=>{ let k='choice'; if (isA) { if (i===q.correct) k+=' correct'; else if (i===ex.selected) k+=' incorrect'; } return `<button class="${k}" onclick="pick(${i})" ${isA?'disabled':''}>${String.fromCharCode(65+i)}. ${c}</button>`; }).join('')}</div>`;
+  } else if (q.type==='fill') {
+    const v = ex ? ex.raw : '';
+    body = `<input type="text" id="fillInput" placeholder="Type…" value="${v.replace(/"/g,'&quot;')}" ${isA?'disabled':''} style="width:100%;padding:12px;font-size:16px;border:2px solid #eee;border-radius:10px;" onkeydown="if(event.key==='Enter')subFill()" />${isA?'':'<div class="submit-row"><button class="btn" onclick="subFill()">Submit</button></div>'}`;
+  } else {
+    const v = ex ? ex.answer : '';
+    body = `<textarea id="openInput" rows="4" ${isA?'disabled':''} style="width:100%;padding:12px;font-size:15px;border:2px solid #eee;border-radius:10px;">${v}</textarea>${isA?'':'<div class="submit-row"><button class="btn" onclick="subOpen()">Submit</button></div>'}`;
+  }
+  let fb = '';
+  if (isA) {
+    let cls='correct', lbl='✅ Nice!';
+    if (ex.type==='open'||ex.type==='experiment') { cls='info'; lbl='✨ Submitted!'; }
+    else if (ex.correct===false) { cls='incorrect'; lbl='❌ Not quite.'; }
+    let txt = '';
+    if (q.type==='mcq'||q.type==='scenario') txt = q.feedback[ex.selected] || '';
+    else if (q.type==='fill') txt = q.feedback;
+    else txt = `Strong answer example:<br><br>${(q.feedback||'').replace(/\n/g,'<br>')}`;
+    fb = `<div class="q-feedback show ${cls}"><b>${lbl}</b> ${txt}</div>`;
+  }
+  const answered = Object.keys(quizAnswers).length;
+  const pct = Math.round(((quizIndex+1)/QUIZ.length)*100);
+  main.innerHTML = `<div class="quiz-progress"><span class="pill">Q ${quizIndex+1} / ${QUIZ.length}</span><div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div><span class="small">${answered} done</span></div><div class="q-card"><div class="q-difficulty ${q.diff}">${diffMap[q.diff]}${q.misconception?' · 🚨':''}</div><div class="q-text">${q.q}</div>${scen}${body}${fb}<div class="q-controls"><div class="submit-row" style="margin:0;"><button class="btn ghost" onclick="prevQ()" ${quizIndex===0?'disabled':''}>← Prev</button><button class="btn secondary" onclick="skipQ()">Skip</button><button class="btn" onclick="nextQ()" ${quizIndex===QUIZ.length-1?'disabled':''}>Next →</button></div><button class="q-flag ${quizFlags.has(quizIndex)?'on':''}" onclick="flagQ()">${quizFlags.has(quizIndex)?'🚩 Flagged':'🏳 Flag'}</button></div></div>`;
+}
+function pick(i) { if (quizAnswers[quizIndex]) return; const q = QUIZ[quizIndex]; quizAnswers[quizIndex] = {type:q.type, selected:i, correct:(i===q.correct)}; renderQuizNav(); renderQ(); }
+function subFill() { if (quizAnswers[quizIndex]) return; const q = QUIZ[quizIndex]; const raw = (document.getElementById('fillInput').value||'').trim(); if (!raw){alert('Type something!');return;} const correct = q.correctText.some(t=>raw.toLowerCase().includes(t.toLowerCase())); quizAnswers[quizIndex]={type:'fill',raw,correct}; renderQuizNav(); renderQ(); }
+function subOpen() { if (quizAnswers[quizIndex]) return; const q = QUIZ[quizIndex]; const ans = (document.getElementById('openInput').value||'').trim(); if (ans.length<5){alert('Give it a real try!');return;} quizAnswers[quizIndex]={type:q.type,answer:ans,correct:null}; renderQuizNav(); renderQ(); }
+function prevQ() { if (quizIndex>0) { quizIndex--; renderQuizNav(); renderQ(); } }
+function nextQ() { if (quizIndex<QUIZ.length-1) { quizIndex++; renderQuizNav(); renderQ(); } }
+function skipQ() { if (quizIndex<QUIZ.length-1) quizIndex++; renderQuizNav(); renderQ(); }
+function flagQ() { if (quizFlags.has(quizIndex)) quizFlags.delete(quizIndex); else quizFlags.add(quizIndex); renderQuizNav(); renderQ(); }
+function confirmFinishQuiz() { const u = []; for(let i=0;i<QUIZ.length;i++) if(!quizAnswers[i]) u.push(i+1); let h='<p>Finish and submit?</p>'; if (u.length) h+=`<p class="small">⚠️ ${u.length} unanswered: ${u.join(', ')}</p>`; openModal('🏁 Finish quiz?', h, [{label:'Yes, finish',cls:'btn success',onClick:'finishQuiz()'},{label:'Not yet',cls:'btn ghost',onClick:'closeModal()'}]); }
+async function finishQuiz() {
+  closeModal();
+  const name = document.getElementById('quiz-student-name').value.trim();
+  const list = QUIZ.map((q,i)=>({q:q.q, ...(quizAnswers[i]||{unanswered:true}), flagged:quizFlags.has(i)}));
+  const auto = list.filter(a=>typeof a.correct==='boolean');
+  const ac = auto.filter(a=>a.correct).length;
+  const oc = list.filter(a=>a.correct===null).length;
+  const p = { type:'quiz', chapter:'B-4', student:name, ts:new Date().toISOString(), autoCorrect:ac, autoTotal:auto.length, openCount:oc, answers:list };
+  submissions.push(p); localStorage.setItem('b4_submissions', JSON.stringify(submissions));
+  let sent=false; if(settings.webhookUrl) try{ const r=await fetch(settings.webhookUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)}); sent=r.ok; }catch(e){}
+  const pct = auto.length ? Math.round((ac/auto.length)*100) : 0;
+  document.getElementById('quizArea').classList.add('hide');
+  document.getElementById('quizResult').classList.remove('hide');
+  const msg = pct===100?'🌟 PERFECT!':pct>=85?'🚀 Amazing!':pct>=70?'👏 Great!':pct>=50?'💪 Good effort!':'🌱 Keep growing!';
+  const emailLink = (!sent && settings.teacherEmail) ? `<a class="btn secondary" href="mailto:${settings.teacherEmail}?subject=${encodeURIComponent('Quiz B-4 from '+name)}&body=${encodeURIComponent(JSON.stringify(p, null, 2))}">📧 Email teacher</a>` : '';
+  document.getElementById('quizResult').innerHTML = `<div class="quiz-result"><h2>${msg}</h2><div class="score-donut" style="--p:${pct}"><span>${ac}/${auto.length}</span></div>${oc?`<p>Plus ${oc} open answers for teacher.</p>`:''}<div class="submit-row" style="justify-content:center;">${emailLink}<button class="btn" onclick="downloadQuiz()">💾 Download</button><button class="btn ghost" onclick="location.reload()">🔁 Retake</button></div></div>`;
+}
+function downloadQuiz() { const last = submissions.filter(s=>s.type==='quiz').slice(-1)[0]; if (!last) return; const b = new Blob([JSON.stringify(last, null, 2)], {type:'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `quiz_B4_${last.student}.json`; a.click(); }
+
+/* TEACHER */
+function renderTeacher() {
+  document.getElementById('apiKey').value = localStorage.getItem('b4_apiKey') || '';
+  document.getElementById('apiStatus').textContent = localStorage.getItem('b4_apiKey') ? '✓ Saved' : '';
+  document.getElementById('teacherEmail').value = settings.teacherEmail || '';
+  document.getElementById('webhookUrl').value = settings.webhookUrl || '';
+  const d = document.getElementById('submissionsTable');
+  if (!submissions.length) d.innerHTML = '<p class="small">No submissions yet.</p>';
+  else d.innerHTML = '<table class="submissions-table"><tr><th>When</th><th>Student</th><th>Type</th><th>Result</th></tr>' + submissions.map(s=>`<tr><td>${new Date(s.ts).toLocaleString()}</td><td>${s.student||'?'}</td><td>${s.type}</td><td>${s.type==='quiz'?s.autoCorrect+'/'+s.autoTotal:Object.values(s.answers||{}).filter(Boolean).length+' answers'}</td></tr>`).join('') + '</table>';
+}
+function saveApiKey() { const k = document.getElementById('apiKey').value.trim(); localStorage.setItem('b4_apiKey', k); document.getElementById('apiStatus').textContent = '✓ Saved'; }
+function clearApiKey() { localStorage.removeItem('b4_apiKey'); document.getElementById('apiKey').value=''; document.getElementById('apiStatus').textContent = 'Cleared'; }
+function saveSubmitSettings() { settings.teacherEmail = document.getElementById('teacherEmail').value.trim(); settings.webhookUrl = document.getElementById('webhookUrl').value.trim(); localStorage.setItem('b4_settings', JSON.stringify(settings)); openModal('✅ Saved', '<p>Settings saved.</p>'); renderHomework(); }
+function exportSubmissions() { const b = new Blob([JSON.stringify(submissions, null, 2)], {type:'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download='submissions_B4.json'; a.click(); }
+function clearSubmissions() { if(confirm('Clear?')){ submissions = []; localStorage.removeItem('b4_submissions'); renderTeacher(); } }
+
+/* UTILITY */
+function openModal(title, body, actions) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-body').innerHTML = body;
+  const ab = document.getElementById('modal-actions'); ab.innerHTML = '';
+  (actions||[]).forEach(a=>{const b=document.createElement('button');b.className=a.cls||'btn';b.textContent=a.label;b.setAttribute('onclick',a.onClick);ab.appendChild(b);});
+  const c = document.createElement('button'); c.className='btn ghost'; c.textContent='Close'; c.setAttribute('onclick','closeModal()'); ab.appendChild(c);
+  document.getElementById('modal').classList.add('show');
+}
+function closeModal() { document.getElementById('modal').classList.remove('show'); }
+document.getElementById('modal').addEventListener('click', e => { if (e.target.id==='modal') closeModal(); });
+
+function showToast(msg) { let t = document.getElementById('toast'); if (!t) { t = document.createElement('div'); t.id='toast'; t.style.cssText='position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 22px;border-radius:999px;font-weight:700;box-shadow:var(--shadow);z-index:200;opacity:0;transition:opacity .25s;'; document.body.appendChild(t); } t.textContent = msg; t.style.opacity='1'; clearTimeout(t._timer); t._timer = setTimeout(()=>t.style.opacity='0', 2800); }
+
+/* SLIDE INSERTION (teacher mode) */
+function addNewSlideAfter(pos) { openModal('➕ Add slide', '<p>For now, use the main chapter (B-3) for advanced slide editing.<br>Full inline edit coming to this chapter in a future update.</p>'); }
+
+/* INIT */
+showSlide(1);
+renderHomework();
+applyTeacherMode();
+document.addEventListener('keydown', e => { if (!document.getElementById('panel-lesson').classList.contains('active')) return; if (e.target.matches('input, textarea')) return; if (e.key==='ArrowRight') nextSlide(); if (e.key==='ArrowLeft') prevSlide(); });
+</script>
+</body>
+</html>

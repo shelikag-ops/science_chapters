@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chapter B-4B · What Is a Species? · Science Adventure</title>
+<style>
+:root {
+  --bg: #fff8f0; --ink: #1f2a44; --ink-soft: #4a5472; --paper: #fff;
+  --sun: #ffb703; --leaf: #2a9d8f; --leaf-dark: #1f7a70; --animal: #e76f51;
+  --sky: #8ecae6; --sky-dark: #219ebc; --berry: #c7477a;
+  --shadow: 0 10px 30px rgba(30,40,70,.12); --shadow-sm: 0 4px 12px rgba(30,40,70,.08);
+  --radius: 18px; --font-display: "Fredoka", sans-serif; --font-body: "Nunito", sans-serif;
+}
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap');
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { font-family: var(--font-body); color: var(--ink); line-height: 1.55; min-height: 100vh;
+  background: radial-gradient(1200px 600px at 10% -10%, #ffe8c4 0%, transparent 60%), radial-gradient(900px 500px at 110% 10%, #cdeadf 0%, transparent 60%), var(--bg); }
+h1, h2, h3 { font-family: var(--font-display); margin: 0 0 .4em; }
+h1 { font-size: clamp(28px, 4vw, 48px); line-height: 1.1; }
+h2 { font-size: clamp(22px, 3vw, 34px); }
+p { margin: 0 0 1em; } button { font-family: inherit; cursor: pointer; } a { color: var(--sky-dark); }
+
+.topnav { position: sticky; top: 0; z-index: 50; display: flex; align-items: center; gap: 16px; padding: 12px 22px; background: rgba(255,255,255,.85); backdrop-filter: blur(10px); border-bottom: 1px solid #eee; }
+.brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 700; font-size: 20px; }
+.brand .logo { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--sun), var(--animal)); display: grid; place-items: center; color: #fff; font-size: 22px; }
+.nav-spacer { flex: 1; }
+.nav-btn { border: 1px solid #e5e5e5; background: #fff; border-radius: 999px; padding: 8px 14px; font-weight: 700; color: var(--ink-soft); }
+.nav-btn:hover { background: #fafafa; }
+.teacher-badge { background: var(--berry); color:#fff; border-color: var(--berry); }
+
+.container { max-width: 1180px; margin: 0 auto; padding: 26px 22px 80px; }
+.chapter-header { background: var(--paper); border-radius: var(--radius); padding: 22px 26px; box-shadow: var(--shadow); margin-bottom: 18px; }
+.chapter-meta { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; color: var(--ink-soft); font-size: 14px; }
+.pill { display: inline-block; padding: 4px 10px; background: #f3efe9; border-radius: 999px; font-weight: 700; font-size: 12px; color: var(--ink-soft); }
+.parts-preview { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 14px; }
+.parts-preview .pp { background: #fafaf4; border-radius: 10px; padding: 10px 12px; font-size: 13px; border-left: 4px solid var(--sun); }
+.parts-preview .pp.p2 { border-color: var(--leaf); }
+.parts-preview .pp b { display: block; font-family: var(--font-display); color: var(--ink); font-size: 14px; }
+@media (max-width: 700px){ .parts-preview { grid-template-columns: 1fr; } }
+.sources-pill { background: linear-gradient(90deg,#fef3f8,#f1f9f5); padding: 4px 10px; border-radius: 999px; font-weight: 700; font-size: 11px; }
+
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; background: var(--paper); padding: 8px; border-radius: 14px; box-shadow: var(--shadow-sm); margin-bottom: 18px; position: sticky; top: 62px; z-index: 40; }
+.tab { border: none; background: transparent; padding: 10px 16px; border-radius: 10px; font-weight: 800; color: var(--ink-soft); }
+.tab.active { background: var(--ink); color: #fff; }
+.tab:not(.active):hover { background: #f3f0ea; }
+.tab-panel { display: none; } .tab-panel.active { display: block; }
+
+.slide-wrap { background: var(--paper); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+.slide-stage { padding: 40px 46px; min-height: 520px; position: relative; overflow: hidden; }
+.slide { display: none; animation: fade .35s ease; position: relative; }
+.slide.active { display: block; }
+@keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+.slide-controls { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 20px; border-top: 1px solid #eee; background: #fcfbf7; flex-wrap: wrap; }
+.slide-btn { background: var(--ink); color: #fff; border: none; padding: 10px 18px; border-radius: 10px; font-weight: 800; }
+.slide-btn.ghost { background: transparent; color: var(--ink-soft); }
+.slide-btn:disabled { opacity: .4; cursor: not-allowed; }
+.slide-meta { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--ink-soft); flex-wrap: wrap; }
+.part-marker { font-weight: 800; font-family: var(--font-display); padding: 4px 12px; border-radius: 999px; font-size: 12px; letter-spacing: .05em; }
+.part-marker.p1 { background: #fff3d6; color: #9a6a00; }
+.part-marker.p2 { background: #dff3ed; color: var(--leaf-dark); }
+.slide-progress { flex: 1; min-width: 140px; max-width: 360px; height: 8px; background: #eee; border-radius: 999px; overflow: hidden; margin: 0 6px; }
+.slide-progress-fill { height: 100%; background: linear-gradient(90deg, var(--sun), var(--animal)); transition: width .3s; }
+
+.big-q { font-family: var(--font-display); font-size: clamp(28px, 4vw, 44px); line-height: 1.15; margin: 0 0 14px; }
+.lead { font-size: 18px; color: var(--ink-soft); max-width: 720px; }
+.callout { background: #fff8e6; border-left: 5px solid var(--sun); padding: 14px 18px; border-radius: 10px; margin: 14px 0; }
+.callout.leaf { background: #eaf7f2; border-color: var(--leaf); }
+.callout.animal { background: #fdefe9; border-color: var(--animal); }
+.callout.sky { background: #e6f4fb; border-color: var(--sky-dark); }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items: center; }
+@media (max-width: 760px){ .two-col { grid-template-columns: 1fr; } }
+
+.part-banner { text-align: center; padding: 20px 10px; border-radius: 14px; }
+.part-banner.p1 { background: linear-gradient(135deg, #ffecb3, #fff6e0); }
+.part-banner.p2 { background: linear-gradient(135deg, #d6efe7, #f0faf6); }
+.part-banner .pb-pill { display: inline-block; padding: 6px 16px; background: rgba(0,0,0,.08); border-radius: 999px; font-family: var(--font-display); font-weight: 700; font-size: 13px; letter-spacing: .1em; color: var(--ink); margin-bottom: 16px; }
+.part-banner h1 { font-size: clamp(36px, 6vw, 64px); margin: 6px 0; }
+.part-banner .pb-sub { font-size: 20px; color: var(--ink-soft); max-width: 640px; margin: 0 auto 20px; }
+.part-banner .pb-meta { display: inline-flex; flex-wrap: wrap; gap: 10px; justify-content: center; font-size: 14px; color: var(--ink-soft); background: rgba(255,255,255,.7); padding: 10px 16px; border-radius: 999px; }
+.part-banner .pb-emoji { font-size: 100px; margin: 10px 0; }
+
+.video-wrap { background: #111; border-radius: 14px; overflow: hidden; max-width: 800px; margin: 10px auto; }
+.video-ratio { position: relative; width: 100%; padding-top: 56.25%; }
+.video-ratio iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+.video-caption { background: #f8f4ec; padding: 10px 14px; border-radius: 10px; margin-top: 10px; font-size: 14px; }
+.video-edit-row { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; flex-wrap: wrap; gap: 10px; }
+.video-meta { font-size: 13px; color: var(--ink-soft); }
+
+.beat { background: linear-gradient(180deg, #fffbf4, #fff); border-radius: 14px; padding: 20px; border: 2px dashed #f0d9a6; margin: 14px 0; }
+.beat .beat-badge { display: inline-block; font-family: var(--font-display); font-weight: 800; letter-spacing: .05em; font-size: 12px; padding: 4px 12px; border-radius: 999px; margin-bottom: 10px; }
+.beat.activity .beat-badge { background: var(--sun); color: #fff; }
+.beat.mystery .beat-badge { background: var(--berry); color: #fff; }
+.beat.sci .beat-badge { background: var(--leaf); color: #fff; }
+.mystery-answer { margin-top: 10px; padding: 12px; background: #f2faf5; border-radius: 10px; border-left: 4px solid var(--leaf); display: none; }
+.mystery-open .mystery-answer { display: block; animation: fade .3s; }
+.reveal-btn { margin-top: 10px; background: var(--berry); color: #fff; border: none; padding: 10px 16px; border-radius: 10px; font-weight: 800; }
+.mystery-open .reveal-btn { display: none; }
+
+.reveal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin-top: 14px; }
+.reveal-card { background: #fff; border-radius: 14px; padding: 16px; box-shadow: var(--shadow-sm); cursor: pointer; min-height: 140px; border: 2px solid #eee; }
+.reveal-card .back { display: none; }
+.reveal-card.open .front { display: none; } .reveal-card.open .back { display: block; }
+.reveal-card.open { background: linear-gradient(180deg, #fff9ea, #fff); border-color: var(--sun); }
+
+/* Hierarchy diagram */
+.hierarchy { display: flex; flex-direction: column; gap: 8px; margin: 16px 0; }
+.hier-row { background: linear-gradient(90deg, #f3eef8, #fff); border-radius: 8px; padding: 10px 14px; border-left: 5px solid var(--berry); display: flex; align-items: center; gap: 12px; font-size: 14px; }
+.hier-row b { font-family: var(--font-display); color: var(--berry); min-width: 90px; }
+.hier-row .ex { color: var(--ink-soft); font-style: italic; }
+
+.session-break { background: linear-gradient(135deg, #fff5e0, #fff0d6); border-radius: 14px; padding: 16px 20px; margin-top: 18px; border-left: 6px solid var(--sun); display: flex; gap: 14px; align-items: center; }
+.session-break .icon { font-size: 40px; }
+.session-break h4 { margin: 0 0 4px; font-family: var(--font-display); }
+.session-break p { margin: 0; font-size: 14px; color: var(--ink-soft); }
+.teacher-note { margin-top: 14px; }
+.teacher-note summary { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; background: #fff4e1; border: 1.5px solid #f3d48a; color: #8f6a15; padding: 6px 14px; border-radius: 999px; font-weight: 700; font-size: 13px; list-style: none; }
+.teacher-note summary::-webkit-details-marker { display: none; }
+.teacher-note .note-body { background: #fffbe6; border: 1.5px solid #f3d48a; border-radius: 12px; padding: 12px 14px; font-size: 14px; margin-top: 8px; max-width: 600px; }
+
+.hw-intro { background: linear-gradient(135deg, #e9f6fd, #fff); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow-sm); margin-bottom: 16px;}
+.hw-list { display: grid; gap: 14px; }
+.hw-card { background: var(--paper); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 20px; border-left: 6px solid var(--sky-dark); }
+.hw-card h3 { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.hw-num { width: 34px; height: 34px; border-radius: 50%; background: var(--sky-dark); color: #fff; display: grid; place-items: center; font-family: var(--font-display); font-weight: 800; }
+.hw-card textarea { width: 100%; border: 2px solid #eee; border-radius: 10px; padding: 10px; font-family: inherit; font-size: 15px; margin-top: 6px; min-height: 80px; resize: vertical; }
+.btn { border: none; background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 10px; font-weight: 800; font-family: inherit; }
+.btn.secondary { background: #fff; color: var(--ink); border: 2px solid var(--ink); }
+.btn.success { background: var(--leaf); } .btn.warn { background: var(--animal); }
+.btn.ghost { background: transparent; color: var(--ink-soft); border: 2px solid #eee;}
+.btn.small { padding: 6px 12px; font-size: 13px; }
+.submit-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; align-items: center; }
+
+.quiz-start { background: linear-gradient(135deg, #fff0e0, #e8f7ef); border-radius: var(--radius); padding: 26px; box-shadow: var(--shadow); text-align: center; }
+.quiz-layout { display: grid; grid-template-columns: 230px 1fr; gap: 18px; align-items: start; }
+@media (max-width: 820px){ .quiz-layout { grid-template-columns: 1fr; } }
+.quiz-nav-sticky { position: sticky; top: 130px; }
+.quiz-navigator { background: var(--paper); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow-sm); }
+.qn-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; margin-bottom: 10px; }
+.qn { aspect-ratio: 1; border-radius: 6px; border: 2px solid #eee; background: #fafaf4; color: var(--ink-soft); font-weight: 800; font-size: 12px; cursor: pointer; display: grid; place-items: center; padding: 0; position: relative; }
+.qn.current { border-color: var(--ink); box-shadow: 0 0 0 2px rgba(31,42,68,.2); color: var(--ink); }
+.qn.answered { background: #e9f7ef; border-color: var(--leaf); color: var(--leaf-dark); }
+.qn.wrong { background: #fde8e1; border-color: var(--animal); color: var(--animal); }
+.qn.open { background: #eef7fc; border-color: var(--sky-dark); color: var(--sky-dark); }
+.qn.flagged::after { content: "🚩"; position: absolute; top: -4px; right: -4px; font-size: 10px; }
+.qn-legend { font-size: 11px; color: var(--ink-soft); padding-top: 8px; margin-top: 4px; border-top: 1px solid #eee; }
+.qn-legend span { display: inline-flex; align-items: center; gap: 4px; margin-right: 10px; }
+.qn-dot { width: 10px; height: 10px; border-radius: 3px; background: #fafaf4; border: 1.5px solid #eee; display: inline-block; }
+.qn-dot.answered { background: #e9f7ef; border-color: var(--leaf); }
+.qn-dot.wrong { background: #fde8e1; border-color: var(--animal); }
+.qn-dot.open { background: #eef7fc; border-color: var(--sky-dark); }
+.quiz-progress { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.progress-bar { flex: 1; height: 10px; background: #eee; border-radius: 999px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--sun), var(--animal)); transition: width .3s; }
+.q-card { background: var(--paper); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); margin-bottom: 16px; }
+.q-difficulty { font-size: 12px; font-weight: 800; letter-spacing: .1em; margin-bottom: 6px; }
+.q-difficulty.easy { color: var(--leaf); } .q-difficulty.medium { color: var(--sun); } .q-difficulty.hard { color: var(--animal); } .q-difficulty.boss { color: var(--berry); }
+.q-text { font-family: var(--font-display); font-size: 20px; margin: 4px 0 16px; }
+.q-scenario { background: #f8f4ec; padding: 12px 14px; border-radius: 10px; font-style: italic; margin-bottom: 12px; }
+.choice-list { display: grid; gap: 8px; }
+.choice { border: 2px solid #eee; background: #fff; padding: 12px 14px; border-radius: 12px; text-align: left; font-weight: 700; font-size: 15px; }
+.choice:hover:not(:disabled) { border-color: var(--ink-soft); }
+.choice.correct { border-color: var(--leaf); background: #e9f7ef; }
+.choice.incorrect { border-color: var(--animal); background: #fde8e1; }
+.q-feedback { margin-top: 12px; padding: 12px 14px; border-radius: 10px; display: none; font-size: 15px; }
+.q-feedback.show { display: block; }
+.q-feedback.correct { background: #e9f7ef; border-left: 4px solid var(--leaf); }
+.q-feedback.incorrect { background: #fde8e1; border-left: 4px solid var(--animal); }
+.q-feedback.info { background: #eef7fc; border-left: 4px solid var(--sky-dark); }
+.q-controls { display: flex; justify-content: space-between; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 14px; }
+.q-flag { background: transparent; border: 2px solid #eee; padding: 8px 12px; border-radius: 10px; font-weight: 700; color: var(--ink-soft); }
+.q-flag.on { background: #fef0f5; border-color: var(--berry); color: var(--berry); }
+.quiz-result { background: var(--paper); border-radius: var(--radius); padding: 30px; box-shadow: var(--shadow); text-align: center; }
+.score-donut { width: 160px; height: 160px; border-radius: 50%; margin: 20px auto; display: grid; place-items: center; font-family: var(--font-display); font-size: 40px; background: conic-gradient(var(--leaf) calc(var(--p,0)*1%), #eee 0); position: relative; }
+.score-donut::after { content:""; position: absolute; inset: 14px; border-radius: 50%; background: #fff;}
+.score-donut span { position: relative; z-index: 1; color: var(--ink); font-weight: 800; }
+
+.teacher-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+.teacher-card { background: var(--paper); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow-sm); border-top: 6px solid var(--berry); }
+.teacher-card h3 { display: flex; gap: 8px; align-items: center; font-family: var(--font-display); }
+.teacher-card small { color: var(--ink-soft); }
+.teacher-card input { width: 100%; padding: 10px; border: 2px solid #eee; border-radius: 10px; font-family: inherit; font-size: 14px; margin-top: 6px; }
+.submissions-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.submissions-table th, .submissions-table td { text-align: left; padding: 8px; border-bottom: 1px solid #eee; }
+
+.modal-back { position: fixed; inset: 0; background: rgba(20,25,40,.5); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px;}
+.modal-back.show { display: flex; }
+.modal { background: #fff; border-radius: var(--radius); padding: 24px; max-width: 520px; width: 100%; box-shadow: var(--shadow);}
+.modal input { width: 100%; padding: 10px; border: 2px solid #eee; border-radius: 10px; margin: 6px 0 10px; }
+
+body.presenting { background: #0f1419; }
+body.presenting .topnav, body.presenting .chapter-header, body.presenting .tabs, body.presenting .slide-controls { display: none !important; }
+body.presenting .container { max-width: none; padding: 0; }
+body.presenting .tab-panel { display: none; } body.presenting #panel-lesson { display: block; }
+body.presenting .slide-wrap { position: fixed; inset: 0; border-radius: 0; box-shadow: none; background: linear-gradient(135deg, #fff 0%, #fdf7ec 100%); z-index: 999; overflow: hidden; }
+body.presenting .slide-stage { padding: 0; min-height: 100vh; height: 100vh; display: block; overflow: hidden; }
+body.presenting .slide.active { display: flex; flex-direction: column; justify-content: center; width: 100%; height: 100vh; padding: 5vh 7vw; gap: 1em; overflow-y: auto; position: relative; }
+body.presenting .slide.active > * { width: 100%; max-width: 1600px; margin-left: auto; margin-right: auto; }
+body.presenting .big-q { font-size: clamp(44px, 5.2vw, 82px); line-height: 1.08; }
+body.presenting .lead { font-size: clamp(22px, 2.4vw, 34px); }
+body.presenting p, body.presenting li { font-size: clamp(18px, 1.7vw, 24px); }
+body.presenting .callout { font-size: clamp(20px, 2vw, 28px); padding: 20px 26px; }
+body.presenting .part-banner { position: absolute; inset: 0; width: 100vw; height: 100vh; max-width: none; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 6vh 4vw; border-radius: 0; z-index: 1; }
+body.presenting .part-banner h1 { font-size: clamp(72px, 9vw, 160px); line-height: 0.95; }
+body.presenting .part-banner .pb-emoji { font-size: clamp(110px, 13vw, 200px); }
+body.presenting .part-banner .pb-sub { font-size: clamp(26px, 2.8vw, 44px); max-width: 1100px; }
+body.presenting .beat { padding: 5vh 6vw; border-radius: 24px; border-width: 3px; min-height: 65vh; display: flex; flex-direction: column; justify-content: center; }
+body.presenting .beat h3 { font-size: clamp(40px, 4vw, 64px); }
+body.presenting .beat p, body.presenting .beat li { font-size: clamp(22px, 2vw, 30px); }
+body.presenting .reveal-grid { grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 26px; }
+body.presenting .reveal-card { min-height: 220px; padding: 32px; font-size: 1.25em; }
+body.presenting .reveal-card b { font-size: clamp(26px, 2.4vw, 36px); display: block; margin-bottom: 10px; }
+body.presenting .video-wrap { max-width: min(1200px, 88vw); }
+body.presenting .hier-row { font-size: clamp(20px, 2vw, 28px); padding: 18px 22px; }
+body.presenting .hier-row b { min-width: 200px; font-size: clamp(22px, 2.2vw, 32px); }
+
+.present-bar { display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(20,25,40,.92); color: #fff; padding: 10px 18px; border-radius: 999px; gap: 10px; align-items: center; z-index: 1000; backdrop-filter: blur(10px); opacity: 0.4; }
+body.presenting .present-bar { display: flex; }
+.present-bar:hover { opacity: 1; }
+.present-bar button { background: transparent; border: 1px solid rgba(255,255,255,.2); color: #fff; padding: 6px 12px; border-radius: 999px; font-weight: 700; }
+.present-bar .counter { font-weight: 700; padding: 0 8px; }
+.present-bar .exit { background: var(--animal); border-color: var(--animal); }
+
+.hide { display: none !important; } .small { font-size: 13px; color: var(--ink-soft); }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="brand"><span class="logo">🔬</span> Science Adventure</div>
+  <span class="pill">Chapter 8 · B-4B + SCI</span>
+  <div class="nav-spacer"></div>
+  <button class="nav-btn" onclick="window.location.href='index.html'">🏠 Home</button>
+  <button class="nav-btn" onclick="enterPresentMode()">🖥 Present</button>
+  <button class="nav-btn" id="teacherToggle" onclick="openTeacherLogin()">🔒 Teacher</button>
+  <button class="nav-btn teacher-only hide" onclick="signOutTeacher()" style="color:var(--animal);border-color:#fdcbbd;">🔒 Exit</button>
+</nav>
+
+<div class="container">
+
+<div class="chapter-header">
+  <div class="chapter-meta">
+    <span class="pill">Lesson B-4B + SCI Species</span>
+    <span class="pill" style="background:#eaf7f2;color:var(--leaf-dark);">Life Science</span>
+    <span class="pill">⏱ ~2 hours · 2 sessions</span>
+    <span class="sources-pill">BFSU + SCI MERGED</span>
+  </div>
+  <h1 style="margin:10px 0 4px;">🧬 What Is a Species? 🐺🐕🐩</h1>
+  <p class="lead">Why are all dogs ONE species but oak trees are 600 different species? And how did wolves become Chihuahuas? The answer is a 200-year-old superpower called <i>selective breeding</i>.</p>
+  <div class="parts-preview">
+    <div class="pp"><b>📅 Session 1 · The Species Idea · ~50–60 min</b>What makes a species a species. Hybrids and mules. Classification hierarchy from kingdom to species.</div>
+    <div class="pp p2"><b>📅 Session 2 · Heredity &amp; Selective Breeding · ~50–60 min</b>How wolves became Chihuahuas. Genes from parents. Heredity vs environment.</div>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" data-tab="lesson">🎬 Lesson</button>
+  <button class="tab" data-tab="homework">📓 Homework</button>
+  <button class="tab" data-tab="quiz">🧠 Quiz</button>
+  <button class="tab teacher-only hide" data-tab="teacher">🧑‍🏫 Teacher</button>
+</div>
+
+<div class="tab-panel active" id="panel-lesson">
+  <div class="slide-wrap">
+    <div class="slide-stage" id="slide-stage">
+
+      <div class="slide active" data-slide="1" data-part="1">
+        <div class="part-banner p1"><span class="pb-pill">SESSION 1 · PART 1 OF 2</span><div class="pb-emoji">🐺 🐕 🐩</div><h1>The Species Idea</h1><p class="pb-sub">Wolves, poodles, golden retrievers — all the SAME species. But oak trees? 600 species. Why?</p><div class="pb-meta">🎬 1 video · 🕵️ 2 mysteries · 🌳 Hierarchy diagram</div></div>
+      </div>
+
+      <div class="slide" data-slide="2" data-part="1">
+        <div class="two-col">
+          <div>
+            <p class="pill">🔭 Today's puzzle</p>
+            <h2 class="big-q">A poodle and a Great Dane look NOTHING alike.</h2>
+            <p class="lead">A poodle is small and curly. A Great Dane is enormous. They look like different animals. Yet scientists call them BOTH the same species.</p>
+            <p>Meanwhile, two oak trees that look almost identical can be different species. Why??</p>
+            <div class="callout">🤔 <b>Today's mission:</b> figure out what "species" really means — it's not just about appearance.</div>
+          </div>
+          <div style="font-size: 160px; text-align:center;">🐩↔️🦮</div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="3" data-part="1">
+        <h2 class="big-q">📜 The Real Definition</h2>
+        <p class="lead">Two animals (or two plants) belong to the SAME SPECIES if they can:</p>
+        <div class="callout leaf" style="font-size:20px;"><b>Mate together AND have babies that can ALSO have babies.</b></div>
+        <p class="lead">Notice the second part — the babies must be able to grow up and have THEIR own babies. Otherwise it's not really "the same species" working.</p>
+        <div class="reveal-grid">
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🐩 Poodle + 🦮 Lab</b><div class="small">Same species?</div></div><div class="back"><b>YES.</b> Poodle + Lab = Labradoodle. Labradoodles grow up and have puppies. Both dogs.</div></div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🐎 Horse + 🫏 Donkey</b><div class="small">Same species?</div></div><div class="back"><b>NO.</b> They CAN mate (mule!), but mules CAN'T have babies. Different species.</div></div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🌳 White oak + 🌳 Red oak</b><div class="small">Same species?</div></div><div class="back"><b>NO.</b> They live next to each other but never crossbreed. Different species.</div></div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="4" data-part="1">
+        <div class="beat mystery" id="mystery-4">
+          <span class="beat-badge">🕵️ MYSTERY #1 · THINK BEFORE YOU CLICK</span>
+          <h3>The Mule Problem</h3>
+          <p>A mule is the kid of a horse mom and a donkey dad. Mules are real — there are millions of them. But you've never heard of "mule puppies." Why not?</p>
+          <button class="reveal-btn" onclick="document.getElementById('mystery-4').classList.add('mystery-open')">🔍 Show answer</button>
+          <div class="mystery-answer">🎯 <b>Mules can't have babies.</b> They're called <b>HYBRIDS</b> — kids from two different species. Most hybrids are infertile (can't reproduce). This is part of WHY horses and donkeys are different species: their babies hit a dead end. Real species are about whether babies can keep the line going. The horse-donkey hybrid is a one-generation experiment.</div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="5" data-part="1">
+        <h2 class="big-q">So if dogs all interbreed… they're one species 🐕</h2>
+        <p class="lead">All dogs — Chihuahuas, Great Danes, Poodles, mutts — can mate (with vet help for size differences!) and produce healthy puppies. Those puppies grow up and have more puppies.</p>
+        <p class="lead">So they're all the same species: <b>Canis familiaris</b> (the dog). The wild differences in size and shape? Those are <b>BREEDS</b> — variations within the species, made by humans through selective breeding (we'll get there!).</p>
+        <div class="callout animal"><b>BREEDS ≠ SPECIES.</b> Different breeds of dog = same species, different "looks" we created on purpose. Different species of oak = naturally don't crossbreed.</div>
+      </div>
+
+      <div class="slide" data-slide="6" data-part="1" data-type="video" data-video-id="qmMX0oTEPu8">
+        <h2 class="big-q">🎬 Watch: 5 Kingdoms of Living Things <span class="pill">~6 min</span></h2>
+        <p class="lead">Quick tour of how scientists organize ALL living things into 5 huge kingdoms — and how species fit inside.</p>
+        <div class="video-wrap"><div class="video-ratio"><iframe src="https://www.youtube.com/embed/qmMX0oTEPu8" title="Living Things Classification" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
+        <div class="video-edit-row"><span class="video-meta">📽 Fun World For Kids</span><a class="btn small secondary" href="https://www.youtube.com/watch?v=qmMX0oTEPu8" target="_blank">▶ Open on YouTube</a></div>
+        <div class="video-caption">🎯 <b>Listen for:</b> the 5 kingdoms. Can you name all 5 by the end?</div>
+      </div>
+
+      <div class="slide" data-slide="7" data-part="1">
+        <h2 class="big-q">🪜 The Big Hierarchy</h2>
+        <p class="lead">Scientists organize life into nested boxes — biggest at the top, smallest (most specific) at the bottom. For YOU, the human:</p>
+        <div class="hierarchy">
+          <div class="hier-row"><b>Kingdom</b> Animal Kingdom <span class="ex">(all animals — you, fish, bugs)</span></div>
+          <div class="hier-row"><b>Phylum</b> Vertebrates <span class="ex">(animals with spines)</span></div>
+          <div class="hier-row"><b>Class</b> Mammals <span class="ex">(have hair, drink milk)</span></div>
+          <div class="hier-row"><b>Order</b> Primates <span class="ex">(monkeys, apes, lemurs, you)</span></div>
+          <div class="hier-row"><b>Family</b> Great Apes <span class="ex">(gorillas, chimps, orangutans, humans)</span></div>
+          <div class="hier-row"><b>Genus</b> Homo <span class="ex">(humans + extinct relatives)</span></div>
+          <div class="hier-row"><b>Species</b> sapiens <span class="ex">(modern humans only)</span></div>
+        </div>
+        <div class="callout">📝 Your full species name: <b>Homo sapiens</b> (Latin for "wise man"). Two-word names like this are how scientists name species worldwide.</div>
+      </div>
+
+      <div class="slide" data-slide="8" data-part="1">
+        <div class="beat activity">
+          <span class="beat-badge">🎲 ACTIVITY · 10 MIN</span>
+          <h3>Place Your Pet in the Hierarchy</h3>
+          <p>Pick your favorite animal (your pet, an animal you love, or one from the zoo). Try to fill in the hierarchy:</p>
+          <ul>
+            <li>Kingdom (almost certainly Animal!)</li>
+            <li>Phylum (vertebrate? invertebrate?)</li>
+            <li>Class (mammal? bird? fish? reptile? insect?)</li>
+            <li>Order (cat-like? dog-like? rodent-like?)</li>
+            <li>Species (the specific type)</li>
+          </ul>
+          <p>Tip: a quick web search will help. Try "scientific classification of [animal name]".</p>
+          <details class="teacher-note"><summary>👩‍🏫 Teacher note</summary><div class="note-body"><b>Teacher:</b> Don't worry about getting Family/Genus right — Class and Order are most important for an 8-year-old. The hierarchy concept (nested groups) is the win.</div></details>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="9" data-part="1">
+        <div class="beat mystery" id="mystery-9">
+          <span class="beat-badge">🕵️ MYSTERY #2 · THINK BEFORE YOU CLICK</span>
+          <h3>Are tigers and house cats the same species?</h3>
+          <p>Tigers and house cats look pretty similar — round eyes, whiskers, padded paws, retractable claws, purring. They're both "cats." Are they the SAME species?</p>
+          <button class="reveal-btn" onclick="document.getElementById('mystery-9').classList.add('mystery-open')">🔍 Show answer</button>
+          <div class="mystery-answer">🎯 <b>NO!</b> They're different species. They share the same FAMILY (Felidae) and they look similar because they share ancestors. But tigers and house cats can't mate and have babies in the wild. Different species, same family. Same with lions, leopards, cheetahs — all in the cat family, but different species.</div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="10" data-part="1">
+        <h2 class="big-q">🎉 End of Session 1</h2>
+        <div class="callout leaf">✅ What you nailed:<ul><li>Species = creatures that mate &amp; produce fertile babies</li><li>Hybrids (like mules) — different species babies, can't reproduce</li><li>Breeds (different dogs) ≠ species (different oaks)</li><li>The hierarchy: Kingdom → Phylum → Class → Order → Family → Genus → Species</li></ul></div>
+        <div class="session-break"><div class="icon">🌟</div><div><h4>End of Session 1!</h4><p>Next: how wolves became Chihuahuas through human meddling, plus the genes you got from your parents.</p></div></div>
+      </div>
+
+      <div class="slide" data-slide="11" data-part="2">
+        <div class="part-banner p2"><span class="pb-pill">SESSION 2 · PART 2 OF 2</span><div class="pb-emoji">🐺→🐕→🐩</div><h1>Heredity &amp; Selective Breeding</h1><p class="pb-sub">Humans turned wolves into Chihuahuas in 15,000 years. Here's the trick.</p><div class="pb-meta">🎬 1 video · 🕵️ 3 mysteries · 🧬 Genes!</div></div>
+      </div>
+
+      <div class="slide" data-slide="12" data-part="2">
+        <h2 class="big-q">From WOLF to CHIHUAHUA in 15,000 years 🤯</h2>
+        <p class="lead">Every dog on Earth — every breed, every mutt — descends from <b>gray wolves</b>. Same species. So how did we get from this 🐺 to this 🐩?</p>
+        <div class="callout"><b>The trick: SELECTIVE BREEDING.</b> Humans picked the wolves with the friendliest temperament. Only let those wolves have pups. Then picked the friendliest puppies. And again. And again. Hundreds of generations.</div>
+        <p>Then they did the same trick to make herding dogs (pick the wolves who naturally rounded up sheep). Then guard dogs. Then small lap dogs. Then dogs that look weird on purpose.</p>
+        <div class="callout animal"><b>💡 Result:</b> 400+ dog breeds — all from wolves, all still one species, because they can still all interbreed.</div>
+      </div>
+
+      <div class="slide" data-slide="13" data-part="2">
+        <h2 class="big-q">Plants get the same treatment 🥕</h2>
+        <p class="lead">Walk into a grocery store. EVERY fruit and vegetable started as a wild plant that humans selected and bred over thousands of years.</p>
+        <div class="reveal-grid">
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🥕 Carrots?</b></div><div class="back"><b>Originally purple and skinny.</b> Humans bred them orange and fat over centuries.</div></div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🌽 Corn?</b></div><div class="back"><b>Originally a tiny grass-like plant</b> with maybe 12 hard kernels. We bred it into the giant cobs we eat.</div></div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🥦 Broccoli?</b></div><div class="back"><b>Originally a wild mustard plant.</b> Same plant also bred into cabbage, kale, cauliflower, Brussels sprouts!</div></div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🍌 Bananas?</b></div><div class="back"><b>Originally full of huge seeds.</b> We bred seedless bananas — but they can no longer reproduce on their own!</div></div>
+        </div>
+        <div class="callout leaf"><b>📝 Plants of human-bred kind = VARIETIES</b> (or "cultivars" in farming). Same idea as dog breeds.</div>
+      </div>
+
+      <div class="slide" data-slide="14" data-part="2">
+        <div class="beat mystery" id="mystery-14">
+          <span class="beat-badge">🕵️ MYSTERY #3 · THINK BEFORE YOU CLICK</span>
+          <h3>Why do bananas have a problem?</h3>
+          <p>Most bananas you eat have NO seeds. So how do banana farmers grow MORE bananas? And why is this a big risk for the world?</p>
+          <button class="reveal-btn" onclick="document.getElementById('mystery-14').classList.add('mystery-open')">🔍 Show answer</button>
+          <div class="mystery-answer">🎯 <b>Cuttings!</b> Farmers chop off pieces of banana plants and grow them like clones. Every commercial banana plant is genetically <b>identical</b> to every other one. Now the risk: if a disease starts killing one banana plant, it can kill ALL of them — they have no genetic variety to fight back. This actually happened in the 1950s — the banana variety we ate then (Gros Michel) was wiped out by a fungus. We now eat a different variety (Cavendish), which is currently being attacked by another fungus! Variety = survival.</div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="15" data-part="2" data-type="video" data-video-id="tm-Z0gCWsgI">
+        <h2 class="big-q">🎬 Watch: Animal Classification <span class="pill">~3 min</span></h2>
+        <p class="lead">A great recap on how scientists sort animals into groups + key vocab (vertebrate, invertebrate, mammals, fish, etc.).</p>
+        <div class="video-wrap"><div class="video-ratio"><iframe src="https://www.youtube.com/embed/tm-Z0gCWsgI" title="Animal Classification - Learn Bright" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>
+        <div class="video-edit-row"><span class="video-meta">📽 Learn Bright</span><a class="btn small secondary" href="https://www.youtube.com/watch?v=tm-Z0gCWsgI" target="_blank">▶ Open on YouTube</a></div>
+        <div class="video-caption">🎯 <b>Listen for:</b> the difference between vertebrates and invertebrates.</div>
+      </div>
+
+      <div class="slide" data-slide="16" data-part="2">
+        <h2 class="big-q">🧬 How parents pass things to kids</h2>
+        <div class="two-col">
+          <div>
+            <p class="lead">When mom and dad make a baby, the baby gets <b>tiny instruction packets</b> from each parent. These packets are called <b>GENES</b>.</p>
+            <p>Genes decide:</p>
+            <ul>
+              <li>👁 Eye color</li>
+              <li>🧑‍🦱 Hair color &amp; texture</li>
+              <li>📏 How tall you'll grow</li>
+              <li>👃 Shape of your nose</li>
+              <li>🩸 Your blood type</li>
+              <li>👅 Whether you can roll your tongue!</li>
+            </ul>
+          </div>
+          <div style="font-size:120px;text-align:center;">👨🧬👩→👶</div>
+        </div>
+        <div class="callout"><b>🔑 Key word:</b> traits passed by genes = <b>HEREDITARY traits</b>. ("I INHERITED my dad's nose.")</div>
+      </div>
+
+      <div class="slide" data-slide="17" data-part="2">
+        <h2 class="big-q">But not EVERYTHING is hereditary 🌱</h2>
+        <p class="lead">Plenty of you comes from <b>environment</b>, not genes. Sort these:</p>
+        <div class="reveal-grid">
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🗣 Your language</b></div><div class="back"><b>Environment.</b> You inherited the ability to learn languages, but WHICH language depends on what you grew up hearing.</div></div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>👁 Your eye color</b></div><div class="back"><b>Hereditary.</b> Genes from mom + dad.</div></div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>🥋 Your karate skill</b></div><div class="back"><b>Environment.</b> You learn it. Genes don't carry karate.</div></div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>📏 How tall you are</b></div><div class="back"><b>Both!</b> Genes set the range; food + sleep + health decides where in the range.</div></div>
+          <div class="reveal-card" onclick="this.classList.toggle('open')"><div class="front"><b>📚 Knowing math</b></div><div class="back"><b>Environment.</b> You inherited the ability to learn math, but knowing it = practice.</div></div>
+        </div>
+        <div class="callout leaf"><b>📝 Lucky truth:</b> we don't inherit our parents' knowledge or skills. We have to learn it. (Also lucky: we don't inherit their bad habits or mistakes.)</div>
+      </div>
+
+      <div class="slide" data-slide="18" data-part="2">
+        <div class="beat mystery" id="mystery-18">
+          <span class="beat-badge">🕵️ MYSTERY #4 · THINK BEFORE YOU CLICK</span>
+          <h3>Identical Twins, Different Lives</h3>
+          <p>Two identical twin girls were separated at birth. One grew up in Japan and learned Japanese. One grew up in Brazil and learned Portuguese. They have the same genes. Will they speak the same language as adults?</p>
+          <button class="reveal-btn" onclick="document.getElementById('mystery-18').classList.add('mystery-open')">🔍 Show answer</button>
+          <div class="mystery-answer">🎯 <b>NO.</b> Same genes — different environments — different languages. Language is environmental. Genes gave them both the brain ABILITY to learn any language. Their environments gave them which one. This is the perfect proof that we are BOTH our genes AND our experiences. (Also true: their height might differ too if their nutrition was different.)</div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="19" data-part="2">
+        <div class="beat mystery" id="mystery-19">
+          <span class="beat-badge">🕵️ MYSTERY #5 · THINK BEFORE YOU CLICK</span>
+          <h3>The "Race" Question</h3>
+          <p>You'll hear people say "human races." But scientists say all humans are one species. So what IS race?</p>
+          <button class="reveal-btn" onclick="document.getElementById('mystery-19').classList.add('mystery-open')">🔍 Show answer</button>
+          <div class="mystery-answer">🎯 People of every "race" can have healthy babies together — that's the species test. So all humans are <b>Homo sapiens</b>, one species. "Race" describes very small visible differences (skin color, hair texture) that developed because human ancestors lived in different climates for thousands of years. Genetically, the differences between any two humans are TINY — about 0.1%. We're way more alike than different. <b>Scientific reality:</b> all humans are one big extended family.</div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="20" data-part="2">
+        <h2 class="big-q">📝 Quick recap: words that look similar but mean different things</h2>
+        <div class="hierarchy">
+          <div class="hier-row"><b>Species</b> Naturally separate group, can mate and produce fertile young together <span class="ex">(humans, oak trees, lions)</span></div>
+          <div class="hier-row" style="border-color:var(--leaf);"><b>Breed</b> Variation within a species, made by humans through selective breeding <span class="ex">(Labrador, Persian cat)</span></div>
+          <div class="hier-row" style="border-color:var(--sky-dark);"><b>Variety</b> Same idea as breed but for plants <span class="ex">(beefsteak tomato, Honeycrisp apple)</span></div>
+          <div class="hier-row" style="border-color:var(--animal);"><b>Hybrid</b> Baby from two different species, usually can't reproduce <span class="ex">(mule, liger)</span></div>
+          <div class="hier-row" style="border-color:var(--sun);"><b>Cultivar</b> A variety made specifically for farming <span class="ex">(most modern crops)</span></div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="21" data-part="2">
+        <div class="beat mystery" id="mystery-21">
+          <span class="beat-badge">🕵️ MYSTERY #6 · THINK BEFORE YOU CLICK</span>
+          <h3>The Fuzzy Edge</h3>
+          <p>Sometimes scientists DISAGREE about whether two groups are "the same species" or "different species." Why is that? Shouldn't science have ONE answer?</p>
+          <button class="reveal-btn" onclick="document.getElementById('mystery-21').classList.add('mystery-open')">🔍 Show answer</button>
+          <div class="mystery-answer">🎯 The species idea has fuzzy edges in the real world. (1) Some groups occasionally interbreed — coyotes and wolves, for example. Same species or not? (2) For extinct animals (fossils), we can't test if they bred. (3) DNA testing keeps changing what we know. Scientists work with the BEST definition we have, but they argue and revise. Real science is always learning. Don't let "scientists disagree" worry you — it means they're checking each other's work. That's what science is!</div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="22" data-part="2">
+        <h2 class="big-q">✨ What you now know</h2>
+        <ul style="font-size:18px;">
+          <li>🐕 <b>Species</b> = creatures that can mate and have FERTILE babies</li>
+          <li>🦝 <b>Hybrids</b> (mules, ligers) come from two species — usually can't reproduce</li>
+          <li>🐩 <b>Breeds</b> (dogs, cats) ≠ species. Breeds are human-made variations</li>
+          <li>🪜 The <b>hierarchy</b>: Kingdom → Phylum → Class → Order → Family → Genus → Species</li>
+          <li>🐺→🐩 <b>Selective breeding</b> turned wolves into 400+ dog breeds in 15,000 years</li>
+          <li>🥕 Same trick made every fruit and vegetable in the grocery store</li>
+          <li>🧬 <b>Genes</b> from parents carry hereditary traits (eye color, height range)</li>
+          <li>🌍 <b>Environment</b> shapes the rest (language, knowledge, skills, exact height)</li>
+          <li>🤝 All humans = one species (all have fertile children together)</li>
+          <li>🤔 Species are real but the EDGES are fuzzy — that's normal in science</li>
+        </ul>
+        <div class="callout"><b>🎁 Phase 1 done!</b> Next phase: <b>Energy</b> — you'll find out what powers everything that lives, moves, or grows. Plus we'll merge SCI's wonderful sound unit. See you in Chapter 9!</div>
+      </div>
+
+    </div>
+    <div class="slide-controls">
+      <button class="slide-btn ghost" onclick="prevSlide()" id="prevBtn">← Back</button>
+      <div class="slide-meta">
+        <span class="part-marker" id="partMarker">PART 1</span>
+        <span id="slideNum" class="small">Slide 1 / 22</span>
+        <div class="slide-progress"><div class="slide-progress-fill" id="slideProgress" style="width:0%"></div></div>
+        <button class="slide-btn ghost" onclick="enterPresentMode()" style="font-size:13px;padding:6px 12px;">🖥 Present</button>
+      </div>
+      <button class="slide-btn" onclick="nextSlide()" id="nextBtn">Next →</button>
+    </div>
+  </div>
+</div>
+
+<div class="tab-panel" id="panel-homework">
+  <div class="hw-intro"><h2 style="margin-top:0;">📓 Homework</h2><p>Five missions exploring species, breeds, and the family tree of life.</p><div class="small" id="hwConfigNote"></div></div>
+  <div class="hw-list" id="homework-list"></div>
+  <div class="q-card" style="text-align:center;"><h3>📤 Submit homework</h3><input type="text" id="hw-student-name" placeholder="Your name" style="width:260px;padding:10px;border:2px solid #eee;border-radius:10px;font-size:15px;" /><div class="submit-row" style="justify-content:center;"><button class="btn success" onclick="submitHomework()">📤 Submit</button><button class="btn secondary" onclick="downloadHomework()">💾 Save</button></div><div id="hwSubmitMsg" class="small" style="margin-top:10px;"></div></div>
+</div>
+
+<div class="tab-panel" id="panel-quiz">
+  <div id="quizStart" class="quiz-start"><div style="font-size: 80px;">🧠</div><h2>Ready for the Quiz?</h2><p class="lead" style="margin-left:auto;margin-right:auto;">30 questions on species, breeds, hierarchy, heredity.</p><input type="text" id="quiz-student-name" placeholder="Your name" style="width:260px;padding:10px;border:2px solid #eee;border-radius:10px;font-size:15px;margin:10px;" /><div><button class="btn success" onclick="startQuiz()">🚀 Start</button></div></div>
+  <div id="quizArea" class="hide"></div>
+  <div id="quizResult" class="hide"></div>
+</div>
+
+<div class="tab-panel" id="panel-teacher">
+  <div class="hw-intro" style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;"><div style="flex:1;min-width:240px;"><h2 style="margin-top:0;">🧑‍🏫 Teacher Center</h2></div><button class="btn ghost" onclick="signOutTeacher()">🔒 Sign out</button></div>
+  <div class="teacher-grid">
+    <div class="teacher-card"><h3>📚 Teacher Notes</h3><div style="margin-top:10px;"><a class="btn" href="chapter-b4b-teacher-notes.html" target="_blank">📖 Open Notes</a></div></div>
+    <div class="teacher-card"><h3>🔑 Claude API Key</h3><input type="password" id="apiKey" placeholder="sk-ant-..." /><div class="submit-row"><button class="btn" onclick="saveApiKey()">💾 Save</button></div><div class="small" id="apiStatus"></div></div>
+    <div class="teacher-card"><h3>📬 Submissions</h3><input type="email" id="teacherEmail" placeholder="teacher@example.com" /><input type="url" id="webhookUrl" placeholder="Formspree URL" /><div class="submit-row"><button class="btn" onclick="saveSubmitSettings()">💾 Save</button></div></div>
+    <div class="teacher-card" style="grid-column: span 2;"><h3>📥 Submissions inbox</h3><div id="submissionsTable"></div><div class="submit-row"><button class="btn" onclick="exportSubmissions()">💾 Export</button><button class="btn ghost" onclick="clearSubmissions()">🗑 Clear</button></div></div>
+  </div>
+</div>
+
+</div>
+
+<div class="present-bar" id="presentBar"><button onclick="prevSlide()">◀</button><span class="counter" id="presentCounter">1 / 22</span><button onclick="nextSlide()">▶</button><button class="exit" onclick="exitPresentMode()">✕ Exit</button></div>
+
+<div class="modal-back" id="modal"><div class="modal"><h3 id="modal-title">Hello</h3><div id="modal-body"></div><div class="submit-row" style="justify-content:flex-end;" id="modal-actions"></div></div></div>
+
+<script>
+const HOMEWORK = [
+  { icon:"🐕", title:"Family Tree of Pets", prompt:"Pick 5 different pet animals (dog, cat, hamster, fish, lizard, bird, etc.). Look up their full scientific classification (kingdom → species). Which two are closest related? Which two are farthest apart?", placeholder:"Animal 1: K___, P___, C___...\n..." },
+  { icon:"🥕", title:"Grocery Time Travel", prompt:"In your kitchen or at the store, pick 3 fruits or vegetables. Look up what their WILD ancestors looked like (try image searches like 'wild carrot' or 'ancient corn'). Sketch or describe how they've changed. What did humans select FOR?", placeholder:"Veggie 1: wild looked like ___, modern looks ___, humans selected ___" },
+  { icon:"🧬", title:"My Hereditary Traits", prompt:"List 3 things about your body that are HEREDITARY (genes from parents) and 3 things that are ENVIRONMENTAL (you picked them up). Easy hereditary: eye color, hair color. Easy environmental: language, hobbies. Then pick a tricky one (height? personality?) and argue both sides.", placeholder:"Hereditary:\n1. ___\n2. ___\n3. ___\nEnvironmental:\n1. ___\n2. ___\n3. ___\nTricky one: ___" },
+  { icon:"🐩", title:"Breed Detective", prompt:"Pick a dog breed (or cat breed, or horse breed). Find out: what was the breed designed FOR? (Hunting? Lap-warming? Herding?) What features were selected for? Is the breed healthier or LESS healthy than its wild ancestor?", placeholder:"Breed: ___\nDesigned for: ___\nFeatures selected: ___\nHealth notes: ___" },
+  { icon:"🌳", title:"Same Species or Not?", prompt:"Make a list of 5 pairs of animals or plants. For each pair, decide: same species, or different species? Examples: lion + tiger? Dog + wolf? Wheat + barley? Robin + bluebird? Dolphin + porpoise? Look it up if needed.", placeholder:"Pair 1: ___ + ___ → same/different because ___" }
+];
+
+const QUIZ = [
+  { type:"mcq", diff:"easy", q:"What is a SPECIES?", choices:["Any kind of plant","A group that can mate and produce fertile babies","An animal with fur","A scientific name"], correct:1, feedback:["Too narrow.","Yes — the reproduction test.","Not all species have fur.","That's a name FOR a species."] },
+  { type:"fill", diff:"easy", q:"A baby produced from two different species (like a horse and donkey) is called a ______.", correctText:["hybrid","mule"], feedback:"A hybrid! The classic example is the mule." },
+  { type:"mcq", diff:"easy", q:"Are all dog breeds the same SPECIES?", choices:["No, each breed is its own species","Yes — they can all mate and produce fertile puppies","Only big dogs are species","Only small dogs are species"], correct:1, feedback:["⚠️ Common confusion.","Yes! All dogs = one species.","Size doesn't matter.","Size doesn't matter."] },
+  { type:"fill", diff:"easy", q:"Tiny instruction packets passed from parents to babies are called ______.", correctText:["genes"], feedback:"Genes! They carry hereditary traits." },
+  { type:"mcq", diff:"easy", q:"All dogs descended originally from:", choices:["Cats","Wolves","Foxes","Sheep"], correct:1, feedback:["Different family.","Yes!","Related but not direct ancestors.","No relation."] },
+  { type:"mcq", diff:"easy", q:"Which is the BIGGEST group in the classification hierarchy?", choices:["Species","Family","Kingdom","Genus"], correct:2, feedback:["Smallest!","Middle.","Yes! Kingdom is the biggest.","Smaller."] },
+  { type:"fill", diff:"easy", q:"Humans are in the genus ______ (this is also our 'first name').", correctText:["homo","Homo"], feedback:"Homo! Our species name is Homo sapiens." },
+  { type:"mcq", diff:"easy", q:"Mules cannot:", choices:["Eat","Walk","Have babies","Live"], correct:2, feedback:["Mules eat fine.","Mules walk fine.","Yes! Mules are infertile.","Mules live fine."] },
+  { type:"scenario", diff:"medium", q:"Tigers and lions can have a baby called a 'liger'. Are tigers and lions the same species?", choices:["Yes — they had a baby","No — ligers are usually infertile, so tigers and lions are different species","Maybe","Only sometimes"], correct:1, scenario:"What's the test for 'same species'?", feedback:["Having a baby is necessary but not sufficient.","Yes! Fertile babies are the test.","There's a clear answer.","There's a clear answer."] },
+  { type:"mcq", diff:"medium", q:"What's the difference between a BREED and a SPECIES?", choices:[
+    "Breeds are humans-made variations within a species; species are naturally separate groups",
+    "There's no difference",
+    "Breeds are bigger than species",
+    "Species are wild; breeds are tame"
+  ], correct:0, feedback:["Yes! Breeds = within species. Species = between groups.","Big difference!","Backwards.","Tame/wild isn't the rule."] },
+  { type:"scenario", diff:"medium", q:"Imagine you wanted to invent a new dog breed: a tiny dog that can swim. What would you do?", choices:[
+    "Buy a tiny dog and put it in water",
+    "Selectively breed: pick small dogs that swim well, breed them together, repeat for many generations",
+    "Just hope for the best",
+    "Cross dogs with fish"
+  ], correct:1, feedback:["Doesn't change DNA!","Yes! That's selective breeding.","Won't work.","Different species can't combine like that."] },
+  { type:"mcq", diff:"medium", q:"Which of these is HEREDITARY?", choices:["Your favorite song","Your eye color","Your knowledge of math","The language you speak"], correct:1, feedback:["Choice — environment.","Yes — genes.","Learned — environment.","Learned — environment."] },
+  { type:"mcq", diff:"medium", q:"A grocery store carrot is orange and chunky. The wild carrot ancestor was:", choices:["Orange and chunky too","Purple and skinny","Already cooked","Invented in a lab"], correct:1, misconception:true, feedback:["⚠️ No! It was bred.","Yes! Centuries of selective breeding made it orange and fat.","⚠️ Plants don't grow cooked.","⚠️ Bred from real wild carrots."] },
+  { type:"fill", diff:"medium", q:"The full scientific species name for humans (two words) is ______.", correctText:["homo sapiens","Homo sapiens"], feedback:"Homo sapiens — Latin for 'wise man'." },
+  { type:"scenario", diff:"medium", q:"All commercial bananas you eat are clones (genetically identical). What's the BIG risk of this?", choices:["Bananas can't taste good","If a disease can kill ONE banana plant, it can kill ALL of them — no genetic variety = no defense","Bananas will get bigger","Nothing"], correct:1, feedback:["They taste fine.","Yes! Variety = survival.","Not the risk.","Real risk."] },
+  { type:"mcq", diff:"medium", q:"Identical twins share:", choices:["Birthday only","All their genes","All their experiences","Their height exactly"], correct:1, feedback:["More than just birthday!","Yes — same DNA.","Different experiences after birth!","Height depends on environment too."] },
+  { type:"scenario", diff:"medium", q:"A parrot raised in Spain learns to speak Spanish words. Same parrot moves to Japan, hears no more Spanish — does it remember Spanish, learn Japanese, or both?", choices:["Forgets Spanish, learns whatever it now hears (parrots learn from environment)","Genetically remembers Spanish forever","Refuses to speak","Speaks both"], correct:0, feedback:["Yes — environmental learning.","⚠️ Language isn't genetic.","Parrots love to talk.","Probably picks up Japanese, drops Spanish."] },
+  { type:"fill", diff:"medium", q:"The classification level RIGHT below Genus is ______.", correctText:["species"], feedback:"Species — the most specific level." },
+  { type:"scenario", diff:"hard", q:"You see two birds in a field guide that look almost identical, but the guide lists them as different species. What's the strongest reason a scientist would split them?", choices:[
+    "They live in different countries",
+    "Genetic tests show they don't naturally interbreed even when their ranges overlap",
+    "One has a different name",
+    "Different bird-watchers prefer different ones"], correct:1, feedback:["Same species can live in many places.","Yes! Reproductive isolation = different species.","Names follow the science.","Not science."] },
+  { type:"scenario", diff:"hard", q:"A farmer's dairy cows produce way more milk than their wild ancestors did. Is this hereditary, environmental, or both?", choices:[
+    "Pure environment",
+    "BOTH — selective breeding gave them genes for high milk production AND modern feed/care boosts that potential",
+    "Pure heredity",
+    "Magic"], correct:1, feedback:["Genetic difference is real.","Yes! Almost everything in farming is genes × environment.","Care matters too.","😄"] },
+  { type:"mcq", diff:"hard", q:"Why do scientists DISAGREE sometimes about species classifications?",
+    choices:["Scientists are bad at biology","Real-world species edges are fuzzy: some groups occasionally interbreed, fossils can't be tested, DNA changes our understanding","Latin is hard","To trick students"], correct:1, feedback:["⚠️ No.","Yes! Real biology is messy.","Latin's stable.","⚠️ Definitely not."] },
+  { type:"open", diff:"hard", q:"Pick a vegetable. Describe what its WILD ancestor was probably like, and explain TWO traits humans bred FOR over thousands of years. (3-4 sentences.)", feedback:"Strong example — TOMATO: wild tomato was tiny (size of a pea), often green or yellow, very acidic. Humans selected for: (1) size — bigger fruits, (2) sweetness — less acid, more sugar, (3) red color — looks ripe and appealing. Modern beefsteak tomatoes are 1000x the size of wild ancestors and totally different in flavor." },
+  { type:"experiment", diff:"hard", q:"HANDS-ON: Look at 3 family photos: you, a parent, a grandparent. List 3 traits that clearly trace through 3 generations (e.g., nose shape, eye color, dimples). Could you predict any of YOUR features from looking at your grandparents?", feedback:"Many traits show 'family resemblance' across generations — eye color, nose shape, hairline, ear shape, dimples. Some skip generations (because of recessive vs dominant genes). Some appear unexpectedly. This is real-world heredity in action!" },
+  { type:"scenario", diff:"hard", q:"A 'wolf-dog' is a hybrid of a wolf and a domestic dog. They CAN have babies. Are wolves and dogs the same species or different species?", choices:[
+    "Different — wolves are wild",
+    "Same — they can produce fertile offspring; dogs are technically wolf descendants (Canis lupus familiaris)",
+    "Different — domestic vs wild matters",
+    "Hybrid means automatic different species"], correct:1, misconception:true, feedback:["⚠️ Wild/domestic isn't the species test.","Yes! Dogs are technically a sub-species of wolf.","⚠️ Doesn't decide species.","⚠️ Mules are sterile hybrids; wolf-dogs aren't."] },
+  { type:"mcq", diff:"hard", q:"Which of these is the BEST argument that all humans are one species?",
+    choices:["We all look the same","We can all communicate","People of any race can have healthy fertile children together","We're all from Earth"], correct:2, feedback:["⚠️ We don't all look the same.","Many animals communicate too.","Yes! The species test in action.","All animals are from Earth."] },
+  { type:"open", diff:"hard", q:"Why is GENETIC VARIETY important to a species' long-term survival? Use 'banana' or 'identical twins' or another example to explain. (3-4 sentences.)", feedback:"Genetic variety is insurance. When environments change (new disease, new climate, new predator), some individuals will have genes that handle the new challenge — they survive and pass those genes on. Identical clones (like commercial bananas) are vulnerable: if one falls to a disease, ALL fall. This is why monocultures are risky and biodiversity matters. It's the same reason we mix gene pools by interbreeding family lines (your unique mix of mom + dad's genes is your insurance against future challenges)." },
+  { type:"scenario", diff:"boss", q:"You're a future scientist who has discovered a new type of animal in the rainforest. It looks 90% like a known species but is slightly bigger and a different color. How do you decide if it's a NEW species or just a variation?", choices:[
+    "Compare DNA, observe whether they breed with the known species in the wild, check if any hybrids are fertile",
+    "Just measure how big it is",
+    "Take its photo and decide later",
+    "Ask the locals what they call it"], correct:0, feedback:[
+    "Yes! All three tests are part of modern species discovery.",
+    "Size alone is misleading.",
+    "More info needed.",
+    "Useful but not enough."] },
+  { type:"open", diff:"boss", q:"Imagine you could pick ANY trait to selectively breed into a new dog breed (size, smartness, fluffiness, swimming ability, kindness). Which would you pick, and what 4 generations of breeding would look like? Also, what UNINTENDED problems might come up? (5+ sentences.)", scenario:"Real breeders know that almost every breed has a hidden cost — health problems, behavior issues. Think about it.", feedback:"Strong answer covers:\n1. Pick the trait clearly (e.g., 'super-friendly').\n2. Generation 1: pick friendliest 5 dogs in a litter, breed them.\n3. Generation 2: pick friendliest pups from gen 1, breed them.\n4. Continue across generations.\n\nUnintended problems (key insight!): when you select hard for ONE trait, OTHER things change too. Bulldogs bred for cuteness can't breathe properly. German Shepherds bred for show have hip problems. Friendly breeds may lose protective instincts. Real selective breeding has trade-offs — there's no 'free' trait." },
+  { type:"scenario", diff:"boss", q:"In 2024, scientists found that human populations 50,000 years ago interbred with Neanderthals — and YOU might have 1-4% Neanderthal DNA. Were Neanderthals a separate species from us?", choices:[
+    "Yes — separate species but VERY close (we used to call them subspecies). Today scientists think of species as a SPECTRUM, not a hard line.",
+    "No — they're identical to us",
+    "It's impossible to know",
+    "Neanderthals are myth"], correct:0, feedback:[
+    "Yes! This is a beautiful example of fuzzy species edges. Modern science accepts that 'species' is a useful but imperfect concept.",
+    "Significantly different.",
+    "DNA testing has shown a lot.",
+    "Real fossils!"] },
+  { type:"open", diff:"boss", q:"BIG FINAL QUESTION: Argue whether selective breeding is GOOD or BAD for the world. Cover BOTH sides — examples of when it's helped (food, working animals, medicine) and when it's harmed (lost species, sick breeds, monocultures). What do YOU think? (5+ sentences.)", scenario:"There's no wrong answer — this is about reasoning.", feedback:"GOOD side: We feed 8 billion people because of selectively-bred crops. Working dogs save lives (search & rescue, guide dogs). Most modern medicine relies on selectively bred test plants and animals. Diverse pets enrich our lives.\n\nBAD side: Inbreeding causes huge health problems in many breeds (Bulldogs can barely breathe; Persian cats have eye issues). Wild ancestors have been pushed to extinction (the wild ox is gone — only its bred descendants remain). Crop monocultures = vulnerable to disease (Irish potato famine). We've lost biodiversity.\n\nA strong reasoned answer acknowledges BOTH and weighs them. Most ethical scientists support selective breeding when done thoughtfully — preserving genetic diversity, animal welfare, and wild relatives. The answer isn't 'good or bad' — it's 'requires care and humility'." }
+];
+
+let currentSlide=1, TOTAL_SLIDES=22;
+let quizIndex=0, quizAnswers={}, quizFlags=new Set(), quizStarted=false;
+let homework={};
+let submissions = JSON.parse(localStorage.getItem('b4b_submissions') || '[]');
+let settings = JSON.parse(localStorage.getItem('b4b_settings') || '{}');
+let teacherMode = localStorage.getItem('b4b_teacher') === '1';
+
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
+  if (t.dataset.tab === 'teacher' && !teacherMode) return;
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(x => x.classList.remove('active'));
+  t.classList.add('active'); document.getElementById('panel-'+t.dataset.tab).classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}));
+
+function openTeacherLogin() {
+  if (teacherMode) { document.querySelector('.tab[data-tab="teacher"]').click(); return; }
+  openModal('🔒 Teacher Login', `<p>Password:</p><input type="password" id="teacherPwInput" autofocus /><p class="small">Default: <b>teacher</b></p><div id="teacherPwMsg" class="small"></div>`, [{label:'🔓 Unlock', cls:'btn success', onClick:'submitTeacherLogin()'}]);
+  setTimeout(() => { const i = document.getElementById('teacherPwInput'); if (i) i.onkeydown = e => { if (e.key==='Enter') submitTeacherLogin(); }; }, 50);
+}
+function submitTeacherLogin() {
+  const pw = (document.getElementById('teacherPwInput')||{}).value || '';
+  if (pw==='teacher' || pw==='sarah') { teacherMode=true; localStorage.setItem('b4b_teacher','1'); closeModal(); applyTeacherMode(); document.querySelector('.tab[data-tab="teacher"]').click(); showToast('✅ Unlocked'); }
+  else { const m = document.getElementById('teacherPwMsg'); if (m) m.innerHTML = '❌ Wrong password.'; }
+}
+function signOutTeacher() { if (!confirm('Sign out?')) return; teacherMode=false; localStorage.removeItem('b4b_teacher'); applyTeacherMode(); document.querySelector('.tab[data-tab="lesson"]').click(); }
+function applyTeacherMode() { const btn=document.getElementById('teacherToggle'); document.querySelectorAll('.teacher-only').forEach(x=>x.classList.toggle('hide',!teacherMode)); btn.textContent = teacherMode?'🔓 Teacher · open':'🔒 Teacher'; btn.classList.toggle('teacher-badge', teacherMode); if (teacherMode) renderTeacher(); renderHomework(); }
+
+function allSlidesInOrder() { return Array.from(document.querySelectorAll('#slide-stage .slide')); }
+function showSlide(n) { const slides=allSlidesInOrder(); TOTAL_SLIDES=slides.length; currentSlide=Math.max(1,Math.min(TOTAL_SLIDES,n)); slides.forEach((s,i)=>s.classList.toggle('active',i===currentSlide-1)); document.getElementById('prevBtn').disabled=currentSlide===1; document.getElementById('nextBtn').textContent=currentSlide===TOTAL_SLIDES?'Finish 🎉':'Next →'; const a=slides[currentSlide-1]; const part=a?(a.dataset.part||'1'):'1'; const pm=document.getElementById('partMarker'); pm.className='part-marker p'+part; pm.textContent='PART '+part; document.getElementById('slideNum').textContent=`Slide ${currentSlide} / ${TOTAL_SLIDES}`; document.getElementById('slideProgress').style.width=`${Math.round((currentSlide/TOTAL_SLIDES)*100)}%`; const pc=document.getElementById('presentCounter'); if (pc) pc.textContent=`${currentSlide} / ${TOTAL_SLIDES}`; }
+function nextSlide() { if (currentSlide===TOTAL_SLIDES) { if (!document.body.classList.contains('presenting')) document.querySelector('.tab[data-tab="homework"]').click(); } else showSlide(currentSlide+1); }
+function prevSlide() { showSlide(currentSlide-1); }
+
+function enterPresentMode() { document.querySelector('.tab[data-tab="lesson"]').click(); document.body.classList.add('presenting'); try { (document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen).call(document.documentElement); } catch(e){} showSlide(currentSlide); }
+function exitPresentMode() { document.body.classList.remove('presenting'); try { if (document.fullscreenElement) document.exitFullscreen(); } catch(e){} }
+document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement) document.body.classList.remove('presenting'); });
+
+function renderHomework() { const list=document.getElementById('homework-list'); list.innerHTML=''; HOMEWORK.forEach((h,i)=>{const c=document.createElement('div');c.className='hw-card';c.innerHTML=`<h3><span class="hw-num">${i+1}</span> ${h.icon} ${h.title}</h3><p>${h.prompt}</p><textarea placeholder="${h.placeholder||''}" oninput="homework[${i}]=this.value">${homework[i]||''}</textarea>`;list.appendChild(c);}); const note=document.getElementById('hwConfigNote'); if (settings.teacherEmail) note.textContent='✓ Submits to '+settings.teacherEmail; else note.textContent='⚠️ Configure email in Teacher tab'; }
+function homeworkPayload() { const n=document.getElementById('hw-student-name').value.trim(); const p={type:'homework',chapter:'B-4B Species',student:n,ts:new Date().toISOString(),answers:{}}; HOMEWORK.forEach((h,i)=>{p.answers[h.title]=homework[i]||'';}); return p; }
+async function submitHomework() { const p=homeworkPayload(); if (!p.student){alert('Name!');return;} submissions.push(p); localStorage.setItem('b4b_submissions',JSON.stringify(submissions)); let sent=false; if (settings.webhookUrl) try{const r=await fetch(settings.webhookUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)}); sent=r.ok;}catch(e){} if (!sent && settings.teacherEmail) window.location.href=`mailto:${settings.teacherEmail}?subject=${encodeURIComponent('HW B-4B from '+p.student)}&body=${encodeURIComponent(JSON.stringify(p.answers,null,2))}`; document.getElementById('hwSubmitMsg').textContent=sent?'✅ Submitted!':(settings.teacherEmail?'📧 Email opened':'💾 Saved'); }
+function downloadHomework() { const p=homeworkPayload(); const b=new Blob([JSON.stringify(p,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=`hw_B4B_${p.student||'student'}.json`; a.click(); }
+
+function startQuiz() { const n=document.getElementById('quiz-student-name').value.trim(); if(!n){alert('Name!');return;} quizIndex=0; quizAnswers={}; quizFlags=new Set(); quizStarted=true; document.getElementById('quizStart').classList.add('hide'); document.getElementById('quizArea').classList.remove('hide'); renderQuizLayout(); }
+function renderQuizLayout() { document.getElementById('quizArea').innerHTML=`<div class="quiz-layout"><div class="quiz-nav-sticky"><div class="quiz-navigator"><h4>📋 QUESTIONS</h4><div class="qn-grid" id="qnGrid"></div><div class="qn-legend"><span><span class="qn-dot answered"></span> done</span><span><span class="qn-dot wrong"></span> wrong</span><span><span class="qn-dot open"></span> open</span></div></div><div class="submit-row" style="margin-top:10px;"><button class="btn success" onclick="confirmFinishQuiz()">🏁 Finish</button></div></div><div id="quizMain"></div></div>`; renderQuizNav(); renderQ(); }
+function renderQuizNav() { const g=document.getElementById('qnGrid'); if(!g) return; g.innerHTML=''; QUIZ.forEach((q,i)=>{const b=document.createElement('button');b.className='qn';if(i===quizIndex)b.classList.add('current');const a=quizAnswers[i];if(a){if(a.type==='open'||a.type==='experiment')b.classList.add('open');else if(a.correct===true)b.classList.add('answered');else if(a.correct===false)b.classList.add('wrong');}if(quizFlags.has(i))b.classList.add('flagged');b.textContent=i+1;b.onclick=()=>{quizIndex=i;renderQuizNav();renderQ();};g.appendChild(b);}); }
+function renderQ() { const main=document.getElementById('quizMain'); if(!main) return; const q=QUIZ[quizIndex]; const ex=quizAnswers[quizIndex]; const isA=!!ex; const diffMap={easy:'WARM-UP',medium:'BRAIN-STRETCH',hard:'THINKER',boss:'BOSS LEVEL!'}; const scen=q.scenario?`<div class="q-scenario">${q.scenario}</div>`:''; let body=''; if (q.type==='mcq'||q.type==='scenario') body=`<div class="choice-list">${q.choices.map((c,i)=>{let k='choice';if(isA){if(i===q.correct)k+=' correct';else if(i===ex.selected)k+=' incorrect';}return `<button class="${k}" onclick="pick(${i})" ${isA?'disabled':''}>${String.fromCharCode(65+i)}. ${c}</button>`;}).join('')}</div>`; else if (q.type==='fill') { const v=ex?ex.raw:''; body=`<input type="text" id="fillInput" placeholder="Type…" value="${v.replace(/"/g,'&quot;')}" ${isA?'disabled':''} style="width:100%;padding:12px;font-size:16px;border:2px solid #eee;border-radius:10px;" onkeydown="if(event.key==='Enter')subFill()" />${isA?'':'<div class="submit-row"><button class="btn" onclick="subFill()">Submit</button></div>'}`; } else { const v=ex?ex.answer:''; body=`<textarea id="openInput" rows="4" ${isA?'disabled':''} style="width:100%;padding:12px;font-size:15px;border:2px solid #eee;border-radius:10px;">${v}</textarea>${isA?'':'<div class="submit-row"><button class="btn" onclick="subOpen()">Submit</button></div>'}`; } let fb=''; if (isA) { let cls='correct',lbl='✅ Nice!'; if (ex.type==='open'||ex.type==='experiment') {cls='info';lbl='✨ Submitted!';} else if (ex.correct===false) {cls='incorrect';lbl='❌ Not quite.';} let txt=''; if (q.type==='mcq'||q.type==='scenario') txt=q.feedback[ex.selected]||''; else if (q.type==='fill') txt=q.feedback; else txt=`Strong answer:<br><br>${(q.feedback||'').replace(/\n/g,'<br>')}`; fb=`<div class="q-feedback show ${cls}"><b>${lbl}</b> ${txt}</div>`; } const answered=Object.keys(quizAnswers).length; const pct=Math.round(((quizIndex+1)/QUIZ.length)*100); main.innerHTML=`<div class="quiz-progress"><span class="pill">Q ${quizIndex+1}/${QUIZ.length}</span><div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div><span class="small">${answered} done</span></div><div class="q-card"><div class="q-difficulty ${q.diff}">${diffMap[q.diff]}${q.misconception?' · 🚨':''}</div><div class="q-text">${q.q}</div>${scen}${body}${fb}<div class="q-controls"><div class="submit-row" style="margin:0;"><button class="btn ghost" onclick="prevQ()" ${quizIndex===0?'disabled':''}>← Prev</button><button class="btn secondary" onclick="skipQ()">Skip</button><button class="btn" onclick="nextQ()" ${quizIndex===QUIZ.length-1?'disabled':''}>Next →</button></div><button class="q-flag ${quizFlags.has(quizIndex)?'on':''}" onclick="flagQ()">${quizFlags.has(quizIndex)?'🚩 Flagged':'🏳 Flag'}</button></div></div>`; }
+function pick(i) { if (quizAnswers[quizIndex]) return; const q=QUIZ[quizIndex]; quizAnswers[quizIndex]={type:q.type,selected:i,correct:(i===q.correct)}; renderQuizNav(); renderQ(); }
+function subFill() { if (quizAnswers[quizIndex]) return; const q=QUIZ[quizIndex]; const raw=(document.getElementById('fillInput').value||'').trim(); if(!raw){alert('Type!');return;} const c=q.correctText.some(t=>raw.toLowerCase().includes(t.toLowerCase())); quizAnswers[quizIndex]={type:'fill',raw,correct:c}; renderQuizNav(); renderQ(); }
+function subOpen() { if (quizAnswers[quizIndex]) return; const q=QUIZ[quizIndex]; const a=(document.getElementById('openInput').value||'').trim(); if(a.length<5){alert('Try harder!');return;} quizAnswers[quizIndex]={type:q.type,answer:a,correct:null}; renderQuizNav(); renderQ(); }
+function prevQ() { if (quizIndex>0) { quizIndex--; renderQuizNav(); renderQ(); } }
+function nextQ() { if (quizIndex<QUIZ.length-1) { quizIndex++; renderQuizNav(); renderQ(); } }
+function skipQ() { if (quizIndex<QUIZ.length-1) quizIndex++; renderQuizNav(); renderQ(); }
+function flagQ() { if (quizFlags.has(quizIndex)) quizFlags.delete(quizIndex); else quizFlags.add(quizIndex); renderQuizNav(); renderQ(); }
+function confirmFinishQuiz() { const u=[]; for(let i=0;i<QUIZ.length;i++) if(!quizAnswers[i]) u.push(i+1); let h='<p>Finish?</p>'; if (u.length) h+=`<p class="small">⚠️ ${u.length} unanswered</p>`; openModal('🏁 Finish?',h,[{label:'Yes',cls:'btn success',onClick:'finishQuiz()'},{label:'Not yet',cls:'btn ghost',onClick:'closeModal()'}]); }
+async function finishQuiz() { closeModal(); const n=document.getElementById('quiz-student-name').value.trim(); const list=QUIZ.map((q,i)=>({q:q.q,...(quizAnswers[i]||{unanswered:true}),flagged:quizFlags.has(i)})); const auto=list.filter(a=>typeof a.correct==='boolean'); const ac=auto.filter(a=>a.correct).length; const oc=list.filter(a=>a.correct===null).length; const p={type:'quiz',chapter:'B-4B',student:n,ts:new Date().toISOString(),autoCorrect:ac,autoTotal:auto.length,openCount:oc,answers:list}; submissions.push(p); localStorage.setItem('b4b_submissions',JSON.stringify(submissions)); let sent=false; if (settings.webhookUrl) try{const r=await fetch(settings.webhookUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)}); sent=r.ok;}catch(e){} const pct=auto.length?Math.round((ac/auto.length)*100):0; document.getElementById('quizArea').classList.add('hide'); document.getElementById('quizResult').classList.remove('hide'); const msg=pct===100?'🌟 PERFECT!':pct>=85?'🚀 Amazing!':pct>=70?'👏 Great!':pct>=50?'💪 Good!':'🌱 Keep going!'; const emailLink=(!sent && settings.teacherEmail)?`<a class="btn secondary" href="mailto:${settings.teacherEmail}?subject=${encodeURIComponent('Quiz B-4B from '+n)}&body=${encodeURIComponent(JSON.stringify(p,null,2))}">📧 Email</a>`:''; document.getElementById('quizResult').innerHTML=`<div class="quiz-result"><h2>${msg}</h2><div class="score-donut" style="--p:${pct}"><span>${ac}/${auto.length}</span></div>${oc?`<p>Plus ${oc} open answers.</p>`:''}<div class="submit-row" style="justify-content:center;">${emailLink}<button class="btn ghost" onclick="location.reload()">🔁 Retake</button></div></div>`; }
+
+function renderTeacher() { document.getElementById('apiKey').value=localStorage.getItem('b4b_apiKey')||''; document.getElementById('apiStatus').textContent=localStorage.getItem('b4b_apiKey')?'✓ Saved':''; document.getElementById('teacherEmail').value=settings.teacherEmail||''; document.getElementById('webhookUrl').value=settings.webhookUrl||''; const d=document.getElementById('submissionsTable'); if (!submissions.length) d.innerHTML='<p class="small">None yet.</p>'; else d.innerHTML='<table class="submissions-table"><tr><th>When</th><th>Student</th><th>Type</th><th>Result</th></tr>'+submissions.map(s=>`<tr><td>${new Date(s.ts).toLocaleString()}</td><td>${s.student||'?'}</td><td>${s.type}</td><td>${s.type==='quiz'?s.autoCorrect+'/'+s.autoTotal:Object.values(s.answers||{}).filter(Boolean).length+' ans'}</td></tr>`).join('')+'</table>'; }
+function saveApiKey() { localStorage.setItem('b4b_apiKey',document.getElementById('apiKey').value.trim()); document.getElementById('apiStatus').textContent='✓ Saved'; }
+function saveSubmitSettings() { settings.teacherEmail=document.getElementById('teacherEmail').value.trim(); settings.webhookUrl=document.getElementById('webhookUrl').value.trim(); localStorage.setItem('b4b_settings',JSON.stringify(settings)); openModal('✅ Saved','<p>Settings saved.</p>'); renderHomework(); }
+function exportSubmissions() { const b=new Blob([JSON.stringify(submissions,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='submissions_B4B.json'; a.click(); }
+function clearSubmissions() { if(confirm('Clear?')){submissions=[];localStorage.removeItem('b4b_submissions');renderTeacher();} }
+
+function openModal(title, body, actions) { document.getElementById('modal-title').textContent=title; document.getElementById('modal-body').innerHTML=body; const ab=document.getElementById('modal-actions'); ab.innerHTML=''; (actions||[]).forEach(a=>{const b=document.createElement('button');b.className=a.cls||'btn';b.textContent=a.label;b.setAttribute('onclick',a.onClick);ab.appendChild(b);}); const c=document.createElement('button'); c.className='btn ghost'; c.textContent='Close'; c.setAttribute('onclick','closeModal()'); ab.appendChild(c); document.getElementById('modal').classList.add('show'); }
+function closeModal() { document.getElementById('modal').classList.remove('show'); }
+document.getElementById('modal').addEventListener('click', e => { if (e.target.id==='modal') closeModal(); });
+function showToast(msg) { let t=document.getElementById('toast'); if(!t){t=document.createElement('div');t.id='toast';t.style.cssText='position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 22px;border-radius:999px;font-weight:700;z-index:200;';document.body.appendChild(t);} t.textContent=msg; setTimeout(()=>t.style.opacity='0',2800); }
+
+showSlide(1); renderHomework(); applyTeacherMode();
+document.addEventListener('keydown', e => { if (!document.getElementById('panel-lesson').classList.contains('active')) return; if (e.target.matches('input, textarea')) return; if (e.key==='ArrowRight') nextSlide(); if (e.key==='ArrowLeft') prevSlide(); });
+</script>
+</body>
+</html>

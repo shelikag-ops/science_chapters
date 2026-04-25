@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Science Adventure · Chapter Home</title>
+<style>
+:root {
+  --bg: #fff8f0; --ink: #1f2a44; --ink-soft: #4a5472; --paper: #fff;
+  --sun: #ffb703; --leaf: #2a9d8f; --leaf-dark: #1f7a70; --animal: #e76f51;
+  --sky: #8ecae6; --sky-dark: #219ebc; --berry: #c7477a;
+  --shadow: 0 10px 30px rgba(30,40,70,.12); --shadow-sm: 0 4px 12px rgba(30,40,70,.08);
+  --radius: 18px;
+}
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap');
+* { box-sizing: border-box; }
+body {
+  margin: 0; font-family: "Nunito", system-ui, sans-serif; color: var(--ink); line-height: 1.55;
+  background: radial-gradient(1200px 600px at 10% -10%, #ffe8c4 0%, transparent 60%),
+              radial-gradient(900px 500px at 110% 10%, #cdeadf 0%, transparent 60%), var(--bg);
+  min-height: 100vh;
+}
+h1, h2, h3 { font-family: "Fredoka", sans-serif; margin: 0 0 .4em; }
+h1 { font-size: clamp(28px, 4vw, 48px); line-height: 1.1; }
+p { margin: 0 0 1em; }
+
+.topnav {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; gap: 16px;
+  padding: 12px 22px; background: rgba(255,255,255,.85);
+  backdrop-filter: blur(10px); border-bottom: 1px solid #eee;
+}
+.brand { display: flex; align-items: center; gap: 10px; font-family: "Fredoka"; font-weight: 700; font-size: 20px; }
+.brand .logo { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, var(--sun), var(--animal)); display: grid; place-items: center; color: #fff; font-size: 22px; }
+.nav-spacer { flex: 1; }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 26px 22px 80px; }
+
+.hero {
+  display: grid; grid-template-columns: 1fr 280px; gap: 22px;
+  background: linear-gradient(135deg, #fff7e6, #e8f7ef);
+  border-radius: var(--radius); padding: 28px;
+  box-shadow: var(--shadow); margin-bottom: 26px;
+}
+.hero h1 span { background: linear-gradient(90deg, var(--animal), var(--sun), var(--leaf)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero-img { font-size: 110px; text-align: center; align-self: center; }
+
+.phase { margin-top: 34px; }
+.phase-title { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+.phase-num {
+  font-family: "Fredoka"; font-weight: 700; font-size: 14px; letter-spacing: .08em;
+  background: var(--paper); padding: 6px 14px; border-radius: 999px;
+  border: 2px solid #eee; color: var(--ink-soft);
+}
+.phase-name { font-size: 22px; font-family: "Fredoka"; font-weight: 700; }
+.phase-duration { color: var(--ink-soft); font-size: 14px; }
+.phase.done .phase-num { background: var(--leaf); color: #fff; border-color: var(--leaf); }
+.phase.current .phase-num { background: var(--animal); color: #fff; border-color: var(--animal); }
+
+.chapter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+.ch-card {
+  background: var(--paper); border-radius: 14px; padding: 18px; box-shadow: var(--shadow-sm);
+  border: 2px solid transparent; cursor: pointer; transition: transform .15s, box-shadow .15s, border-color .15s;
+  display: flex; flex-direction: column; gap: 8px; text-align: left; text-decoration: none; color: inherit;
+  position: relative;
+}
+.ch-card:hover:not(.locked) { transform: translateY(-2px); box-shadow: var(--shadow); }
+.ch-card.current { border-color: var(--animal); background: linear-gradient(180deg,#fff1e6,#fff); }
+.ch-card.done { background: #f3faf4; border-color: #d4ecdd; }
+.ch-card.ready { background: #eef7fc; border-color: #cae2ee; }
+.ch-card.locked { opacity: .55; cursor: not-allowed; }
+.ch-seq {
+  position: absolute; top: 10px; right: 12px;
+  font-family: "Fredoka"; font-weight: 700; font-size: 16px; color: var(--ink-soft);
+}
+.ch-card.current .ch-seq { color: var(--animal); }
+.ch-card.done .ch-seq { color: var(--leaf-dark); }
+.ch-code { font-family: "Fredoka"; font-weight: 700; font-size: 11px; letter-spacing: .1em; color: var(--ink-soft); padding-right: 40px; }
+.ch-title { font-weight: 800; color: var(--ink); font-size: 16px; padding-right: 28px; }
+.ch-badge { font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 999px; display: inline-block; align-self: flex-start; letter-spacing: .03em; }
+.ch-badge.now { background: var(--animal); color: #fff; }
+.ch-badge.done { background: var(--leaf); color: #fff; }
+.ch-badge.ready { background: var(--sky-dark); color: #fff; }
+.ch-badge.soon { background: #eee; color: #777; }
+.ch-meta {
+  display: flex; gap: 6px; flex-wrap: wrap; font-size: 11px; color: var(--ink-soft); margin-top: 4px;
+}
+.src-pill { background: #fafaf4; padding: 2px 8px; border-radius: 999px; border: 1px solid #eee; font-weight: 700; }
+.src-pill.bfsu { color: var(--berry); border-color: #f5d5e1; background: #fef3f8; }
+.src-pill.sci { color: var(--leaf-dark); border-color: #d0ebe3; background: #f1f9f5; }
+.src-pill.both { background: linear-gradient(90deg, #fef3f8, #f1f9f5); color: var(--ink); }
+
+/* Legend */
+.legend {
+  background: var(--paper); border-radius: 14px; padding: 16px 20px; margin-top: 10px;
+  box-shadow: var(--shadow-sm); display: flex; gap: 20px; flex-wrap: wrap; font-size: 14px; color: var(--ink-soft);
+}
+.legend b { color: var(--ink); }
+.legend .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="brand"><span class="logo">🔬</span> Science Adventure</div>
+  <div class="nav-spacer"></div>
+  <span style="color:var(--ink-soft);font-size:13px;">BFSU Volume I + SCI Level 1 · Integrated Curriculum</span>
+</nav>
+
+<div class="container">
+
+<div class="hero">
+  <div>
+    <h1>Welcome, <span>scientist!</span> 👋</h1>
+    <p style="color:var(--ink-soft);font-size:18px;">41 chapters, sequenced across 6 learning phases. Click any unlocked chapter to dive in. The one in orange is what we'll explore next.</p>
+    <p style="font-size:13px;color:var(--ink-soft);">Based on Bernard Nebel's <em>Building Foundations of Scientific Understanding</em> (BFSU) Volume I + Eileen Murphy's <em>Scientific Connections Inquiry</em> (SCI) Level 1. Merged and resequenced for grade-K-2 homeschool.</p>
+  </div>
+  <div class="hero-img">🌱🦋🌞🌍🧲🐰</div>
+</div>
+
+<div class="legend">
+  <span><span class="src-pill bfsu">BFSU</span> from Bernard Nebel's curriculum</span>
+  <span><span class="src-pill sci">SCI</span> from Eileen Murphy's curriculum</span>
+  <span><span class="src-pill both">MERGED</span> combined content from both</span>
+  <span>· Sequence is by teaching order, not by source book.</span>
+</div>
+
+<!-- ===================== FOUNDATIONS ===================== -->
+<div class="phase done">
+  <div class="phase-title">
+    <span class="phase-num">✓ FOUNDATIONS</span>
+    <span class="phase-name">Already covered OR ready to teach</span>
+    <span class="phase-duration">· mix of taught &amp; prepared</span>
+  </div>
+  <div class="chapter-grid" id="phase-0"></div>
+</div>
+
+<!-- ===================== PHASE 1 ===================== -->
+<div class="phase current">
+  <div class="phase-title">
+    <span class="phase-num">PHASE 1 · NEXT UP</span>
+    <span class="phase-name">Life Science Wrap-Up</span>
+    <span class="phase-duration">· ~3 weeks</span>
+  </div>
+  <div class="chapter-grid" id="phase-1"></div>
+</div>
+
+<!-- ===================== PHASE 2 ===================== -->
+<div class="phase">
+  <div class="phase-title">
+    <span class="phase-num">PHASE 2</span>
+    <span class="phase-name">Energy Foundation</span>
+    <span class="phase-duration">· ~5 weeks</span>
+  </div>
+  <div class="chapter-grid" id="phase-2"></div>
+</div>
+
+<!-- ===================== PHASE 3 ===================== -->
+<div class="phase">
+  <div class="phase-title">
+    <span class="phase-num">PHASE 3</span>
+    <span class="phase-name">Life Science Depth</span>
+    <span class="phase-duration">· ~9 weeks</span>
+  </div>
+  <div class="chapter-grid" id="phase-3"></div>
+</div>
+
+<!-- ===================== PHASE 4 ===================== -->
+<div class="phase">
+  <div class="phase-title">
+    <span class="phase-num">PHASE 4</span>
+    <span class="phase-name">Matter Depth</span>
+    <span class="phase-duration">· ~9 weeks</span>
+  </div>
+  <div class="chapter-grid" id="phase-4"></div>
+</div>
+
+<!-- ===================== PHASE 5 ===================== -->
+<div class="phase">
+  <div class="phase-title">
+    <span class="phase-num">PHASE 5</span>
+    <span class="phase-name">Forces</span>
+    <span class="phase-duration">· ~3 weeks</span>
+  </div>
+  <div class="chapter-grid" id="phase-5"></div>
+</div>
+
+<!-- ===================== PHASE 6 ===================== -->
+<div class="phase">
+  <div class="phase-title">
+    <span class="phase-num">PHASE 6</span>
+    <span class="phase-name">Earth & Space</span>
+    <span class="phase-duration">· ~7 weeks</span>
+  </div>
+  <div class="chapter-grid" id="phase-6"></div>
+</div>
+
+</div>
+
+<script>
+/* ============ SEQUENCED CHAPTER DATA ============ */
+const CHAPTERS = [
+  // Phase 0 — Done
+  { seq: 1, code: "BDK", title: "Baloney Detection Kit", sources: ["bfsu","sci"], phase: 0, done: true, href: "https://shelikag-ops.github.io/Baloney-Detection-Kit/" },
+  { seq: 2, code: "A/B-1", title: "Organizing Things into Categories", sources: ["bfsu"], phase: 0, done: true, href: "https://shelikag-ops.github.io/Organising-Things/" },
+  { seq: 3, code: "A-2", title: "Solids, Liquids, and Gases", sources: ["bfsu"], phase: 0, done: true, href: "https://shelikag-ops.github.io/Solids-Liquids/" },
+  { seq: 4, code: "B-2", title: "Living vs Natural Earth vs Human-Made", sources: ["bfsu"], phase: 0, ready: true, href: "https://shelikag-ops.github.io/Living-Manmade/" },
+  { seq: 5, code: "B-3", title: "The Plant & Animal Kingdoms", sources: ["bfsu"], phase: 0, ready: true, href: "chapter-b3-plants-animals.html" },
+
+  // Phase 1 — Life Science Wrap-Up
+  { seq: 6, code: "B-4", title: "Life Cycles", sources: ["bfsu"], phase: 1, current: true, href: "chapter-b4-life-cycles.html" },
+  { seq: 7, code: "B-4A + SCI", title: "Identification of Living Things", sources: ["both"], phase: 1, current: true, href: "chapter-b4a-identification.html" },
+  { seq: 8, code: "B-4B + SCI", title: "What Is a Species?", sources: ["both"], phase: 1, current: true, href: "chapter-b4b-species.html" },
+
+  // Phase 2 — Energy Foundation
+  { seq: 9, code: "C-1", title: "Energy I: Making Things Go", sources: ["bfsu"], phase: 2, done: true, href: "#" },
+  { seq: 10, code: "C-3", title: "Kinetic & Potential Energy", sources: ["bfsu"], phase: 2, ready: true, href: "chapter-c3-kinetic-potential.html" },
+  { seq: 11, code: "C-2 + SCI", title: "Sound, Vibrations & Energy", sources: ["both"], phase: 2, ready: true, href: "chapter-c2-sci-sound.html" },
+  { seq: 12, code: "C-3A", title: "Energy and Force", sources: ["bfsu"], phase: 2, ready: true, href: "chapter-c3a-energy-force.html" },
+  { seq: 13, code: "C-4 + SCI", title: "Matter vs Energy", sources: ["both"], phase: 2, ready: true, href: "chapter-c4-sci-matter-energy.html" },
+
+  // Phase 3 — Life Science Depth
+  { seq: 14, code: "B-5 + SCI", title: "Food Chains & Energy Flow", sources: ["both"], phase: 3, ready: true, href: "chapter-b5-sci-food-chains.html" },
+  { seq: 15, code: "B-5A + SCI", title: "Adaptations & Survival", sources: ["both"], phase: 3, ready: true, href: "chapter-b5a-sci-adaptations.html" },
+  { seq: 16, code: "B-6", title: "Skeleton & Muscle System", sources: ["bfsu"], phase: 3, ready: true, href: "chapter-b6-skeleton-muscle.html" },
+  { seq: 17, code: "B-7", title: "Animal Body Designs", sources: ["bfsu"], phase: 3, ready: true, href: "chapter-b7-body-designs.html" },
+  { seq: 18, code: "B-8", title: "Nervous System", sources: ["bfsu"], phase: 3, ready: true, href: "chapter-b8-nervous-system.html" },
+  { seq: 19, code: "B-9", title: "Energy to Run the Body", sources: ["bfsu"], phase: 3 },
+  { seq: 20, code: "B-10", title: "Plant Structure & Reproduction", sources: ["bfsu"], phase: 3 },
+  { seq: 21, code: "B-11", title: "Germination & Growth", sources: ["bfsu"], phase: 3 },
+  { seq: 22, code: "B-12", title: "Plants, Soil, Water & Erosion", sources: ["bfsu"], phase: 3 },
+
+  // Phase 4 — Matter Depth
+  { seq: 23, code: "A-3", title: "Air Is a Substance", sources: ["bfsu"], phase: 4 },
+  { seq: 24, code: "A-4", title: "Matter: Its Particulate Nature", sources: ["bfsu"], phase: 4 },
+  { seq: 25, code: "A-5", title: "Distinguishing Materials", sources: ["bfsu"], phase: 4 },
+  { seq: 26, code: "A-5A + SCI", title: "Magnets & Magnetic Fields", sources: ["both"], phase: 4 },
+  { seq: 27, code: "A-6 + SCI", title: "Air Pressure, Vacuums & Atmosphere", sources: ["both"], phase: 4 },
+  { seq: 28, code: "A-7 + SCI", title: "Air: A Mixture of Gases", sources: ["both"], phase: 4 },
+  { seq: 29, code: "A-8 + SCI", title: "Evaporation, Condensation & the Water Cycle", sources: ["both"], phase: 4 },
+  { seq: 30, code: "A-9", title: "Dissolving & Solutions", sources: ["bfsu"], phase: 4 },
+  { seq: 31, code: "A-10", title: "Rocks, Minerals, Crystals & Soil", sources: ["bfsu"], phase: 4 },
+
+  // Phase 5 — Forces
+  { seq: 32, code: "C-5", title: "Inertia", sources: ["bfsu"], phase: 5 },
+  { seq: 33, code: "C-6", title: "Friction", sources: ["bfsu"], phase: 5 },
+  { seq: 34, code: "C-7", title: "Push Pushes Back", sources: ["bfsu"], phase: 5 },
+
+  // Phase 6 — Earth & Space
+  { seq: 35, code: "D-1", title: "Gravity I: Earth's Gravity", sources: ["bfsu"], phase: 6 },
+  { seq: 36, code: "D-2 + D-5 + SCI", title: "Day, Night & Earth's Rotation (Time)", sources: ["both"], phase: 6 },
+  { seq: 37, code: "D-3 + SCI", title: "Reading & Drawing Maps", sources: ["both"], phase: 6 },
+  { seq: 38, code: "D-3A + SCI", title: "Directions: N, E, S, W", sources: ["both"], phase: 6 },
+  { seq: 39, code: "D-4 + D-6 + SCI", title: "Landforms, Biomes & Seasons", sources: ["both"], phase: 6 },
+  { seq: 40, code: "D-7", title: "Gravity II: Mass vs Weight", sources: ["bfsu"], phase: 6 },
+  { seq: 41, code: "D-8", title: "Rocks & Fossils", sources: ["bfsu"], phase: 6 },
+];
+
+function render() {
+  for (const ch of CHAPTERS) {
+    const grid = document.getElementById('phase-' + ch.phase);
+    if (!grid) continue;
+    const a = document.createElement('a');
+    const locked = !ch.done && !ch.current && !ch.ready && !ch.href;
+    a.className = 'ch-card'
+      + (ch.current ? ' current' : '')
+      + (ch.done ? ' done' : '')
+      + (ch.ready ? ' ready' : '')
+      + (locked ? ' locked' : '');
+    a.href = ch.href || '#';
+    if (locked) { a.onclick = e => { e.preventDefault(); alert('📚 This chapter is being prepared — check back soon!'); }; }
+    const sourcePill = ch.sources.includes('both')
+      ? '<span class="src-pill both">BFSU + SCI</span>'
+      : ch.sources.map(s => `<span class="src-pill ${s}">${s.toUpperCase()}</span>`).join('');
+    const badge = ch.current ? '<span class="ch-badge now">NEXT UP</span>'
+                : ch.done ? '<span class="ch-badge done">✓ TAUGHT</span>'
+                : ch.ready ? '<span class="ch-badge ready">📦 READY</span>'
+                : '<span class="ch-badge soon">COMING SOON</span>';
+    a.innerHTML = `
+      <div class="ch-seq">#${ch.seq}</div>
+      ${badge}
+      <div class="ch-code">${ch.code}</div>
+      <div class="ch-title">${ch.title}</div>
+      <div class="ch-meta">${sourcePill}</div>
+    `;
+    grid.appendChild(a);
+  }
+}
+render();
+</script>
+
+</body>
+</html>
