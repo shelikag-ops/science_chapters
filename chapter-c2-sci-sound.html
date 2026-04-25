@@ -99,16 +99,21 @@ p{margin:0 0 1em;} button{font-family:inherit; cursor:pointer;} a{color:var(--sk
 .qn-grid{display:grid; grid-template-columns:repeat(6,1fr); gap:4px; margin-bottom:10px;}
 .qn{aspect-ratio:1; border-radius:6px; border:2px solid #eee; background:#fafaf4; color:var(--ink-soft); font-weight:800; font-size:12px; cursor:pointer; display:grid; place-items:center; padding:0; position:relative;}
 .qn.current{border-color:var(--ink); box-shadow:0 0 0 2px rgba(31,42,68,.2); color:var(--ink);}
-.qn.answered{background:#e9f7ef; border-color:var(--leaf); color:var(--leaf-dark);}
+.qn.answered{background:#eef7fc; border-color:var(--sky-dark); color:var(--sky-dark);}
+.qn.correct{background:#e9f7ef; border-color:var(--leaf); color:var(--leaf-dark);}
 .qn.wrong{background:#fde8e1; border-color:var(--animal); color:var(--animal);}
-.qn.open{background:#eef7fc; border-color:var(--sky-dark); color:var(--sky-dark);}
+.qn.open{background:#e7f1fb; border-color:#3a7ec0; color:#1f558a;}
+.qn.skipped{background:#fafaf4; border-color:#cfcfc8; color:#888; border-style:dashed;}
 .qn.flagged::after{content:"🚩"; position:absolute; top:-4px; right:-4px; font-size:10px;}
 .qn-legend{font-size:11px; color:var(--ink-soft); padding-top:8px; margin-top:4px; border-top:1px solid #eee;}
 .qn-legend span{display:inline-flex; align-items:center; gap:4px; margin-right:10px;}
 .qn-dot{width:10px; height:10px; border-radius:3px; background:#fafaf4; border:1.5px solid #eee; display:inline-block;}
-.qn-dot.answered{background:#e9f7ef; border-color:var(--leaf);}
+.qn-dot.answered{background:#eef7fc; border-color:var(--sky-dark);}
+.qn-dot.correct{background:#e9f7ef; border-color:var(--leaf);}
 .qn-dot.wrong{background:#fde8e1; border-color:var(--animal);}
-.qn-dot.open{background:#eef7fc; border-color:var(--sky-dark);}
+.qn-dot.open{background:#e7f1fb; border-color:#3a7ec0;}
+.qn-dot.skipped{background:#fafaf4; border-color:#cfcfc8; border-style:dashed;}
+.qn-dot.flagged{background:#fff; border-color:var(--berry);}
 .quiz-progress{display:flex; align-items:center; gap:10px; margin-bottom:14px;}
 .progress-bar{flex:1; height:10px; background:#eee; border-radius:999px; overflow:hidden;}
 .progress-fill{height:100%; background:linear-gradient(90deg,var(--sun),var(--animal)); transition:width .3s;}
@@ -120,6 +125,7 @@ p{margin:0 0 1em;} button{font-family:inherit; cursor:pointer;} a{color:var(--sk
 .choice-list{display:grid; gap:8px;}
 .choice{border:2px solid #eee; background:#fff; padding:12px 14px; border-radius:12px; text-align:left; font-weight:700; font-size:15px;}
 .choice:hover:not(:disabled){border-color:var(--ink-soft);}
+.choice.selected{border-color:var(--sky-dark); background:#eef7fc;}
 .choice.correct{border-color:var(--leaf); background:#e9f7ef;}
 .choice.incorrect{border-color:var(--animal); background:#fde8e1;}
 .q-feedback{margin-top:12px; padding:12px 14px; border-radius:10px; display:none; font-size:15px;}
@@ -127,6 +133,19 @@ p{margin:0 0 1em;} button{font-family:inherit; cursor:pointer;} a{color:var(--sk
 .q-feedback.correct{background:#e9f7ef; border-left:4px solid var(--leaf);}
 .q-feedback.incorrect{background:#fde8e1; border-left:4px solid var(--animal);}
 .q-feedback.info{background:#eef7fc; border-left:4px solid var(--sky-dark);}
+.q-hints { margin: 10px 0 14px; }
+.hint-revealed {
+  background: #fff8d6; border-left: 4px solid #f5b400;
+  padding: 10px 14px; border-radius: 8px; margin: 8px 0; font-size: 14px;
+}
+.hint-revealed b { color: #8a5a00; }
+.hint-btn {
+  background: linear-gradient(135deg, #ffe7a3, #ffc452);
+  color: #5a4500; border: 2px solid #f0b53a; padding: 8px 14px;
+  border-radius: 999px; cursor: pointer; font-weight: 700; font-size: 13px;
+}
+.hint-btn:hover { transform: translateY(-1px); box-shadow: 0 2px 8px rgba(255,170,0,.25); }
+.hints-done { font-size: 12px; color: var(--ink-soft); margin-top: 6px; font-style: italic; }
 .q-controls{display:flex; justify-content:space-between; gap:10px; align-items:center; flex-wrap:wrap; margin-top:14px;}
 .q-flag{background:transparent; border:2px solid #eee; padding:8px 12px; border-radius:10px; font-weight:700; color:var(--ink-soft);}
 .q-flag.on{background:#fef0f5; border-color:var(--berry); color:var(--berry);}
@@ -493,24 +512,24 @@ const QUIZ = [
   { type:"mcq", diff:"easy", q:"In OUTER SPACE (no air), can sound travel?", choices:["Yes, fast","Yes, slow","No, it's silent","Only on Tuesdays"], correct:2, misconception:true, feedback:["⚠️ No molecules to bump.","⚠️ No molecules.","Yes! Silent.","Funny but no."] },
   { type:"fill", diff:"easy", q:"When sound bounces off a wall and you hear it again, that's called an ______.", correctText:["echo"], feedback:"Echo!" },
   { type:"mcq", diff:"easy", q:"The first part of your ear that vibrates from sound is called the:", choices:["Eardrum","Eyebrow","Nose","Tongue"], correct:0, feedback:["Yes!","Eyebrows do nothing for sound.","Different organ.","Different organ."] },
-  { type:"scenario", diff:"medium", q:"You touch a vibrating tuning fork. The sound stops. Why?", choices:["You absorbed the music","Your touch DAMPED the vibrations — no vibration = no sound","The fork got tired","Sound dies in fingers"], correct:1, feedback:["Not how it works.","Yes!","Forks don't tire.","Not really."] },
+  { type:"scenario", diff:"medium", q:"You touch a vibrating tuning fork. The sound stops. Why?", choices:["Your fingers soaked up the sound waves through your skin","Your touch stopped the fork from vibrating, and no vibration means no sound","The fork ran out of stored sound energy as soon as you touched it","Touching cold metal cools the fork down, which silences it"], correct:1, hints:["What is sound, fundamentally? Where does sound come from in the first place?","If a fork has to vibrate to make sound, what does your finger DO when you touch it?"], feedback:["⚠️ Skin doesn't absorb sound. Sound is vibration, and your finger stops the vibration directly.","Yes! Your finger 'damps' the fork — its weight and friction stop the wiggle. No wiggle = silence.","⚠️ Forks don't store sound. They make sound by vibrating freely. You stopped the wiggle.","⚠️ Temperature isn't the cause. The fork vibrates whether warm or cool — until something stops it."] },
   { type:"mcq", diff:"medium", q:"A bigger drum sounds:", choices:["Louder, but same pitch","Lower pitched (deeper)","Higher pitched","Same as a small drum"], correct:1, feedback:["Maybe louder, but pitch changes too.","Yes! Bigger = slower vibration = lower note.","Opposite!","No."] },
   { type:"scenario", diff:"medium", q:"Your guitar has 6 strings. Why does the THIN top string sound HIGHER than the THICK bottom string?",
-    choices:["Thin strings vibrate faster (higher frequency = higher pitch)","Thicker strings are made of magic","Top string is louder","Both sound the same"], correct:0, feedback:["Yes! Mass and tension matter.","Real physics.","Loudness ≠ pitch.","They sound very different."] },
+    choices:["Thin strings vibrate faster — and faster vibrations mean higher pitch","Thin strings are pulled tighter on purpose, and tighter strings always sound louder","Thicker strings touch more air, so their sound dies out before reaching your ear","Higher strings are positioned closer to your ear, so they sound higher"], correct:0, feedback:["Yes! Less mass = easier to wiggle = more wiggles per second = higher pitch.","⚠️ Tightness changes pitch, not loudness. And the question is about thickness anyway.","⚠️ Both strings reach your ear fine. The difference is in HOW the strings vibrate, not how the air carries them.","⚠️ Your ear doesn't care which string is closer — pitch comes from the string's wiggle speed."] },
   { type:"fill", diff:"medium", q:"You pluck a guitar string GENTLY. Same string. The pitch (frequency) stays the same — but what changes?", correctText:["loudness","amplitude","volume"], feedback:"Loudness (amplitude). Pitch is set by the string; you control amplitude." },
   { type:"mcq", diff:"medium", q:"Why does a string telephone work?",
-    choices:["Magic","Sound vibrations travel through the tight string from cup to cup, faster than through air","Phones sneak through wires","Strings are alive"], correct:1, feedback:["Real physics!","Yes! Solids carry sound very well.","Nope.","No."] },
+    choices:["The cups echo your voice back and forth between each other","Sound vibrations travel through the tight string from one cup to the other","The string carries tiny puffs of air from your mouth to your friend's ear","Your voice gets squeezed thin enough to fit inside the cup, then expands again"], correct:1, hints:["What does the string have to be for the phone to work — loose or tight? Why?"], feedback:["⚠️ Echoes need a hard wall to bounce off. Cups alone don't echo a voice across a string.","Yes! A tight string is a SOLID, and solids carry sound vibrations even better than air.","⚠️ Air doesn't travel along the string — only vibrations do. The air in your room is separate from the air in your friend's room.","⚠️ Sound isn't matter that gets squeezed. It's a wiggle that travels through stuff."] },
   { type:"scenario", diff:"medium", q:"You hear thunder a few seconds AFTER seeing lightning. Why?",
-    choices:["Light is faster than sound — they happen together but light reaches you first","Thunder is shy","They're separate events","Lightning makes no sound"], correct:0, feedback:["Yes! Light: ~instant. Sound: ~340m/sec.","Funny but no.","Same event!","It does — that's the thunder."] },
+    choices:["Light travels MUCH faster than sound, so the flash arrives first and the boom comes later","Thunder is made by the rain hitting the ground a few seconds after the lightning","Lightning makes a small sound, but thunder comes from a different cloud nearby","Thunder waits until lightning has finished, then rolls in afterward"], correct:0, feedback:["Yes! Light is nearly instant; sound only goes about 340 meters per second. They start together — light just wins the race.","⚠️ Thunder is made by lightning itself heating air super fast — it isn't from rain.","⚠️ The lightning bolt IS the thunder's source. Same event, two signals.","⚠️ Both happen at the same moment. The delay is from sound being slow, not from waiting."] },
   { type:"fill", diff:"medium", q:"The unit we use to measure frequency (vibrations per second) is the ______.", correctText:["hertz","Hz"], feedback:"Hertz (Hz). Named after Heinrich Hertz." },
   { type:"mcq", diff:"medium", q:"The 3 tiniest bones in your body are in your:", choices:["Hand","Foot","Ear","Knee"], correct:2, feedback:["Bigger.","Bigger.","Yes! Hammer, anvil, stirrup.","No."] },
   { type:"scenario", diff:"medium", q:"Bats fly at night and don't crash into things, even in pitch dark. How?",
-    choices:["Excellent eyes","Echolocation: they make clicks, listen for echoes, build a 'sound picture' of obstacles","They fly very slowly","Magic"], correct:1, feedback:["Bats actually have weak eyes!","Yes! Same trick as dolphins and submarines.","They're fast.","Real science."] },
+    choices:["Bats have giant eyes that see clearly in the dark, like cats do","Bats use echolocation — they make clicks and listen for the echoes to map obstacles","Bats can sense the warmth of things around them, like a heat camera","Bats memorize the layout of their cave and fly the same path every night"], correct:1, hints:["Bats actually have weaker eyes than you'd think. What other sense could they be using to 'see'?"], feedback:["⚠️ Bats actually have small, weak eyes. Their trick isn't sight at all.","Yes! Bats squeak, the squeak bounces off bugs and walls, and bats hear how long it takes to come back. That's echolocation — same trick as submarines and dolphins.","⚠️ Some snakes use heat-sensing, but bats don't. Bats use SOUND echoes.","⚠️ Bats fly into NEW places too, like out hunting bugs — they can't memorize new air."] },
   { type:"mcq", diff:"medium", q:"Whales sing across MILES of ocean. Why does sound work so well in water?",
-    choices:["Whales are loud","Water is denser than air, so sound travels faster and farther","Whales have radios","Water magnifies sound"], correct:1, feedback:["Helps but not the main reason.","Yes! Sound moves ~4x faster in water.","No!","Closer to right."] },
+    choices:["Whales sing extra loud — louder than any animal can sing in the air","Water molecules are packed tightly, so vibrations pass between them faster and farther","Salt in seawater carries the sound much better than freshwater can","The ocean acts like a giant speaker, bouncing whale songs back at higher volume"], correct:1, feedback:["⚠️ Whales ARE loud, but loudness alone doesn't explain miles. The water itself helps.","Yes! Water is denser (more molecules close together) than air, so sound travels about 4x faster AND farther.","⚠️ Sound travels well in fresh water too. The trick is density, not salt.","⚠️ Some bouncing happens, but whale songs travel mostly because water carries vibrations so well."] },
   { type:"open", diff:"hard", q:"Explain in your own words why a vacuum (totally empty space) is silent. Use what you know about sound. (3 sentences.)", feedback:"Sound is a chain of vibrations: a vibrating object pushes nearby molecules, those bump the next, and so on, until the wave reaches your ear. In a vacuum (like outer space), there are NO molecules to bump. So even if a star explodes nearby, no chain can form, and no sound reaches anyone. Vacuums are silent because sound has nothing to ride on." },
   { type:"scenario", diff:"hard", q:"A bell ringing in a sealed glass jar gets QUIETER as you pump out the air. Why?",
-    choices:["The bell is dying","Fewer air molecules = weaker chain to carry sound = quieter","The jar absorbs sound","Magic"], correct:1, feedback:["Bell is fine.","Yes! This is a classic vacuum experiment.","Jar isn't the cause.","Real physics."] },
+    choices:["Pumping out air also pulls some sound vibrations out with it","With fewer air molecules left, there's a weaker chain to carry sound to the glass","The bell rings less hard when there's less air pressing on it","The vacuum gets cold, and cold makes metal vibrate more slowly"], correct:1, hints:["Sound needs SOMETHING to travel through. What is sound traveling through inside the jar?","If you start with a full jar of air and slowly remove the air molecules, what happens to sound's 'highway'?"], feedback:["⚠️ Sound isn't a substance you can pump out. It's a wiggle that needs molecules.","Yes! Sound is a chain of molecule bumps. Fewer molecules = weaker chain = quieter sound. Pump out ALL the air and it's silent.","⚠️ The bell still rings exactly as hard. What changes is how the sound is carried away.","⚠️ Vacuums don't get cold instantly, and bell vibrations aren't really temperature-sensitive."] },
   { type:"mcq", diff:"hard", q:"Why might TWO thin strings of the same guitar sound DIFFERENT pitches even though they look the same length?",
     choices:["Random","One is tuned tighter than the other","Strings are just different","Magic"], correct:1, feedback:["Real reason.","Yes! Tightness (tension) matters too. Tighter = faster vibration = higher pitch.","Mass matters too.","Real physics."] },
   { type:"experiment", diff:"hard", q:"HANDS-ON: Fill 4 glasses with different amounts of water. Tap each gently with a spoon. Order them from highest to lowest pitch and write what you found. Why does the order go that way?", feedback:"More water = more mass = slower vibration = lower pitch. Empty glass: highest. Full glass: lowest. (Note: blowing across the top reverses this — it's the AIR column vibrating then, and less water = more air column = lower pitch. Try both!)" },
@@ -522,34 +541,28 @@ const QUIZ = [
   { type:"mcq", diff:"hard", q:"As you grow older, the highest frequencies you can hear tend to:",
     choices:["Increase","Stay the same","Decrease","Become magical"], correct:2, feedback:["No.","No.","Yes! 'Mosquito tone' apps work because adults often can't hear the highest pitches that kids can.","No."] },
   { type:"open", diff:"hard", q:"Imagine you're standing 170 meters from a brick wall. You yell. About how long until you hear the echo? (Hint: sound travels ~340 meters per second, and the sound has to go to the wall AND come back.)", feedback:"The total round trip is 170m × 2 = 340m. At 340 m/sec, the sound takes 340 ÷ 340 = 1 second. So you'd hear the echo about 1 second after yelling. Echo delay can give you a real-world estimate of how far things are!" },
-  { type:"scenario", diff:"boss", q:"Suppose a hummingbird flutters its wings 80 times per second, way too fast to see clearly. Will the wings make a sound? If so, what kind?",
-    choices:[
-    "No, only big things make sound",
-    "Yes — at 80Hz, this is in the human hearing range, and we'd hear a low-pitched humming or buzzing (which is exactly why hummingbirds got their name)",
-    "Only at night",
-    "Only if you have a microphone"], correct:1, feedback:[
-    "Wrong rule.",
-    "Yes! That's literally why we call them HUMmingbirds.",
-    "Day or night.",
-    "Bare ears work."] },
+  { type:"open", diff:"boss", q:"Suppose a hummingbird flutters its wings 80 times per second, way too fast to see clearly. Will the wings make a sound? If you think yes, what kind of sound — high-pitched or low-pitched? Walk through your reasoning. (3-5 sentences.)",
+    scenario:"There's no single right number — what matters is connecting the wing speed to what you know about sound.",
+    hints:[
+    "What is sound, fundamentally? When something vibrates 80 times per second, does that fit the recipe for sound?",
+    "Human hearing covers about 20 Hz to 20,000 Hz. Where does 80 Hz fit on that scale — inside or outside our hearing?",
+    "Higher frequency = higher pitch. So 80 wing-flaps per second would sound HIGH or LOW pitched compared to a kid singing 'la' at about 250 Hz?"],
+    feedback:"Strong answer:\nYes — the wings DO make sound. Anything vibrating fast enough is making sound, and 80 Hz (80 wiggles per second) is well inside human hearing (which covers ~20 to ~20,000 Hz). The wings push air molecules 80 times every second, sending vibrations to your ear.\n\nThe pitch will be LOW. 80 Hz is much lower than a singing voice (~250 Hz), so the sound is a deep humming or buzzing — not a high whistle. That's exactly why these birds are called HUMmingbirds! If they flapped their wings 5 times a second instead, that would be only 5 Hz — TOO low for us to hear, and we'd just see (but not hear) the wings beat." },
   { type:"open", diff:"boss", q:"Design a 'silent room' for someone with super-sensitive hearing. List 4 specific things you'd do, using everything you've learned about sound. Explain WHY each one helps.", feedback:"Strong design ideas:\n1. **Soft walls (carpet, foam, fabric)** — soft surfaces ABSORB sound vibrations rather than reflecting them, killing echoes.\n2. **Double walls with vacuum or thick insulation between** — fewer molecules in the gap = less sound transmission from outside.\n3. **Floating floor (rubber mounts)** — stops vibrations traveling up from the building structure.\n4. **No windows or thick double-glazed ones** — glass conducts sound; thick layers + air gap reduce it.\n5. **No metal pipes or hard ducts inside** — solids carry sound easily.\n6. **Quiet ventilation system** — even a fan makes sound.\n\nThis is exactly how 'anechoic chambers' (used to test microphones and speakers) are built. They're so silent you can hear your own heartbeat — disturbing!" },
-  { type:"scenario", diff:"boss", q:"Two cars driving toward each other both honk. The sound from EACH car's horn reaches the OTHER driver. What's traveling between them — sound, or air, or both?",
-    choices:[
-    "Just the air moves",
-    "Sound: a wave of bumps travels between the molecules — the molecules themselves don't really go anywhere; they just push their neighbors and snap back",
-    "The horn molecules teleport",
-    "Light travels between them"], correct:1, feedback:[
-    "Air doesn't move much.",
-    "Yes! This is the deepest insight about sound: a wave is a PATTERN of motion through the molecules, not the molecules themselves moving from A to B. The energy travels; the matter mostly stays put.",
-    "No teleportation!",
-    "Light is unrelated here."] }
+  { type:"open", diff:"boss", q:"Two cars driving toward each other both honk. The sound from EACH car's horn reaches the OTHER driver. What ACTUALLY travels between the two cars to carry the sound — the air itself, or something else? Walk through your reasoning. (4-5 sentences.)",
+    scenario:"This is one of the deepest ideas in physics — try to picture what each air molecule does.",
+    hints:[
+    "If air ITSELF traveled from car A to car B, there'd be a strong wind every time anyone honked. Is that what you'd feel?",
+    "Picture a long line of dominoes. When the first one falls and tips the second, then the second tips the third, what's actually moving down the line — the dominoes, or just the falling motion?",
+    "Each air molecule wiggles back and forth a tiny bit and bumps its neighbor. Then it snaps back. Does it travel from car A to car B, or stay roughly where it started?"],
+    feedback:"Strong answer:\nWhat travels between the cars is a SOUND WAVE — a pattern of bumping that moves through the air, not the air itself. Each air molecule wiggles back and forth a tiny bit, bumps its neighbor, and snaps back to about where it started. So the molecule near car A doesn't actually travel to car B — it just shoves its neighbor, who shoves its neighbor, and so on, all the way to car B.\n\nThis is the deepest insight about sound: a wave is a PATTERN of motion through the molecules, not the molecules themselves moving from A to B. The ENERGY travels; the matter mostly stays put. (If the air itself traveled across, every honk would feel like a gust of wind — which it doesn't.) Same idea with ocean waves: the water doesn't travel across the ocean, but the wave pattern does." }
 ];
 
 let currentSlide=1, TOTAL_SLIDES=21;
-let quizIndex=0, quizAnswers={}, quizFlags=new Set(), quizStarted=false;
+let quizIndex=0, quizAnswers={}, quizFlags=new Set(), quizHintsRevealed={}, quizSkipped=new Set(), quizFinished=false, quizStarted=false;
 let homework={};
 let submissions=JSON.parse(localStorage.getItem('c2_submissions')||'[]');
-let settings=JSON.parse(localStorage.getItem('c2_settings')||'{}');
+let settings=JSON.parse(localStorage.getItem('c2_settings')||'{}'); if(!settings.webhookUrl)settings.webhookUrl='https://anthropic-proxy.shelikag.workers.dev/quiz';
 let teacherMode=localStorage.getItem('c2_teacher')==='1';
 
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{ if(t.dataset.tab==='teacher'&&!teacherMode)return; document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active')); document.querySelectorAll('.tab-panel').forEach(x=>x.classList.remove('active')); t.classList.add('active'); document.getElementById('panel-'+t.dataset.tab).classList.add('active'); window.scrollTo({top:0,behavior:'smooth'}); }));
@@ -572,19 +585,134 @@ function homeworkPayload(){const n=document.getElementById('hw-student-name').va
 async function submitHomework(){const p=homeworkPayload(); if(!p.student){alert('Name!');return;} submissions.push(p); localStorage.setItem('c2_submissions',JSON.stringify(submissions)); let sent=false; if(settings.webhookUrl)try{const r=await fetch(settings.webhookUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)}); sent=r.ok;}catch(e){} if(!sent&&settings.teacherEmail)window.location.href=`mailto:${settings.teacherEmail}?subject=${encodeURIComponent('HW C-2 from '+p.student)}&body=${encodeURIComponent(JSON.stringify(p.answers,null,2))}`; document.getElementById('hwSubmitMsg').textContent=sent?'✅ Submitted!':(settings.teacherEmail?'📧 Email opened':'💾 Saved');}
 function downloadHomework(){const p=homeworkPayload(); const b=new Blob([JSON.stringify(p,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=`hw_C2_${p.student||'student'}.json`; a.click();}
 
-function startQuiz(){const n=document.getElementById('quiz-student-name').value.trim(); if(!n){alert('Name!');return;} quizIndex=0; quizAnswers={}; quizFlags=new Set(); quizStarted=true; document.getElementById('quizStart').classList.add('hide'); document.getElementById('quizArea').classList.remove('hide'); renderQuizLayout();}
-function renderQuizLayout(){document.getElementById('quizArea').innerHTML=`<div class="quiz-layout"><div class="quiz-nav-sticky"><div class="quiz-navigator"><h4>📋 QUESTIONS</h4><div class="qn-grid" id="qnGrid"></div><div class="qn-legend"><span><span class="qn-dot answered"></span> done</span><span><span class="qn-dot wrong"></span> wrong</span><span><span class="qn-dot open"></span> open</span></div></div><div class="submit-row" style="margin-top:10px;"><button class="btn success" onclick="confirmFinishQuiz()">🏁 Finish</button></div></div><div id="quizMain"></div></div>`; renderQuizNav(); renderQ();}
-function renderQuizNav(){const g=document.getElementById('qnGrid'); if(!g)return; g.innerHTML=''; QUIZ.forEach((q,i)=>{const b=document.createElement('button');b.className='qn';if(i===quizIndex)b.classList.add('current'); const a=quizAnswers[i]; if(a){if(a.type==='open'||a.type==='experiment')b.classList.add('open'); else if(a.correct===true)b.classList.add('answered'); else if(a.correct===false)b.classList.add('wrong');} if(quizFlags.has(i))b.classList.add('flagged'); b.textContent=i+1; b.onclick=()=>{quizIndex=i; renderQuizNav(); renderQ();}; g.appendChild(b);});}
-function renderQ(){const main=document.getElementById('quizMain'); if(!main)return; const q=QUIZ[quizIndex]; const ex=quizAnswers[quizIndex]; const isA=!!ex; const diffMap={easy:'WARM-UP',medium:'BRAIN-STRETCH',hard:'THINKER',boss:'BOSS LEVEL!'}; const scen=q.scenario?`<div class="q-scenario">${q.scenario}</div>`:''; let body=''; if(q.type==='mcq'||q.type==='scenario')body=`<div class="choice-list">${q.choices.map((c,i)=>{let k='choice'; if(isA){if(i===q.correct)k+=' correct'; else if(i===ex.selected)k+=' incorrect';} return `<button class="${k}" onclick="pick(${i})" ${isA?'disabled':''}>${String.fromCharCode(65+i)}. ${c}</button>`;}).join('')}</div>`; else if(q.type==='fill'){const v=ex?ex.raw:''; body=`<input type="text" id="fillInput" placeholder="Type…" value="${v.replace(/"/g,'&quot;')}" ${isA?'disabled':''} style="width:100%;padding:12px;font-size:16px;border:2px solid #eee;border-radius:10px;" onkeydown="if(event.key==='Enter')subFill()" />${isA?'':'<div class="submit-row"><button class="btn" onclick="subFill()">Submit</button></div>'}`;} else {const v=ex?ex.answer:''; body=`<textarea id="openInput" rows="4" ${isA?'disabled':''} style="width:100%;padding:12px;font-size:15px;border:2px solid #eee;border-radius:10px;">${v}</textarea>${isA?'':'<div class="submit-row"><button class="btn" onclick="subOpen()">Submit</button></div>'}`;} let fb=''; if(isA){let cls='correct',lbl='✅ Nice!'; if(ex.type==='open'||ex.type==='experiment'){cls='info'; lbl='✨ Submitted!';} else if(ex.correct===false){cls='incorrect'; lbl='❌ Not quite.';} let txt=''; if(q.type==='mcq'||q.type==='scenario')txt=q.feedback[ex.selected]||''; else if(q.type==='fill')txt=q.feedback; else txt=`Strong answer:<br><br>${(q.feedback||'').replace(/\n/g,'<br>')}`; fb=`<div class="q-feedback show ${cls}"><b>${lbl}</b> ${txt}</div>`;} const answered=Object.keys(quizAnswers).length; const pct=Math.round(((quizIndex+1)/QUIZ.length)*100); main.innerHTML=`<div class="quiz-progress"><span class="pill">Q ${quizIndex+1}/${QUIZ.length}</span><div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div><span class="small">${answered} done</span></div><div class="q-card"><div class="q-difficulty ${q.diff}">${diffMap[q.diff]}${q.misconception?' · 🚨':''}</div><div class="q-text">${q.q}</div>${scen}${body}${fb}<div class="q-controls"><div class="submit-row" style="margin:0;"><button class="btn ghost" onclick="prevQ()" ${quizIndex===0?'disabled':''}>← Prev</button><button class="btn secondary" onclick="skipQ()">Skip</button><button class="btn" onclick="nextQ()" ${quizIndex===QUIZ.length-1?'disabled':''}>Next →</button></div><button class="q-flag ${quizFlags.has(quizIndex)?'on':''}" onclick="flagQ()">${quizFlags.has(quizIndex)?'🚩 Flagged':'🏳 Flag'}</button></div></div>`;}
-function pick(i){if(quizAnswers[quizIndex])return; const q=QUIZ[quizIndex]; quizAnswers[quizIndex]={type:q.type,selected:i,correct:(i===q.correct)}; renderQuizNav(); renderQ();}
-function subFill(){if(quizAnswers[quizIndex])return; const q=QUIZ[quizIndex]; const raw=(document.getElementById('fillInput').value||'').trim(); if(!raw){alert('Type!');return;} const c=q.correctText.some(t=>raw.toLowerCase().includes(t.toLowerCase())); quizAnswers[quizIndex]={type:'fill',raw,correct:c}; renderQuizNav(); renderQ();}
-function subOpen(){if(quizAnswers[quizIndex])return; const q=QUIZ[quizIndex]; const a=(document.getElementById('openInput').value||'').trim(); if(a.length<5){alert('Try harder!');return;} quizAnswers[quizIndex]={type:q.type,answer:a,correct:null}; renderQuizNav(); renderQ();}
+function startQuiz(){const n=document.getElementById('quiz-student-name').value.trim(); if(!n){alert('Name!');return;} quizIndex=0; quizAnswers={}; quizFlags=new Set(); quizHintsRevealed={}; quizSkipped=new Set(); quizFinished=false; quizStarted=true; document.getElementById('quizStart').classList.add('hide'); document.getElementById('quizArea').classList.remove('hide'); renderQuizLayout();}
+function renderQuizLayout(){
+  const legend = quizFinished
+    ? `<span><span class="qn-dot correct"></span> correct</span><span><span class="qn-dot wrong"></span> wrong</span><span><span class="qn-dot open"></span> open</span><span><span class="qn-dot flagged"></span> flagged</span>`
+    : `<span><span class="qn-dot answered"></span> answered</span><span><span class="qn-dot skipped"></span> skipped</span><span><span class="qn-dot flagged"></span> flagged</span>`;
+  const finishBtn = quizFinished
+    ? '<button class="btn" onclick="backToScore()">🏆 Back to score</button>'
+    : '<button class="btn success" onclick="confirmFinishQuiz()">🏁 Finish</button>';
+  document.getElementById('quizArea').innerHTML=`<div class="quiz-layout"><div class="quiz-nav-sticky"><div class="quiz-navigator"><h4>📋 QUESTIONS</h4><div class="qn-grid" id="qnGrid"></div><div class="qn-legend">${legend}</div></div><div class="submit-row" style="margin-top:10px;">${finishBtn}</div></div><div id="quizMain"></div></div>`;
+  renderQuizNav(); renderQ();
+}
+function renderQuizNav(){
+  const g=document.getElementById('qnGrid'); if(!g)return; g.innerHTML='';
+  QUIZ.forEach((q,i)=>{
+    const b=document.createElement('button');
+    b.className='qn';
+    if(i===quizIndex) b.classList.add('current');
+    const a=quizAnswers[i];
+    if(a){
+      if(quizFinished){
+        if(a.type==='open'||a.type==='experiment') b.classList.add('open');
+        else if(a.correct===true) b.classList.add('correct');
+        else if(a.correct===false) b.classList.add('wrong');
+      } else {
+        b.classList.add('answered');
+      }
+    } else if(quizSkipped.has(i)){
+      b.classList.add('skipped');
+    }
+    if(quizFlags.has(i)) b.classList.add('flagged');
+    b.textContent=i+1;
+    b.onclick=()=>{quizIndex=i; renderQuizNav(); renderQ();};
+    g.appendChild(b);
+  });
+}
+function renderQ(){
+  const main=document.getElementById('quizMain'); if(!main)return;
+  const q=QUIZ[quizIndex]; const ex=quizAnswers[quizIndex]; const isA=!!ex;
+  const diffMap={easy:'WARM-UP',medium:'BRAIN-STRETCH',hard:'THINKER',boss:'BOSS LEVEL!'};
+  const scen=q.scenario?`<div class="q-scenario">${q.scenario}</div>`:'';
+  const hintsHtml = renderHintsBlock(q, quizIndex, isA);
+  let body='';
+  if(q.type==='mcq'||q.type==='scenario') body=`<div class="choice-list">${q.choices.map((c,i)=>{
+    let k='choice';
+    if(isA){
+      if(quizFinished){
+        if(i===q.correct) k+=' correct';
+        else if(i===ex.selected) k+=' incorrect';
+      } else if(i===ex.selected){
+        k+=' selected';
+      }
+    }
+    return `<button class="${k}" onclick="pick(${i})" ${quizFinished?'disabled':''}>${String.fromCharCode(65+i)}. ${c}</button>`;
+  }).join('')}</div>`;
+  else if(q.type==='fill'){
+    const v=ex?ex.raw:'';
+    body=`<input type="text" id="fillInput" placeholder="Type…" value="${v.replace(/"/g,'&quot;')}" ${quizFinished?'disabled':''} style="width:100%;padding:12px;font-size:16px;border:2px solid #eee;border-radius:10px;" onkeydown="if(event.key==='Enter')subFill()" />${quizFinished?'':`<div class="submit-row"><button class="btn" onclick="subFill()">${isA?'Update':'Submit'}</button></div>`}`;
+  } else {
+    const v=ex?ex.answer:'';
+    body=`<textarea id="openInput" rows="4" ${quizFinished?'disabled':''} style="width:100%;padding:12px;font-size:15px;border:2px solid #eee;border-radius:10px;">${v}</textarea>${quizFinished?'':`<div class="submit-row"><button class="btn" onclick="subOpen()">${isA?'Update':'Submit'}</button></div>`}`;
+  }
+  let fb='';
+  if(isA && quizFinished){
+    let cls='correct',lbl='✅ Nice!';
+    if(ex.type==='open'||ex.type==='experiment'){cls='info'; lbl='✨ Submitted!';}
+    else if(ex.correct===false){cls='incorrect'; lbl='❌ Not quite.';}
+    let txt='';
+    if(q.type==='mcq'||q.type==='scenario') txt=q.feedback[ex.selected]||'';
+    else if(q.type==='fill') txt=q.feedback;
+    else txt=`Strong answer:<br><br>${(q.feedback||'').replace(/\n/g,'<br>')}`;
+    fb=`<div class="q-feedback show ${cls}"><b>${lbl}</b> ${txt}</div>`;
+  }
+  const answered=Object.keys(quizAnswers).length;
+  const pct=Math.round(((quizIndex+1)/QUIZ.length)*100);
+  const statusLine = quizFinished
+    ? '<span class="small" style="color:var(--ink-soft)">📖 Review mode — answers locked</span>'
+    : `<span class="small">${answered} done</span>`;
+  main.innerHTML=`<div class="quiz-progress"><span class="pill">Q ${quizIndex+1}/${QUIZ.length}</span><div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>${statusLine}</div><div class="q-card"><div class="q-difficulty ${q.diff}">${diffMap[q.diff]}${q.misconception?' · 🚨':''}</div><div class="q-text">${q.q}</div>${scen}${hintsHtml}${body}${fb}<div class="q-controls"><div class="submit-row" style="margin:0;"><button class="btn ghost" onclick="prevQ()" ${quizIndex===0?'disabled':''}>← Prev</button>${quizFinished?'':'<button class="btn secondary" onclick="skipQ()">Skip</button>'}<button class="btn" onclick="nextQ()" ${quizIndex===QUIZ.length-1?'disabled':''}>Next →</button></div><button class="q-flag ${quizFlags.has(quizIndex)?'on':''}" onclick="flagQ()">${quizFlags.has(quizIndex)?'🚩 Flagged':'🏳 Flag'}</button></div></div>`;
+}
+function pick(i){if(quizFinished)return; const q=QUIZ[quizIndex]; quizAnswers[quizIndex]={type:q.type,selected:i,correct:(i===q.correct)}; quizSkipped.delete(quizIndex); renderQuizNav(); renderQ();}
+function subFill(){if(quizFinished)return; const q=QUIZ[quizIndex]; const raw=(document.getElementById('fillInput').value||'').trim(); if(!raw){alert('Type!');return;} const c=q.correctText.some(t=>raw.toLowerCase().includes(t.toLowerCase())); quizAnswers[quizIndex]={type:'fill',raw,correct:c}; quizSkipped.delete(quizIndex); renderQuizNav(); renderQ();}
+function subOpen(){if(quizFinished)return; const q=QUIZ[quizIndex]; const a=(document.getElementById('openInput').value||'').trim(); if(a.length<5){alert('Try harder!');return;} quizAnswers[quizIndex]={type:q.type,answer:a,correct:null}; quizSkipped.delete(quizIndex); renderQuizNav(); renderQ();}
 function prevQ(){if(quizIndex>0){quizIndex--; renderQuizNav(); renderQ();}}
 function nextQ(){if(quizIndex<QUIZ.length-1){quizIndex++; renderQuizNav(); renderQ();}}
-function skipQ(){if(quizIndex<QUIZ.length-1)quizIndex++; renderQuizNav(); renderQ();}
+function skipQ(){
+  if(quizFinished) return;
+  if(!quizAnswers[quizIndex]) quizSkipped.add(quizIndex);
+  if(quizIndex<QUIZ.length-1) quizIndex++;
+  renderQuizNav(); renderQ();
+}
+function renderHintsBlock(q, qIdx, isAnsw) {
+  if (!q.hints || !q.hints.length) return '';
+  const total = q.hints.length;
+  const revealed = quizHintsRevealed[qIdx] || 0;
+  let html = '<div class="q-hints">';
+  for (let i = 0; i < revealed && i < total; i++) {
+    html += `<div class="hint-revealed"><b>💡 Hint ${i+1}:</b> ${q.hints[i]}</div>`;
+  }
+  if (!isAnsw && revealed < total) {
+    const label = revealed === 0 ? '💡 Need a hint?' : `💡 Show another hint (${revealed} of ${total} used)`;
+    html += `<button class="hint-btn" onclick="revealHint()">${label}</button>`;
+  } else if (revealed >= total) {
+    html += `<div class="hints-done">All ${total} hints revealed.</div>`;
+  }
+  html += '</div>';
+  return html;
+}
+function revealHint() {
+  const q = QUIZ[quizIndex];
+  if (!q || !q.hints) return;
+  const cur = quizHintsRevealed[quizIndex] || 0;
+  if (cur < q.hints.length) {
+    quizHintsRevealed[quizIndex] = cur + 1;
+    renderQ();
+  }
+}
 function flagQ(){if(quizFlags.has(quizIndex))quizFlags.delete(quizIndex); else quizFlags.add(quizIndex); renderQuizNav(); renderQ();}
 function confirmFinishQuiz(){const u=[]; for(let i=0;i<QUIZ.length;i++)if(!quizAnswers[i])u.push(i+1); let h='<p>Finish?</p>'; if(u.length)h+=`<p class="small">⚠️ ${u.length} unanswered</p>`; openModal('🏁 Finish?',h,[{label:'Yes',cls:'btn success',onClick:'finishQuiz()'},{label:'Not yet',cls:'btn ghost',onClick:'closeModal()'}]);}
-async function finishQuiz(){closeModal(); const n=document.getElementById('quiz-student-name').value.trim(); const list=QUIZ.map((q,i)=>({q:q.q,...(quizAnswers[i]||{unanswered:true}),flagged:quizFlags.has(i)})); const auto=list.filter(a=>typeof a.correct==='boolean'); const ac=auto.filter(a=>a.correct).length; const oc=list.filter(a=>a.correct===null).length; const p={type:'quiz',chapter:'C-2',student:n,ts:new Date().toISOString(),autoCorrect:ac,autoTotal:auto.length,openCount:oc,answers:list}; submissions.push(p); localStorage.setItem('c2_submissions',JSON.stringify(submissions)); let sent=false; if(settings.webhookUrl)try{const r=await fetch(settings.webhookUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)}); sent=r.ok;}catch(e){} const pct=auto.length?Math.round((ac/auto.length)*100):0; document.getElementById('quizArea').classList.add('hide'); document.getElementById('quizResult').classList.remove('hide'); const msg=pct===100?'🌟 PERFECT!':pct>=85?'🚀 Amazing!':pct>=70?'👏 Great!':pct>=50?'💪 Good!':'🌱 Keep going!'; const emailLink=(!sent&&settings.teacherEmail)?`<a class="btn secondary" href="mailto:${settings.teacherEmail}?subject=${encodeURIComponent('Quiz C-2 from '+n)}&body=${encodeURIComponent(JSON.stringify(p,null,2))}">📧 Email</a>`:''; document.getElementById('quizResult').innerHTML=`<div class="quiz-result"><h2>${msg}</h2><div class="score-donut" style="--p:${pct}"><span>${ac}/${auto.length}</span></div>${oc?`<p>Plus ${oc} open answers.</p>`:''}<div class="submit-row" style="justify-content:center;">${emailLink}<button class="btn ghost" onclick="location.reload()">🔁 Retake</button></div></div>`;}
+async function finishQuiz(){closeModal(); quizFinished=true; const n=document.getElementById('quiz-student-name').value.trim(); const list=QUIZ.map((q,i)=>({q:q.q,...(quizAnswers[i]||{unanswered:true}),flagged:quizFlags.has(i)})); const auto=list.filter(a=>typeof a.correct==='boolean'); const ac=auto.filter(a=>a.correct).length; const oc=list.filter(a=>a.correct===null).length; const p={type:'quiz',chapter:'C-2',student:n,ts:new Date().toISOString(),autoCorrect:ac,autoTotal:auto.length,openCount:oc,answers:list}; submissions.push(p); localStorage.setItem('c2_submissions',JSON.stringify(submissions)); let sent=false; if(settings.webhookUrl)try{const r=await fetch(settings.webhookUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)}); sent=r.ok;}catch(e){} const pct=auto.length?Math.round((ac/auto.length)*100):0; document.getElementById('quizArea').classList.add('hide'); document.getElementById('quizResult').classList.remove('hide'); const msg=pct===100?'🌟 PERFECT!':pct>=85?'🚀 Amazing!':pct>=70?'👏 Great!':pct>=50?'💪 Good!':'🌱 Keep going!'; const emailLink=(!sent&&settings.teacherEmail)?`<a class="btn secondary" href="mailto:${settings.teacherEmail}?subject=${encodeURIComponent('Quiz C-2 from '+n)}&body=${encodeURIComponent(JSON.stringify(p,null,2))}">📧 Email</a>`:''; document.getElementById('quizResult').innerHTML=`<div class="quiz-result"><h2>${msg}</h2><div class="score-donut" style="--p:${pct}"><span>${ac}/${auto.length}</span></div>${oc?`<p>Plus ${oc} open answers.</p>`:''}<div class="submit-row" style="justify-content:center;">${emailLink}<button class="btn" onclick="reviewAnswers()">🔍 Review answers</button><button class="btn ghost" onclick="location.reload()">🔁 Retake</button></div></div>`;}
+function reviewAnswers(){
+  document.getElementById('quizResult').classList.add('hide');
+  document.getElementById('quizArea').classList.remove('hide');
+  renderQuizLayout();
+}
+function backToScore(){
+  document.getElementById('quizArea').classList.add('hide');
+  document.getElementById('quizResult').classList.remove('hide');
+}
 
 function renderTeacher(){document.getElementById('apiKey').value=localStorage.getItem('c2_apiKey')||''; document.getElementById('apiStatus').textContent=localStorage.getItem('c2_apiKey')?'✓ Saved':''; document.getElementById('teacherEmail').value=settings.teacherEmail||''; document.getElementById('webhookUrl').value=settings.webhookUrl||''; const d=document.getElementById('submissionsTable'); if(!submissions.length)d.innerHTML='<p class="small">None yet.</p>'; else d.innerHTML='<table class="submissions-table"><tr><th>When</th><th>Student</th><th>Type</th><th>Result</th></tr>'+submissions.map(s=>`<tr><td>${new Date(s.ts).toLocaleString()}</td><td>${s.student||'?'}</td><td>${s.type}</td><td>${s.type==='quiz'?s.autoCorrect+'/'+s.autoTotal:Object.values(s.answers||{}).filter(Boolean).length+' ans'}</td></tr>`).join('')+'</table>';}
 function saveApiKey(){localStorage.setItem('c2_apiKey',document.getElementById('apiKey').value.trim()); document.getElementById('apiStatus').textContent='✓ Saved';}

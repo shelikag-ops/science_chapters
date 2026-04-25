@@ -390,16 +390,20 @@ a { color: var(--sky-dark); }
   display: grid; place-items: center;
 }
 .qn.current { border-color: var(--ink); box-shadow: 0 0 0 2px rgba(31,42,68,.2); color: var(--ink); }
-.qn.answered { background: #e9f7ef; border-color: var(--leaf); color: var(--leaf-dark); }
+.qn.answered { background: #eef7fc; border-color: var(--sky-dark); color: var(--sky-dark); }
+.qn.correct { background: #e9f7ef; border-color: var(--leaf); color: var(--leaf-dark); }
 .qn.wrong { background: #fde8e1; border-color: var(--animal); color: var(--animal); }
-.qn.open { background: #eef7fc; border-color: var(--sky-dark); color: var(--sky-dark); }
+.qn.open { background: #e7f1fb; border-color: #3a7ec0; color: #1f558a; }
+.qn.skipped { background: #fafaf4; border-color: #cfcfc8; color: #888; border-style: dashed; }
 .qn.flagged::after { content: "🚩"; position: absolute; top: -4px; right: -4px; font-size: 10px; }
 .qn-legend { font-size: 11px; color: var(--ink-soft); line-height: 1.5; border-top: 1px solid #eee; padding-top: 8px; margin-top: 4px; }
 .qn-legend span { display: inline-flex; align-items: center; gap: 4px; margin-right: 10px; }
 .qn-dot { width: 10px; height: 10px; border-radius: 3px; background: #fafaf4; border: 1.5px solid #eee; display: inline-block; }
-.qn-dot.answered { background: #e9f7ef; border-color: var(--leaf); }
+.qn-dot.answered { background: #eef7fc; border-color: var(--sky-dark); }
+.qn-dot.correct { background: #e9f7ef; border-color: var(--leaf); }
 .qn-dot.wrong { background: #fde8e1; border-color: var(--animal); }
-.qn-dot.open { background: #eef7fc; border-color: var(--sky-dark); }
+.qn-dot.open { background: #e7f1fb; border-color: #3a7ec0; }
+.qn-dot.skipped { background: #fafaf4; border-color: #cfcfc8; border-style: dashed; }
 .qn-dot.flagged { background: #fff; border-color: var(--berry); }
 
 .quiz-progress {
@@ -1668,13 +1672,15 @@ let TOTAL_SLIDES = 35;
 let quizIndex = 0;
 let quizAnswers = {};        // indexed by question index
 let quizFlags = new Set();
+let quizSkipped = new Set();
+let quizFinished = false;
 let quizHintsRevealed = {};  // qIdx -> number of hints revealed (0..hints.length)
 let quizStarted = false;
 let homework = {};
 let resources = JSON.parse(localStorage.getItem('b3_resources') || '[]');
 let links = JSON.parse(localStorage.getItem('b3_links') || '[]');
 let submissions = JSON.parse(localStorage.getItem('b3_submissions') || '[]');
-let settings = JSON.parse(localStorage.getItem('b3_settings') || '{}');
+let settings = JSON.parse(localStorage.getItem('b3_settings') || '{}'); if(!settings.webhookUrl)settings.webhookUrl='https://anthropic-proxy.shelikag.workers.dev/quiz';
 let videoOverrides = JSON.parse(localStorage.getItem('b3_videos') || '{}');
 let teacherMode = localStorage.getItem('b3_teacher') === '1';
 
@@ -2023,7 +2029,7 @@ function clearHomework() {
 function startQuiz() {
   const name = document.getElementById('quiz-student-name').value.trim();
   if (!name) { alert('Please type your name first.'); return; }
-  quizIndex = 0; quizAnswers = {}; quizFlags = new Set(); quizHintsRevealed = {}; quizStarted = true;
+  quizIndex = 0; quizAnswers = {}; quizFlags = new Set(); quizSkipped = new Set(); quizFinished = false; quizHintsRevealed = {}; quizStarted = true;
   document.getElementById('quizStart').classList.add('hide');
   document.getElementById('quizArea').classList.remove('hide');
   document.getElementById('quizResult').classList.add('hide');
@@ -2031,21 +2037,22 @@ function startQuiz() {
 }
 function renderQuizLayout() {
   const area = document.getElementById('quizArea');
+  const legend = quizFinished
+    ? `<span><span class="qn-dot correct"></span> correct</span><span><span class="qn-dot wrong"></span> wrong</span><span><span class="qn-dot open"></span> open</span><span><span class="qn-dot flagged"></span> 🚩 flagged</span>`
+    : `<span><span class="qn-dot answered"></span> answered</span><span><span class="qn-dot skipped"></span> skipped</span><span><span class="qn-dot flagged"></span> 🚩 flagged</span>`;
+  const finishBtn = quizFinished
+    ? '<button class="btn" onclick="backToScore()">🏆 Back to score</button>'
+    : '<button class="btn success" onclick="confirmFinishQuiz()" id="finishBtn">🏁 Finish</button>';
   area.innerHTML = `
     <div class="quiz-layout">
       <div class="quiz-nav-sticky">
         <div class="quiz-navigator">
           <h4>📋 ALL QUESTIONS</h4>
           <div class="qn-grid" id="qnGrid"></div>
-          <div class="qn-legend">
-            <span><span class="qn-dot answered"></span> answered</span>
-            <span><span class="qn-dot wrong"></span> wrong</span>
-            <span><span class="qn-dot open"></span> open</span>
-            <span><span class="qn-dot flagged"></span> 🚩 flagged</span>
-          </div>
+          <div class="qn-legend">${legend}</div>
         </div>
         <div class="submit-row" style="margin-top:10px;">
-          <button class="btn success" onclick="confirmFinishQuiz()" id="finishBtn">🏁 Finish</button>
+          ${finishBtn}
         </div>
         <div class="add-new-row teacher-only ${teacherMode?'':'hide'}" style="margin-top:10px;">
           <button onclick="addNewQuizQuestion()">➕ Add question</button>
@@ -2068,9 +2075,15 @@ function renderQuizNavigator() {
     if (i === quizIndex) btn.classList.add('current');
     const a = quizAnswers[i];
     if (a) {
-      if (a.type === 'open' || a.type === 'experiment') btn.classList.add('open');
-      else if (a.correct === true) btn.classList.add('answered');
-      else if (a.correct === false) btn.classList.add('wrong');
+      if (quizFinished) {
+        if (a.type === 'open' || a.type === 'experiment') btn.classList.add('open');
+        else if (a.correct === true) btn.classList.add('correct');
+        else if (a.correct === false) btn.classList.add('wrong');
+      } else {
+        btn.classList.add('answered');
+      }
+    } else if (quizSkipped.has(i)) {
+      btn.classList.add('skipped');
     }
     if (quizFlags.has(i)) btn.classList.add('flagged');
     btn.textContent = i+1;
@@ -2094,24 +2107,28 @@ function renderCurrentQuestion() {
     body = `<div class="choice-list">${q.choices.map((c,i)=>{
       let klass = 'choice';
       if (isAnswered) {
-        if (i === q.correct) klass += ' correct';
-        else if (i === existing.selected) klass += ' incorrect';
-      } else if (existing && existing.selected === i) klass += ' selected';
-      const disabled = isAnswered ? 'disabled' : '';
+        if (quizFinished) {
+          if (i === q.correct) klass += ' correct';
+          else if (i === existing.selected) klass += ' incorrect';
+        } else if (i === existing.selected) {
+          klass += ' selected';
+        }
+      }
+      const disabled = quizFinished ? 'disabled' : '';
       return `<button class="${klass}" onclick="pickChoice(${i})" ${disabled}>${String.fromCharCode(65+i)}. ${c}</button>`;
     }).join('')}</div>`;
   } else if (q.type === 'fill') {
     const val = existing ? existing.raw : '';
-    body = `<input type="text" id="fillInput" placeholder="Type your answer…" value="${val.replace(/"/g,'&quot;')}" ${isAnswered?'disabled':''} style="width:100%;padding:12px;font-size:16px;border:2px solid #eee;border-radius:10px;" onkeydown="if(event.key==='Enter')submitFill()" />${isAnswered?'':'<div class="submit-row"><button class="btn" onclick="submitFill()">Submit</button></div>'}`;
+    body = `<input type="text" id="fillInput" placeholder="Type your answer…" value="${val.replace(/"/g,'&quot;')}" ${quizFinished?'disabled':''} style="width:100%;padding:12px;font-size:16px;border:2px solid #eee;border-radius:10px;" onkeydown="if(event.key==='Enter')submitFill()" />${quizFinished?'':`<div class="submit-row"><button class="btn" onclick="submitFill()">${isAnswered?'Update':'Submit'}</button></div>`}`;
   } else if (q.type === 'open') {
     const val = existing ? existing.answer : '';
-    body = `<textarea id="openInput" rows="4" placeholder="Write your answer here…" ${isAnswered?'disabled':''} style="width:100%;padding:12px;font-size:15px;border:2px solid #eee;border-radius:10px;">${val}</textarea>${isAnswered?'':'<div class="submit-row"><button class="btn" onclick="submitOpen()">Submit my answer</button><span class="small">This one\'s judged by your teacher, not the computer.</span></div>'}`;
+    body = `<textarea id="openInput" rows="4" placeholder="Write your answer here…" ${quizFinished?'disabled':''} style="width:100%;padding:12px;font-size:15px;border:2px solid #eee;border-radius:10px;">${val}</textarea>${quizFinished?'':`<div class="submit-row"><button class="btn" onclick="submitOpen()">${isAnswered?'Update':'Submit my answer'}</button><span class="small">This one's judged by your teacher, not the computer.</span></div>`}`;
   } else if (q.type === 'experiment') {
     const val = existing ? existing.answer : '';
-    body = `<textarea id="openInput" rows="5" placeholder="Describe what you did and what you saw…" ${isAnswered?'disabled':''} style="width:100%;padding:12px;font-size:15px;border:2px solid #eee;border-radius:10px;">${val}</textarea>${isAnswered?'':'<div class="submit-row"><button class="btn" onclick="submitOpen()">I did the experiment! Submit</button><span class="small">🧪 Real-world experiment — teacher will review.</span></div>'}`;
+    body = `<textarea id="openInput" rows="5" placeholder="Describe what you did and what you saw…" ${quizFinished?'disabled':''} style="width:100%;padding:12px;font-size:15px;border:2px solid #eee;border-radius:10px;">${val}</textarea>${quizFinished?'':`<div class="submit-row"><button class="btn" onclick="submitOpen()">${isAnswered?'Update':'I did the experiment! Submit'}</button><span class="small">🧪 Real-world experiment — teacher will review.</span></div>`}`;
   }
   let feedbackHtml = '';
-  if (isAnswered) {
+  if (isAnswered && quizFinished) {
     let cls = 'correct', label = '✅ Nice!';
     if (existing.type === 'open' || existing.type === 'experiment') { cls = 'info'; label = '✨ Submitted!'; }
     else if (existing.correct === false) { cls = 'incorrect'; label = '❌ Not quite.'; }
@@ -2147,7 +2164,7 @@ function renderCurrentQuestion() {
       <div class="q-controls">
         <div class="submit-row" style="margin:0;">
           <button class="btn ghost" onclick="prevQuestion()" ${quizIndex===0?'disabled':''}>← Previous</button>
-          <button class="btn secondary" onclick="skipQuestion()">Skip ⏭</button>
+          ${quizFinished?'':'<button class="btn secondary" onclick="skipQuestion()">Skip ⏭</button>'}
           <button class="btn" onclick="nextQuestion()" ${quizIndex===quizList.length-1?'disabled':''}>Next →</button>
         </div>
         <button class="q-flag ${quizFlags.has(quizIndex)?'on':''}" onclick="toggleFlag()">${quizFlags.has(quizIndex) ? '🚩 Flagged' : '🏳 Flag for review'}</button>
@@ -2157,8 +2174,9 @@ function renderCurrentQuestion() {
 }
 function pickChoice(i) {
   const q = quizQ(quizIndex);
-  if (quizAnswers[quizIndex]) return;
+  if (quizFinished) return;
   quizAnswers[quizIndex] = { type: q.type, selected: i, correct: (i === q.correct) };
+  quizSkipped.delete(quizIndex);
   renderQuizNavigator();
   renderCurrentQuestion();
 }
@@ -2192,27 +2210,31 @@ function revealHint() {
 }
 function submitFill() {
   const q = quizQ(quizIndex);
-  if (quizAnswers[quizIndex]) return;
+  if (quizFinished) return;
   const raw = (document.getElementById('fillInput').value || '').trim();
   if (!raw) { alert('Type an answer first!'); return; }
   const ans = raw.toLowerCase();
   const correct = (q.correctText||[]).some(t => ans.includes(t.toLowerCase()));
   quizAnswers[quizIndex] = { type:'fill', raw, correct };
+  quizSkipped.delete(quizIndex);
   renderQuizNavigator();
   renderCurrentQuestion();
 }
 function submitOpen() {
   const q = quizQ(quizIndex);
-  if (quizAnswers[quizIndex]) return;
+  if (quizFinished) return;
   const ans = (document.getElementById('openInput').value || '').trim();
   if (ans.length < 5) { alert("Give it a real try — at least a sentence!"); return; }
   quizAnswers[quizIndex] = { type: q.type, answer: ans, correct: null };
+  quizSkipped.delete(quizIndex);
   renderQuizNavigator();
   renderCurrentQuestion();
 }
 function prevQuestion() { if (quizIndex>0) { quizIndex--; renderQuizNavigator(); renderCurrentQuestion(); } }
 function nextQuestion() { const L = getQuizList().length; if (quizIndex<L-1) { quizIndex++; renderQuizNavigator(); renderCurrentQuestion(); } }
 function skipQuestion() {
+  if (quizFinished) return;
+  if (!quizAnswers[quizIndex]) quizSkipped.add(quizIndex);
   const L = getQuizList().length;
   if (quizIndex < L-1) { quizIndex++; }
   else {
@@ -2239,6 +2261,7 @@ function confirmFinishQuiz() {
 }
 async function finishQuiz() {
   closeModal();
+  quizFinished = true;
   const name = document.getElementById('quiz-student-name').value.trim();
   const quizList = getQuizList();
   const answerList = quizList.map((q, i) => ({ q: q.q, ...(quizAnswers[i] || { unanswered: true }), flagged: quizFlags.has(i) }));
@@ -2270,11 +2293,21 @@ async function finishQuiz() {
       <p class="small">${sent ? '✅ Automatically sent to teacher.' : settings.teacherEmail ? '👇 Click below to email your results.' : '💾 Saved locally. Ask teacher to set up email/webhook.'}</p>
       <div class="submit-row" style="justify-content:center;">
         ${emailLink}
+        <button class="btn" onclick="reviewAnswers()">🔍 Review answers</button>
         <button class="btn" onclick="downloadQuiz()">💾 Download results</button>
         <button class="btn ghost" onclick="location.reload()">🔁 Retake</button>
       </div>
     </div>
   `;
+}
+function reviewAnswers() {
+  document.getElementById('quizResult').classList.add('hide');
+  document.getElementById('quizArea').classList.remove('hide');
+  renderQuizLayout();
+}
+function backToScore() {
+  document.getElementById('quizArea').classList.add('hide');
+  document.getElementById('quizResult').classList.remove('hide');
 }
 function downloadQuiz() {
   const last = submissions.filter(s => s.type==='quiz').slice(-1)[0];
