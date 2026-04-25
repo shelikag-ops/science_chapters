@@ -118,8 +118,27 @@ Every chapter MUST include all 7:
 - **Slide count adapts to depth.** Topic-narrow chapters = 12-15 slides. Topic-rich (multi-curriculum merges) = 18-22 slides. Don't pad; don't truncate.
 - **Sessions adapt to depth.** Single-concept chapters = 1 session (~60 min). Two-concept chapters = 2 sessions (e.g. "Why does this happen?" + "How do we measure it?"). Avoid 3 sessions for an 8-year-old unless the topic genuinely demands it.
 - **Mysteries (5-6 per chapter)** are interleaved with concept slides, NOT clustered at the end. Each mystery is solvable with a concept already taught.
+
+### 🔁 Interleaving Rule (videos + activities live next to their concept)
+
+> **Videos and activities are placed IMMEDIATELY AFTER the concept they reinforce — never at the end.**
+
+The point isn't to "watch a video" or "do an activity" as a generic deliverable. The point is to use them at the EXACT moment the student is forming the concept, so they reinforce understanding RIGHT THEN.
+
+- ❌ **Wrong:** Concept slide → Mystery → Mystery → Mystery → Spiral → Watch video → Summary
+- ✅ **Right:** Concept slide → **Video about the concept** → Mystery using the concept → ...
+- ❌ **Wrong:** Tools slide → Mystery → Mystery → Mystery → ... → Demo using the tools
+- ✅ **Right:** Tools slide → **Demo using those tools immediately** → Mystery applying them
+
+**Practical placement:**
+- After the **Concept anchor**, place a video (if exists) that introduces the concept visually.
+- After a **Tools/Methods slide**, place a hands-on demo using those tools.
+- After the **Evidence slide**, optionally place a small confirmatory experiment.
+- The "Spiral META" slide and the "Edge case mystery" can come at the END of the lesson — they synthesize, not introduce.
+
 - **Each chapter must have:**
   - A **conceptual anchor slide** (the WHY before the WHAT).
+  - **A video or activity placed right after each major concept** (interleaving rule).
   - An **evidence slide** (multi-source confirmation).
   - A **spiral callback slide** (1+ link to prior chapter).
   - A **session-end recap** (between Session 1 and Session 2 if multi-session).

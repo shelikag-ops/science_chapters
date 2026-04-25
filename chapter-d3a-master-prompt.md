@@ -42,23 +42,27 @@ This is a HOOK, but it's followed immediately by a CONCEPT slide — not by anot
 
 ### Session 1 (15 slides total, 1 session)
 
+> **Note on ordering:** Videos and activities are placed IMMEDIATELY after the concept they reinforce. See **Interleaving Rule** in `CHAPTER_QUALITY_GUIDE.md` Part 4.
+
 | # | Type | Title | Purpose |
 |---|---|---|---|
 | 1 | Title | Finding Your Way | Welcome |
 | 2 | Big Q | How did sailors cross oceans? | Hook |
-| 3 | **CONCEPT** | 🌍 The Spinning Top | **Earth axis = 2 still points = N and S. Includes ball-spinning hands-on demo.** |
+| 3 | **CONCEPT** | 🌍 The Spinning Top | **Earth axis = 2 still points = N and S. Includes ball-spinning hands-on demo (activity paired with concept).** |
 | 4 | Cards | The 4 Cardinal Directions | N/E/S/W derived from Concept |
-| 5 | **EVIDENCE** | Mystery #1 — How do we KNOW which way is north? | 4 independent sources confirm N. Includes apparent-vs-actual motion. |
-| 6 | Tools | The 4 Tools Explorers Used | **Step-by-step HOW each tool works** (shadow stick, Polaris via Big Dipper, compass usage, nature hints). Plus Scientist's Note: "Hints, not Laws." |
-| 7 | **APPLICATION** | Mystery #2 — Why does compass point north? | **Spiral to A-5A.** Frame compass as APPLICATION of magnetic-field law. Includes magnetic declination nuance. |
-| 8 | Cards + Math | The 4 Intercardinal Directions | NE/SE/SW/NW + **Singapore Math derivation: 360÷4=90°, 90÷2=45°.** Plus full azimuth labels (0°/90°/180°/270°). |
-| 9 | Application | Mystery #3 — Why doesn't Polaris move? | **Spiral to D-2.** Logical deduction from Concept slide #3. |
-| 10 | Application | Mystery #4 — How did ancient sailors navigate? | **Variable-Based Challenge: cloudy sky — which clues fail vs work?** |
-| 11 | Demo | Find North 3 Ways | Shadow stick / Watch / Compass app. **Plus Olympiad Bonus: Mystery Object + Navigator's Log table.** |
-| 12 | Spiral META | How This Chapter Connects to Others | Magnets (A-5A) + Directions (this) + Maps (D-3) = Navigation |
-| 13 | Application | Mystery #5 — What happens at the North Pole? | All directions = south. Edge case demonstrates Concept's power. |
-| 14 | Video | How to Find Your Way | **Includes embed AND clickable YouTube link AND 2 backup videos** (in case embedding is blocked). |
+| 5 | **VIDEO** ⭐ | Watch: How to Find Your Way | **Placed RIGHT AFTER cardinal directions intro to reinforce the basic concept visually before mysteries begin.** Has YouTube fallback link. |
+| 6 | **EVIDENCE** | Mystery #1 — How do we KNOW which way is north? | 4 independent sources confirm N. Includes apparent-vs-actual motion. |
+| 7 | Tools | The 4 Tools Explorers Used | **Step-by-step HOW each tool works** (shadow stick, Polaris via Big Dipper, compass usage, nature hints). Plus Scientist's Note: "Hints, not Laws." |
+| 8 | **DEMO** ⭐ | Find North 3 Ways | **Placed RIGHT AFTER Tools slide so student practices using each tool immediately.** Plus Olympiad Bonus: Mystery Object + Navigator's Log table. |
+| 9 | **APPLICATION** | Mystery #2 — Why does compass point north? | **Spiral to A-5A.** Frame compass as APPLICATION of magnetic-field law. Includes magnetic declination nuance. |
+| 10 | Cards + Math | The 4 Intercardinal Directions | NE/SE/SW/NW + **Singapore Math derivation: 360÷4=90°, 90÷2=45°.** Plus full azimuth labels (0°/90°/180°/270°). |
+| 11 | Application | Mystery #3 — Why doesn't Polaris move? | **Spiral to D-2.** Logical deduction from Concept slide #3. |
+| 12 | Application | Mystery #4 — How did ancient sailors navigate? | **Variable-Based Challenge: cloudy sky — which clues fail vs work?** |
+| 13 | Spiral META | How This Chapter Connects to Others | Magnets (A-5A) + Directions (this) + Maps (D-3) = Navigation |
+| 14 | Application | Mystery #5 — What happens at the North Pole? | All directions = south. Edge case demonstrates Concept's power. |
 | 15 | Summary | What you now know | Recap |
+
+**⭐ marks slides that follow the Interleaving Rule** — video reinforces concept introduced one slide earlier; demo lets student practice tools they just learned about.
 
 ---
 
