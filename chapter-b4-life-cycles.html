@@ -208,6 +208,12 @@ a { color: var(--sky-dark); }
 .q-feedback.correct { background: #e9f7ef; border-left: 4px solid var(--leaf); }
 .q-feedback.incorrect { background: #fde8e1; border-left: 4px solid var(--animal); }
 .q-feedback.info { background: #eef7fc; border-left: 4px solid var(--sky-dark); }
+.q-hints { margin: 10px 0 14px; }
+.hint-revealed { background: #fff8d6; border-left: 4px solid #f5b400; padding: 10px 14px; border-radius: 8px; margin: 8px 0; font-size: 14px; }
+.hint-revealed b { color: #8a5a00; }
+.hint-btn { background: linear-gradient(135deg, #ffe7a3, #ffc452); color: #5a4500; border: 2px solid #f0b53a; padding: 8px 14px; border-radius: 999px; cursor: pointer; font-weight: 700; font-size: 13px; }
+.hint-btn:hover { transform: translateY(-1px); box-shadow: 0 2px 8px rgba(255,170,0,.25); }
+.hints-done { font-size: 12px; color: var(--ink-soft); margin-top: 6px; font-style: italic; }
 .q-controls { display: flex; justify-content: space-between; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 14px; }
 .q-flag { background: transparent; border: 2px solid #eee; padding: 8px 12px; border-radius: 10px; font-weight: 700; color: var(--ink-soft); }
 .q-flag.on { background: #fef0f5; border-color: var(--berry); color: var(--berry); }
@@ -797,7 +803,7 @@ const HOMEWORK = [
 ];
 
 const QUIZ = [
-  { type:"mcq", diff:"easy", q:"What is a life cycle?", choices:["A machine that makes babies","The journey from baby to grown-up and back to baby","A bicycle for life","A special kind of weather"], correct:1, feedback:["Nope!","Yes! It's the whole circle.","Cute, but no.","Different kind of cycle."] },
+  { type:"mcq", diff:"easy", q:"What is a life cycle?", choices:["The order all living things eat each other in","The journey from baby to grown-up to having babies of your own","The number of years a living thing is alive","How fast a heart beats during one day"], correct:1, feedback:["That's a food chain — different idea.","Yes! It's the whole circle: born → grow → make new babies → repeat.","That's lifespan — the length, not the cycle.","That's heart rate — totally different cycle."] },
   { type:"fill", diff:"easy", q:"The baby of a butterfly is called a ______.", correctText:["caterpillar","larva"], feedback:"A caterpillar (also called a larva)!" },
   { type:"mcq", diff:"easy", q:"Which group feeds their babies milk?", choices:["Birds","Mammals","Frogs","Plants"], correct:1, feedback:["Birds lay eggs, no milk.","Yes! Only mammals make milk.","Frogs don't.","Plants definitely don't."] },
   { type:"fill", diff:"easy", q:"The big word for 'caterpillar turns into butterfly' is ______.", correctText:["metamorphosis"], feedback:"Metamorphosis — means 'big body change'!" },
@@ -807,51 +813,132 @@ const QUIZ = [
   { type:"mcq", diff:"easy", q:"Which animals lay eggs in water?", choices:["Elephants","Dogs","Frogs","Horses"], correct:2, feedback:["Live birth.","Live birth.","Yes! Frogs lay eggs in ponds.","Live birth."] },
   { type:"scenario", diff:"medium", q:"You find a small black ball of jelly in a pond. A few days later, you see wiggling fish-like things with tails. What life cycle are you watching?", choices:["Fish","Frog","Turtle","Butterfly"], correct:1, scenario:"The 'fish-like thing with a tail' gives it away.", feedback:["Fish hatch as tiny fish, not tadpoles.","Yes! Those are tadpoles — baby frogs.","Turtles hatch with shells.","Butterflies don't live in water."] },
   { type:"mcq", diff:"medium", q:"Why does a mother dog have 6 puppies but an elephant has just 1 baby?",
-    choices:["Elephants are lazy","Because elephants care for their babies for years, so they don't need to make many; dogs need extras because fewer survive","Because dogs are smaller","It's random"], correct:1, feedback:["Nope.","Yes! Fewer babies = more parent care. More babies = less care.","Size isn't the rule.","There's a real pattern."] },
+    choices:[
+      "Elephants are bigger, so they can only fit one baby at a time",
+      "Elephants invest years protecting one baby; dogs make extras because not all puppies survive in the wild",
+      "Dogs are friendlier and want to share their babies with humans",
+      "Wild dogs only have 1 puppy — pet dogs have more because they're well-fed"
+    ], correct:1,
+    hints:[
+      "Think about how MUCH each parent does after the baby is born. Elephant moms care for their calf for over a decade. What do dog moms do?",
+      "When parents give lots of care, more babies survive — so you don't need many. When parents give little care, you need extras as backup. Which strategy fits each animal?"
+    ],
+    feedback:[
+      "⚠️ Body size matters a little, but blue whales are huge and only have 1 calf, while small mice have many. So size isn't the rule.",
+      "Yes! Lots of parent care = few babies needed. Less parent care = more babies needed as 'safety stock'.",
+      "⚠️ Friendliness isn't the science — it's about survival math.",
+      "⚠️ Pet dogs and wild dogs both typically have 4–8 puppies. The pattern is built into the species, not the lifestyle."
+    ] },
   { type:"scenario", diff:"medium", q:"You see a pupa hanging from a branch. What stage of life cycle comes BEFORE this?", choices:["Adult butterfly","Caterpillar","Egg","Flower"], correct:1, scenario:"Think through the butterfly cycle.", feedback:["That comes after!","Yes! Caterpillar → pupa → butterfly.","Egg comes before the caterpillar.","Flowers aren't butterflies."] },
-  { type:"mcq", diff:"medium", q:"A friend says 'my cat gave birth to a puppy.' Why is this impossible?", choices:["Cats can't have babies","Different species can't make babies together","Puppies aren't real","Cats are too small"], correct:1, misconception:true, feedback:["⚠️ Cats absolutely have babies.","Yes! Rule #1 of life cycles: only same species can reproduce together.","⚠️ Puppies are very real!","⚠️ Size isn't the issue."] },
+  { type:"mcq", diff:"medium", q:"A friend says 'my cat gave birth to a puppy.' Why is this impossible?", choices:[
+      "Cats and dogs are very different sizes, so the baby wouldn't fit",
+      "A baby can only ever be the same species as its parents — cats make kittens, dogs make puppies",
+      "Cats are mammals but dogs are reptiles, so their cycles don't match",
+      "It IS possible — vets call it a 'cog' or 'dat'; it's just rare"
+    ], correct:1, misconception:true, feedback:[
+      "⚠️ Size is a side issue. The deeper rule is about species, not body size.",
+      "Yes! Rule #1 of life cycles: babies are the same species as their parents. Different species can't reproduce together.",
+      "⚠️ Both cats AND dogs are mammals. The blocker isn't mammal vs reptile — it's that they're different species.",
+      "⚠️ Common myth! No such hybrid exists. Cats and dogs are too biologically different to make a baby together."
+    ] },
   { type:"fill", diff:"medium", q:"Every life cycle starts when a male's sperm meets a female's egg — this meeting is called ______.", correctText:["fertilization","fertilisation"], feedback:"Fertilization! The moment the cycle begins." },
   { type:"mcq", diff:"medium", q:"A frog lays 2,000 eggs. On average, how many must grow up and have babies to keep the frog population stable?", choices:["2,000","200","20","2"], correct:3, misconception:true, feedback:["⚠️ That would double the population every year!","⚠️ Still way too many.","⚠️ Too many.","Correct! Just 2 — one boy, one girl to replace the parents."] },
-  { type:"scenario", diff:"medium", q:"You open a pumpkin and count 600 seeds. If every single seed grew into a new pumpkin plant that also had 600 seeds, after just 3 years, Earth would be covered in pumpkins. Why isn't it?", choices:["Pumpkins are fake","Most seeds never grow — they're eaten, rot, or land somewhere bad","Pumpkins are small","We eat them all"], correct:1, feedback:["Pumpkins are real.","Yes! Over-production exists because most don't make it.","Nope.","We eat some, but that's not the main reason."] },
+  { type:"scenario", diff:"medium", q:"You open a pumpkin and count 600 seeds. If every seed grew into a pumpkin plant that also had 600 seeds, in just 3 years Earth would be covered in pumpkins. Why isn't it?", choices:[
+      "Pumpkin seeds get less powerful each generation, so by year 2 most can't grow",
+      "Most seeds never grow — they get eaten by animals, rot in the soil, or land somewhere with no water",
+      "Plants secretly limit how many of their own seeds can sprout in the same area",
+      "Pumpkin plants only let 600 seeds grow per planet, total — it's a built-in cap"
+    ], correct:1, feedback:[
+      "⚠️ Seeds don't get weaker each generation — every fresh seed has full potential.",
+      "Yes! Over-production happens because most seeds don't make it. The plant 'budgets' for huge losses.",
+      "⚠️ Plants don't actively limit each other like that — the limits come from the environment.",
+      "⚠️ There's no built-in cap. The limits are food, water, space, and predators — all environmental."
+    ] },
   { type:"mcq", diff:"medium", q:"Which is a mammal life cycle feature that's UNIQUE to mammals?", choices:["Hatches from egg","Drinks milk from mom","Has legs","Breathes air"], correct:1, feedback:["Some mammals (platypus!) lay eggs, but the MILK is the key.","Yes! Only mammals make milk.","Lots of animals have legs.","Lots of animals breathe air."] },
   { type:"fill", diff:"medium", q:"Identical twins start as ______ fertilized egg that splits in two.", correctText:["one","1"], feedback:"One! That's why they share identical genes." },
   { type:"mcq", diff:"medium", q:"Which is NOT usually an 'environmental factor' that decides survival?",
-    choices:["Food availability","Predators","Color of the sky","Temperature"], correct:2, feedback:["Food matters!","Predators matter!","Correct — sky color doesn't affect survival.","Temperature matters big time."] },
-  { type:"scenario", diff:"hard", q:"Gardens with one type of plant (like all corn) are called monocultures. A disease hits corn and spreads fast. Why does it spread so well when all the plants are identical?", choices:["Plants are dumb","When all plants are nearly identical, a germ that beats one can beat them all","The plants fight each other","Disease likes tall plants"], correct:1, feedback:["Not the answer.","Yes! Variation helps populations survive disease. Monoculture = no variation = disaster risk.","They don't fight.","Not about height."] },
-  { type:"scenario", diff:"hard", q:"A pair of rabbits has 40 babies. Normally the population stays stable. If this year a new highway kills a lot of adult rabbits, what will you likely see NEXT year?", choices:["More babies survive to adulthood, population tries to bounce back","All rabbits disappear","Rabbits grow wings","Nothing changes"], correct:0, feedback:["Yes! Over-production is a safety net — when times are tough, more babies survive to fill gaps. This is how nature recovers.","Not necessarily.","😂 No.","Something changes!"] },
+    choices:["How much food is around","How many predators are nearby","The favorite color of the parents","How hot or cold the climate is"], correct:2, feedback:[
+      "⚠️ Food availability is a major environmental factor.",
+      "⚠️ Predators are a huge environmental factor.",
+      "Yes — there's no such thing as a parent's 'favorite color' affecting survival. Environmental factors are about the world around the animal, not preferences.",
+      "⚠️ Temperature is one of THE biggest environmental factors — too hot or too cold and life cycles can't even start."
+    ] },
+  { type:"scenario", diff:"hard", q:"Gardens with one type of plant (like all corn) are called monocultures. A disease hits corn and spreads fast. Why does it spread so well when all the plants are identical?", choices:[
+      "Identical plants share roots underground, so the germ travels through them",
+      "When plants are nearly identical, a germ that beats one can beat all of them — there's no variation to slow it down",
+      "Diseases reproduce faster in tidy farm rows than in wild forests",
+      "All the plants reach maturity at the same time, so they're all weak together"
+    ], correct:1, hints:[
+      "Imagine 100 kids who are all clones. A virus that infects one kid will probably infect all 100, because their immune systems are identical. Now compare that to 100 kids with different genes.",
+      "What does VARIATION do for a population when a new threat shows up?"
+    ], feedback:[
+      "⚠️ Plants don't share roots underground (mostly). The disease spreads through air, water, and contact.",
+      "Yes! Variation is a population's defense. When all plants are clones, one disease that beats one plant beats them all — no genetic backups.",
+      "⚠️ Diseases don't care about row layout — they care about whether the next host can fight them off.",
+      "⚠️ Same maturity timing helps a little, but the deeper issue is identical genes = identical weaknesses."
+    ] },
+  { type:"scenario", diff:"hard", q:"A pair of rabbits has 40 babies a year. Normally the population stays stable. If this year a new highway kills a lot of adult rabbits, what will you most likely see NEXT year?", choices:[
+      "More of those 40 babies survive to adulthood, because there's now more food and space for them — population tries to bounce back",
+      "The remaining adult rabbits start having even more babies than normal to make up the loss",
+      "Rabbits stay away from the highway forever, so the population shifts to the other side and never returns",
+      "The whole population collapses — the few survivors give up on having babies"
+    ], correct:0, feedback:[
+      "Yes! Over-production is the safety net. When times are tough, more of those extra babies have room to survive and replace the losses. This is how nature recovers.",
+      "⚠️ Rabbits don't decide to have more babies based on news — the litter size is built in. The bounce-back comes from MORE BABIES SURVIVING, not more being born.",
+      "⚠️ Population shift can happen briefly, but rabbits don't permanently abandon territory — and the question is about TOTAL population.",
+      "⚠️ Healthy populations don't 'give up' — life cycles continue automatically as long as adults are alive."
+    ] },
   { type:"mcq", diff:"hard", q:"Which life-cycle strategy makes more sense for a species with MANY predators?",
     choices:["Have 1 baby and protect it forever","Have tons of babies, hope some survive","Never reproduce","Eat predators"], correct:1, misconception:true, feedback:["⚠️ With tons of predators, 1 baby is very risky — it might get eaten.","Yes! Frogs, fish, insects do this — the 'many eggs' strategy.","Then the species ends.","⚠️ Many prey animals aren't big enough to eat predators."] },
   { type:"open", diff:"hard", q:"Penguins lay 1 egg a year. Salmon lay 7,000 eggs a year. Both species are still around. Explain WHY both strategies work. (2–3 sentences.)", scenario:"Think about what parent penguins do vs. parent salmon.", feedback:"Expected: Penguins invest HEAVILY in their one baby — both parents take turns keeping the egg warm, then protecting and feeding the chick. High parent care = few babies needed. Salmon lay eggs and swim away. Most eggs get eaten, but with 7,000, at least 2 usually survive. Low parent care = many babies needed. Both strategies work because they balance the equation in different ways." },
   { type:"experiment", diff:"hard", q:"HANDS-ON: Plant 3 beans — one in bright light, one in a dark cupboard, one in the fridge. Water them all the same. Check each day for 1 week. Which sprouts first? Write your observation and what it tells you about environmental factors.", feedback:"The bright-light one usually sprouts first; the fridge one likely doesn't sprout at all (too cold = seed stays dormant); the dark one may sprout but look pale. This shows temperature + light affect whether life cycles even START." },
-  { type:"scenario", diff:"hard", q:"A species of bird lays only 2 eggs per pair per year. A disease kills the adults, and the bird population drops 80%. Will this species recover quickly, slowly, or maybe not at all?", choices:["Very quickly","Slowly — because they only make 2 offspring per year, there's little 'extra' to rebuild from","Never","Instantly"], correct:1, misconception:true, feedback:["⚠️ With low reproduction rates, recovery is slow.","Yes! Species with few offspring are vulnerable to disasters. This is why we worry about pandas, elephants, whales.","Not necessarily — some might still survive.","⚠️ Not instant!"] },
+  { type:"scenario", diff:"hard", q:"A species of bird lays only 2 eggs per pair per year. A disease kills the adults, and the bird population drops 80%. How fast will this species recover?", choices:[
+      "Quickly — fewer adults means more food per bird, so survivors will lay more eggs to make up the loss",
+      "Slowly — they only make 2 offspring per year, so there's barely any 'extra' to rebuild from after a disaster",
+      "Right back to normal in one season, like rabbits do after a bad winter",
+      "It depends only on whether the disease comes back — reproduction speed doesn't really matter"
+    ], correct:1, misconception:true, feedback:[
+      "⚠️ Birds can't suddenly lay more eggs than their species' biology allows — the egg count is built in.",
+      "Yes! Species with few offspring per year are very vulnerable to population crashes. This is why we worry about pandas, elephants, and condors.",
+      "⚠️ Rabbits CAN bounce back fast because they make 40+ babies a year — these birds make 2. Huge difference.",
+      "⚠️ Reproduction speed matters HUGELY. A species that can only add 2 babies per pair per year recovers MUCH slower than one that adds 40."
+    ] },
   { type:"mcq", diff:"hard", q:"Why are identical twins an EXCEPTION to the rule 'every offspring is a little different'?",
-    choices:["Because they're magic","Because they came from the same single fertilized egg","Because they were born at the same time","Because they eat the same food"], correct:1, feedback:["Not magic.","Right! Single egg split = same genes = near-identical twins.","Same birthday, different eggs = fraternal twins (different).","Environment shapes lots, but not identical-ness."] },
+    choices:[
+      "Because being in the same belly at the same time forces babies to develop the same DNA",
+      "Because they came from one single fertilized egg that split in two",
+      "Because the parents 'chose' to have identical twins by passing matching genes",
+      "Because identical twins always come from older parents whose cells have stopped varying"
+    ], correct:1, feedback:[
+      "⚠️ Sharing a womb doesn't change DNA. Fraternal twins share a womb too, and they have different genes.",
+      "Right! One fertilized egg + a split = two babies with identical genes. That's why they look the same.",
+      "⚠️ Parents can't 'choose' which kind of twins they have — it depends on whether the egg splits.",
+      "⚠️ Parent age affects twin frequency a little, but it has nothing to do with whether twins are identical or fraternal."
+    ] },
   { type:"open", diff:"hard", q:"Imagine all frogs in one pond lay 500 eggs each year and the pond holds 100 frogs stably. Roughly how many of those eggs eventually grow up to have babies? Why do you think that number is specifically that?", feedback:"Expected answer: each pair (2 frogs) needs to produce just 2 replacement adults. So if there are 50 pairs laying 500 × 50 = 25,000 eggs, only about 100 survive to become breeding adults — roughly 0.4% of all eggs. The rest die from predation, disease, dry pond, or just bad luck. This is the 'over-reproduction' principle in action." },
-  { type:"scenario", diff:"boss", q:"A new invasive insect arrives and starts eating all the baby frogs in a pond. The adult frogs still lay thousands of eggs, but fewer and fewer tadpoles are making it. Predict what happens to the frog population over the next 5 years, and explain WHY.", choices:[
-    "Frog population shrinks rapidly — without enough babies reaching adulthood, replacement falls below 2 per couple, so the population decreases each year until extinct or new balance",
-    "Nothing changes",
-    "Frogs evolve poison",
-    "Insects get tired and leave"], correct:0, feedback:[
-    "Yes! This is the exact mechanism of endangerment and extinction — not that adults die, but that offspring stop surviving. Real-world examples: chytrid fungus in frogs, habitat loss in pandas.",
-    "With broken survival math, things MUST change.",
-    "Adaptations happen slowly (many generations), too slow here.",
-    "Not reliable!"] },
+  { type:"open", diff:"boss", q:"A new invasive insect arrives and starts eating all the baby frogs in a pond. Adult frogs still lay thousands of eggs, but fewer and fewer tadpoles are making it. Predict what happens to the frog population over the next 5 years, and explain WHY. (3–5 sentences.)",
+    scenario:"There's no single right answer — what matters is your reasoning chain.",
+    hints:[
+      "Remember the survival rule: each pair of adults needs at least 2 of their babies to grow up and have babies of their own. What's happening to that math here?",
+      "Adults aren't dying from the insect — only babies are. So adult numbers stay the same... for now. What happens when those adults eventually die of old age?",
+      "Could the frogs adapt fast enough to escape the insect? Adaptations usually take many generations. What's blocking new generations from forming?"
+    ],
+    feedback:"Strong answer: The frog population will shrink steadily and may collapse. Even though adults still lay tons of eggs, almost none survive to adulthood — so the 'replacement' rate drops below 2 babies per pair. As the existing adults age and die, there are fewer and fewer young adults to replace them. After a few years, the breeding population gets dangerously small. The frogs can't 'evolve' fast enough — adaptations take many generations, and there are barely any new generations forming. This is exactly how species become endangered or extinct: not because adults die, but because OFFSPRING STOP SURVIVING. Real examples: chytrid fungus in frogs, habitat loss for pandas, nest predation for kiwis." },
   { type:"open", diff:"boss", q:"Humans on Earth have gone from 1 billion people (1800) to 8 billion (today) in just 200 years. Using what you learned about life cycles and environmental factors, why did this happen? Do you think it will keep going like this forever? Explain your reasoning. (4–5 sentences.)", scenario:"Think: what changed about humans' environmental factors — food, disease, medicine — over the last 200 years?", feedback:"Expected reasoning: Humans didn't start having more babies per couple — actually, we have FEWER. The population exploded because our environmental factors got MUCH better. Vaccines and medicine mean far fewer children die. Farming produces enormous amounts of food. Safer shelter, cleaner water. So more of every couple's children survive to have children of their own — way more than just 2. That shifts the math: instead of 2 replacing 2, maybe 5 replace 2, and the population grows fast.\n\nWhether it keeps going: probably not forever. Already, birth rates are dropping in many countries, and environmental factors (space, food, climate) put limits on how many people Earth can support. Scientists estimate we might peak around 10–11 billion this century. Eventually, just like any species, our population stabilizes when environmental factors balance out." },
-  { type:"scenario", diff:"boss", q:"Imagine you're a scientist asked to SAVE a nearly-extinct species of parrot (only 200 left). What THREE things would you try, based on what you've learned about life cycles? Pick the best combination:", choices:[
-    "Make them reproduce faster by injecting them with hormones",
-    "Protect their habitat + breed them in captivity + prevent predators near nests",
-    "Catch all of them and put them in a zoo",
-    "Feed them human food"], correct:1, feedback:[
-    "Not safe or reliable.",
-    "Yes! This is exactly what real conservation programs do — fix environmental factors (habitat, predators) + boost reproductive success (captive breeding). Both sides of the life-cycle equation.",
-    "Would end natural reproduction and habitat adaptation.",
-    "Could hurt them."] },
+  { type:"open", diff:"boss", q:"You're a scientist asked to SAVE a nearly-extinct parrot species — only 200 birds left. List THREE things you would try, and explain WHY each one helps based on life cycles. (1–2 sentences per idea.)",
+    scenario:"Think about the two sides of the life-cycle equation: how many babies are made, and how many survive.",
+    hints:[
+      "The life-cycle equation has two halves: how many offspring are born, and how many survive to have their own babies. Pick interventions that boost EITHER side.",
+      "Think about what kills parrot babies in the wild — nest predators, lost habitat, food shortage. Which of these can humans actually fix?",
+      "Captive breeding programs are real — places like zoos hatch eggs in safe conditions, then release birds to the wild. Why might that work? What are the risks?"
+    ],
+    feedback:"Strong answer ideas (any 3 of these reasoning lines):\n\n• PROTECT HABITAT — fix the environment so wild parrots have food, nesting trees, and shelter. Without habitat, every other effort fails.\n• PREVENT PREDATORS NEAR NESTS — wrap nest trees with predator guards, remove invasive species (rats, cats). This boosts survival of babies that ARE born.\n• CAPTIVE BREEDING — collect some eggs and hatch them in a safe facility, then release young birds back to the wild. Boosts the 'how many survive' side hugely.\n• REDUCE HUMAN THREATS — stop illegal pet trade, ban harmful pesticides, slow deforestation.\n• HEALTH MONITORING — vaccinate or treat birds for diseases.\n\nReal conservation programs (like the Kakapo in New Zealand or California Condor) combine ALL of these — they fix environmental factors AND boost reproductive success. Both sides of the life-cycle equation." },
   { type:"open", diff:"boss", q:"BIG FINAL QUESTION: A species' life cycle strategy is like a 'bet' — either bet on MANY offspring with little care, OR FEW offspring with lots of care. Pick one strategy and defend why it's 'safer' in an unpredictable world. Then explain what the other side would argue. (3–4 sentences per side.)", scenario:"No wrong answer — this is about reasoning.", feedback:"MANY-offspring argument: when the environment is unpredictable (storms, droughts, disease), most babies will die anyway — so having a huge number is insurance. Even if 99.9% die, enough survive to continue. Frogs, fish, insects thrive this way.\n\nFEW-offspring argument: when parents can protect and teach their young, investment pays off. Elephants, humans, penguins survive because their careful parenting ensures the babies that ARE made survive and learn. In stable environments, this beats 'many' because you waste less energy.\n\nThe best answer: BOTH strategies work — evolution figured out they're equally good bets, just suited to different environments and body plans. 🌍" }
 ];
 
 /* STATE */
 let currentSlide = 1, TOTAL_SLIDES = 28;
-let quizIndex = 0, quizAnswers = {}, quizFlags = new Set(), quizStarted = false;
+let quizIndex = 0, quizAnswers = {}, quizFlags = new Set(), quizHintsRevealed = {}, quizStarted = false;
 let homework = {};
 let submissions = JSON.parse(localStorage.getItem('b4_submissions') || '[]');
 let settings = JSON.parse(localStorage.getItem('b4_settings') || '{}');
@@ -969,7 +1056,7 @@ function clearHomework() { if (confirm('Clear?')) { homework = {}; renderHomewor
 function startQuiz() {
   const name = document.getElementById('quiz-student-name').value.trim();
   if (!name) { alert('Name first!'); return; }
-  quizIndex = 0; quizAnswers = {}; quizFlags = new Set(); quizStarted = true;
+  quizIndex = 0; quizAnswers = {}; quizFlags = new Set(); quizHintsRevealed = {}; quizStarted = true;
   document.getElementById('quizStart').classList.add('hide');
   document.getElementById('quizArea').classList.remove('hide');
   renderQuizLayout();
@@ -1003,6 +1090,7 @@ function renderQ() {
   const q = QUIZ[quizIndex]; const ex = quizAnswers[quizIndex]; const isA = !!ex;
   const diffMap = { easy:'WARM-UP', medium:'BRAIN-STRETCH', hard:'THINKER', boss:'BOSS LEVEL!' };
   const scen = q.scenario ? `<div class="q-scenario">${q.scenario}</div>` : '';
+  const hintsHtml = renderHintsBlock(q, quizIndex, isA);
   let body = '';
   if (q.type==='mcq' || q.type==='scenario') {
     body = `<div class="choice-list">${q.choices.map((c,i)=>{ let k='choice'; if (isA) { if (i===q.correct) k+=' correct'; else if (i===ex.selected) k+=' incorrect'; } return `<button class="${k}" onclick="pick(${i})" ${isA?'disabled':''}>${String.fromCharCode(65+i)}. ${c}</button>`; }).join('')}</div>`;
@@ -1026,9 +1114,32 @@ function renderQ() {
   }
   const answered = Object.keys(quizAnswers).length;
   const pct = Math.round(((quizIndex+1)/QUIZ.length)*100);
-  main.innerHTML = `<div class="quiz-progress"><span class="pill">Q ${quizIndex+1} / ${QUIZ.length}</span><div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div><span class="small">${answered} done</span></div><div class="q-card"><div class="q-difficulty ${q.diff}">${diffMap[q.diff]}${q.misconception?' · 🚨':''}</div><div class="q-text">${q.q}</div>${scen}${body}${fb}<div class="q-controls"><div class="submit-row" style="margin:0;"><button class="btn ghost" onclick="prevQ()" ${quizIndex===0?'disabled':''}>← Prev</button><button class="btn secondary" onclick="skipQ()">Skip</button><button class="btn" onclick="nextQ()" ${quizIndex===QUIZ.length-1?'disabled':''}>Next →</button></div><button class="q-flag ${quizFlags.has(quizIndex)?'on':''}" onclick="flagQ()">${quizFlags.has(quizIndex)?'🚩 Flagged':'🏳 Flag'}</button></div></div>`;
+  main.innerHTML = `<div class="quiz-progress"><span class="pill">Q ${quizIndex+1} / ${QUIZ.length}</span><div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div><span class="small">${answered} done</span></div><div class="q-card"><div class="q-difficulty ${q.diff}">${diffMap[q.diff]}${q.misconception?' · 🚨':''}</div><div class="q-text">${q.q}</div>${scen}${hintsHtml}${body}${fb}<div class="q-controls"><div class="submit-row" style="margin:0;"><button class="btn ghost" onclick="prevQ()" ${quizIndex===0?'disabled':''}>← Prev</button><button class="btn secondary" onclick="skipQ()">Skip</button><button class="btn" onclick="nextQ()" ${quizIndex===QUIZ.length-1?'disabled':''}>Next →</button></div><button class="q-flag ${quizFlags.has(quizIndex)?'on':''}" onclick="flagQ()">${quizFlags.has(quizIndex)?'🚩 Flagged':'🏳 Flag'}</button></div></div>`;
 }
 function pick(i) { if (quizAnswers[quizIndex]) return; const q = QUIZ[quizIndex]; quizAnswers[quizIndex] = {type:q.type, selected:i, correct:(i===q.correct)}; renderQuizNav(); renderQ(); }
+function renderHintsBlock(q, qIdx, isA) {
+  if (!q.hints || !q.hints.length) return '';
+  const total = q.hints.length;
+  const revealed = quizHintsRevealed[qIdx] || 0;
+  let html = '<div class="q-hints">';
+  for (let i = 0; i < revealed && i < total; i++) {
+    html += `<div class="hint-revealed"><b>💡 Hint ${i+1}:</b> ${q.hints[i]}</div>`;
+  }
+  if (!isA && revealed < total) {
+    const label = revealed === 0 ? '💡 Need a hint?' : `💡 Show another hint (${revealed} of ${total} used)`;
+    html += `<button class="hint-btn" onclick="revealHint()">${label}</button>`;
+  } else if (revealed >= total) {
+    html += `<div class="hints-done">All ${total} hints revealed.</div>`;
+  }
+  html += '</div>';
+  return html;
+}
+function revealHint() {
+  const q = QUIZ[quizIndex];
+  if (!q || !q.hints) return;
+  const cur = quizHintsRevealed[quizIndex] || 0;
+  if (cur < q.hints.length) { quizHintsRevealed[quizIndex] = cur + 1; renderQ(); }
+}
 function subFill() { if (quizAnswers[quizIndex]) return; const q = QUIZ[quizIndex]; const raw = (document.getElementById('fillInput').value||'').trim(); if (!raw){alert('Type something!');return;} const correct = q.correctText.some(t=>raw.toLowerCase().includes(t.toLowerCase())); quizAnswers[quizIndex]={type:'fill',raw,correct}; renderQuizNav(); renderQ(); }
 function subOpen() { if (quizAnswers[quizIndex]) return; const q = QUIZ[quizIndex]; const ans = (document.getElementById('openInput').value||'').trim(); if (ans.length<5){alert('Give it a real try!');return;} quizAnswers[quizIndex]={type:q.type,answer:ans,correct:null}; renderQuizNav(); renderQ(); }
 function prevQ() { if (quizIndex>0) { quizIndex--; renderQuizNav(); renderQ(); } }
