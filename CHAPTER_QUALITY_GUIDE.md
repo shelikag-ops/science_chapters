@@ -182,6 +182,42 @@ Aim for **5-8 homework items** per chapter. Mix of types:
 - 5-6 **misconception-flagged** with `misconception: true` and `hints: [...]` arrays
 - ≥1 **scenario** (tells a story, asks student to reason)
 
+### 🎯 3-Tier Checklist (Final Pass for Every Chapter)
+
+Before finalizing any chapter, do this **3-question check** on the homework + quiz set:
+
+1. **Does at least one HOMEWORK have a "What if?" Variable Change?** (Extrapolation)
+   - Example: "You did the demo with 23° tilt. **What would happen with 45° tilt?**"
+   - Forces the student to apply the concept to a NEW scenario, not just re-do the observed one.
+   - Builds **predictive intelligence** — the SciOly winner's edge.
+
+2. **Does at least one QUIZ Q use "How do you know?" inference?** (Evidence Reasoning)
+   - ❌ Wrong: "Which biome is cold and treeless?" (memory match)
+   - ✅ Right: "A scientist finds a plant that is short, has no deep roots, and grows under snow. Which biome? **How do you know?**"
+   - Forces the student to USE biological clues to INFER, not just recognize labels.
+
+3. **Is at least one QUIZ Q built around degrees/numbers?** (Math Integration)
+   - ❌ Wrong: "What's it like at the equator?"
+   - ✅ Right: "If you are at **0° latitude** in January, do you need a winter coat? Why?"
+   - Links coordinates to physical reality, integrating Singapore Math with science.
+
+### 📝 Conclusion-Sentence Pattern (Pro homework polish)
+
+Every homework involving observation should end with a **scientist-style conclusion**:
+
+> "I observed [WHAT happened] because [SCIENTIFIC LAW from the lesson]."
+
+Example: *"I observed the sticker get darker when I tilted the ball away, which happened because angled sunlight is less intense than direct sunlight."*
+
+This builds the habit of connecting observations to laws — the foundation of every science write-up SciOly judges expect.
+
+### 🔄 Sequence-of-Events Quiz Pattern
+
+For PROCESSES (rain shadow, water cycle, fertilization, photosynthesis):
+- Don't just test the result.
+- **Test the ORDER of steps.** Give 4 events (A, B, C, D) and ask the student to put them in causal sequence.
+- Plus: "WHY must X happen before Y?" — tests the actual physical/biological logic, not memorization.
+
 ### Distractor rules:
 - **NO "Magic" / "Plants are fake" / "It's random"** distractors.
 - **EVERY distractor must be a plausible-but-wrong belief** (a real misconception kids have).
