@@ -275,6 +275,23 @@ body.presenting .present-bar{display:flex;}
         </div>
       </div>
 
+      <div class="slide" data-slide="4a" data-part="1">
+        <h2 class="big-q">🚫 No Air, No Noise — the Concept</h2>
+        <p class="lead">Here's the BIG IDEA most people get wrong. Sound is NOT a thing that travels by itself like a ball thrown through space. Sound is a <b>relay race</b>.</p>
+        <div class="callout sky">
+          <b>🏃 Sound = a chain of particle bumps.</b><br>
+          A vibrating object pushes the air molecule next to it. That molecule bumps the next. That one bumps the next. The wiggle gets passed down the line — like dominoes — until it reaches your eardrum.
+        </div>
+        <div style="font-size:42px; text-align:center; margin:18px 0;">🔔 → 🟢→🟢→🟢→🟢 → 👂</div>
+        <div class="callout animal">
+          <b>🤔 Common WRONG idea:</b> "Sound is a thing that flies through the air, like an invisible bullet." ❌<br>
+          <b>Right idea:</b> "Sound is a wiggle being PASSED through stuff. The stuff (air, water, wood) doesn't travel — only the wiggle does." ✅
+        </div>
+        <div class="callout leaf">
+          <b>🚀 Big consequence:</b> If there are NO particles to bump (like in outer space), there can be NO sound. We'll see this in Session 2 when we ask: <i>can you hear an explosion in space?</i>
+        </div>
+      </div>
+
       <div class="slide" data-slide="5" data-part="1" data-type="video" data-video-id="gdGyvGPZ1G0">
         <h2 class="big-q">🎬 Watch: What Is Sound? <span class="pill">~3 min</span></h2>
         <p class="lead">Dr. Binocs explains how sound works in 3 minutes flat.</p>
@@ -332,6 +349,29 @@ body.presenting .present-bar{display:flex;}
           <p>A wet finger rubbed around the rim of a wine glass makes a clear musical note. There's no string, no drum skin, no reed. What's vibrating?</p>
           <button class="reveal-btn" onclick="document.getElementById('mystery-10').classList.add('mystery-open')">🔍 Show answer</button>
           <div class="mystery-answer">🎯 The <b>glass itself</b> is vibrating! Your finger drags slightly, then slips, drags, slips — these tiny stick-slip events cause the whole glass to ring. Add water and the pitch CHANGES (more water = more mass = slower vibration = lower note). Try it with several glasses at different water levels — you've made an instrument!</div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="10a" data-part="1">
+        <h2 class="big-q">⚡ The Lightning Count — Sound's Secret Speed</h2>
+        <p class="lead">Sound is fast — but NOTHING compared to light. Here's how to use that gap to MEASURE distance.</p>
+        <div class="callout">
+          <b>📏 Speed of sound in air ≈ 343 meters per second (about 340 m/s).</b><br>
+          <b>⚡ Speed of light:</b> 300,000,000 m/s (basically instant for anything you can see).
+        </div>
+        <p style="margin-top:14px;"><b>The Lightning Trick:</b> when you see a flash, count seconds until you hear the boom. Each second ≈ 340 meters away. That's the distance to the lightning!</p>
+        <table style="width:100%;border-collapse:collapse;font-size:16px;margin:14px 0;">
+          <tr style="background:#fff8e1;"><th style="padding:10px;border:1px solid #ddd;">Seconds counted</th><th style="padding:10px;border:1px solid #ddd;">Distance (m)</th><th style="padding:10px;border:1px solid #ddd;">Roughly</th></tr>
+          <tr><td style="padding:10px;border:1px solid #ddd;">1 sec</td><td style="padding:10px;border:1px solid #ddd;">340 m</td><td style="padding:10px;border:1px solid #ddd;">3 football fields</td></tr>
+          <tr><td style="padding:10px;border:1px solid #ddd;">3 sec</td><td style="padding:10px;border:1px solid #ddd;">~1,020 m</td><td style="padding:10px;border:1px solid #ddd;">≈ 1 km</td></tr>
+          <tr><td style="padding:10px;border:1px solid #ddd;">5 sec</td><td style="padding:10px;border:1px solid #ddd;">~1,700 m</td><td style="padding:10px;border:1px solid #ddd;">≈ 1.7 km</td></tr>
+          <tr><td style="padding:10px;border:1px solid #ddd;">10 sec</td><td style="padding:10px;border:1px solid #ddd;">~3,400 m</td><td style="padding:10px;border:1px solid #ddd;">≈ 3.4 km</td></tr>
+        </table>
+        <div class="callout leaf">
+          <b>🧮 The math:</b> distance = speed × time. So if time = 4 sec, distance = 340 × 4 = <b>1,360 m</b>. (🔁 Spiral to D-5 Time — measuring time + speed gives us distance!)
+        </div>
+        <div class="callout animal">
+          <b>🎯 SciOly question:</b> You see lightning, and 6 seconds later you hear thunder. How far away is the storm? <details><summary>Show answer</summary>340 × 6 = <b>2,040 meters</b> (≈ 2 km). If the gap shrinks each time you count, the storm is getting CLOSER.</details>
         </div>
       </div>
 
@@ -501,7 +541,7 @@ const HOMEWORK=[
   { icon:"🎼", title:"Pitch Detective", prompt:"List 3 things in your home that make HIGH pitched sounds and 3 that make LOW pitched sounds. For each, what's vibrating? Is it big or small?", placeholder:"HIGH:\n1. ___ (vibrating part: ___, size: ___)\n..." },
   { icon:"🏞", title:"The Echo Chase", prompt:"Find a place where you can hear an echo (a tunnel, a stairwell, an empty hall, a canyon). Yell something. How long does the echo take? Roughly how far away is the wall? (Hint: sound travels ~340m/sec.)", placeholder:"Where I went: ___\nWhat I yelled: ___\nEcho delay: ~___ seconds" },
   { icon:"🐶", title:"Family Hearing Test", prompt:"Look up online '20kHz hearing test' and play the tone for everyone in your family. Who can hear it? Who can't? Generally, kids hear higher tones than adults. Find your family's pattern.", placeholder:"Family member: ___ — heard up to ___ Hz" }
-,{icon:"🔊",title:"Pitch & Length Variable Lab",prompt:"Use a ruler on a desk edge. Twang it, then SHORTEN the part hanging off. Listen — does pitch go UP or DOWN with shorter length?\n\nCER: claim about length-pitch relationship. Evidence: what you heard. Reasoning: shorter object vibrates FASTER → higher frequency → higher pitch."}];
+,{icon:"🔊",title:"Pitch & Length Variable Lab",prompt:"Use a ruler on a desk edge. Twang it, then SHORTEN the part hanging off. Listen — does pitch go UP or DOWN with shorter length?\n\nCER: claim about length-pitch relationship. Evidence: what you heard. Reasoning: shorter object vibrates FASTER → higher frequency → higher pitch."},{icon:"📞",title:"CER Lab: Cup Phone — Tight vs Loose",prompt:"Make a string telephone (2 paper cups + 1 long string, ~5 m). Poke holes in the cup bottoms, thread the string, knot inside.\n\n🧪 EXPERIMENT: Try the phone TWO ways:\n  Test A — string pulled TIGHT between you and a friend\n  Test B — string LOOSE / sagging\n\nWrite up using CER:\n• CLAIM: When does the sound travel better?\n• EVIDENCE: What you actually heard in each test (be specific!).\n• REASONING: Why? (Hint: think about the relay-race idea — particles passing the wiggle. Tight string = particles in close contact = good relay. Loose string = sagging = relay broken.)\n\n📝 CONCLUSION SENTENCE TO USE: \"I observed that the sound was clearer when the string was TIGHT because tight particles are better at passing vibrations than loose ones.\""},{icon:"👶",title:"Toddler Test: Explain how we talk",prompt:"Mission: explain to a 3-year-old how WE MAKE WORDS COME OUT OF OUR MOUTHS.\n\n🚫 FORBIDDEN WORDS: \"sound\", \"vibrate\", \"voice\", \"air\", \"throat\".\n\n✅ You CAN use: stretchy, wiggly, push, blow, jiggle, tight, loose, fast, slow, neck, mouth, wind.\n\nWrite 2-3 sentences that a toddler would actually understand. Then write the SAME idea in real science words for a grown-up.\n\n(Hint: think about rubber bands stretched across your neck that wiggle when you push wind past them. Tight = high. Loose = low.)",placeholder:"For toddler:\n  ___\n\nFor grown-up (real science words):\n  ___"}];
 
 const QUIZ=[
   { type:"mcq", diff:"easy", q:"Sound is made by:", choices:["Light","Vibrations","Smells","Colors"], correct:1, feedback:["No.","Yes!","No.","No."] },
@@ -556,7 +596,7 @@ const QUIZ=[
     "Picture a long line of dominoes. When the first one falls and tips the second, then the second tips the third, what's actually moving down the line — the dominoes, or just the falling motion?",
     "Each air molecule wiggles back and forth a tiny bit and bumps its neighbor. Then it snaps back. Does it travel from car A to car B, or stay roughly where it started?"],
     feedback:"Strong answer:\nWhat travels between the cars is a SOUND WAVE — a pattern of bumping that moves through the air, not the air itself. Each air molecule wiggles back and forth a tiny bit, bumps its neighbor, and snaps back to about where it started. So the molecule near car A doesn't actually travel to car B — it just shoves its neighbor, who shoves its neighbor, and so on, all the way to car B.\n\nThis is the deepest insight about sound: a wave is a PATTERN of motion through the molecules, not the molecules themselves moving from A to B. The ENERGY travels; the matter mostly stays put. (If the air itself traveled across, every honk would feel like a gust of wind — which it doesn't.) Same idea with ocean waves: the water doesn't travel across the ocean, but the wave pattern does." }
-,{type:"open","diff":"hard",q:"🔊 INFERENCE: A guitar string is shortened by half. What happens to the pitch? (Connect to A-4: what does length do to vibration speed?)",feedback:"Pitch DOUBLES (one octave higher!). Shorter string = vibrates faster = higher frequency = higher pitch. Same physics whether ruler, guitar, or violin."}];
+,{type:"open","diff":"hard",q:"🔊 INFERENCE: A guitar string is shortened by half. What happens to the pitch? (Connect to A-4: what does length do to vibration speed?)",feedback:"Pitch DOUBLES (one octave higher!). Shorter string = vibrates faster = higher frequency = higher pitch. Same physics whether ruler, guitar, or violin."},{type:"scenario","diff":"hard",q:"🌊 VISUAL SYNTHESIS — Three sound waves are drawn below. Match each to the right sound:\n\n  Wave A: tall + tightly packed (BIG amplitude, SHORT wavelength)\n  Wave B: short + spread out (small amplitude, LONG wavelength)\n  Wave C: short + tightly packed (small amplitude, SHORT wavelength)\n\nWhich wave matches a LOUD, HIGH-pitched whistle?",choices:["Wave A — tall (loud) AND tightly packed (high pitch)","Wave B — short (quiet) and spread out (low pitch)","Wave C — short (quiet) but tightly packed (high pitch)","All three are loud and high-pitched"],correct:0,hints:["LOUD comes from the SIZE of the wiggle (amplitude). HIGH pitch comes from how FAST the wiggles are (frequency = how packed together). Which wave has BOTH?","Picture an opera singer at full volume hitting a high note. The wave should look TALL (loud) AND have many wiggles (high pitch)."],feedback:["Yes! AMPLITUDE = loudness (tall = loud). FREQUENCY = pitch (more wiggles per second = packed tightly = high pitch). Loud + high = tall AND tightly packed = Wave A.","⚠️ Wave B has small amplitude (so it's quiet) AND long wavelength (so it's low). That's a QUIET LOW sound — like a soft hum.","⚠️ Wave C is QUIET (small amplitude). The question asked for LOUD. Pitch is right but loudness is wrong.","⚠️ Each wave has different properties. Look carefully at amplitude (height) AND wavelength (spacing)."]}];
 let currentSlide=1, TOTAL_SLIDES=21;
 let quizIndex=0, quizAnswers={}, quizFlags=new Set(), quizHintsRevealed={}, quizSkipped=new Set(), quizFinished=false, quizStarted=false;
 let homework={};
