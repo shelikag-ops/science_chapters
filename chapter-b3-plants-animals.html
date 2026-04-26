@@ -795,7 +795,7 @@ body.presenting .present-bar { display: flex; }
               <p>Mammals, fish, birds, insects, worms, crabs, jellyfish, corals — anything that eats other things.</p>
             </div>
           </div>
-          <p class="lead">Quick brain buzz: scientists now also use <b>fungi</b> (mushrooms), <b>bacteria</b>, and <b>protozoa</b> as separate kingdoms. We'll save those for another day — today is <b>Plants vs. Animals</b>.</p>
+          <p class="lead">💡 <b>Note for the curious:</b> scientists also recognize OTHER kingdoms (fungi, bacteria, etc.) — but we'll explore those in a separate lesson. Today, master the 2-Kingdom logic first. (We'll add the others as a Classification Hierarchy at the end!)</p>
         </div>
 
         <!-- Slide 5: VIDEO — What is a Plant? -->
@@ -1477,10 +1477,10 @@ const HOMEWORK=[
     prompt:"Draw a picture that shows: sun ➔ plant ➔ animal ➔ heat. Make it as wild or silly as you want. Upload a photo below (optional) or just describe it in words.",
     placeholder:"Describe your drawing here, or just upload a photo!"
   }
-,{icon:"🌳","title":"Carnivorous Plants Inference (CER)",prompt:"Look up Venus Flytrap. It's a PLANT but eats insects! Does it follow the plant rules from this chapter?\n\nCER: Claim it's still a plant. Evidence: it photosynthesizes. Reasoning: insect-eating is just a SUPPLEMENT for nitrogen in poor soil. The plant still gets ENERGY from sunlight."}];
+,{icon:"🌳","title":"Carnivorous Plants Inference (CER)",prompt:"Look up Venus Flytrap. It's classified as a PLANT but eats insects!\n\n🚨 GEMINI-CURATED CHALLENGE: The QUESTION is NOT \"Is it a plant or animal?\" — that's too easy. The DEEP question is: <b>Is the Venus Flytrap a PRODUCER or a CONSUMER?</b>\n\nCER:\n• CLAIM: \"The Venus Flytrap is a ___\" (Producer / Consumer / Both?)\n• EVIDENCE: It is GREEN (photosynthesis = produces own food), AND has NO MOUTH (in the animal sense), AND its insect-snapping is for MINERALS not energy.\n• REASONING: A producer makes its own food using sunlight. A consumer eats other organisms for energy. Which fits?\n\nFinish with: \"I observed [evidence] because [the rule about producers/consumers]. So the Venus Flytrap is primarily a ___.\""},{icon:"🌙",title:"The Midnight Garden — Variable Swap (Gemini-curated!)",prompt:"🌙 EXTRAPOLATION CHALLENGE: Imagine the Sun stopped shining for 1 entire year.\n\nUsing the food chain Sun → Grass → Cow → You, predict what happens. Trace it step-by-step:\n\n1. What happens to the GRASS first? Why?\n2. After grass dies, what happens to the COW? Why?\n3. After cow dies, what happens to YOU? Why?\n4. Which link in the chain breaks FIRST? Why?\n5. WHAT IF the Sun came back after 1 year — could life return immediately?\n\nThis tests systemic intelligence — exactly what SciOly Ecology events demand!"}];
 
 /* ============ DATA: QUIZ (30 questions, progressive) ============ */
-const QUIZ = [
+const QUIZ=[
   { type:"mcq", diff:"easy", q:"Which of these is an animal?",
     choices:["🌳 Oak tree","🌻 Sunflower","🐟 Fish","🌾 Wheat"], correct:2,
     feedback:["Oak trees are plants — no mouth!","Sunflowers are plants — leaves!","Yes! Fish have mouths and eat other living things.","Wheat is a plant."] },
@@ -1664,7 +1664,7 @@ const QUIZ = [
   { type:"open", diff:"boss", q:"BIG FINAL QUESTION: Pick one kingdom — plant OR animal — and make the strongest argument you can that your kingdom is more important to life on Earth. Then write what the other kingdom would argue back. (3–4 sentences per side.)",
     scenario:"There's no single right answer — this question is about REASONING. Use what you know.",
     feedback:"Strong PLANT argument: Plants are the only team that catches sunlight. Without plants, no energy for anyone. Plants make ALL the food and most of the oxygen in the air. Every single animal depends on plants.\n\nStrong ANIMAL argument: Animals spread plant seeds, bring water in poop and bodies, pollinate flowers, and break down dead stuff. Without animals, many plants couldn't reproduce or spread. Both sides actually need each other — that's the real answer. 🌍" }
-];
+,{type:"mcq","diff":"hard",q:"🍄 INFERENCE Q (Gemini-curated): A mushroom is NOT green (no chlorophyll) and has NO MOUTH (in the animal sense). Can it be a plant? Can it be an animal? Why?",choices:["Yes — it's a plant because it grows from soil","No to both — it's neither plant nor animal (it's a fungus)","Yes — it's an animal because it has tiny holes","No — only because it's shaped weird"],correct:1,feedback:["⚠️ Growing from soil isn't the test — many things grow from soil!","Yes — INFERENCE! No green + no mouth = neither classic plant NOR animal. This is exactly why scientists added the Fungi kingdom.","⚠️ Mushroom holes aren't mouths — they're for releasing spores!","⚠️ Shape isn't the science."]},{type:"mcq","diff":"hard",q:"📸 VISUAL SYNTHESIS (D-8 spiral!): A fossil shows a leaf imprint preserved in stone. Which kingdom did the original organism belong to, and what \"magic power\" did it have when alive?",choices:["Animal — it could move","Plant — it could capture sunlight (photosynthesis)","Fungus — it could decompose","Mineral — it was always stone"],correct:1,feedback:["⚠️ Animals don't have leaves.","Yes — leaves = plant kingdom. Its magic power: PHOTOSYNTHESIS (turning sunlight into food).","⚠️ Fungi don't have leaves.","⚠️ Fossils are STONE COPIES of organisms (D-8); the original was a living plant."]},{type:"mcq","diff":"hard",q:"⚡ ENERGY PYRAMID MATH (Gemini-curated, 10% Rule!): If 1,000 units of energy come from the Sun to the grass, how many units does the COW get from eating grass?",choices:["1,000 (all of it transfers)","100 (about 10% — the 10% Rule!)","2,000 (more than what grass got)","0 (cows don't eat grass)"],correct:1,feedback:["⚠️ Most energy is LOST as heat at each step.","Yes — the 10% Rule: only ~10% of energy transfers up each food-chain level. So 100 units to the cow.","⚠️ Energy can't INCREASE through the food chain (Conservation of Energy!).","⚠️ Cows definitely eat grass!"]}];
 
 /* ============ STATE ============ */
 let currentSlide = 1;
