@@ -495,15 +495,15 @@ body.presenting .present-bar{display:flex;}
 <div class="modal-back" id="modal"><div class="modal"><h3 id="modal-title">Hello</h3><div id="modal-body"></div><div class="submit-row" style="justify-content:flex-end;" id="modal-actions"></div></div></div>
 
 <script>
-const HOMEWORK = [
+const HOMEWORK=[
   { icon:"🎵", title:"Sound Hunt", prompt:"Find 5 sounds at home. For each, identify what's VIBRATING to make the sound. (e.g., fan blade, dog vocal cords, washing machine drum)", placeholder:"Sound 1: ___ — vibrates because ___" },
   { icon:"🥄", title:"Spoon Bell Experiment", prompt:"Tie a metal spoon to the middle of a string (~1m). Wrap the string ends around your fingers, press fingers to your ears (carefully). Have someone tap the spoon with another spoon. What do you hear? Why is it surprisingly LOUD?", placeholder:"What I heard: ___\nWhy: sound traveled through ___" },
   { icon:"🎼", title:"Pitch Detective", prompt:"List 3 things in your home that make HIGH pitched sounds and 3 that make LOW pitched sounds. For each, what's vibrating? Is it big or small?", placeholder:"HIGH:\n1. ___ (vibrating part: ___, size: ___)\n..." },
   { icon:"🏞", title:"The Echo Chase", prompt:"Find a place where you can hear an echo (a tunnel, a stairwell, an empty hall, a canyon). Yell something. How long does the echo take? Roughly how far away is the wall? (Hint: sound travels ~340m/sec.)", placeholder:"Where I went: ___\nWhat I yelled: ___\nEcho delay: ~___ seconds" },
   { icon:"🐶", title:"Family Hearing Test", prompt:"Look up online '20kHz hearing test' and play the tone for everyone in your family. Who can hear it? Who can't? Generally, kids hear higher tones than adults. Find your family's pattern.", placeholder:"Family member: ___ — heard up to ___ Hz" }
-];
+,{icon:"🔊",title:"Pitch & Length Variable Lab",prompt:"Use a ruler on a desk edge. Twang it, then SHORTEN the part hanging off. Listen — does pitch go UP or DOWN with shorter length?\n\nCER: claim about length-pitch relationship. Evidence: what you heard. Reasoning: shorter object vibrates FASTER → higher frequency → higher pitch."}];
 
-const QUIZ = [
+const QUIZ=[
   { type:"mcq", diff:"easy", q:"Sound is made by:", choices:["Light","Vibrations","Smells","Colors"], correct:1, feedback:["No.","Yes!","No.","No."] },
   { type:"fill", diff:"easy", q:"How fast something vibrates is called its ______.", correctText:["frequency","pitch"], feedback:"Frequency (it determines pitch)." },
   { type:"mcq", diff:"easy", q:"A loud sound has a LARGER:", choices:["Frequency","Amplitude","Color","Speed"], correct:1, feedback:["That's pitch.","Yes!","No.","Speed of sound is constant."] },
@@ -556,8 +556,7 @@ const QUIZ = [
     "Picture a long line of dominoes. When the first one falls and tips the second, then the second tips the third, what's actually moving down the line — the dominoes, or just the falling motion?",
     "Each air molecule wiggles back and forth a tiny bit and bumps its neighbor. Then it snaps back. Does it travel from car A to car B, or stay roughly where it started?"],
     feedback:"Strong answer:\nWhat travels between the cars is a SOUND WAVE — a pattern of bumping that moves through the air, not the air itself. Each air molecule wiggles back and forth a tiny bit, bumps its neighbor, and snaps back to about where it started. So the molecule near car A doesn't actually travel to car B — it just shoves its neighbor, who shoves its neighbor, and so on, all the way to car B.\n\nThis is the deepest insight about sound: a wave is a PATTERN of motion through the molecules, not the molecules themselves moving from A to B. The ENERGY travels; the matter mostly stays put. (If the air itself traveled across, every honk would feel like a gust of wind — which it doesn't.) Same idea with ocean waves: the water doesn't travel across the ocean, but the wave pattern does." }
-];
-
+,{type:"open","diff":"hard",q:"🔊 INFERENCE: A guitar string is shortened by half. What happens to the pitch? (Connect to A-4: what does length do to vibration speed?)",feedback:"Pitch DOUBLES (one octave higher!). Shorter string = vibrates faster = higher frequency = higher pitch. Same physics whether ruler, guitar, or violin."}];
 let currentSlide=1, TOTAL_SLIDES=21;
 let quizIndex=0, quizAnswers={}, quizFlags=new Set(), quizHintsRevealed={}, quizSkipped=new Set(), quizFinished=false, quizStarted=false;
 let homework={};

@@ -482,15 +482,15 @@ body.presenting .present-bar { display:flex; }
 <div class="modal-back" id="modal"><div class="modal"><h3 id="modal-title">Hello</h3><div id="modal-body"></div><div class="submit-row" style="justify-content:flex-end;" id="modal-actions"></div></div></div>
 
 <script>
-const HOMEWORK = [
+const HOMEWORK=[
   { icon:"🎢", title:"Roller-Coaster Energy Map", prompt:"Find a video of a real roller coaster (or imagine one). Sketch the track. Mark with arrows where the coaster has the most POTENTIAL energy and where it has the most KINETIC energy.", placeholder:"Describe or sketch:..." },
   { icon:"🏠", title:"Energy Hunt at Home", prompt:"Find 5 things at home that store potential energy (battery, stretched rubber band, full water bottle on a shelf, wound clock, balloon). For each, describe the form of stored energy.", placeholder:"1. Battery — chemical potential\n2. ...\n..." },
   { icon:"🤚", title:"Friction Heat Test", prompt:"Rub your palms together hard for 30 seconds. What happens? Then rub a coin on cloth for 30 seconds — touch the coin. What happens? Describe the energy chain.", placeholder:"Hands felt: ___\nCoin felt: ___\nEnergy chain: muscle → ___ → ___" },
   { icon:"🎈", title:"Balloon Rocket", prompt:"Blow up a balloon. Don't tie it. Let it go. Watch it zoom around. Where did the energy come from? Where does it go? Use the words KINETIC, POTENTIAL, and HEAT.", placeholder:"Description: ..." },
   { icon:"🍪", title:"My Body's Energy Flow", prompt:"List 5 things you did today that used energy (running, talking, thinking, growing, breathing). Where did that energy ORIGINALLY come from? Trace it back to the sun.", placeholder:"Activity → energy from food → food from plants → plants from sun" }
-];
+,{icon:"⚡","title":"Energy Transformation Trace (Rube Goldberg!)",prompt:"Pick a real object (e.g., a yo-yo). Trace energy:\n• Held UP (potential energy) → released → falls (potential→kinetic) → spins (kinetic) → climbs back up (kinetic→potential).\n\nDraw arrows showing energy transformation at each step. Add: where does energy LOSS go? (Hint: friction → heat)"}];
 
-const QUIZ = [
+const QUIZ=[
   { type:"mcq", diff:"easy", q:"Energy of MOVEMENT is called:", choices:["Potential","Kinetic","Frozen","Magic"], correct:1, feedback:["Stored.","Yes!","Not a science term.","Not science."] },
   { type:"mcq", diff:"easy", q:"Energy that's STORED, ready to be released, is called:", choices:["Kinetic","Potential","Solar","Friction"], correct:1, feedback:["Moving.","Yes!","Type of energy, not a state.","A force."] },
   { type:"fill", diff:"easy", q:"Energy can never be created or destroyed, only ______ between forms.", correctText:["transformed","changed","converted"], feedback:"Transformed (changed). Conservation of Energy!" },
@@ -535,8 +535,7 @@ const QUIZ = [
     "How is this rule like checking your math: if the answer doesn't match, you know there must be a missing step?"],
     feedback:"Strong answer:\nThe Conservation Law lets scientists work like detectives. If energy 'goes missing' in an experiment, they KNOW it must be somewhere — they just haven't found it yet. So they keep looking instead of giving up.\n\nReal example: In the 1930s, energy in radioactive decay didn't add up. Wolfgang Pauli predicted there must be an invisible particle carrying away the missing energy. Decades later, scientists found it — and named it the NEUTRINO. Without faith in Conservation, nobody would have known to look.\n\nThe rule also lets us PREDICT outcomes: if a roller coaster starts with X joules of potential energy, we know it will have X joules of kinetic energy at the bottom (minus a tiny bit lost to friction). Engineers use this to design safe rides, efficient cars, and rockets.\n\nIt's like checking your math: if the totals don't match, the missing piece MUST exist. Conservation of Energy is one of the most powerful tools in all of science." },
   { type:"open", diff:"boss", q:"BIG FINAL QUESTION: Use kinetic + potential energy concepts to explain why THE SUN is essential to life on Earth. (5+ sentences.)", feedback:"Strong answer covers:\n1. Energy can't be created on Earth — it must come from outside (sun is the source).\n2. Sunlight is kinetic radiation energy that travels here.\n3. Plants convert it into chemical POTENTIAL energy (sugars, wood) via photosynthesis.\n4. Animals (and humans) eat plants to get that stored chemical energy, convert it back to kinetic for muscle, brain, growth.\n5. ALL energy use leaks heat — we keep losing it constantly.\n6. Without daily new sunlight, this leak would slowly drain the chemical reserves and life would freeze and stop.\n7. Conservation Law guarantees energy isn't 'wasted' — it just spreads as heat into space, requiring fresh sunlight to keep the system running. The sun is the renewable input that fights endless heat-leak." }
-];
-
+,{type:"mcq","diff":"medium",q:"⚡ A bowling ball drops from a 10m roof. At 5m height, what fraction is potential energy vs kinetic?",choices:["100% potential","50% / 50%","100% kinetic","Cannot determine"],correct:1,feedback:["⚠️ Some has converted to KE.","Yes — at half-height, half the PE has converted to KE. Conservation of energy.","⚠️ KE only at the bottom.","⚠️ Math + physics tells us!"]}];
 let currentSlide=1, TOTAL_SLIDES=19;
 let quizIndex=0, quizAnswers={}, quizFlags=new Set(), quizHintsRevealed={}, quizSkipped=new Set(), quizFinished=false, quizStarted=false;
 let homework={};
