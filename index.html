@@ -122,15 +122,15 @@ p { margin: 0 0 1em; }
   <span><span class="src-pill bfsu">BFSU</span> from Bernard Nebel's curriculum</span>
   <span><span class="src-pill sci">SCI</span> from Eileen Murphy's curriculum</span>
   <span><span class="src-pill both">MERGED</span> combined content from both</span>
-  <span>· Sequence is by teaching order, not by source book.</span>
+  <span>· Sequence follows BFSU Volume I parallel chapter flow chart (Nebel, Orientation 8).</span>
 </div>
 
 <!-- ===================== FOUNDATIONS ===================== -->
 <div class="phase done">
   <div class="phase-title">
     <span class="phase-num">✓ FOUNDATIONS</span>
-    <span class="phase-name">Already covered OR ready to teach</span>
-    <span class="phase-duration">· mix of taught &amp; prepared</span>
+    <span class="phase-name">Already covered</span>
+    <span class="phase-duration">· BFSU slots 1–3</span>
   </div>
   <div class="chapter-grid" id="phase-0"></div>
 </div>
@@ -139,8 +139,8 @@ p { margin: 0 0 1em; }
 <div class="phase current">
   <div class="phase-title">
     <span class="phase-num">PHASE 1 · NEXT UP</span>
-    <span class="phase-name">Life Science Wrap-Up</span>
-    <span class="phase-duration">· ~3 weeks</span>
+    <span class="phase-name">Threads Begin</span>
+    <span class="phase-duration">· ~4 weeks · BFSU slots 4–7</span>
   </div>
   <div class="chapter-grid" id="phase-1"></div>
 </div>
@@ -149,8 +149,8 @@ p { margin: 0 0 1em; }
 <div class="phase">
   <div class="phase-title">
     <span class="phase-num">PHASE 2</span>
-    <span class="phase-name">Energy Foundation</span>
-    <span class="phase-duration">· ~5 weeks</span>
+    <span class="phase-name">Particles, Sound &amp; Kingdoms</span>
+    <span class="phase-duration">· ~6 weeks · BFSU slots 8–13</span>
   </div>
   <div class="chapter-grid" id="phase-2"></div>
 </div>
@@ -159,8 +159,8 @@ p { margin: 0 0 1em; }
 <div class="phase">
   <div class="phase-title">
     <span class="phase-num">PHASE 3</span>
-    <span class="phase-name">Life Science Depth</span>
-    <span class="phase-duration">· ~9 weeks</span>
+    <span class="phase-name">Orientation &amp; Materials</span>
+    <span class="phase-duration">· ~4 weeks · BFSU slots 14–17</span>
   </div>
   <div class="chapter-grid" id="phase-3"></div>
 </div>
@@ -169,8 +169,8 @@ p { margin: 0 0 1em; }
 <div class="phase">
   <div class="phase-title">
     <span class="phase-num">PHASE 4</span>
-    <span class="phase-name">Matter Depth</span>
-    <span class="phase-duration">· ~9 weeks</span>
+    <span class="phase-name">Life Cycles &amp; Biomes</span>
+    <span class="phase-duration">· ~7 weeks · BFSU slots 18–24</span>
   </div>
   <div class="chapter-grid" id="phase-4"></div>
 </div>
@@ -179,8 +179,8 @@ p { margin: 0 0 1em; }
 <div class="phase">
   <div class="phase-title">
     <span class="phase-num">PHASE 5</span>
-    <span class="phase-name">Forces</span>
-    <span class="phase-duration">· ~3 weeks</span>
+    <span class="phase-name">Atmosphere, Anatomy &amp; Forces</span>
+    <span class="phase-duration">· ~8 weeks · BFSU slots 25–32</span>
   </div>
   <div class="chapter-grid" id="phase-5"></div>
 </div>
@@ -189,8 +189,8 @@ p { margin: 0 0 1em; }
 <div class="phase">
   <div class="phase-title">
     <span class="phase-num">PHASE 6</span>
-    <span class="phase-name">Earth & Space</span>
-    <span class="phase-duration">· ~7 weeks</span>
+    <span class="phase-name">Cycles, Earth &amp; Plants</span>
+    <span class="phase-duration">· ~9 weeks · BFSU slots 33–41</span>
   </div>
   <div class="chapter-grid" id="phase-6"></div>
 </div>
@@ -198,62 +198,70 @@ p { margin: 0 0 1em; }
 </div>
 
 <script>
-/* ============ SEQUENCED CHAPTER DATA ============ */
+/* ============ SEQUENCED CHAPTER DATA ============
+ * Sequence aligned to BFSU Volume I parallel chapter flow chart
+ * (Bernard Nebel, Orientation 8). Threads A/B/C/D interleave
+ * deliberately so each lesson's prerequisites are met before it lands.
+ * Merged chapters (D-2+D-5, D-4+D-6) are placed at the EARLIER lesson's
+ * slot — D-5 and D-6 prereqs are satisfied by the time those merged
+ * chapters are taught (D-2 covers Earth rotation needed for D-5;
+ * D-2+D-5 + D-3/D-3A cover what D-6 needs by Phase 4).
+ * ===================================================== */
 const CHAPTERS = [
-  // Phase 0 — Done
+  // Phase 0 — Foundations (BFSU slots 1-3) · already taught
   { seq: 1, code: "BDK", title: "Baloney Detection Kit", sources: ["bfsu","sci"], phase: 0, done: true, href: "https://shelikag-ops.github.io/Baloney-Detection-Kit/" },
   { seq: 2, code: "A/B-1", title: "Organizing Things into Categories", sources: ["bfsu"], phase: 0, done: true, href: "https://shelikag-ops.github.io/Organising-Things/" },
   { seq: 3, code: "A-2", title: "Solids, Liquids, and Gases", sources: ["bfsu"], phase: 0, done: true, href: "https://shelikag-ops.github.io/Solids-Liquids/" },
-  { seq: 4, code: "B-2", title: "Living vs Natural Earth vs Human-Made", sources: ["bfsu"], phase: 0, ready: true, href: "https://shelikag-ops.github.io/Living-Manmade/" },
-  { seq: 5, code: "B-3", title: "The Plant & Animal Kingdoms", sources: ["bfsu"], phase: 0, ready: true, href: "chapter-b3-plants-animals.html" },
 
-  // Phase 1 — Life Science Wrap-Up
-  { seq: 6, code: "B-4", title: "Life Cycles", sources: ["bfsu"], phase: 1, current: true, href: "chapter-b4-life-cycles.html" },
-  { seq: 7, code: "B-4A + SCI", title: "Identification of Living Things", sources: ["both"], phase: 1, current: true, href: "chapter-b4a-identification.html" },
-  { seq: 8, code: "B-4B + SCI", title: "What Is a Species?", sources: ["both"], phase: 1, current: true, href: "chapter-b4b-species.html" },
+  // Phase 1 — Threads Begin (BFSU slots 4-7) · first cross-thread loop
+  { seq: 4, code: "A-3", title: "Air Is a Substance", sources: ["bfsu"], phase: 1, current: true, href: "chapter-a3-air-substance.html" },
+  { seq: 5, code: "D-1", title: "Gravity I: Why Things Fall Down", sources: ["bfsu"], phase: 1, current: true, href: "chapter-d1-gravity-1.html" },
+  { seq: 6, code: "B-2", title: "Living vs Natural Earth vs Human-Made", sources: ["bfsu"], phase: 1, current: true, href: "https://shelikag-ops.github.io/Living-Manmade/" },
+  { seq: 7, code: "C-1", title: "Energy I: Making Things Go", sources: ["bfsu"], phase: 1, done: true, href: "#" },
 
-  // Phase 2 — Energy Foundation
-  { seq: 9, code: "C-1", title: "Energy I: Making Things Go", sources: ["bfsu"], phase: 2, done: true, href: "#" },
+  // Phase 2 — Particles, Sound & Kingdoms (BFSU slots 8-13)
+  { seq: 8, code: "A-4", title: "Matter: Its Particulate Nature", sources: ["bfsu"], phase: 2, ready: true, href: "chapter-a4-matter-particles.html" },
+  { seq: 9, code: "C-2 + SCI", title: "Sound, Vibrations & Energy", sources: ["both"], phase: 2, ready: true, href: "chapter-c2-sci-sound.html" },
   { seq: 10, code: "C-3", title: "Kinetic & Potential Energy", sources: ["bfsu"], phase: 2, ready: true, href: "chapter-c3-kinetic-potential.html" },
-  { seq: 11, code: "C-2 + SCI", title: "Sound, Vibrations & Energy", sources: ["both"], phase: 2, ready: true, href: "chapter-c2-sci-sound.html" },
-  { seq: 12, code: "C-3A", title: "Energy and Force", sources: ["bfsu"], phase: 2, ready: true, href: "chapter-c3a-energy-force.html" },
-  { seq: 13, code: "C-4 + SCI", title: "Matter vs Energy", sources: ["both"], phase: 2, ready: true, href: "chapter-c4-sci-matter-energy.html" },
+  { seq: 11, code: "C-3A", title: "Energy and Force", sources: ["bfsu"], phase: 2, ready: true, href: "chapter-c3a-energy-force.html" },
+  { seq: 12, code: "B-3", title: "The Plant & Animal Kingdoms", sources: ["bfsu"], phase: 2, ready: true, href: "chapter-b3-plants-animals.html" },
+  { seq: 13, code: "D-2 + D-5 + SCI", title: "Day, Night & How We Measure Time", sources: ["both"], phase: 2, ready: true, href: "chapter-d2-day-night-time.html" },
 
-  // Phase 3 — Life Science Depth
-  { seq: 14, code: "B-5 + SCI", title: "Food Chains & Energy Flow", sources: ["both"], phase: 3, ready: true, href: "chapter-b5-sci-food-chains.html" },
-  { seq: 15, code: "B-5A + SCI", title: "Adaptations & Survival", sources: ["both"], phase: 3, ready: true, href: "chapter-b5a-sci-adaptations.html" },
-  { seq: 16, code: "B-6", title: "Skeleton & Muscle System", sources: ["bfsu"], phase: 3, ready: true, href: "chapter-b6-skeleton-muscle.html" },
-  { seq: 17, code: "B-7", title: "Animal Body Designs", sources: ["bfsu"], phase: 3, ready: true, href: "chapter-b7-body-designs.html" },
-  { seq: 18, code: "B-8", title: "Nervous System", sources: ["bfsu"], phase: 3, ready: true, href: "chapter-b8-nervous-system.html" },
-  { seq: 19, code: "B-9", title: "Energy to Run the Body", sources: ["bfsu"], phase: 3, ready: true, href: "chapter-b9-body-energy.html" },
-  { seq: 20, code: "B-10", title: "Plant Structure & What Plants Need", sources: ["bfsu"], phase: 3, ready: true, href: "chapter-b10-plant-structure.html" },
-  { seq: 21, code: "B-11", title: "Seeds & Germination", sources: ["bfsu"], phase: 3, ready: true, href: "chapter-b11-germination.html" },
-  { seq: 22, code: "B-12", title: "Plants, Soil & The Garden", sources: ["bfsu"], phase: 3, ready: true, href: "chapter-b12-plants-soil.html" },
+  // Phase 3 — Orientation & Materials (BFSU slots 14-17)
+  { seq: 14, code: "D-3 + SCI", title: "Maps: Reading and Drawing the World", sources: ["both"], phase: 3, ready: true, href: "chapter-d3-maps.html" },
+  { seq: 15, code: "D-3A + SCI", title: "Finding Your Way: The Cardinal Directions", sources: ["both"], phase: 3, ready: true, href: "chapter-d3a-directions.html" },
+  { seq: 16, code: "A-5", title: "Distinguishing Materials", sources: ["bfsu"], phase: 3, ready: true, href: "chapter-a5-distinguishing-materials.html" },
+  { seq: 17, code: "A-5A + SCI", title: "Magnets & Magnetic Fields", sources: ["both"], phase: 3, ready: true, href: "chapter-a5a-magnets.html" },
 
-  // Phase 4 — Matter Depth
-  { seq: 23, code: "A-3", title: "Air Is a Substance", sources: ["bfsu"], phase: 4, ready: true, href: "chapter-a3-air-substance.html" },
-  { seq: 24, code: "A-4", title: "Matter: Its Particulate Nature", sources: ["bfsu"], phase: 4, ready: true, href: "chapter-a4-matter-particles.html" },
-  { seq: 25, code: "A-5", title: "Distinguishing Materials", sources: ["bfsu"], phase: 4, ready: true, href: "chapter-a5-distinguishing-materials.html" },
-  { seq: 26, code: "A-5A + SCI", title: "Magnets & Magnetic Fields", sources: ["both"], phase: 4, ready: true, href: "chapter-a5a-magnets.html" },
-  { seq: 27, code: "A-6 + SCI", title: "Air Pressure, Vacuums & Atmosphere", sources: ["both"], phase: 4, ready: true, href: "chapter-a6-air-pressure.html" },
-  { seq: 28, code: "A-7 + SCI", title: "Air: A Mixture of Gases", sources: ["both"], phase: 4, ready: true, href: "chapter-a7-air-mixture.html" },
-  { seq: 29, code: "A-8 + SCI", title: "Evaporation, Condensation & the Water Cycle", sources: ["both"], phase: 4, ready: true, href: "chapter-a8-water-cycle.html" },
-  { seq: 30, code: "A-9", title: "Dissolving & Solutions", sources: ["bfsu"], phase: 4, ready: true, href: "chapter-a9-solutions.html" },
-  { seq: 31, code: "A-10", title: "Rocks, Minerals, Crystals & Soil", sources: ["bfsu"], phase: 4, ready: true, href: "chapter-a10-rocks-minerals.html" },
+  // Phase 4 — Life Cycles, Matter vs Energy & Biomes (BFSU slots 18-24)
+  { seq: 18, code: "B-4", title: "Life Cycles", sources: ["bfsu"], phase: 4, ready: true, href: "chapter-b4-life-cycles.html" },
+  { seq: 19, code: "B-4A + SCI", title: "Identification of Living Things", sources: ["both"], phase: 4, ready: true, href: "chapter-b4a-identification.html" },
+  { seq: 20, code: "B-4B + SCI", title: "What Is a Species?", sources: ["both"], phase: 4, ready: true, href: "chapter-b4b-species.html" },
+  { seq: 21, code: "C-4 + SCI", title: "Matter vs Energy", sources: ["both"], phase: 4, ready: true, href: "chapter-c4-sci-matter-energy.html" },
+  { seq: 22, code: "D-4 + D-6 + SCI", title: "Landforms, Biomes & The Seasons", sources: ["both"], phase: 4, ready: true, href: "chapter-d4-biomes-seasons.html" },
+  { seq: 23, code: "B-5 + SCI", title: "Food Chains & Energy Flow", sources: ["both"], phase: 4, ready: true, href: "chapter-b5-sci-food-chains.html" },
+  { seq: 24, code: "B-5A + SCI", title: "Adaptations & Survival", sources: ["both"], phase: 4, ready: true, href: "chapter-b5a-sci-adaptations.html" },
 
-  // Phase 5 — Forces
-  { seq: 32, code: "C-5", title: "Inertia: Why Things Keep Doing What They\'re Doing", sources: ["bfsu"], phase: 5, ready: true, href: "chapter-c5-inertia.html" },
-  { seq: 33, code: "C-6", title: "Friction: The Force That Grips", sources: ["bfsu"], phase: 5, ready: true, href: "chapter-c6-friction.html" },
-  { seq: 34, code: "C-7", title: "Every Push Pushes Back: Newton\'s 3rd Law", sources: ["bfsu"], phase: 5, ready: true, href: "chapter-c7-push-back.html" },
+  // Phase 5 — Atmosphere, Anatomy & Forces (BFSU slots 25-32)
+  { seq: 25, code: "A-6 + SCI", title: "Air Pressure, Vacuums & Atmosphere", sources: ["both"], phase: 5, ready: true, href: "chapter-a6-air-pressure.html" },
+  { seq: 26, code: "A-7 + SCI", title: "Air: A Mixture of Gases", sources: ["both"], phase: 5, ready: true, href: "chapter-a7-air-mixture.html" },
+  { seq: 27, code: "B-6", title: "Skeleton & Muscle System", sources: ["bfsu"], phase: 5, ready: true, href: "chapter-b6-skeleton-muscle.html" },
+  { seq: 28, code: "B-7", title: "Animal Body Designs", sources: ["bfsu"], phase: 5, ready: true, href: "chapter-b7-body-designs.html" },
+  { seq: 29, code: "B-8", title: "Nervous System", sources: ["bfsu"], phase: 5, ready: true, href: "chapter-b8-nervous-system.html" },
+  { seq: 30, code: "C-5", title: "Inertia: Why Things Keep Doing What They\'re Doing", sources: ["bfsu"], phase: 5, ready: true, href: "chapter-c5-inertia.html" },
+  { seq: 31, code: "C-6", title: "Friction: The Force That Grips", sources: ["bfsu"], phase: 5, ready: true, href: "chapter-c6-friction.html" },
+  { seq: 32, code: "C-7", title: "Every Push Pushes Back: Newton\'s 3rd Law", sources: ["bfsu"], phase: 5, ready: true, href: "chapter-c7-push-back.html" },
 
-  // Phase 6 — Earth & Space
-  { seq: 35, code: "D-1", title: "Gravity I: Why Things Fall Down", sources: ["bfsu"], phase: 6, ready: true, href: "chapter-d1-gravity-1.html" },
-  { seq: 36, code: "D-2 + D-5 + SCI", title: "Day, Night & How We Measure Time", sources: ["both"], phase: 6, ready: true, href: "chapter-d2-day-night-time.html" },
-  { seq: 37, code: "D-3 + SCI", title: "Maps: Reading and Drawing the World", sources: ["both"], phase: 6, ready: true, href: "chapter-d3-maps.html" },
-  { seq: 38, code: "D-3A + SCI", title: "Finding Your Way: The Cardinal Directions", sources: ["both"], phase: 6, ready: true, href: "chapter-d3a-directions.html" },
-  { seq: 39, code: "D-4 + D-6 + SCI", title: "Landforms, Biomes & The Seasons", sources: ["both"], phase: 6, ready: true, href: "chapter-d4-biomes-seasons.html" },
-  { seq: 40, code: "D-7", title: "Gravity II: Mass vs Weight", sources: ["bfsu"], phase: 6, ready: true, href: "chapter-d7-mass-vs-weight.html" },
-  { seq: 41, code: "D-8", title: "Rocks & Fossils: Earth\'s Stone Diary", sources: ["bfsu"], phase: 6, ready: true, href: "chapter-d8-rocks-fossils.html" },
+  // Phase 6 — Cycles, Earth & Plants (BFSU slots 33-41)
+  { seq: 33, code: "A-8 + SCI", title: "Evaporation, Condensation & the Water Cycle", sources: ["both"], phase: 6, ready: true, href: "chapter-a8-water-cycle.html" },
+  { seq: 34, code: "A-9", title: "Dissolving & Solutions", sources: ["bfsu"], phase: 6, ready: true, href: "chapter-a9-solutions.html" },
+  { seq: 35, code: "B-9", title: "Energy to Run the Body", sources: ["bfsu"], phase: 6, ready: true, href: "chapter-b9-body-energy.html" },
+  { seq: 36, code: "D-7", title: "Gravity II: Mass vs Weight", sources: ["bfsu"], phase: 6, ready: true, href: "chapter-d7-mass-vs-weight.html" },
+  { seq: 37, code: "A-10", title: "Rocks, Minerals, Crystals & Soil", sources: ["bfsu"], phase: 6, ready: true, href: "chapter-a10-rocks-minerals.html" },
+  { seq: 38, code: "D-8", title: "Rocks & Fossils: Earth\'s Stone Diary", sources: ["bfsu"], phase: 6, ready: true, href: "chapter-d8-rocks-fossils.html" },
+  { seq: 39, code: "B-10", title: "Plant Structure & What Plants Need", sources: ["bfsu"], phase: 6, ready: true, href: "chapter-b10-plant-structure.html" },
+  { seq: 40, code: "B-11", title: "Seeds & Germination", sources: ["bfsu"], phase: 6, ready: true, href: "chapter-b11-germination.html" },
+  { seq: 41, code: "B-12", title: "Plants, Soil & The Garden", sources: ["bfsu"], phase: 6, ready: true, href: "chapter-b12-plants-soil.html" },
 ];
 
 function render() {
