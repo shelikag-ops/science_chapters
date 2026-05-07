@@ -89,6 +89,61 @@ body.presenting .video-wrap{max-width:min(1200px,88vw)}
 .present-bar{display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(20,25,40,.92);color:#fff;padding:10px 18px;border-radius:999px;gap:10px;align-items:center;z-index:1000;backdrop-filter:blur(10px);opacity:.4}body.presenting .present-bar{display:flex}.present-bar:hover{opacity:1}
 .present-bar button{background:transparent;border:1px solid rgba(255,255,255,.2);color:#fff;padding:6px 12px;border-radius:999px;font-weight:700}.present-bar .counter{font-weight:700;padding:0 8px}.present-bar .exit{background:var(--animal);border-color:var(--animal)}
 .hide{display:none!important}.small{font-size:13px;color:var(--ink-soft)}
+/* === BEE QUIZ + WORD CARDS === */
+.bq-intro{background:linear-gradient(135deg,#fff3d6,#fff8e6);border-radius:var(--radius);padding:20px;margin-bottom:18px;box-shadow:var(--shadow-sm)}
+.bq-screen{background:var(--paper);border-radius:var(--radius);padding:26px;box-shadow:var(--shadow);margin-bottom:18px}
+.bq-screen.hide{display:none}
+.bq-modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:20px 0}
+.bq-mode-btn{padding:20px;border:2px solid #eee;background:#fff;border-radius:14px;cursor:pointer;text-align:center;transition:all .2s;font-family:inherit}
+.bq-mode-btn:hover{border-color:var(--sun);transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+.bq-mode-emoji{font-size:36px;margin-bottom:8px}
+.bq-mode-title{font-family:var(--font-display);font-weight:800;font-size:18px;color:var(--ink)}
+.bq-mode-sub{font-size:13px;color:var(--ink-soft);margin-top:4px}
+.bq-stats{font-size:13px;color:var(--ink-soft);margin-top:14px;text-align:center}
+.bq-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px}
+.bq-progress{font-weight:800;color:var(--ink-soft);font-size:14px}
+.bq-timer{font-family:var(--font-display);font-weight:800;font-size:24px;background:var(--berry);color:#fff;padding:6px 18px;border-radius:999px}
+.bq-timer.warning{background:var(--animal);animation:bqpulse 1s infinite}
+@keyframes bqpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.bq-progress-bar{height:8px;background:#eee;border-radius:999px;overflow:hidden;margin-bottom:18px}
+.bq-progress-fill{height:100%;background:linear-gradient(90deg,var(--sun),var(--animal));transition:width .3s}
+.bq-question{font-family:var(--font-display);font-size:22px;line-height:1.3;margin:0 0 18px;min-height:60px}
+.bq-choices{display:grid;gap:10px}
+.bq-choice{padding:14px 18px;border:2px solid #eee;background:#fff;border-radius:12px;text-align:left;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;color:var(--ink);display:flex;align-items:center}
+.bq-choice:hover:not(:disabled){border-color:var(--ink-soft);background:#fafaf4}
+.bq-choice:disabled{cursor:not-allowed;opacity:.85}
+.bq-choice.correct{border-color:var(--leaf);background:#e9f7ef;color:var(--leaf-dark)}
+.bq-choice.wrong{border-color:var(--animal);background:#fde8e1;color:var(--animal)}
+.bq-letter{display:inline-block;width:26px;height:26px;border-radius:50%;background:#f3efe9;text-align:center;line-height:26px;font-weight:800;margin-right:12px;font-size:13px;flex-shrink:0}
+.bq-choice.correct .bq-letter{background:var(--leaf);color:#fff}
+.bq-choice.wrong .bq-letter{background:var(--animal);color:#fff}
+.bq-feedback{margin-top:14px;padding:12px 16px;border-radius:10px;font-size:14px}
+.bq-feedback.hide{display:none}
+.bq-feedback.correct{background:#e9f7ef;border-left:4px solid var(--leaf)}
+.bq-feedback.wrong{background:#fde8e1;border-left:4px solid var(--animal)}
+.bq-score-display{display:flex;flex-direction:column;align-items:center;margin:30px 0}
+.bq-score{font-family:var(--font-display);font-size:64px;font-weight:800;color:var(--leaf)}
+.bq-percent{font-size:24px;color:var(--ink-soft)}
+.bq-time{text-align:center;color:var(--ink-soft);margin-bottom:24px}
+.bq-result-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:18px}
+.bq-sync-status{text-align:center;font-size:13px;color:var(--ink-soft);min-height:20px}
+.bq-divider{height:1px;background:#eee;margin:30px 0}
+.wc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-top:14px}
+.wc-card{background:#fff;border-radius:14px;box-shadow:var(--shadow-sm);padding:18px;cursor:pointer;min-height:170px;border:2px solid #eee;transition:transform .2s, border-color .2s;display:flex;flex-direction:column;justify-content:space-between}
+.wc-card:hover{transform:translateY(-2px);border-color:var(--sun)}
+.wc-card .wc-back{display:none}
+.wc-card.flipped .wc-front{display:none}
+.wc-card.flipped .wc-back{display:flex;flex-direction:column;gap:10px}
+.wc-card.flipped{background:linear-gradient(180deg,#fff9ea,#fff);border-color:var(--sun)}
+.wc-emoji{font-size:36px;margin-bottom:6px}
+.wc-word{font-family:var(--font-display);font-weight:800;font-size:18px;margin:6px 0;color:var(--ink)}
+.wc-prompt{font-size:11px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em}
+.wc-defn{font-size:14px;line-height:1.45;color:var(--ink)}
+.wc-example{font-size:13px;color:var(--ink-soft);font-style:italic;margin-top:auto}
+.wc-difficulty{display:inline-block;font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px;text-transform:uppercase;margin-top:8px;align-self:flex-start}
+.wc-difficulty.easy{background:#e9f7ef;color:var(--leaf-dark)}
+.wc-difficulty.medium{background:#fff3d6;color:#9a6a00}
+.wc-difficulty.hard{background:#fde8e1;color:var(--animal)}
 </style></head><body>
 
 <nav class="topnav"><div class="brand"><span class="logo">🔬</span> Science Adventure</div><span class="pill">Chapter 38 · D-3A</span><div class="nav-spacer"></div><button class="nav-btn" onclick="window.location.href='index.html'">🏠 Home</button><button class="nav-btn" onclick="enterPresentMode()">🖥 Present</button><button class="nav-btn" id="teacherToggle" onclick="openTeacherLogin()">🔒 Teacher</button><button class="nav-btn teacher-only hide" onclick="signOutTeacher()" style="color:var(--animal);border-color:#fdcbbd;">🔒 Exit</button></nav>
@@ -102,7 +157,7 @@ body.presenting .video-wrap{max-width:min(1200px,88vw)}
 </div>
 </div>
 
-<div class="tabs"><button class="tab active" data-tab="lesson">🎬 Lesson</button><button class="tab" data-tab="homework">📓 Homework</button><button class="tab" data-tab="quiz">🧠 Quiz</button><button class="tab teacher-only hide" data-tab="teacher">🧑‍🏫 Teacher</button></div>
+<div class="tabs"><button class="tab active" data-tab="lesson">🎬 Lesson</button><button class="tab" data-tab="homework">📓 Homework</button><button class="tab" data-tab="quiz">🧠 Quiz</button><button class="tab" data-tab="beequiz">🐝 Bee Quiz</button><button class="tab teacher-only hide" data-tab="teacher">🧑‍🏫 Teacher</button></div>
 
 <div class="tab-panel active" id="panel-lesson"><div class="slide-wrap"><div class="slide-stage" id="slide-stage"><div class="slide active" data-slide="1" data-part="1"><div class="part-banner" style="background:#eaf7f2;color:var(--leaf-dark);"><span>📘 Part 1 of 1</span><span class="part-title">Lesson — Directions: N, E, S, W</span></div><h1 class="big-q">Finding Your Way: The Cardinal Directions</h1><p class="lead">Click <b>Next ➡</b> to begin the adventure!</p><div style="font-size:120px;text-align:center;margin-top:30px;">🧭</div></div>
 <div class="slide" data-slide="2" data-part="1"><div class="two-col"><div><p class="pill">🔭 Today's puzzle</p><h2 class="big-q">How did sailors cross OCEANS before GPS?</h2><p class="lead">A thousand years ago, Vikings sailed from Norway to North America. Polynesians sailed thousands of miles between tiny Pacific islands. Columbus crossed the Atlantic. They had no Google Maps. No phones. Many didn't even have a compass!</p><p class="lead">Yet they found their way. <b>How?</b> What did they USE to know north from south?</p><div class="callout">🤔 <b>Today's mission:</b> learn the four directions — and discover the EVIDENCE that points the way.</div></div><div style="font-size:140px;text-align:center;">🧭🌍</div></div></div>
@@ -139,6 +194,41 @@ body.presenting .video-wrap{max-width:min(1200px,88vw)}
 <div class="tab-panel" id="panel-quiz"><div id="quizStart" class="quiz-start"><div style="font-size: 80px;">🧠</div><h2>Quiz</h2><p class="lead" style="margin-left:auto;margin-right:auto;">🧭 <b>Navigation & Evidence Quiz</b> — 33 questions on directions, the spinning Earth, magnets, and finding your way. Includes visual synthesis, math-bridge, and &ldquo;what would a scientist do?&rdquo; challenges.</p><input type="text" id="quiz-student-name" placeholder="Your name" style="width:260px;padding:10px;border:2px solid #eee;border-radius:10px;font-size:15px;margin:10px;" /><div><button class="btn success" onclick="startQuiz()">🚀 Start</button></div></div><div id="quizArea" class="hide"></div><div id="quizResult" class="hide"></div></div>
 <div class="tab-panel" id="panel-teacher"><div class="hw-intro" style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;"><div style="flex:1;min-width:240px;"><h2 style="margin-top:0;">🧑‍🏫 Teacher Center</h2></div><button class="btn ghost" onclick="signOutTeacher()">🔒 Sign out</button></div><div class="teacher-grid"><div class="teacher-card"><h3>🔑 API Key</h3><input type="password" id="apiKey" placeholder="sk-ant-..." /><div class="submit-row"><button class="btn" onclick="saveApiKey()">💾 Save</button></div><div class="small" id="apiStatus"></div></div><div class="teacher-card"><h3>📬 Submissions</h3><input type="email" id="teacherEmail" placeholder="teacher@example.com" /><input type="url" id="webhookUrl" placeholder="Formspree URL" /><div class="submit-row"><button class="btn" onclick="saveSubmitSettings()">💾 Save</button></div></div><div class="teacher-card" style="grid-column: span 2;"><h3>📥 Inbox</h3><div id="submissionsTable"></div><div class="submit-row"><button class="btn" onclick="exportSubmissions()">💾 Export</button><button class="btn ghost" onclick="clearSubmissions()">🗑 Clear</button></div></div></div></div>
 
+<div class="tab-panel" id="panel-beequiz">
+  <div class="bq-intro">
+    <h2 style="margin-top:0;">🐝 Bee Quiz</h2>
+    <p class="lead">Bee-style practice on Cardinal Directions — recall, sequence, and misconception traps. Then review your word cards below.</p>
+  </div>
+  <div id="bq-mode-picker" class="bq-screen">
+    <h3 style="margin-top:0;">Pick a mode</h3>
+    <div class="bq-modes">
+      <button class="bq-mode-btn" data-mode="quick-5"><div class="bq-mode-emoji">⚡</div><div class="bq-mode-title">Quick 5</div><div class="bq-mode-sub">5 questions · ~2 min</div></button>
+      <button class="bq-mode-btn" data-mode="full-15"><div class="bq-mode-emoji">📋</div><div class="bq-mode-title">Full 15</div><div class="bq-mode-sub">15 questions · ~7 min</div></button>
+      <button class="bq-mode-btn" data-mode="mixed-review"><div class="bq-mode-emoji">🔀</div><div class="bq-mode-title">Mixed Review</div><div class="bq-mode-sub">10 random · all chapters</div></button>
+    </div>
+    <div class="bq-stats"><span id="bq-attempts-count">0</span> attempt(s) saved on this device</div>
+  </div>
+  <div id="bq-active" class="bq-screen hide">
+    <div class="bq-header"><div class="bq-progress" id="bq-progress">Question 1 of 15</div><div class="bq-timer" id="bq-timer">⏱ 30</div></div>
+    <div class="bq-progress-bar"><div class="bq-progress-fill" id="bq-progress-fill"></div></div>
+    <div class="bq-question" id="bq-question"></div>
+    <div class="bq-choices" id="bq-choices"></div>
+    <div class="bq-feedback hide" id="bq-feedback"></div>
+  </div>
+  <div id="bq-results" class="bq-screen hide">
+    <h3 style="margin-top:0;">🎯 Results</h3>
+    <div class="bq-score-display"><div class="bq-score" id="bq-score">0 / 15</div><div class="bq-percent" id="bq-percent">0%</div></div>
+    <div class="bq-time" id="bq-avgtime">Average time: 0 sec/Q</div>
+    <div class="bq-result-actions"><button class="btn success" onclick="bqRestart()">🔄 Try Again</button><button class="btn secondary" onclick="bqBackToCards()">📇 Review Word Cards</button></div>
+    <div id="bq-sync-status" class="bq-sync-status"></div>
+  </div>
+  <div class="bq-divider"></div>
+  <div id="bq-cards-section">
+    <h3>🃏 Word Cards · Cardinal Directions</h3>
+    <p class="small">Tap a card to flip it. Review the chapter's key vocabulary.</p>
+    <div class="wc-grid" id="wc-grid"></div>
+  </div>
+</div>
 </div>
 <div class="present-bar" id="presentBar"><button onclick="prevSlide()">◀</button><span class="counter" id="presentCounter">1 / 15</span><button onclick="nextSlide()">▶</button><button class="exit" onclick="exitPresentMode()">✕ Exit</button></div>
 <div class="modal-back" id="modal"><div class="modal"><h3 id="modal-title">Hello</h3><div id="modal-body"></div><div class="submit-row" style="justify-content:flex-end;" id="modal-actions"></div></div></div>
@@ -191,4 +281,60 @@ document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='
 function showToast(msg){let t=document.getElementById('toast');if(!t){t=document.createElement('div');t.id='toast';t.style.cssText='position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 22px;border-radius:999px;font-weight:700;z-index:200;';document.body.appendChild(t);}t.textContent=msg;setTimeout(()=>t.style.opacity='0',2800);}
 showSlide(1);renderHomework();applyTeacherMode();
 document.addEventListener('keydown',e=>{if(!document.getElementById('panel-lesson').classList.contains('active'))return;if(e.target.matches('input, textarea'))return;if(e.key==='ArrowRight')nextSlide();if(e.key==='ArrowLeft')prevSlide();});
-</script></body></html>
+</script>
+<script>
+/* === BEE QUIZ + WORD CARDS — chapter d3a === */
+const BEE_QUIZ_DATA = {
+  chapter: "d3a",
+  topic: "Cardinal Directions",
+  bee_quiz: [
+    {id:1,category:"vocab",difficulty:"easy",question:"North, South, East, and West are examples of which type of direction?",choices:{a:"ordinal",b:"cardinal",c:"intermediate",d:"magnetic"},correct:"b",distractor_strategy:"half-right"},
+    {id:2,category:"vocab",difficulty:"easy",question:"The imaginary line that Earth spins around is called its what?",choices:{a:"tropic",b:"prime meridian",c:"equator",d:"axis"},correct:"d",distractor_strategy:"half-right"},
+    {id:3,category:"vocab",difficulty:"medium",question:"A diagram on a map showing the four main directions is called a what?",choices:{a:"compass rose",b:"wind chart",c:"compass needle",d:"axis map"},correct:"a",distractor_strategy:"half-right"},
+    {id:4,category:"recall",difficulty:"easy",question:"The direction in which the Sun rises is called what?",choices:{a:"North",b:"South",c:"West",d:"East"},correct:"d",distractor_strategy:"plausible"},
+    {id:5,category:"recall",difficulty:"easy",question:"Going clockwise from North, the next cardinal direction is what?",choices:{a:"East",b:"South",c:"West",d:"Southwest"},correct:"a",distractor_strategy:"plausible"},
+    {id:6,category:"recall",difficulty:"medium",question:"Earth's axis ends at two points; the end at the top of the planet is called what?",choices:{a:"the southern end",b:"the central point",c:"the topmost end (North Pole)",d:"the equatorial line"},correct:"c",distractor_strategy:"half-right"},
+    {id:7,category:"misconception",difficulty:"medium",question:"Sarah turns to face South. Her LEFT hand now points to which direction?",choices:{a:"West",b:"East",c:"North",d:"South"},correct:"b",distractor_strategy:"common-misconception",misconception_targeted:"Students confuse relative direction (left/right, which depend on facing) with absolute direction (cardinal). When facing south, your left is east, not west."},
+    {id:8,category:"misconception",difficulty:"medium",question:"Which of the following is TRUE about the direction North?",choices:{a:"North changes if you turn around",b:"North means the way you're walking",c:"North is the same direction for everyone, no matter which way they face",d:"North is whichever way 'up' is in your view"},correct:"c",distractor_strategy:"common-misconception",misconception_targeted:"Students often think direction is relative to themselves; cardinal directions are absolute and fixed to Earth."},
+    {id:9,category:"misconception",difficulty:"hard",question:"The North Star (Polaris) appears nearly motionless in the night sky because:",choices:{a:"it is the brightest star",b:"it sits directly above Earth's axis",c:"it orbits Earth at the same speed as Earth rotates",d:"it is the closest star to us"},correct:"b",distractor_strategy:"common-misconception",misconception_targeted:"Students often think Polaris is special because of brightness or distance, when actually it's its position over the rotation axis."},
+    {id:10,category:"sequence",difficulty:"medium",question:"Moving clockwise from North on a compass, the cardinal direction right before West is which?",choices:{a:"South",b:"East",c:"North",d:"Southwest"},correct:"a",distractor_strategy:"plausible"},
+    {id:11,category:"sequence",difficulty:"medium",question:"Walking West and then turning 180 degrees, you would now be walking what direction?",choices:{a:"North",b:"South",c:"Still West",d:"East"},correct:"d",distractor_strategy:"common-misconception"},
+    {id:12,category:"sequence",difficulty:"easy",question:"Listing the cardinal directions as N, E, S, W is an example of going which way?",choices:{a:"counterclockwise",b:"alphabetical",c:"clockwise",d:"randomly"},correct:"c",distractor_strategy:"plausible"},
+    {id:13,category:"negative-selection",difficulty:"easy",question:"Which of the following is NOT one of the four cardinal directions?",choices:{a:"Northeast",b:"North",c:"South",d:"East"},correct:"a",distractor_strategy:"plausible"},
+    {id:14,category:"negative-selection",difficulty:"hard",question:"All of the following are true about Earth's axis EXCEPT:",choices:{a:"it is an imaginary line",b:"it goes from the North Pole to the South Pole",c:"the equator runs along the axis",d:"Earth spins around it"},correct:"c",distractor_strategy:"half-right"},
+    {id:15,category:"negative-selection",difficulty:"medium",question:"Which of the following is NOT a way to find direction at night?",choices:{a:"Reading a sundial",b:"Locating the North Star (Polaris)",c:"Looking at the position of the moon",d:"Using a compass"},correct:"a",distractor_strategy:"common-misconception"}
+  ],
+  word_cards: [
+    {word:"Cardinal Direction",definition:"One of the four main compass directions: North, East, South, or West.",example:"Walk north from the tree.",emoji:"🧭",difficulty:"easy"},
+    {word:"Axis",definition:"An imaginary line that something spins around. Earth's goes from the top of the planet to the bottom.",example:"Like a stick through a spinning ball.",emoji:"🌍",difficulty:"medium"},
+    {word:"Compass Rose",definition:"A drawing on a map that shows the four main directions.",example:"Look for it in the corner of any map.",emoji:"🗺️",difficulty:"easy"},
+    {word:"Equator",definition:"An imaginary line around the middle of Earth, halfway between the top and bottom.",example:"Hot places are near the equator.",emoji:"🌡️",difficulty:"medium"},
+    {word:"North Star",definition:"A star (Polaris) that appears almost still in the sky because it sits directly above Earth's axis.",example:"Sailors used it to find their way at night.",emoji:"⭐",difficulty:"medium"},
+    {word:"North Pole",definition:"The point at the very top of Earth, where the axis ends.",example:"Polar bears live near it.",emoji:"🐻‍❄️",difficulty:"easy"},
+    {word:"South Pole",definition:"The point at the very bottom of Earth, where the axis ends on the other side.",example:"Penguins live near it.",emoji:"🐧",difficulty:"easy"},
+    {word:"Compass",definition:"A small tool with a magnetic needle that points to magnetic north.",example:"You can hold it in your hand to find direction.",emoji:"🧭",difficulty:"easy"},
+    {word:"Absolute Direction",definition:"A direction (like North) that stays the same no matter which way you face.",example:"'Walk west' works the same for everyone.",emoji:"📌",difficulty:"hard"},
+    {word:"Relative Direction",definition:"A direction (like Left or Right) that depends on which way someone is facing.",example:"'Walk left' is different for different people.",emoji:"↔️",difficulty:"hard"}
+  ]
+};
+const BQ_PROXY='https://anthropic-proxy.shelikag.workers.dev';
+const BQ_DB_ID='2de2bcd5b1cd46a59dc6289863d7c30b';
+const WC_DB_ID='2b950200f7804b219b6c9bc311be47f1';
+const BQ_CHAPTER='d3a';
+let bqMode=null,bqQuestions=[],bqIndex=0,bqAnswers=[],bqQStartTime=0,bqTimerInterval=null;
+function bqShuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function bqInit(){document.querySelectorAll('.bq-mode-btn').forEach(btn=>{btn.onclick=()=>bqStart(btn.dataset.mode);});bqUpdateStats();bqRenderWordCards();/* Publish this chapter's cards so word-jar.html can aggregate */localStorage.setItem('wc-cards-'+BQ_CHAPTER,JSON.stringify({chapter:BQ_CHAPTER,topic:BEE_QUIZ_DATA.topic,cards:BEE_QUIZ_DATA.word_cards}));}
+function bqUpdateStats(){const a=JSON.parse(localStorage.getItem('bq-attempts-'+BQ_CHAPTER)||'[]');const el=document.getElementById('bq-attempts-count');if(el)el.textContent=a.length;}
+function bqStart(mode){bqMode=mode;bqAnswers=[];bqIndex=0;if(mode==='quick-5')bqQuestions=bqShuffle(BEE_QUIZ_DATA.bee_quiz).slice(0,5);else if(mode==='full-15')bqQuestions=bqShuffle(BEE_QUIZ_DATA.bee_quiz);else bqQuestions=bqShuffle(BEE_QUIZ_DATA.bee_quiz).slice(0,10);document.getElementById('bq-mode-picker').classList.add('hide');document.getElementById('bq-results').classList.add('hide');document.getElementById('bq-active').classList.remove('hide');bqRenderQuestion();}
+function bqRenderQuestion(){const q=bqQuestions[bqIndex];document.getElementById('bq-progress').textContent=`Question ${bqIndex+1} of ${bqQuestions.length}`;document.getElementById('bq-question').textContent=q.question;document.getElementById('bq-progress-fill').style.width=`${(bqIndex/bqQuestions.length)*100}%`;document.getElementById('bq-feedback').classList.add('hide');const ce=document.getElementById('bq-choices');ce.innerHTML='';for(const[letter,text]of Object.entries(q.choices)){const btn=document.createElement('button');btn.className='bq-choice';btn.dataset.letter=letter;btn.innerHTML=`<span class="bq-letter">${letter}</span>${text}`;btn.onclick=()=>bqAnswer(letter);ce.appendChild(btn);}bqStartTimer();}
+function bqStartTimer(){bqQStartTime=Date.now();let secs=30;const tEl=document.getElementById('bq-timer');tEl.textContent=`⏱ ${secs}`;tEl.classList.remove('warning');if(bqTimerInterval)clearInterval(bqTimerInterval);bqTimerInterval=setInterval(()=>{secs--;if(secs<=5)tEl.classList.add('warning');if(secs<=0){clearInterval(bqTimerInterval);bqAnswer(null);return;}tEl.textContent=`⏱ ${secs}`;},1000);}
+function bqAnswer(letter){if(bqTimerInterval)clearInterval(bqTimerInterval);const q=bqQuestions[bqIndex];const seconds=(Date.now()-bqQStartTime)/1000;const correct=letter===q.correct;bqAnswers.push({qId:q.id,chosen:letter,correct,seconds});document.querySelectorAll('.bq-choice').forEach(btn=>{btn.disabled=true;if(btn.dataset.letter===q.correct)btn.classList.add('correct');else if(btn.dataset.letter===letter)btn.classList.add('wrong');});const fbEl=document.getElementById('bq-feedback');fbEl.classList.remove('hide');if(letter===null){fbEl.className='bq-feedback wrong';fbEl.textContent=`⏱ Time's up! Correct answer: ${q.correct}) ${q.choices[q.correct]}`;}else if(correct){fbEl.className='bq-feedback correct';fbEl.textContent=`✅ Correct! (${seconds.toFixed(1)} sec)`;}else{fbEl.className='bq-feedback wrong';fbEl.textContent=`❌ Not quite. Correct: ${q.correct}) ${q.choices[q.correct]}`;}setTimeout(()=>{bqIndex++;if(bqIndex<bqQuestions.length)bqRenderQuestion();else bqShowResults();},1800);}
+function bqShowResults(){document.getElementById('bq-active').classList.add('hide');document.getElementById('bq-results').classList.remove('hide');const correct=bqAnswers.filter(a=>a.correct).length;const total=bqAnswers.length;const percent=Math.round((correct/total)*100);const avgSec=(bqAnswers.reduce((s,a)=>s+a.seconds,0)/total).toFixed(1);document.getElementById('bq-score').textContent=`${correct} / ${total}`;document.getElementById('bq-percent').textContent=`${percent}% correct`;document.getElementById('bq-avgtime').textContent=`Average time: ${avgSec} seconds per question`;bqSaveLocally(correct,total,percent,avgSec);bqSyncToNotion(correct,total,percent,avgSec);}
+function bqSaveLocally(correct,total,percent,avgSec){const a=JSON.parse(localStorage.getItem('bq-attempts-'+BQ_CHAPTER)||'[]');a.push({chapter:BQ_CHAPTER,date:new Date().toISOString().slice(0,10),mode:bqMode,score:correct,total:total,percent:percent,avgSec:parseFloat(avgSec),wrongIds:bqAnswers.filter(x=>!x.correct).map(x=>x.qId).join(','),timestamp:Date.now()});localStorage.setItem('bq-attempts-'+BQ_CHAPTER,JSON.stringify(a));bqUpdateStats();}
+async function bqSyncToNotion(correct,total,percent,avgSec){const tEl=document.getElementById('bq-sync-status');const TK=localStorage.getItem('hs-notion-key');if(!TK){tEl.innerHTML='⚠️ Notion sync off — paste your Notion key in dashboard settings to enable';return;}tEl.innerHTML='⏳ Syncing to Notion...';const today=new Date().toISOString().slice(0,10);const wrongIds=bqAnswers.filter(a=>!a.correct).map(a=>a.qId).join(',');try{const res=await fetch(`${BQ_PROXY}/notion/v1/pages`,{method:'POST',headers:{'Content-Type':'application/json','x-notion-key':TK},body:JSON.stringify({parent:{database_id:BQ_DB_ID},properties:{Attempt:{title:[{text:{content:`${BQ_CHAPTER} · ${today} · ${bqMode}`}}]},Chapter:{rich_text:[{text:{content:BQ_CHAPTER}}]},Date:{date:{start:today}},Mode:{select:{name:bqMode}},Score:{number:correct},Total:{number:total},Percent:{number:percent},'Avg Sec per Q':{number:parseFloat(avgSec)},'Wrong Question IDs':{rich_text:[{text:{content:wrongIds}}]}}})});if(res.ok)tEl.innerHTML='✅ Synced to Notion';else{const err=await res.text();tEl.innerHTML=`⚠️ Sync failed (${res.status}): ${err.slice(0,100)}`;}}catch(e){tEl.innerHTML=`⚠️ Sync error: ${e.message}`;}}
+function bqRestart(){document.getElementById('bq-results').classList.add('hide');document.getElementById('bq-mode-picker').classList.remove('hide');}
+function bqBackToCards(){document.getElementById('bq-cards-section').scrollIntoView({behavior:'smooth'});}
+function bqRenderWordCards(){const grid=document.getElementById('wc-grid');if(!grid)return;grid.innerHTML='';for(const card of BEE_QUIZ_DATA.word_cards){const div=document.createElement('div');div.className='wc-card';div.innerHTML=`<div class="wc-front"><div class="wc-emoji">${card.emoji||'📇'}</div><div class="wc-word">${card.word}</div><div class="wc-prompt">tap to see definition</div><span class="wc-difficulty ${card.difficulty}">${card.difficulty}</span></div><div class="wc-back"><div class="wc-defn">${card.definition}</div><div class="wc-example">${card.example}</div><span class="wc-difficulty ${card.difficulty}">${card.difficulty}</span></div>`;div.onclick=()=>div.classList.toggle('flipped');grid.appendChild(div);}}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bqInit);else bqInit();
+</script>
+</body></html>

@@ -1,0 +1,310 @@
+{
+  "chapter": "b2",
+  "topic": "Living vs Natural Earth vs Human-Made",
+  "bee_quiz": [
+    {
+      "id": 1,
+      "category": "vocab",
+      "difficulty": "easy",
+      "question": "Anything connected to living things — alive, once alive, or made by living things — is called what?",
+      "choices": {
+        "a": "Biological",
+        "b": "Natural Earth",
+        "c": "Human-made",
+        "d": "Technological"
+      },
+      "correct": "a",
+      "distractor_strategy": "half-right",
+      "misconception_targeted": null
+    },
+    {
+      "id": 2,
+      "category": "vocab",
+      "difficulty": "easy",
+      "question": "Rocks, soil, sand, water, and air that exist in nature and were NOT made by humans or living things are called what?",
+      "choices": {
+        "a": "Biological material",
+        "b": "Processed material",
+        "c": "Natural Earth",
+        "d": "Organic matter"
+      },
+      "correct": "c",
+      "distractor_strategy": "half-right",
+      "misconception_targeted": null
+    },
+    {
+      "id": 3,
+      "category": "vocab",
+      "difficulty": "medium",
+      "question": "A plastic bottle, wooden chair, and metal fork are all examples of what?",
+      "choices": {
+        "a": "Biological",
+        "b": "Geological",
+        "c": "Human-made",
+        "d": "Synthetic organisms"
+      },
+      "correct": "c",
+      "distractor_strategy": "plausible",
+      "misconception_targeted": null
+    },
+    {
+      "id": 4,
+      "category": "recall",
+      "difficulty": "medium",
+      "question": "In the MRS GREN checklist, what does the first 'R' stand for?",
+      "choices": {
+        "a": "Reaction",
+        "b": "Respiration",
+        "c": "Reproduction",
+        "d": "Response"
+      },
+      "correct": "b",
+      "distractor_strategy": "half-right",
+      "misconception_targeted": null
+    },
+    {
+      "id": 5,
+      "category": "recall",
+      "difficulty": "medium",
+      "question": "Which of these is NOT part of the MRS GREN checklist for living things?",
+      "choices": {
+        "a": "Movement",
+        "b": "Reproduction",
+        "c": "Transparency",
+        "d": "Growth"
+      },
+      "correct": "c",
+      "distractor_strategy": "obvious-wrong",
+      "misconception_targeted": null
+    },
+    {
+      "id": 6,
+      "category": "recall",
+      "difficulty": "hard",
+      "question": "According to the 7-of-7 rule in science, something is alive if and only if it does which number of the MRS GREN processes?",
+      "choices": {
+        "a": "At least 4",
+        "b": "At least 5",
+        "c": "At least 6",
+        "d": "All 7"
+      },
+      "correct": "d",
+      "distractor_strategy": "common-misconception",
+      "misconception_targeted": null
+    },
+    {
+      "id": 7,
+      "category": "misconception",
+      "difficulty": "medium",
+      "question": "A candle flame grows, eats fuel, moves, and releases smoke like waste. Is a flame alive?",
+      "choices": {
+        "a": "Yes, because it eats fuel and grows bigger",
+        "b": "Yes, because it moves and releases waste",
+        "c": "No, because it cannot reproduce and has no cells or DNA",
+        "d": "No, because flames are too hot to be living"
+      },
+      "correct": "c",
+      "distractor_strategy": "half-right",
+      "misconception_targeted": "Flame shares some properties of life but lacks reproduction, DNA, and cells"
+    },
+    {
+      "id": 8,
+      "category": "misconception",
+      "difficulty": "medium",
+      "question": "A wooden spoon is an example of what category?",
+      "choices": {
+        "a": "Biological, because it came from a tree",
+        "b": "Human-made, because a human deliberately shaped it",
+        "c": "Natural Earth, because wood comes from nature",
+        "d": "A mix of both biological and human-made"
+      },
+      "correct": "b",
+      "distractor_strategy": "half-right",
+      "misconception_targeted": "When humans deliberately shape something, the product becomes human-made even if the raw material was biological"
+    },
+    {
+      "id": 9,
+      "category": "misconception",
+      "difficulty": "hard",
+      "question": "A feather that fell off a bird yesterday is an example of what category?",
+      "choices": {
+        "a": "Natural Earth, because it was separated from the living bird",
+        "b": "Human-made, because someone found it",
+        "c": "Biological, because it grew from and is a product of a living thing",
+        "d": "Not in any category because it is not alive anymore"
+      },
+      "correct": "c",
+      "distractor_strategy": "common-misconception",
+      "misconception_targeted": "Parts of living things remain biological even after they separate from the organism"
+    },
+    {
+      "id": 10,
+      "category": "sequence",
+      "difficulty": "medium",
+      "question": "In the technology-building process, finding the raw material comes BEFORE which step?",
+      "choices": {
+        "a": "Cutting and shaping",
+        "b": "Delivering to the shop",
+        "c": "Assembling the parts",
+        "d": "Using the finished product"
+      },
+      "correct": "a",
+      "distractor_strategy": "plausible",
+      "misconception_targeted": null
+    },
+    {
+      "id": 11,
+      "category": "sequence",
+      "difficulty": "medium",
+      "question": "After humans process raw materials and make individual parts, the next step in technology is what?",
+      "choices": {
+        "a": "Finding more raw materials",
+        "b": "Assemble the parts together",
+        "c": "Deliver to the shop",
+        "d": "Recycle the product"
+      },
+      "correct": "b",
+      "distractor_strategy": "plausible",
+      "misconception_targeted": null
+    },
+    {
+      "id": 12,
+      "category": "sequence",
+      "difficulty": "hard",
+      "question": "A bird builds a nest from twigs. Which of these is a step that the bird takes DIFFERENTLY than humans use technology?",
+      "choices": {
+        "a": "Finding raw materials from nature",
+        "b": "Uses instinct or learning from parents instead of written plans",
+        "c": "Shaping and processing the materials",
+        "d": "Assembling the final product"
+      },
+      "correct": "b",
+      "distractor_strategy": "half-right",
+      "misconception_targeted": null
+    },
+    {
+      "id": 13,
+      "category": "negative-selection",
+      "difficulty": "medium",
+      "question": "Which of these is NOT an example of something biological?",
+      "choices": {
+        "a": "Honey made by bees",
+        "b": "A rock formed in the Earth",
+        "c": "A shell made by a mollusc",
+        "d": "A feather from a bird"
+      },
+      "correct": "b",
+      "distractor_strategy": "obvious-wrong",
+      "misconception_targeted": null
+    },
+    {
+      "id": 14,
+      "category": "negative-selection",
+      "difficulty": "medium",
+      "question": "All of these are clues scientists use to spot a living thing EXCEPT which one?",
+      "choices": {
+        "a": "Orientation — having a clear top and bottom",
+        "b": "Color — being bright and shiny",
+        "c": "Symmetry — having matching sides",
+        "d": "Fine structure — detailed patterns under magnification"
+      },
+      "correct": "b",
+      "distractor_strategy": "obvious-wrong",
+      "misconception_targeted": null
+    },
+    {
+      "id": 15,
+      "category": "negative-selection",
+      "difficulty": "hard",
+      "question": "All of these are involved in making technology EXCEPT which one?",
+      "choices": {
+        "a": "Finding raw materials",
+        "b": "Processing and making parts",
+        "c": "Living things reproducing to make offspring",
+        "d": "Assembling parts together"
+      },
+      "correct": "c",
+      "distractor_strategy": "obvious-wrong",
+      "misconception_targeted": null
+    }
+  ],
+  "word_cards": [
+    {
+      "word": "Biological",
+      "definition": "Anything connected to living things — alive right now, once alive, part of a living thing, or made by a living thing.",
+      "example": "Sugar is biological because it comes from a sugarcane plant, even though the sugar granules don't look alive.",
+      "emoji": "🌿",
+      "difficulty": "easy"
+    },
+    {
+      "word": "Natural Earth",
+      "definition": "Things that exist in nature all by themselves and were not made by humans or living things.",
+      "example": "Rocks, soil, sand, water, and air are all examples of natural Earth materials.",
+      "emoji": "🪨",
+      "difficulty": "easy"
+    },
+    {
+      "word": "Human-made",
+      "definition": "Objects that humans deliberately shaped, processed, or built, usually starting from natural materials.",
+      "example": "A plastic bottle is human-made because humans used technology to process crude oil into plastic.",
+      "emoji": "⚙️",
+      "difficulty": "easy"
+    },
+    {
+      "word": "Orientation",
+      "definition": "Having a clear top and bottom, a front and back — a definite right way to position something.",
+      "example": "A dog has a head end and a tail end, so it has orientation. A rock can be turned any way.",
+      "emoji": "↕️",
+      "difficulty": "medium"
+    },
+    {
+      "word": "Symmetry",
+      "definition": "When two sides of something match each other perfectly, or when parts arrange in a matching circle pattern.",
+      "example": "Your left and right sides match — that is bilateral symmetry. A starfish has radial symmetry.",
+      "emoji": "🦋",
+      "difficulty": "medium"
+    },
+    {
+      "word": "Respiration",
+      "definition": "The process where living things use oxygen and food to release energy and create waste like carbon dioxide.",
+      "example": "When you breathe in oxygen and eat food, your body uses respiration to give you energy to move and think.",
+      "emoji": "💨",
+      "difficulty": "hard"
+    },
+    {
+      "word": "Reproduction",
+      "definition": "When living things create more of themselves — such as animals having babies or plants making seeds.",
+      "example": "A rabbit has baby rabbits. An apple tree grows seeds. Both are examples of reproduction.",
+      "emoji": "👶",
+      "difficulty": "medium"
+    },
+    {
+      "word": "Technology",
+      "definition": "Every step from finding raw materials to cutting, processing, assembling to create something humans designed.",
+      "example": "Making a tin of baked beans uses farming, canning, cooking, and shipping — all are parts of technology.",
+      "emoji": "⚙️",
+      "difficulty": "medium"
+    },
+    {
+      "word": "MRS GREN",
+      "definition": "A checklist of 7 things scientists look for to decide if something is alive: Movement, Respiration, Sensitivity, Growth, Reproduction, Excretion, Nutrition.",
+      "example": "A plant does all 7 things on MRS GREN. A candle flame fails because it cannot reproduce or sense the environment.",
+      "emoji": "🧬",
+      "difficulty": "hard"
+    },
+    {
+      "word": "Excretion",
+      "definition": "When living things get rid of waste that their body doesn't need anymore.",
+      "example": "When you sweat, pee, breathe out carbon dioxide, or drop dead leaves, you are doing excretion.",
+      "emoji": "🚽",
+      "difficulty": "medium"
+    },
+    {
+      "word": "Nutrition",
+      "definition": "Taking in food or energy from somewhere to help your body grow bigger and repair itself.",
+      "example": "You get nutrition when you eat food. A plant gets nutrition from soil, water, and sunlight.",
+      "emoji": "🍞",
+      "difficulty": "easy"
+    }
+  ]
+}

@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Organising Things into Categories 🗂️</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0e17;
+    --surface: #1a1833;
+    --card: #231f42;
+    --accent1: #ff6b6b;
+    --accent2: #ffd166;
+    --accent3: #06d6a0;
+    --accent4: #118ab2;
+    --accent5: #c77dff;
+    --text: #fffffe;
+    --subtext: #a7a9be;
+    --radius: 18px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 30% 60%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 55% 15%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 75% 45%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 70%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 20% 85%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 65% 80%, rgba(255,255,255,0.4) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .slide {
+    display: none;
+    min-height: 100vh;
+    padding: 30px 40px 100px;
+    position: relative;
+    z-index: 1;
+    animation: fadeIn 0.4s ease;
+  }
+  .slide.active { display: flex; flex-direction: column; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* NAV */
+  .nav {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 100;
+    background: rgba(26,24,51,0.92);
+    padding: 10px 20px;
+    border-radius: 50px;
+    border: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+  }
+  .nav button {
+    background: var(--card);
+    border: none;
+    color: var(--text);
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 8px 22px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .nav button:hover { background: var(--accent4); transform: scale(1.05); }
+  .nav .slide-counter {
+    color: var(--subtext);
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    padding: 0 6px;
+  }
+
+  /* SHARED */
+  .slide-title {
+    font-family: 'Baloo 2', sans-serif;
+    font-size: clamp(28px, 4vw, 48px);
+    font-weight: 800;
+    margin-bottom: 8px;
+    line-height: 1.1;
+  }
+  .slide-subtitle {
+    color: var(--subtext);
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 30px;
+  }
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+  }
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 24px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .btn {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    padding: 12px 28px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn:hover { transform: scale(1.05); }
+  .btn-primary { background: var(--accent3); color: #0f0e17; }
+  .btn-secondary { background: var(--accent2); color: #0f0e17; }
+  .btn-danger { background: var(--accent1); color: #fff; }
+  .btn-purple { background: var(--accent5); color: #fff; }
+  .offline-box {
+    background: linear-gradient(135deg, rgba(255,209,102,0.1), rgba(255,107,107,0.1));
+    border: 2px solid var(--accent2);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-top: 20px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .offline-icon { font-size: 32px; min-width: 40px; }
+  .offline-title { font-size: 15px; font-weight: 800; color: var(--accent2); margin-bottom: 5px; }
+  .offline-desc { font-size: 13px; font-weight: 600; color: var(--subtext); line-height: 1.6; }
+
+  /* SLIDE 1 */
+  #slide-1 { justify-content: center; align-items: center; text-align: center; }
+  .hero-emoji { font-size: 100px; line-height: 1; margin-bottom: 20px; animation: bounce 2s infinite; }
+  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+  #slide-1 .slide-title {
+    font-size: clamp(36px, 6vw, 72px);
+    background: linear-gradient(135deg, var(--accent2), var(--accent1), var(--accent5));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .hero-tagline { font-size: 20px; color: var(--subtext); margin-top: 12px; font-weight: 600; }
+  .start-btn {
+    margin-top: 36px; font-size: 18px; padding: 16px 48px;
+    background: linear-gradient(135deg, var(--accent3), var(--accent4));
+    color: #fff; border: none; border-radius: 50px; cursor: pointer;
+    font-family: 'Baloo 2', sans-serif; font-weight: 700; transition: all 0.3s;
+    box-shadow: 0 8px 32px rgba(6,214,160,0.3);
+  }
+  .start-btn:hover { transform: scale(1.06); box-shadow: 0 12px 40px rgba(6,214,160,0.5); }
+
+  /* WARMUP */
+  .warmup-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 16px; margin-top: 10px; }
+  .warmup-card {
+    background: var(--card); border-radius: var(--radius); padding: 20px; text-align: center;
+    border: 2px solid transparent; cursor: pointer; transition: all 0.25s; font-size: 42px;
+  }
+  .warmup-card:hover { border-color: var(--accent2); transform: scale(1.04); }
+  .warmup-card.selected { border-color: var(--accent3); background: rgba(6,214,160,0.12); }
+  .warmup-card p { font-size: 13px; color: var(--subtext); margin-top: 8px; font-weight: 600; }
+  .warmup-reveal { margin-top: 20px; background: rgba(6,214,160,0.1); border: 1px solid var(--accent3); border-radius: var(--radius); padding: 20px; display: none; }
+  .warmup-reveal.show { display: block; animation: fadeIn 0.4s; }
+
+  /* CONCEPT */
+  .concept-row { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; }
+  .concept-box { flex:1; min-width: 200px; background: var(--card); border-radius: var(--radius); padding: 24px; text-align: center; position: relative; overflow: hidden; }
+  .concept-box::before { content:''; position:absolute; top:0;left:0;right:0; height:4px; }
+  .concept-box.c1::before{background:var(--accent1)} .concept-box.c2::before{background:var(--accent2)}
+  .concept-box.c3::before{background:var(--accent3)} .concept-box.c4::before{background:var(--accent5)}
+  .concept-emoji { font-size: 44px; margin-bottom: 10px; }
+  .concept-label { font-weight: 800; font-size: 16px; margin-bottom: 6px; }
+  .concept-items { font-size: 13px; color: var(--subtext); line-height: 1.7; }
+  .big-idea { margin-top: 24px; background: linear-gradient(135deg,rgba(255,107,107,0.15),rgba(199,125,255,0.15)); border-radius: var(--radius); padding: 22px; border: 1px solid rgba(199,125,255,0.3); font-size: 18px; font-weight: 700; text-align: center; }
+  .big-idea span { color: var(--accent5); }
+
+  /* SORTING GAME */
+  .sorting-container { display: flex; gap: 20px; flex-wrap: wrap; }
+  .items-pool { flex:1; min-width:220px; background:var(--card); border-radius:var(--radius); padding:20px; }
+  .bins-area { flex:2; min-width:300px; display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .bin { background:var(--card); border-radius:var(--radius); padding:16px; min-height:140px; border:2px dashed rgba(255,255,255,0.15); transition:all 0.2s; }
+  .bin.drag-over { border-color:var(--accent3); background:rgba(6,214,160,0.08); }
+  .bin-label { font-size:13px; font-weight:800; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+  .sortable-item { display:inline-block; background:var(--surface); border-radius:30px; padding:6px 14px; margin:4px; font-size:13px; font-weight:700; cursor:grab; border:1px solid rgba(255,255,255,0.1); transition:all 0.2s; user-select:none; }
+  .sortable-item:hover { background:var(--accent4); color:#fff; transform:scale(1.06); }
+  .sort-score { margin-top:16px; text-align:center; font-size:18px; font-weight:800; color:var(--accent3); display:none; }
+
+  /* SUPERMARKET */
+  .chaotic-items { display:flex; flex-wrap:wrap; gap:10px; padding:20px; background:rgba(255,107,107,0.08); border-radius:var(--radius); border:1px solid rgba(255,107,107,0.3); }
+  .chaotic-item { background:var(--surface); border-radius:8px; padding:8px 14px; font-size:12px; font-weight:700; }
+  .chaos-question { font-size:20px; font-weight:800; color:var(--accent2); text-align:center; margin:16px 0; }
+
+  /* MEMORY GAME */
+  .tray-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin:20px 0; }
+  .tray-item { background:var(--card); border-radius:14px; padding:16px 8px; text-align:center; font-size:30px; border:2px solid transparent; transition:all 0.3s; }
+  .tray-item p { font-size:11px; color:var(--subtext); margin-top:4px; font-weight:600; }
+  .tray-item.hidden { filter:blur(8px); }
+  .timer-display { background:var(--card); border-radius:12px; padding:12px 24px; font-size:32px; font-weight:800; font-family:'Baloo 2',sans-serif; color:var(--accent2); text-align:center; min-width:100px; }
+  .answer-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:12px; }
+  .answer-chip { background:var(--card); border-radius:10px; padding:8px; text-align:center; font-size:12px; font-weight:700; cursor:pointer; border:2px solid transparent; transition:all 0.2s; }
+  .answer-chip:hover { border-color:var(--accent3); }
+  .answer-chip.correct { border-color:var(--accent3); background:rgba(6,214,160,0.15); }
+
+  /* ===== VIDEOS SLIDE ===== */
+  .videos-intro {
+    background: linear-gradient(135deg, rgba(17,138,178,0.15), rgba(199,125,255,0.12));
+    border: 1px solid rgba(17,138,178,0.35);
+    border-radius: var(--radius);
+    padding: 18px 22px;
+    margin-bottom: 22px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--subtext);
+    line-height: 1.6;
+  }
+  .videos-intro strong { color: var(--text); }
+  .video-section-label {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 22px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .video-section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.1);
+  }
+  .video-row {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .video-card {
+    flex: 1;
+    min-width: 280px;
+    background: var(--card);
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.07);
+    transition: all 0.25s;
+    display: flex;
+    flex-direction: column;
+  }
+  .video-card:hover { border-color: rgba(255,255,255,0.18); transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+  .video-thumb-wrap {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%;
+    background: #000;
+    cursor: pointer;
+    overflow: hidden;
+  }
+  .video-thumb-wrap iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  .video-thumb-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #111;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .video-thumb-placeholder:hover { background: #1a1a2e; }
+  .play-btn-big {
+    width: 62px;
+    height: 62px;
+    background: rgba(255,0,0,0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    transition: all 0.2s;
+    box-shadow: 0 4px 20px rgba(255,0,0,0.4);
+  }
+  .video-thumb-placeholder:hover .play-btn-big { transform: scale(1.1); box-shadow: 0 8px 28px rgba(255,0,0,0.6); }
+  .play-btn-big svg { fill: white; width: 28px; height: 28px; margin-left: 4px; }
+  .thumb-title { font-size: 12px; font-weight: 700; color: #ccc; text-align: center; padding: 0 16px; }
+  .thumb-channel { font-size: 11px; color: #888; margin-top: 4px; }
+  .video-info { padding: 16px 18px 18px; flex: 1; }
+  .video-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 8px;
+  }
+  .badge-inclass { background: rgba(6,214,160,0.2); color: var(--accent3); }
+  .badge-afterclass { background: rgba(255,209,102,0.2); color: var(--accent2); }
+  .video-title { font-size: 15px; font-weight: 800; margin-bottom: 6px; line-height: 1.3; }
+  .video-channel { font-size: 11px; color: var(--subtext); font-weight: 700; margin-bottom: 8px; }
+  .video-desc { font-size: 12.5px; color: var(--subtext); font-weight: 600; line-height: 1.6; }
+  .video-timing {
+    margin-top: 10px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .timing-chip {
+    background: var(--surface);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--subtext);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .video-open-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 12px;
+    background: rgba(255,0,0,0.15);
+    border: 1px solid rgba(255,80,80,0.3);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 12px;
+    font-weight: 800;
+    color: #ff7070;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .video-open-btn:hover { background: rgba(255,0,0,0.28); color: #ff9090; }
+
+  /* MYSTERIES */
+  .mysteries-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; }
+  .mystery-card { background:var(--card); border-radius:var(--radius); padding:22px; border:2px solid rgba(255,255,255,0.06); cursor:pointer; position:relative; overflow:hidden; }
+  .mystery-card::before { content:''; position:absolute; top:0;left:0;right:0; height:3px; background:linear-gradient(90deg,var(--accent2),var(--accent1)); }
+  .mystery-num { font-size:11px; font-weight:800; letter-spacing:2px; text-transform:uppercase; color:var(--accent2); margin-bottom:8px; }
+  .mystery-q { font-size:14px; font-weight:700; line-height:1.5; margin-bottom:14px; }
+  .mystery-answer { background:rgba(6,214,160,0.1); border:1px solid var(--accent3); border-radius:10px; padding:12px; font-size:13px; font-weight:600; color:var(--accent3); display:none; line-height:1.5; }
+  .mystery-answer.revealed { display:block; animation:fadeIn 0.3s; }
+  .reveal-btn { background:var(--surface); border:1px solid rgba(255,255,255,0.12); border-radius:20px; padding:7px 16px; font-size:12px; font-weight:700; color:var(--subtext); cursor:pointer; transition:all 0.2s; margin-top:8px; }
+  .reveal-btn:hover { background:var(--accent2); color:#0f0e17; }
+
+  /* QUIZ */
+  .quiz-progress { display:flex; gap:6px; margin-bottom:24px; flex-wrap:wrap; }
+  .q-dot { width:32px; height:8px; border-radius:4px; background:var(--card); transition:all 0.3s; }
+  .q-dot.correct { background:var(--accent3); } .q-dot.wrong { background:var(--accent1); } .q-dot.active { background:var(--accent2); }
+  .quiz-card { background:var(--card); border-radius:var(--radius); padding:28px; max-width:760px; margin:0 auto; width:100%; }
+  .quiz-meta { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+  .quiz-qnum { font-size:12px; font-weight:800; color:var(--subtext); letter-spacing:1px; text-transform:uppercase; }
+  .quiz-diff { font-size:11px; font-weight:800; padding:3px 10px; border-radius:20px; letter-spacing:0.5px; }
+  .diff-easy { background:rgba(6,214,160,0.2); color:var(--accent3); }
+  .diff-medium { background:rgba(255,209,102,0.2); color:var(--accent2); }
+  .diff-hard { background:rgba(255,107,107,0.2); color:var(--accent1); }
+  .diff-challenge { background:rgba(199,125,255,0.2); color:var(--accent5); }
+  .quiz-question { font-size:18px; font-weight:800; line-height:1.45; margin-bottom:22px; }
+  .quiz-options { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
+  @media(max-width:500px) { .quiz-options { grid-template-columns:1fr; } }
+  .quiz-opt { background:var(--surface); border:2px solid rgba(255,255,255,0.08); border-radius:14px; padding:14px 16px; font-size:14px; font-weight:700; cursor:pointer; transition:all 0.2s; text-align:left; color:var(--text); font-family:'Nunito',sans-serif; line-height:1.4; }
+  .quiz-opt:hover:not(:disabled) { border-color:var(--accent4); background:rgba(17,138,178,0.1); }
+  .quiz-opt.correct { border-color:var(--accent3); background:rgba(6,214,160,0.15); color:var(--accent3); }
+  .quiz-opt.wrong { border-color:var(--accent1); background:rgba(255,107,107,0.15); color:var(--accent1); }
+  .quiz-opt:disabled { cursor:default; }
+  .quiz-feedback { background:var(--surface); border-radius:12px; padding:16px; font-size:14px; font-weight:600; line-height:1.5; margin-top:12px; display:none; }
+  .quiz-feedback.show { display:block; animation:fadeIn 0.3s; }
+  .feedback-correct { border-left:4px solid var(--accent3); }
+  .feedback-wrong { border-left:4px solid var(--accent1); }
+  .quiz-score-display { text-align:center; padding:40px 20px; }
+  .final-score-num { font-family:'Baloo 2',sans-serif; font-size:64px; font-weight:800; background:linear-gradient(135deg,var(--accent2),var(--accent3)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+  /* HOMEWORK */
+  .hw-list { display:flex; flex-direction:column; gap:14px; margin-top:10px; }
+  .hw-item { background:var(--card); border-radius:var(--radius); padding:20px 24px; display:flex; align-items:flex-start; gap:16px; border:1px solid rgba(255,255,255,0.05); transition:all 0.2s; }
+  .hw-item:hover { border-color:rgba(255,255,255,0.12); transform:translateX(4px); }
+  .hw-num { font-family:'Baloo 2',sans-serif; font-size:22px; font-weight:800; min-width:36px; text-align:center; line-height:1; margin-top:2px; }
+  .hw-content { flex:1; }
+  .hw-title { font-size:15px; font-weight:800; margin-bottom:5px; }
+  .hw-desc { font-size:13px; color:var(--subtext); line-height:1.6; font-weight:600; }
+  .hw-emoji { font-size:28px; }
+
+  /* ENDING */
+  #slide-11 { justify-content:center; align-items:center; text-align:center; }
+  .firework { font-size:64px; animation:spin 2s linear infinite; }
+  @keyframes spin { from{transform:rotate(0deg) scale(1)} 50%{transform:rotate(180deg) scale(1.15)} to{transform:rotate(360deg) scale(1)} }
+  .badge-grid { display:flex; justify-content:center; gap:16px; flex-wrap:wrap; margin-top:28px; }
+  .badge { background:var(--card); border-radius:16px; padding:16px 20px; font-size:13px; font-weight:800; text-align:center; border:1px solid rgba(255,255,255,0.08); }
+  .badge-icon { font-size:30px; display:block; margin-bottom:6px; }
+</style>
+</head>
+<body>
+
+<!-- ===== SLIDE 1: TITLE ===== -->
+<div id="slide-1" class="slide active">
+  <div class="hero-emoji">🗂️</div>
+  <div class="slide-title">Organising Things<br>into Categories</div>
+  <div class="hero-tagline">Why does your brain <em>love</em> putting things in groups?</div>
+  <button class="start-btn" onclick="goTo(2)">Let's Find Out! →</button>
+</div>
+
+<!-- ===== SLIDE 2: WARM UP ===== -->
+<div id="slide-2" class="slide">
+  <div class="tag" style="background:rgba(255,209,102,0.2);color:var(--accent2);">🌅 Warm Up</div>
+  <div class="slide-title">Look at YOUR Room!</div>
+  <div class="slide-subtitle">Click everything that describes how your bedroom is organised</div>
+  <div class="warmup-grid">
+    <div class="warmup-card" onclick="this.classList.toggle('selected')">👕<p>Clothes in a drawer or closet</p></div>
+    <div class="warmup-card" onclick="this.classList.toggle('selected')">📚<p>Books on a shelf</p></div>
+    <div class="warmup-card" onclick="this.classList.toggle('selected')">🧸<p>Toys in a box or bin</p></div>
+    <div class="warmup-card" onclick="this.classList.toggle('selected')">👟<p>Shoes by the door or in a rack</p></div>
+    <div class="warmup-card" onclick="this.classList.toggle('selected')">🎮<p>Games or electronics in one spot</p></div>
+    <div class="warmup-card" onclick="this.classList.toggle('selected')">🎒<p>School stuff together</p></div>
+  </div>
+  <div id="warmup-reveal" class="warmup-reveal">
+    <div style="font-size:18px;font-weight:800;color:var(--accent3);margin-bottom:8px;">✨ You already know how to do this!</div>
+    <p style="font-size:14px;color:var(--subtext);line-height:1.7;font-weight:600;">Every group you clicked is a <strong style="color:var(--text)">category</strong> — a group of things that share something in common. You've been organising things your whole life without even knowing the science word for it! 🔬</p>
+  </div>
+  <button class="btn btn-secondary" onclick="document.getElementById('warmup-reveal').classList.add('show')" style="margin-top:20px;">Show the Secret 🔍</button>
+</div>
+
+<!-- ===== SLIDE 3: WHAT IS A CATEGORY ===== -->
+<div id="slide-3" class="slide">
+  <div class="tag" style="background:rgba(199,125,255,0.2);color:var(--accent5);">💡 Key Idea</div>
+  <div class="slide-title">What IS a Category?</div>
+  <div class="slide-subtitle">A category = a group of things that share something in common</div>
+  <div class="concept-row">
+    <div class="concept-box c1"><div class="concept-emoji">🍎🍌🍇</div><div class="concept-label">Fruits</div><div class="concept-items">Apple, banana, grapes…<br><em>They all grow on plants and taste sweet</em></div></div>
+    <div class="concept-box c2"><div class="concept-emoji">🐕🐈🐇</div><div class="concept-label">Pets</div><div class="concept-items">Dog, cat, rabbit…<br><em>They all live in our homes with us</em></div></div>
+    <div class="concept-box c3"><div class="concept-emoji">✏️📏📐</div><div class="concept-label">School Supplies</div><div class="concept-items">Pencil, ruler, eraser…<br><em>They all help you learn and create</em></div></div>
+    <div class="concept-box c4"><div class="concept-emoji">🚗🚌🚲</div><div class="concept-label">Transport</div><div class="concept-items">Car, bus, bicycle…<br><em>They all help you get somewhere</em></div></div>
+  </div>
+  <div class="big-idea">🔑 Big Idea: A category needs <span>at least 2 things</span> that share <span>a similarity or purpose</span>.<br><span style="font-size:14px;color:var(--subtext)">And here's the cool part — the same item can belong to different categories depending on HOW you're looking at it!</span></div>
+  <div class="offline-box" style="margin-top:16px;">
+    <div class="offline-icon">🎲</div>
+    <div><div class="offline-title">Quick Off-Screen Activity!</div><div class="offline-desc">Look around the room right now. Pick any 4 objects you can see. Can you put them into 2 groups? What's the rule for each group? Share with your teacher!</div></div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 4: SORTING GAME ===== -->
+<div id="slide-4" class="slide">
+  <div class="tag" style="background:rgba(6,214,160,0.2);color:var(--accent3);">🎮 Sorting Game</div>
+  <div class="slide-title">Sort the Supermarket!</div>
+  <div class="slide-subtitle">Drag each item to the right shelf — or click an item then click a bin</div>
+  <div class="sorting-container">
+    <div class="items-pool" id="items-pool">
+      <div style="font-size:12px;font-weight:800;color:var(--subtext);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;">Items to Sort</div>
+      <div id="pool-items"></div>
+    </div>
+    <div class="bins-area">
+      <div class="bin" id="bin-fruit" data-category="fruit" ondragover="allowDrop(event)" ondrop="dropItem(event)"><div class="bin-label" style="color:var(--accent1)">🍎 Fruits &amp; Veg</div><div class="bin-contents"></div></div>
+      <div class="bin" id="bin-dairy" data-category="dairy" ondragover="allowDrop(event)" ondrop="dropItem(event)"><div class="bin-label" style="color:var(--accent2)">🥛 Dairy</div><div class="bin-contents"></div></div>
+      <div class="bin" id="bin-snacks" data-category="snacks" ondragover="allowDrop(event)" ondrop="dropItem(event)"><div class="bin-label" style="color:var(--accent5)">🍪 Snacks</div><div class="bin-contents"></div></div>
+      <div class="bin" id="bin-cleaning" data-category="cleaning" ondragover="allowDrop(event)" ondrop="dropItem(event)"><div class="bin-label" style="color:var(--accent3)">🧹 Cleaning</div><div class="bin-contents"></div></div>
+    </div>
+  </div>
+  <div id="sort-score" class="sort-score">🎉 Amazing! You sorted everything correctly!</div>
+  <button class="btn btn-secondary" onclick="initSorting()" style="margin-top:12px;">↺ Reset</button>
+</div>
+
+<!-- ===== SLIDE 5: WHY ORGANISE ===== -->
+<div id="slide-5" class="slide">
+  <div class="tag" style="background:rgba(17,138,178,0.2);color:var(--accent4);">🤔 Why Bother?</div>
+  <div class="slide-title">Imagine a Supermarket Gone Wrong…</div>
+  <div class="chaos-question">What if NOTHING was organised? 😱</div>
+  <div class="chaotic-items">
+    <div class="chaotic-item">🥫 Beans</div><div class="chaotic-item">🧴 Shampoo</div><div class="chaotic-item">🍌 Banana</div>
+    <div class="chaotic-item">🧻 Toilet Paper</div><div class="chaotic-item">🥛 Milk</div><div class="chaotic-item">🍪 Cookies</div>
+    <div class="chaotic-item">🫧 Soap</div><div class="chaotic-item">🧀 Cheese</div><div class="chaotic-item">🍎 Apple</div>
+    <div class="chaotic-item">🧽 Sponge</div><div class="chaotic-item">🥚 Eggs</div><div class="chaotic-item">🍫 Chocolate</div>
+    <div class="chaotic-item">🥦 Broccoli</div><div class="chaotic-item">🫙 Pasta</div><div class="chaotic-item">🧈 Butter</div>
+    <div class="chaotic-item">🪥 Toothbrush</div>
+  </div>
+  <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:20px;">
+    <div class="card" style="flex:1;min-width:200px;"><div style="font-size:24px;margin-bottom:8px;">😤</div><div style="font-weight:800;font-size:15px;margin-bottom:6px;">Without Organisation</div><div style="font-size:13px;color:var(--subtext);line-height:1.6;font-weight:600;">You'd have to check EVERY item in the whole store just to find your milk. That could take hours!</div></div>
+    <div class="card" style="flex:1;min-width:200px;"><div style="font-size:24px;margin-bottom:8px;">😊</div><div style="font-weight:800;font-size:15px;margin-bottom:6px;">With Organisation</div><div style="font-size:13px;color:var(--subtext);line-height:1.6;font-weight:600;">You walk straight to the Dairy aisle. Done in 10 seconds! Organisation saves your time and brain power.</div></div>
+    <div class="card" style="flex:1;min-width:200px;"><div style="font-size:24px;margin-bottom:8px;">🔬</div><div style="font-weight:800;font-size:15px;margin-bottom:6px;">Scientists Do This Too!</div><div style="font-size:13px;color:var(--subtext);line-height:1.6;font-weight:600;">Scientists sort their data into categories to spot patterns — like how doctors know it's a cold and not flu because of which symptom group you're in!</div></div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 6: MEMORY GAME ===== -->
+<div id="slide-6" class="slide">
+  <div class="tag" style="background:rgba(199,125,255,0.2);color:var(--accent5);">🧠 Brain Game</div>
+  <div class="slide-title">The Memory Tray Challenge</div>
+  <div class="slide-subtitle">You have 15 seconds to memorise all 20 items. Then they hide — and you tap what you remember!</div>
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:12px;">
+    <div class="timer-display" id="mem-timer">15</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="btn btn-primary" id="mem-start-btn" onclick="startMemory()">👀 Start Memorising!</button>
+      <button class="btn btn-secondary" id="mem-hide-btn" onclick="hideTray()" style="display:none;">🙈 Hide Items</button>
+    </div>
+    <div style="font-size:14px;font-weight:700;color:var(--subtext)">Score: <span id="mem-score" style="color:var(--accent3)">0</span>/20</div>
+  </div>
+  <div class="tray-grid" id="tray-grid"></div>
+  <div id="mem-secret" style="display:none;background:rgba(199,125,255,0.1);border:1px solid var(--accent5);border-radius:var(--radius);padding:16px;margin-top:12px;">
+    <div style="font-weight:800;font-size:15px;color:var(--accent5);margin-bottom:8px;">🔮 The Secret Strategy</div>
+    <div style="font-size:13px;font-weight:600;line-height:1.6;color:var(--subtext)">Group the items into <strong style="color:var(--text)">categories</strong> in your head! Instead of trying to remember 20 separate things, remember 4 groups of 5. Your brain can hold groups MUCH better than random lists. This is exactly how memory champions do it! 🏆</div>
+  </div>
+  <div id="mem-answer-area" style="display:none;margin-top:12px;">
+    <div style="font-size:13px;font-weight:800;color:var(--subtext);margin-bottom:8px;">TAP each item you can remember:</div>
+    <div class="answer-grid" id="answer-grid"></div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 7: VIDEOS ===== -->
+<div id="slide-7" class="slide">
+  <div class="tag" style="background:rgba(255,80,80,0.2);color:#ff7070;">▶ Watch &amp; Learn</div>
+  <div class="slide-title">Videos: See It in the Real World!</div>
+
+  <div class="videos-intro">
+    These videos connect what you've learned today to how <strong>real scientists</strong> use categories.
+    Watch the first one <strong>together in class</strong>, then explore the others at home! 🍿
+  </div>
+
+  <!-- IN CLASS VIDEO -->
+  <div class="video-section-label" style="color:var(--accent3);">🟢 Watch Together in Class</div>
+
+  <div style="max-width:760px;">
+    <div class="video-card" style="flex-direction:row;flex-wrap:wrap;">
+      <div class="video-thumb-wrap" style="min-width:280px;padding-top:0;height:220px;flex:1;">
+        <iframe
+          id="inclass-iframe"
+          src="https://www.youtube.com/embed/D7qlBOcuYGo?rel=0&modestbranding=1"
+          title="How Do We Classify Animals? SciShow Kids"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+      <div class="video-info" style="flex:1;min-width:240px;">
+        <div class="video-badge badge-inclass">✅ In Class</div>
+        <div class="video-title">"How Do We Classify Animals?"</div>
+        <div class="video-channel">📺 SciShow Kids</div>
+        <div class="video-desc">
+          Jessi and Squeaks explore how scientists group animals using shared features — exactly the same thinking skill you just practised! Perfect for connecting today's lesson to real science. Watch how sorting everyday objects is the SAME thing scientists do with every creature on Earth.
+        </div>
+        <div class="video-timing">
+          <span class="timing-chip">⏱ ~4 minutes</span>
+          <span class="timing-chip">👁 Ages 6–10</span>
+          <span class="timing-chip">🔬 Life Science</span>
+        </div>
+        <a class="video-open-btn" href="https://www.youtube.com/watch?v=D7qlBOcuYGo" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#ff7070"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"/></svg>
+          Open on YouTube
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- AFTER CLASS VIDEOS -->
+  <div class="video-section-label" style="color:var(--accent2);margin-top:24px;">🟡 Watch at Home — After Class</div>
+
+  <div class="video-row">
+
+    <!-- After class video 1 -->
+    <div class="video-card">
+      <div class="video-thumb-wrap">
+        <div class="video-thumb-placeholder" onclick="loadVideo(this,'https://www.youtube.com/embed/cpPG9ILod_I?rel=0&modestbranding=1&autoplay=1','Sorting and Classifying Objects for Kids - Homeschool Pop')">
+          <div class="play-btn-big">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <div class="thumb-title">Sorting and Classifying Objects</div>
+          <div class="thumb-channel">Homeschool Pop</div>
+        </div>
+      </div>
+      <div class="video-info">
+        <div class="video-badge badge-afterclass">🏠 At Home</div>
+        <div class="video-title">"Sorting and Classifying Objects"</div>
+        <div class="video-channel">📺 Homeschool Pop</div>
+        <div class="video-desc">
+          A fun, clear video that walks through sorting real objects by different rules — colour, size, shape, and use. Great for reinforcing that the same objects can be grouped different ways depending on your purpose. Watch with a parent and try the activities they suggest!
+        </div>
+        <div class="video-timing">
+          <span class="timing-chip">⏱ ~5 minutes</span>
+          <span class="timing-chip">👁 Ages 5–9</span>
+          <span class="timing-chip">🧩 Hands-on</span>
+        </div>
+        <a class="video-open-btn" href="https://www.youtube.com/watch?v=cpPG9ILod_I" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#ff7070"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"/></svg>
+          Open on YouTube
+        </a>
+      </div>
+    </div>
+
+    <!-- After class video 2 -->
+    <div class="video-card">
+      <div class="video-thumb-wrap">
+        <div class="video-thumb-placeholder" onclick="loadVideo(this,'https://www.youtube.com/embed/MvTGLiMHn3I?rel=0&modestbranding=1&autoplay=1','Animal Classification for Kids - Vertebrates and Invertebrates - Peekaboo Kidz')">
+          <div class="play-btn-big">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <div class="thumb-title">Animal Classification for Kids</div>
+          <div class="thumb-channel">Peekaboo Kidz — Dr. Binocs Show</div>
+        </div>
+      </div>
+      <div class="video-info">
+        <div class="video-badge badge-afterclass">🏠 At Home</div>
+        <div class="video-title">"Animal Classification for Kids"</div>
+        <div class="video-channel">📺 Peekaboo Kidz — Dr. Binocs Show</div>
+        <div class="video-desc">
+          Dr. Binocs explains how scientists organise ALL animals into groups using shared features — vertebrates, invertebrates, mammals, reptiles, and more. This is a brilliant real-world example of the category thinking from today's lesson applied to the entire animal kingdom!
+        </div>
+        <div class="video-timing">
+          <span class="timing-chip">⏱ ~5 minutes</span>
+          <span class="timing-chip">👁 Ages 6–10</span>
+          <span class="timing-chip">🐾 Animals</span>
+        </div>
+        <a class="video-open-btn" href="https://www.youtube.com/watch?v=MvTGLiMHn3I" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#ff7070"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"/></svg>
+          Open on YouTube
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Watch prompt box -->
+  <div class="offline-box" style="margin-top:16px;">
+    <div class="offline-icon">💬</div>
+    <div>
+      <div class="offline-title">After watching: Think about this!</div>
+      <div class="offline-desc">In the SciShow Kids video, scientists put dolphins in the same group as dogs, not sharks. After today's lesson — does that make sense to you? Can you explain WHY? Try to tell someone in your family!</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 8: MYSTERIES ===== -->
+<div id="slide-8" class="slide">
+  <div class="tag" style="background:rgba(255,107,107,0.2);color:var(--accent1);">🔍 Real Life Mysteries</div>
+  <div class="slide-title">Can You Crack These?</div>
+  <div class="slide-subtitle">Think carefully before revealing the answer — these need REAL thinking!</div>
+  <div class="mysteries-grid">
+    <div class="mystery-card">
+      <div class="mystery-num">Mystery 01</div>
+      <div class="mystery-q">🏪 A new helper starts at the grocery store. They put the toothpaste next to the cheese, shampoo next to the apples, and soap near the bread. Customers are furious. Why is this so bad, and what went wrong in the helper's thinking?</div>
+      <button class="reveal-btn" onclick="revealMystery(this)">🤔 I've thought about it — reveal!</button>
+      <div class="mystery-answer">The helper didn't think about <strong>purpose categories</strong>. Customers expect things grouped by what they ARE (food vs. hygiene). When categories are wrong, nobody can find anything! Organisation only works when the system makes sense to the people using it.</div>
+    </div>
+    <div class="mystery-card">
+      <div class="mystery-num">Mystery 02</div>
+      <div class="mystery-q">📚 A librarian organised ALL the books by colour — red books together, blue books together, yellow books together. The library looks beautiful! But students are complaining they can't find anything. Why is a beautiful system sometimes a BAD system?</div>
+      <button class="reveal-btn" onclick="revealMystery(this)">🤔 I've thought about it — reveal!</button>
+      <div class="mystery-answer">Organisation must match its <strong>purpose</strong>! The purpose of a library is to find books by topic or author — not by colour. A pretty system that doesn't help people do what they came to do is actually a useless system.</div>
+    </div>
+    <div class="mystery-card">
+      <div class="mystery-num">Mystery 03</div>
+      <div class="mystery-q">🧩 Scientists studying animals have a category called "mammals." A whale lives in the ocean and a bat flies in the sky. Yet BOTH are called mammals — not fish, not birds. What must mammals share that makes them belong to the same category despite looking so different?</div>
+      <button class="reveal-btn" onclick="revealMystery(this)">🤔 I've thought about it — reveal!</button>
+      <div class="mystery-answer">Categories are based on <strong>shared hidden rules</strong>, not just looks! Mammals all: have fur/hair, are warm-blooded, give birth to live babies, and feed their babies milk. Whales and bats both do ALL of these things — even though one swims and one flies.</div>
+    </div>
+    <div class="mystery-card">
+      <div class="mystery-num">Mystery 04</div>
+      <div class="mystery-q">🧺 Your family is sorting laundry: whites, darks, colours. Where does a light grey shirt with a dark blue stripe go? There's no perfect category for it! What does this teach us about real-life categories?</div>
+      <button class="reveal-btn" onclick="revealMystery(this)">🤔 I've thought about it — reveal!</button>
+      <div class="mystery-answer">Real life has <strong>"oddball" items</strong> that don't fit perfectly into any category. This is normal! When you find an oddball, you have choices: (1) create a new category, (2) put it in the closest group, or (3) decide which rule matters most. Scientists face this too — and it often leads to new discoveries!</div>
+    </div>
+    <div class="mystery-card">
+      <div class="mystery-num">Mystery 05</div>
+      <div class="mystery-q">🧠 Mia tries to memorise a shopping list of 18 random items and forgets most of them. Then she groups them into "vegetables," "dairy," and "snacks." Now she remembers almost all of them. She didn't learn any new facts — so what actually changed?</div>
+      <button class="reveal-btn" onclick="revealMystery(this)">🤔 I've thought about it — reveal!</button>
+      <div class="mystery-answer">She changed how the information was <strong>organised in her brain</strong>! Your brain can hold about 4–7 "chunks" of information at once. 18 random items = 18 chunks (too many). 3 groups = 3 chunks (easy!). Organisation doesn't add information — it makes existing information easier to hold and find.</div>
+    </div>
+    <div class="mystery-card">
+      <div class="mystery-num">Mystery 06</div>
+      <div class="mystery-q">🔬 A scientist discovers a new creature in the Amazon rainforest. It has scales like a fish, lays eggs like a reptile, can breathe underwater like a fish, but walks on land like a lizard. The scientist needs to categorise it. What problem does she face, and how might she solve it?</div>
+      <button class="reveal-btn" onclick="revealMystery(this)">🤔 I've thought about it — reveal!</button>
+      <div class="mystery-answer">She faces a genuine scientific puzzle — the creature shares features of <strong>multiple existing categories</strong>. She could: (1) choose the category with the MOST features in common, (2) decide which feature is most fundamental, or (3) create a brand new category! This actually happened when scientists first saw a platypus — they thought someone was playing a trick on them!</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 9: QUIZ ===== -->
+<div id="slide-9" class="slide">
+  <div class="tag" style="background:rgba(6,214,160,0.2);color:var(--accent3);">🏆 Quiz Time</div>
+  <div class="slide-title">Test Your Brain!</div>
+  <div class="quiz-progress" id="quiz-progress"></div>
+  <div class="quiz-card" id="quiz-card">
+    <div id="quiz-question-area"></div>
+  </div>
+  <div id="quiz-final" class="quiz-score-display" style="display:none;">
+    <div style="font-size:72px;" id="final-emoji">🌟</div>
+    <div class="final-score-num" id="final-num">0/10</div>
+    <div style="font-size:18px;color:var(--subtext);margin-top:8px;" id="final-label">Great effort!</div>
+    <button class="btn btn-primary" onclick="restartQuiz()" style="margin-top:24px;">🔄 Try Again</button>
+  </div>
+</div>
+
+<!-- ===== SLIDE 10: HOMEWORK ===== -->
+<div id="slide-10" class="slide">
+  <div class="tag" style="background:rgba(255,209,102,0.2);color:var(--accent2);">🏠 Homework</div>
+  <div class="slide-title">Your Category Detective Missions!</div>
+  <div class="slide-subtitle">5 real-life investigations to do at home this week</div>
+  <div class="hw-list">
+    <div class="hw-item">
+      <div class="hw-num" style="color:var(--accent1)">1</div>
+      <div class="hw-emoji">🍽️</div>
+      <div class="hw-content"><div class="hw-title">The Dinner Table Sort</div><div class="hw-desc">At dinner tonight, look at everything on the table. Secretly sort ALL items into at least 3 different categories (you decide the rules!). Tell someone in your family — can they guess your sorting rule? Try to find at least 2 different ways to sort the same items.</div></div>
+    </div>
+    <div class="hw-item">
+      <div class="hw-num" style="color:var(--accent2)">2</div>
+      <div class="hw-emoji">🚿</div>
+      <div class="hw-content"><div class="hw-title">Bathroom Cabinet Detective</div><div class="hw-desc">Look inside your bathroom cabinet or under the sink. Draw or write down everything you find. Then ask: is it organised? What categories would YOU use to reorganise it better? Present your plan to a parent — would it actually work?</div></div>
+    </div>
+    <div class="hw-item">
+      <div class="hw-num" style="color:var(--accent3)">3</div>
+      <div class="hw-emoji">🌳</div>
+      <div class="hw-content"><div class="hw-title">Nature's Categories Outside</div><div class="hw-desc">On your next walk outside (or just look out the window), find 10 things in nature. Sort them into categories — but you have to find at least 3 DIFFERENT ways to sort the SAME 10 things. What do different sorting systems reveal about nature?</div></div>
+    </div>
+    <div class="hw-item">
+      <div class="hw-num" style="color:var(--accent5)">4</div>
+      <div class="hw-emoji">🎲</div>
+      <div class="hw-content"><div class="hw-title">Family Memory Tray Game</div><div class="hw-desc">Play the Memory Tray game with your family! Put 15–20 objects on a tray. Give everyone 30 seconds to look, then hide the tray. Who remembers the most? Teach your family the "secret" — group items into categories first! Did it help them?</div></div>
+    </div>
+    <div class="hw-item">
+      <div class="hw-num" style="color:var(--accent4)">5</div>
+      <div class="hw-emoji">📓</div>
+      <div class="hw-content"><div class="hw-title">My Observation Diary: Oddball Hunt</div><div class="hw-desc">Over 3 days, keep a small diary. Each day, find ONE "oddball" — something in real life that doesn't fit neatly into any obvious category (like a tomato: is it a fruit or vegetable?). Write down: what it is, why it's hard to categorise, and what YOU would decide. Bring your 3 oddballs to the next class!</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 11: GREAT JOB ===== -->
+<div id="slide-11" class="slide">
+  <div class="firework">🎆</div>
+  <div class="slide-title" style="font-size:48px;background:linear-gradient(135deg,var(--accent2),var(--accent3),var(--accent5));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+    Amazing Work!
+  </div>
+  <div style="font-size:18px;color:var(--subtext);margin-top:12px;font-weight:600;">You've unlocked the superpower of organising! 🧠✨</div>
+  <div class="badge-grid">
+    <div class="badge"><span class="badge-icon">🗂️</span>Category Creator</div>
+    <div class="badge"><span class="badge-icon">🧠</span>Memory Master</div>
+    <div class="badge"><span class="badge-icon">🔍</span>Pattern Finder</div>
+    <div class="badge"><span class="badge-icon">🔬</span>Young Scientist</div>
+  </div>
+  <div class="card" style="max-width:600px;margin-top:28px;text-align:left;">
+    <div style="font-size:15px;font-weight:800;margin-bottom:10px;color:var(--accent2);">📖 What You Discovered Today</div>
+    <ul style="font-size:13px;color:var(--subtext);line-height:2;font-weight:600;list-style:none;padding:0;">
+      <li>✅ A <strong style="color:var(--text)">category</strong> = 2+ things sharing something in common</li>
+      <li>✅ The same items can be sorted in <strong style="color:var(--text)">different ways</strong> depending on purpose</li>
+      <li>✅ Organisation <strong style="color:var(--text)">saves time, reveals patterns, and exposes gaps</strong></li>
+      <li>✅ Organising information <strong style="color:var(--text)">supercharges your memory</strong></li>
+      <li>✅ "Oddballs" often lead to exciting <strong style="color:var(--text)">new discoveries</strong></li>
+    </ul>
+  </div>
+  <div style="margin-top:20px;font-size:14px;color:var(--subtext);font-weight:600;">
+    📚 Recommended Reading: <em>Sort It Out!</em> by Barbara Mariconda &nbsp;|&nbsp; 🎬 Watch the after-class videos on Slide 7!
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <button onclick="prevSlide()">← Back</button>
+  <div class="slide-counter" id="slide-counter">1 / 11</div>
+  <button onclick="nextSlide()">Next →</button>
+</div>
+
+<script>
+const TOTAL = 11;
+let cur = 1;
+
+function goTo(n) {
+  document.getElementById('slide-'+cur).classList.remove('active');
+  cur = n;
+  document.getElementById('slide-'+cur).classList.add('active');
+  document.getElementById('slide-counter').textContent = cur + ' / ' + TOTAL;
+  window.scrollTo(0,0);
+  if (n===4 && !sortInit) initSorting();
+  if (n===6 && !memInit) initMemory();
+  if (n===9 && !quizInit) initQuiz();
+}
+function nextSlide(){ if(cur<TOTAL) goTo(cur+1); }
+function prevSlide(){ if(cur>1) goTo(cur-1); }
+
+// video loader
+function loadVideo(placeholder, src, title) {
+  const wrap = placeholder.parentElement;
+  const iframe = document.createElement('iframe');
+  iframe.src = src;
+  iframe.title = title;
+  iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+  iframe.allowFullscreen = true;
+  iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:none;';
+  wrap.innerHTML = '';
+  wrap.appendChild(iframe);
+}
+
+// ===== SORTING =====
+let sortInit = false, selectedItem = null;
+const sortItems = [
+  {name:'🍎 Apple',cat:'fruit'},{name:'🥛 Milk',cat:'dairy'},{name:'🍪 Cookies',cat:'snacks'},{name:'🧻 Paper Towels',cat:'cleaning'},
+  {name:'🍌 Banana',cat:'fruit'},{name:'🧀 Cheese',cat:'dairy'},{name:'🍫 Chocolate Bar',cat:'snacks'},{name:'🧹 Broom',cat:'cleaning'},
+  {name:'🥦 Broccoli',cat:'fruit'},{name:'🥚 Eggs',cat:'dairy'},{name:'🍿 Popcorn',cat:'snacks'},{name:'🫧 Dish Soap',cat:'cleaning'},
+];
+
+function initSorting(){
+  sortInit=true; selectedItem=null;
+  const pool=document.getElementById('pool-items'); pool.innerHTML='';
+  document.querySelectorAll('.bin-contents').forEach(b=>b.innerHTML='');
+  document.getElementById('sort-score').style.display='none';
+  [...sortItems].sort(()=>Math.random()-0.5).forEach(item=>{
+    const el=document.createElement('div');
+    el.className='sortable-item'; el.textContent=item.name; el.dataset.category=item.cat;
+    el.draggable=true;
+    el.addEventListener('dragstart',e=>{e.dataTransfer.setData('text',item.name+'|'+item.cat);el.style.opacity='0.5';});
+    el.addEventListener('dragend',e=>el.style.opacity='1');
+    el.addEventListener('click',()=>handleItemClick(el));
+    pool.appendChild(el);
+  });
+}
+function handleItemClick(el){
+  if(selectedItem===el){el.style.outline='';selectedItem=null;return;}
+  if(selectedItem) selectedItem.style.outline='';
+  selectedItem=el; el.style.outline='2px solid var(--accent2)';
+}
+document.querySelectorAll('.bin').forEach(bin=>{
+  bin.addEventListener('click',()=>{
+    if(!selectedItem) return;
+    moveItemToBin(selectedItem,bin,selectedItem.dataset.category,bin.dataset.category);
+    selectedItem.style.outline=''; selectedItem=null;
+  });
+  bin.addEventListener('dragleave',()=>bin.classList.remove('drag-over'));
+});
+function allowDrop(e){e.preventDefault();e.currentTarget.classList.add('drag-over');}
+function dropItem(e){
+  e.preventDefault(); const bin=e.currentTarget; bin.classList.remove('drag-over');
+  const [name,cat]=e.dataTransfer.getData('text').split('|');
+  const el=[...document.querySelectorAll('#pool-items .sortable-item')].find(i=>i.dataset.category===cat&&i.textContent===name);
+  if(el) moveItemToBin(el,bin,cat,bin.dataset.category);
+}
+function moveItemToBin(el,bin,itemCat,binCat){
+  if(itemCat===binCat){
+    el.style.background='rgba(6,214,160,0.3)'; el.style.cursor='default'; el.draggable=false;
+    bin.querySelector('.bin-contents').appendChild(el);
+  } else {
+    el.style.background='rgba(255,107,107,0.3)';
+    setTimeout(()=>el.style.background='',600);
+  }
+  if(document.querySelectorAll('#pool-items .sortable-item').length===0) document.getElementById('sort-score').style.display='block';
+}
+
+// ===== MEMORY =====
+let memInit=false, memTimer=null, memSeconds=15, memPhase='ready';
+const memItems=[
+  {emoji:'🍎',name:'Apple',cat:'kitchen'},{emoji:'🍌',name:'Banana',cat:'kitchen'},{emoji:'🥛',name:'Milk',cat:'kitchen'},
+  {emoji:'🍳',name:'Pan',cat:'kitchen'},{emoji:'🥄',name:'Spoon',cat:'kitchen'},
+  {emoji:'✏️',name:'Pencil',cat:'desk'},{emoji:'📏',name:'Ruler',cat:'desk'},{emoji:'📎',name:'Paper Clip',cat:'desk'},
+  {emoji:'📌',name:'Pin',cat:'desk'},{emoji:'📔',name:'Notebook',cat:'desk'},
+  {emoji:'🧸',name:'Bear',cat:'toys'},{emoji:'🎮',name:'Controller',cat:'toys'},{emoji:'🏀',name:'Ball',cat:'toys'},
+  {emoji:'🎯',name:'Target',cat:'toys'},{emoji:'🎪',name:'Tent',cat:'toys'},
+  {emoji:'🪙',name:'Coin',cat:'coins'},{emoji:'💎',name:'Gem',cat:'coins'},{emoji:'🔑',name:'Key',cat:'coins'},
+  {emoji:'⭐',name:'Star',cat:'coins'},{emoji:'🏅',name:'Medal',cat:'coins'},
+];
+function initMemory(){ memInit=true; renderTray(false); }
+function renderTray(hidden){
+  const g=document.getElementById('tray-grid'); g.innerHTML='';
+  memItems.forEach(item=>{
+    const d=document.createElement('div');
+    d.className='tray-item'+(hidden?' hidden':'');
+    d.innerHTML=`${item.emoji}<p>${hidden?'???':item.name}</p>`;
+    g.appendChild(d);
+  });
+}
+function startMemory(){
+  if(memPhase!=='ready') return; memPhase='memorise'; memSeconds=15;
+  document.getElementById('mem-start-btn').style.display='none';
+  document.getElementById('mem-hide-btn').style.display='inline-flex';
+  renderTray(false);
+  memTimer=setInterval(()=>{
+    memSeconds--; document.getElementById('mem-timer').textContent=memSeconds;
+    if(memSeconds<=0){clearInterval(memTimer);hideTray();}
+  },1000);
+}
+function hideTray(){
+  clearInterval(memTimer); memPhase='answer';
+  document.getElementById('mem-hide-btn').style.display='none';
+  renderTray(true); document.getElementById('mem-timer').textContent='🙈';
+  document.getElementById('mem-secret').style.display='block';
+  const area=document.getElementById('mem-answer-area'), grid=document.getElementById('answer-grid');
+  area.style.display='block'; grid.innerHTML='';
+  [...memItems].sort(()=>Math.random()-0.5).forEach(item=>{
+    const c=document.createElement('div'); c.className='answer-chip';
+    c.textContent=item.emoji+' '+item.name;
+    c.onclick=()=>{
+      if(c.classList.contains('correct')) return; c.classList.add('correct');
+      document.getElementById('mem-score').textContent=parseInt(document.getElementById('mem-score').textContent)+1;
+    };
+    grid.appendChild(c);
+  });
+}
+
+// ===== MYSTERIES =====
+function revealMystery(btn){
+  btn.closest('.mystery-card').querySelector('.mystery-answer').classList.add('revealed');
+  btn.style.display='none';
+}
+
+// ===== QUIZ =====
+let quizInit=false, curQ=0, quizScore=0;
+const answered=[];
+const questions=[
+  {q:"Your little sister throws all her toys, books, and clothes into one giant box. What problem will she have?",diff:"easy",opts:["The box will be too heavy to lift","She won't be able to find specific things quickly — everything is mixed up with no organisation","Her toys will get bored being with books","Nothing bad will happen"],correct:1,fb:"✅ Exactly! Without categories, you have to search through EVERYTHING to find one thing. Organisation saves time and mental energy."},
+  {q:"A supermarket organises its food by COLOUR instead of type. Blue section, red section, yellow section. Why would this system fail shoppers?",diff:"easy",opts:["The lights would be confusing","Colours are hard to see","Shoppers think by what they NEED (dairy, produce), not by colour — the system doesn't match how people look for things","It would work perfectly fine"],correct:2,fb:"✅ Great thinking! Organisation must match its PURPOSE. Shoppers search by food type, not colour."},
+  {q:"🔬 Scientists discovered that dolphins are mammals, not fish — even though dolphins live in water and look like fish. What does this tell us about categories?",diff:"medium",opts:["Scientists made a mistake","Categories are based on hidden shared rules (warm-blooded, breathe air, nurse babies with milk), not just how something looks","Fish and mammals are the same thing","Dolphins should be reclassified as fish"],correct:1,fb:"✅ Brilliant! Real scientific categories are based on fundamental shared characteristics, not surface appearances."},
+  {q:"Mia needs to memorise 18 shopping items. She groups them into 'vegetables,' 'dairy,' and 'snacks.' She remembers more items now. What actually happened?",diff:"medium",opts:["She became smarter","She tricked her brain","She reduced 18 separate things to just 3 chunks — her brain can hold groups better than random lists","She memorised fewer items on purpose"],correct:2,fb:"✅ Yes! Your brain handles 'chunks' of organised information much better than long random lists."},
+  {q:"📦 You're sorting a junk drawer and find a candle. It could go with 'decoration,' 'emergency supplies,' OR 'lighting.' What does this tell you?",diff:"medium",opts:["The candle is broken and should be thrown away","Your junk drawer is too messy","One item can belong to multiple categories — the RIGHT category depends on your purpose","You need to buy more candles"],correct:2,fb:"✅ Exactly right! The same item can be organised differently depending on what you're trying to accomplish."},
+  {q:"🌍 Scientists study climate data year by year. By organising temperature records into categories by decade, they spot a pattern: each decade is warmer than the last. How did organisation help here?",diff:"medium",opts:["It made the numbers look prettier","Organising by time revealed a pattern that was invisible in the raw data — the trend only appears when data is sorted","It proved the scientists were right","It had no real effect"],correct:1,fb:"✅ Perfect! Organising information reveals patterns that are HIDDEN in messy data. This is how scientists make discoveries."},
+  {q:"🏫 A teacher has her classroom organised so books, art supplies, and science tools each have their own area. A visitor walks in and immediately knows where to find a pencil without asking. How is this possible?",diff:"hard",opts:["The visitor has been in the room before","The visitor is guessing","The category system is intuitive — once you understand the logic of organisation, you can navigate ANY organised system you've never seen before","The pencils are labelled"],correct:2,fb:"✅ Brilliant! Understanding how organisation WORKS — not just where things are — lets you navigate any organised environment."},
+  {q:"🦴 Palaeontologists (fossil scientists) find a gap in the fossil record — a missing creature between two known species. Because of ORGANISATION, they predicted exactly what it would look like BEFORE finding it. How?",diff:"hard",opts:["They used magic","They found a photo of it","By organising known species into categories, they found a GAP in the pattern — and the category system told them exactly what features the missing link had to have","They guessed randomly"],correct:2,fb:"✅ Incredible! Organised systems reveal GAPS — missing pieces that MUST exist to complete the pattern. This is how real science works!"},
+  {q:"🤔 Someone says: 'There's only ONE right way to categorise things.' Based on what you learned today, is this true?",diff:"hard",opts:["Yes — scientists have found the one perfect system","No — there is NO right way, organisation is completely random","No — there are MANY valid ways to organise the same things; the best system depends on your purpose","Yes — alphabetical order is always best"],correct:2,fb:"✅ This is the core idea! The 'right' way to organise depends on PURPOSE."},
+  {q:"🌟 HARDEST: A tomato is botanically a fruit (it grows from a flower and has seeds) but is cooked and eaten as a vegetable. A court case in the USA once ruled legally that it's a vegetable. This same object is BOTH fruit AND vegetable depending on who you ask. What deeper truth does this reveal about ALL categories?",diff:"challenge",opts:["Scientists and lawyers are confused about tomatoes","Categories are human inventions — we create them to serve our purposes, and the same reality can be categorised differently by different communities with different needs. No single categorisation is 'true'; all are useful tools","Tomatoes should be a completely separate food group","Once something is categorised, it can never change"],correct:1,fb:"🌟 EXCEPTIONAL! Categories aren't 'out there in nature' — they are frameworks humans CONSTRUCT to make sense of the world. Different purposes create different valid category systems."}
+];
+
+function initQuiz(){ quizInit=true; curQ=0; quizScore=0; answered.length=0; renderProgress(); renderQ(); }
+function renderProgress(){
+  const p=document.getElementById('quiz-progress'); p.innerHTML='';
+  questions.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='q-dot'+(i===curQ?' active':answered[i]===true?' correct':answered[i]===false?' wrong':'');
+    p.appendChild(d);
+  });
+}
+function renderQ(){
+  const q=questions[curQ];
+  const dm={easy:'diff-easy',medium:'diff-medium',hard:'diff-hard',challenge:'diff-challenge'};
+  const dl={easy:'⭐ Warm Up',medium:'⭐⭐ Thinking',hard:'⭐⭐⭐ Challenge',challenge:'🔥 Boss Level'};
+  document.getElementById('quiz-question-area').innerHTML=`
+    <div class="quiz-meta"><div class="quiz-qnum">Question ${curQ+1} of 10</div><div class="quiz-diff ${dm[q.diff]}">${dl[q.diff]}</div></div>
+    <div class="quiz-question">${q.q}</div>
+    <div class="quiz-options" id="quiz-opts">${q.opts.map((o,i)=>`<button class="quiz-opt" onclick="answerQ(${i})">${o}</button>`).join('')}</div>
+    <div class="quiz-feedback" id="quiz-fb"></div>
+    <div id="quiz-next" style="display:none;margin-top:16px;text-align:center;">
+      <button class="btn btn-primary" onclick="nextQ()">${curQ===9?'🏆 See Results!':'Next Question →'}</button>
+    </div>`;
+}
+function answerQ(idx){
+  const q=questions[curQ];
+  document.querySelectorAll('.quiz-opt').forEach(o=>o.disabled=true);
+  const fb=document.getElementById('quiz-fb');
+  if(idx===q.correct){
+    document.querySelectorAll('.quiz-opt')[idx].classList.add('correct');
+    quizScore++; answered[curQ]=true;
+    fb.className='quiz-feedback show feedback-correct'; fb.textContent=q.fb;
+  } else {
+    document.querySelectorAll('.quiz-opt')[idx].classList.add('wrong');
+    document.querySelectorAll('.quiz-opt')[q.correct].classList.add('correct');
+    answered[curQ]=false;
+    fb.className='quiz-feedback show feedback-wrong'; fb.textContent='❌ Not quite. '+q.fb;
+  }
+  document.getElementById('quiz-next').style.display='block';
+  renderProgress();
+}
+function nextQ(){
+  curQ++;
+  if(curQ>=questions.length){
+    document.getElementById('quiz-card').style.display='none';
+    document.getElementById('quiz-final').style.display='block';
+    const pct=quizScore/10;
+    document.getElementById('final-num').textContent=quizScore+'/10';
+    document.getElementById('final-emoji').textContent=pct>=0.9?'🏆':pct>=0.7?'🌟':pct>=0.5?'💪':'🌱';
+    document.getElementById('final-label').textContent=pct>=0.9?'Outstanding! You\'re a Category Genius!':pct>=0.7?'Excellent work! Your brain is organising beautifully!':pct>=0.5?'Good effort! Try again and watch your score climb!':'Keep practising — you\'re just getting started!';
+  } else { renderProgress(); renderQ(); }
+}
+function restartQuiz(){
+  answered.length=0;
+  document.getElementById('quiz-card').style.display='block';
+  document.getElementById('quiz-final').style.display='none';
+  initQuiz();
+}
+
+// init on load
+initSorting();
+</script>
+
+<!-- ============================================================
+     Bee Quiz Data — Chapter A/B-1: Organising Things into Categories
+     Version: 1 (Gemini APPROVED 2026-04-27, fixes applied)
+     Source spec: wiki/tools/bee-quiz-generation-spec.md
+     Reviewer: wiki/tools/gemini-review-prompt.md (v3, Beprep strategy chat)
+     ============================================================ -->
+<script type="application/json" id="bee-quiz-data">
+{
+  "chapter": "A/B-1",
+  "seq": 2,
+  "topic": "Organising Things into Categories",
+  "source_url": "https://shelikag-ops.github.io/Organising-Things/",
+  "bee_quiz": [
+    {
+      "id": 1,
+      "category": "vocab",
+      "difficulty": "easy",
+      "question": "The science word for a group of things that share something in common is what?",
+      "choices": {
+        "a": "categorization",
+        "b": "category",
+        "c": "section",
+        "d": "collection"
+      },
+      "correct": "b",
+      "distractor_strategy": "half-right"
+    },
+    {
+      "id": 2,
+      "category": "vocab",
+      "difficulty": "medium",
+      "question": "In memory science, a 'chunk' best describes what?",
+      "choices": {
+        "a": "a single random number",
+        "b": "a group of related items remembered together",
+        "c": "the smallest piece of food",
+        "d": "a long unsorted list"
+      },
+      "correct": "b",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 3,
+      "category": "vocab",
+      "difficulty": "medium",
+      "question": "An animal that is warm-blooded, has fur or hair, gives birth to live babies, and feeds them milk is called a what?",
+      "choices": {
+        "a": "mammal",
+        "b": "reptile",
+        "c": "warm-blooded reptile",
+        "d": "fish"
+      },
+      "correct": "a",
+      "distractor_strategy": "half-right"
+    },
+    {
+      "id": 4,
+      "category": "recall",
+      "difficulty": "easy",
+      "question": "Apples, bananas, and grapes are sweet and grow on plants — they are all examples of which category?",
+      "choices": {
+        "a": "Vegetables",
+        "b": "Pets",
+        "c": "School Supplies",
+        "d": "Fruits"
+      },
+      "correct": "d",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 5,
+      "category": "recall",
+      "difficulty": "easy",
+      "question": "A librarian who organises her books by their colour instead of by topic has chosen the wrong what?",
+      "choices": {
+        "a": "shelf",
+        "b": "book",
+        "c": "library",
+        "d": "purpose"
+      },
+      "correct": "d",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 6,
+      "category": "recall",
+      "difficulty": "medium",
+      "question": "The chapter says the human brain can comfortably hold a number of chunks roughly between what range?",
+      "choices": {
+        "a": "1 to 2",
+        "b": "4 to 7",
+        "c": "10 to 15",
+        "d": "20 to 25"
+      },
+      "correct": "b",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 7,
+      "category": "misconception",
+      "difficulty": "medium",
+      "question": "A whale lives in the ocean and looks like a fish, but it is best classified as a member of which group?",
+      "choices": {
+        "a": "Mammal Family",
+        "b": "Fish",
+        "c": "Mammals",
+        "d": "Reptiles"
+      },
+      "correct": "c",
+      "distractor_strategy": "half-right",
+      "misconception_targeted": "Whales look fish-like, so kids assume they're fish — but the four mammal traits (warm-blooded, fur, live birth, milk) classify them with dogs."
+    },
+    {
+      "id": 8,
+      "category": "misconception",
+      "difficulty": "medium",
+      "question": "How do scientists actually decide which category an animal belongs to?",
+      "choices": {
+        "a": "by what color it is",
+        "b": "by how big it grows",
+        "c": "by hidden shared rules like body traits",
+        "d": "by where it lives only"
+      },
+      "correct": "c",
+      "distractor_strategy": "common-misconception",
+      "misconception_targeted": "Categories are based on looks — kids assume looks decide groups, but it's hidden traits like fur, warm-blood, etc."
+    },
+    {
+      "id": 9,
+      "category": "misconception",
+      "difficulty": "hard",
+      "question": "Mia turns 18 random items into 3 grouped categories and now remembers them all. What changed in her brain?",
+      "choices": {
+        "a": "she learned new facts",
+        "b": "she got smarter overnight",
+        "c": "only how the same information was organised",
+        "d": "she added more storage space"
+      },
+      "correct": "c",
+      "distractor_strategy": "common-misconception",
+      "misconception_targeted": "Better memory = more info learned. Actually, organising changes how existing info is held, not how much you know."
+    },
+    {
+      "id": 10,
+      "category": "sequence",
+      "difficulty": "medium",
+      "question": "When scientists meet a new oddball animal, the FIRST option the chapter lists for sorting it is to do what?",
+      "choices": {
+        "a": "name it after the closest existing animal",
+        "b": "put it in the category with the MOST features in common",
+        "c": "create a brand new category",
+        "d": "ignore it until more is known"
+      },
+      "correct": "b",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 11,
+      "category": "sequence",
+      "difficulty": "easy",
+      "question": "Of these chunk counts — 3, 7, and 18 — which is hardest for the brain to hold?",
+      "choices": {
+        "a": "3",
+        "b": "7",
+        "c": "all the same",
+        "d": "18"
+      },
+      "correct": "d",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 12,
+      "category": "sequence",
+      "difficulty": "medium",
+      "question": "When scientists first saw a platypus, before they figured out its category, they did what?",
+      "choices": {
+        "a": "thought someone was playing a trick on them",
+        "b": "called it a brand new kingdom",
+        "c": "placed it with reptiles",
+        "d": "immediately knew it was a mammal"
+      },
+      "correct": "a",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 13,
+      "category": "negative-selection",
+      "difficulty": "medium",
+      "question": "Which of the following is **NOT** one of the four hidden traits all mammals share?",
+      "choices": {
+        "a": "warm-blooded",
+        "b": "feeds babies milk",
+        "c": "gives birth to live babies",
+        "d": "lays eggs"
+      },
+      "correct": "d",
+      "distractor_strategy": "common-misconception"
+    },
+    {
+      "id": 14,
+      "category": "negative-selection",
+      "difficulty": "medium",
+      "question": "Which of these is **NOT** a benefit of organising things into categories, according to the chapter?",
+      "choices": {
+        "a": "makes a system look pretty no matter what",
+        "b": "saves time",
+        "c": "reveals patterns",
+        "d": "helps your memory"
+      },
+      "correct": "a",
+      "distractor_strategy": "common-misconception"
+    },
+    {
+      "id": 15,
+      "category": "negative-selection",
+      "difficulty": "easy",
+      "question": "Which of these is **NOT** something a category must have, according to the chapter?",
+      "choices": {
+        "a": "at least 2 items",
+        "b": "a similarity or purpose shared by the items",
+        "c": "all items the same color",
+        "d": "a clear rule"
+      },
+      "correct": "c",
+      "distractor_strategy": "plausible"
+    }
+  ],
+  "word_cards": [
+    {
+      "word": "Category",
+      "definition": "A group of things put together because they all share something the same.",
+      "example": "Apples, bananas, and grapes belong together as 'fruits' because they all grow on plants and taste sweet.",
+      "emoji": "🗂️",
+      "difficulty": "easy"
+    },
+    {
+      "word": "Chunk",
+      "definition": "A small group of related ideas or items that your brain holds together as one single piece.",
+      "example": "Remembering the four numbers 1-9-8-4 as just '1984 — the year my dad was born' is one of these.",
+      "emoji": "🧠",
+      "difficulty": "medium"
+    },
+    {
+      "word": "Mammal",
+      "definition": "An animal that is warm-blooded, has fur or hair, gives birth to live babies, and feeds those babies milk.",
+      "example": "A dog, a whale, a bat, and you all belong to this group — even though you all look very different.",
+      "emoji": "🐶",
+      "difficulty": "medium"
+    },
+    {
+      "word": "Pattern",
+      "definition": "Something that repeats in a way you can notice — the same shape, colour, or rule showing up again and again.",
+      "example": "Stripes on a tiger, the way Mondays always feel tired, or how rain often follows dark clouds.",
+      "emoji": "🔄",
+      "difficulty": "easy"
+    },
+    {
+      "word": "Purpose",
+      "definition": "The reason something is being done — what you are trying to use it for.",
+      "example": "A library is sorted by topic, not by colour, because the reason people come is to find books about a subject.",
+      "emoji": "🎯",
+      "difficulty": "easy"
+    },
+    {
+      "word": "Similarity",
+      "definition": "Something two or more things have in common — a way they are the same.",
+      "example": "A cat and a dog are not the same animal, but they share that both have fur and four legs.",
+      "emoji": "👯",
+      "difficulty": "easy"
+    },
+    {
+      "word": "Oddball",
+      "definition": "A thing that doesn't fit neatly into the groups you already have.",
+      "example": "A tomato is a famous one — it grows like a fruit but tastes like a vegetable, so people argue where it goes.",
+      "emoji": "🍅",
+      "difficulty": "medium"
+    },
+    {
+      "word": "Sort",
+      "definition": "To put a pile of things into separate groups based on a rule you choose.",
+      "example": "At the supermarket, milk, cheese, and butter all go on the dairy shelf — that's a rule about what they are.",
+      "emoji": "🧺",
+      "difficulty": "easy"
+    },
+    {
+      "word": "Reptile",
+      "definition": "An animal that is cold-blooded, has scales, and usually lays eggs.",
+      "example": "A snake, a lizard, a turtle, and a crocodile are all in this group.",
+      "emoji": "🦎",
+      "difficulty": "medium"
+    },
+    {
+      "word": "Categorisation",
+      "definition": "The process of looking at a bunch of items and deciding which groups they belong in.",
+      "example": "When a librarian decides which shelf each new book belongs on, that's what she is doing.",
+      "emoji": "📚",
+      "difficulty": "medium"
+    }
+  ]
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,306 @@
+{
+  "chapter": "bdk",
+  "sequence": 1,
+  "title": "Baloney Detection Kit",
+  "source_url": "https://shelikag-ops.github.io/Baloney-Detection-Kit/",
+  "topic": "Critical thinking — Carl Sagan's Baloney Detection Kit, adapted for 3rd grade as 8 Detective Tools",
+  "framework_version": "v3 (5 categories × 3 + cross-cutting rules)",
+  "generated": "2026-04-29",
+  "review_status": "pending Gemini review",
+  "bee_quiz": [
+    {
+      "id": 1,
+      "category": "vocab",
+      "difficulty": "easy",
+      "question": "Saying \"How do you know that?\" before believing a claim is using which detective tool?",
+      "choices": {
+        "a": "Coincidence Trap",
+        "b": "Cherry-Pick Alert",
+        "c": "Show Me The Evidence!",
+        "d": "Some is NOT All"
+      },
+      "correct": "c",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 2,
+      "category": "vocab",
+      "difficulty": "hard",
+      "question": "The fancy name for attacking the person instead of their idea is what?",
+      "choices": {
+        "a": "Hearsay",
+        "b": "Cherry-picking",
+        "c": "Coincidence",
+        "d": "Ad hominem"
+      },
+      "correct": "d",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 3,
+      "category": "vocab",
+      "difficulty": "medium",
+      "question": "Information passed along like \"my friend told me so\" — without any real proof — is called what?",
+      "choices": {
+        "a": "hearsay",
+        "b": "baloney",
+        "c": "ad hominem",
+        "d": "cherry-picking"
+      },
+      "correct": "a",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 4,
+      "category": "recall",
+      "difficulty": "easy",
+      "question": "The Baloney Detective Agency teaches how many detective tools in total?",
+      "choices": {
+        "a": "Five",
+        "b": "Six",
+        "c": "Eight",
+        "d": "Ten"
+      },
+      "correct": "c",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 5,
+      "category": "recall",
+      "difficulty": "medium",
+      "question": "Two things happening together but NOT actually causing each other is the trap called what?",
+      "choices": {
+        "a": "Cherry-Picking Trap",
+        "b": "Coincidence Trap",
+        "c": "Hearsay Trap",
+        "d": "Ad Hominem Trap"
+      },
+      "correct": "b",
+      "distractor_strategy": "half-right"
+    },
+    {
+      "id": 6,
+      "category": "recall",
+      "difficulty": "medium",
+      "question": "Showing only the evidence that supports your side and hiding the rest is called what?",
+      "choices": {
+        "a": "cherry-picking",
+        "b": "coincidence",
+        "c": "hearsay",
+        "d": "ad hominem"
+      },
+      "correct": "a",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 7,
+      "category": "misconception",
+      "difficulty": "medium",
+      "question": "A boy's lucky socks were worn on three days his team won. Which conclusion is most correct?",
+      "choices": {
+        "a": "The socks definitely caused the wins",
+        "b": "Wearing the socks more often will keep the team winning",
+        "c": "The wins and the socks happened together but the socks did not cause the wins",
+        "d": "The socks have a 75% chance of causing wins"
+      },
+      "correct": "c",
+      "distractor_strategy": "common-misconception",
+      "misconception_targeted": "Students often assume that two events happening together prove one caused the other (Tool #3: Coincidence Trap). The lucky-socks example exists in the kit specifically to break this misconception."
+    },
+    {
+      "id": 8,
+      "category": "misconception",
+      "difficulty": "easy",
+      "question": "A classmate says \"Don't trust her science project, she has messy hair.\" This is wrong because:",
+      "choices": {
+        "a": "Hair has nothing to do with whether the science is correct",
+        "b": "Messy hair usually means smarter people",
+        "c": "Only neat people can do good science",
+        "d": "Science projects don't need to be correct"
+      },
+      "correct": "a",
+      "distractor_strategy": "common-misconception",
+      "misconception_targeted": "Students may judge ideas based on the appearance or personality of the person making them, instead of the evidence (Tool #6: Ad Hominem)."
+    },
+    {
+      "id": 9,
+      "category": "misconception",
+      "difficulty": "hard",
+      "question": "An advert says \"9 out of 10 dentists recommend BrightSmile!\" — but they tested 200 dentists. The smartest question to ask is:",
+      "choices": {
+        "a": "Are dentists usually right?",
+        "b": "What did the other 190 dentists say?",
+        "c": "Is BrightSmile a tasty toothpaste?",
+        "d": "How long was the test?"
+      },
+      "correct": "b",
+      "distractor_strategy": "common-misconception",
+      "misconception_targeted": "Students often miss that '9 out of 10' could be cherry-picked from a much larger sample where most disagreed (Tool #4: Don't Cherry-Pick)."
+    },
+    {
+      "id": 10,
+      "category": "sequence",
+      "difficulty": "medium",
+      "question": "Which of these is the STRONGEST evidence that a claim is true?",
+      "choices": {
+        "a": "Your best friend told you so",
+        "b": "An advert says it on TV",
+        "c": "Many independent scientists tested it and got the same result",
+        "d": "Lots of people on the internet agree"
+      },
+      "correct": "c",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 11,
+      "category": "sequence",
+      "difficulty": "hard",
+      "question": "A pea-sized battery claims to last 1,000 hours, but normal ones last 10. Which detective tool spots this baloney?",
+      "choices": {
+        "a": "Tool #4: Don't Cherry-Pick",
+        "b": "Tool #6: Ad Hominem",
+        "c": "Tool #8: Do the Numbers Add Up?",
+        "d": "Tool #2: Find the Real Cause"
+      },
+      "correct": "c",
+      "distractor_strategy": "half-right"
+    },
+    {
+      "id": 12,
+      "category": "sequence",
+      "difficulty": "medium",
+      "question": "\"Brushing teeth every night → fewer cavities\" — this relationship is an example of which type?",
+      "choices": {
+        "a": "Coincidence Trap",
+        "b": "Real Cause",
+        "c": "Cherry-Picking",
+        "d": "Ad Hominem"
+      },
+      "correct": "b",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 13,
+      "category": "negative-selection",
+      "difficulty": "easy",
+      "question": "Which of the following is NOT one of the eight Detective Tools in the kit?",
+      "choices": {
+        "a": "Show Me The Evidence!",
+        "b": "Don't Cherry-Pick!",
+        "c": "Always Believe Authority!",
+        "d": "Coincidence Trap!"
+      },
+      "correct": "c",
+      "distractor_strategy": "common-misconception"
+    },
+    {
+      "id": 14,
+      "category": "negative-selection",
+      "difficulty": "medium",
+      "question": "All of the following count as REAL EVIDENCE for a claim EXCEPT:",
+      "choices": {
+        "a": "Physical proof you can hold and measure",
+        "b": "Photographs from many different people",
+        "c": "Tests done independently by different scientists",
+        "d": "\"My friend said it's true\""
+      },
+      "correct": "d",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 15,
+      "category": "negative-selection",
+      "difficulty": "hard",
+      "question": "Which of these is NOT a baloney threat tactic?",
+      "choices": {
+        "a": "\"Share this or BAD THINGS will happen to you!\"",
+        "b": "\"Believe my cream OR your skin will keep getting worse!\"",
+        "c": "\"If you don't repost, you'll have bad luck for 7 years!\"",
+        "d": "\"I tested it on 100 people and 70 got better.\""
+      },
+      "correct": "d",
+      "distractor_strategy": "half-right"
+    }
+  ],
+  "word_cards": [
+    {
+      "word": "Baloney",
+      "definition": "Something that sounds true but isn't. Often used to fool people.",
+      "example": "\"My lucky socks made my team win!\" — that's baloney.",
+      "emoji": "🥪",
+      "difficulty": "easy"
+    },
+    {
+      "word": "Evidence",
+      "definition": "Facts or proof you can actually check — like measurements, photos, or tests. NOT just someone's word.",
+      "example": "Real evidence: scales, claws, or bones from a creature, not just \"a friend told me.\"",
+      "emoji": "🔍",
+      "difficulty": "easy"
+    },
+    {
+      "word": "Hearsay",
+      "definition": "Information passed from one person to another without any real proof.",
+      "example": "\"My cousin's friend saw a UFO\" — that's hearsay, not evidence.",
+      "emoji": "💬",
+      "difficulty": "medium"
+    },
+    {
+      "word": "Coincidence",
+      "definition": "Two things happening together just by chance, with no real link between them.",
+      "example": "Wearing red socks on a day your team wins — they happened together but the socks didn't cause the win.",
+      "emoji": "🎲",
+      "difficulty": "medium"
+    },
+    {
+      "word": "Cherry-Pick",
+      "definition": "Showing only the facts that help your side and hiding the ones that don't.",
+      "example": "An advert that says \"9 of 10 dentists agree!\" but quietly skips the 190 who didn't.",
+      "emoji": "🍒",
+      "difficulty": "medium"
+    },
+    {
+      "word": "Ad Hominem",
+      "definition": "Attacking the person instead of their idea. The fancy Latin name for it.",
+      "example": "\"Don't listen to her science — she has messy hair.\" Hair has nothing to do with the facts.",
+      "emoji": "💬",
+      "difficulty": "hard"
+    },
+    {
+      "word": "Real Cause",
+      "definition": "When one thing actually makes another thing happen, with a clear reason you can show.",
+      "example": "Brushing teeth every night → fewer cavities. Germs → sickness.",
+      "emoji": "⚙️",
+      "difficulty": "medium"
+    },
+    {
+      "word": "Independent Test",
+      "definition": "When different people or scientists check the same thing on their own. If they all get the same answer, the proof is much stronger.",
+      "example": "Three labs in three different countries each test a medicine and all find the same result.",
+      "emoji": "🔬",
+      "difficulty": "hard"
+    },
+    {
+      "word": "Some is NOT All",
+      "definition": "A thinking rule that says you can't decide something is true for everyone based on just a few examples.",
+      "example": "Three sour strawberries from one shop don't prove every strawberry in the world is sour.",
+      "emoji": "⚖️",
+      "difficulty": "medium"
+    },
+    {
+      "word": "Threat (as a trick)",
+      "definition": "When someone says \"bad things will happen if you don't believe me\" or \"good things if you do.\" That's a fear-or-bribery trick — not real proof.",
+      "example": "\"Share this with 20 friends or BAD THINGS will happen!\" Real claims don't need threats.",
+      "emoji": "⚠️",
+      "difficulty": "medium"
+    }
+  ],
+  "self_check": {
+    "category_distribution": "3 vocab + 3 recall + 3 misconception + 3 sequence + 3 negative-selection = 15",
+    "half_right_distractors": "Q5 (Coincidence Trap variants), Q11 (Tool #N variants), Q15 (statistic-style distractor) = 3",
+    "instrument_or_unit": "BDK has no measurement content; rule does not apply",
+    "example_to_category_count": "Q11 + Q12 = 2",
+    "buzzer_friendly_rear_loaded": "Q1, Q2, Q3, Q4, Q5, Q6, Q12 = 7 of 12 non-negative-selection (≥ half)",
+    "max_stem_words": 21,
+    "correct_answer_positions": "a=3, b=3, c=5, d=4 (no position ≥6)"
+  }
+}

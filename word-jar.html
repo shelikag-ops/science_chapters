@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>🃏 Word Jar · Sarah's Daily Vocab Review</title>
+<style>
+:root{--bg:#fff8f0;--ink:#1f2a44;--ink-soft:#4a5472;--paper:#fff;--sun:#ffb703;--leaf:#2a9d8f;--leaf-dark:#1f7a70;--animal:#e76f51;--sky:#8ecae6;--sky-dark:#219ebc;--berry:#c7477a;--shadow:0 10px 30px rgba(30,40,70,.12);--shadow-sm:0 4px 12px rgba(30,40,70,.08);--radius:18px;--font-display:"Fredoka",sans-serif;--font-body:"Nunito",sans-serif}
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap');
+*{box-sizing:border-box}html,body{margin:0;padding:0}
+body{font-family:var(--font-body);color:var(--ink);line-height:1.55;min-height:100vh;background:radial-gradient(1200px 600px at 10% -10%,#ffe8c4 0%,transparent 60%),radial-gradient(900px 500px at 110% 10%,#cdeadf 0%,transparent 60%),var(--bg)}
+h1,h2,h3{font-family:var(--font-display);margin:0 0 .4em}
+.topnav{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:16px;padding:12px 22px;background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid #eee}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:700;font-size:20px}
+.brand .logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--sun),var(--berry));display:grid;place-items:center;color:#fff;font-size:22px}
+.nav-spacer{flex:1}
+.nav-btn{border:1px solid #e5e5e5;background:#fff;border-radius:999px;padding:8px 14px;font-weight:700;color:var(--ink-soft);cursor:pointer;font-family:inherit}
+.nav-btn:hover{background:#fafafa}
+.container{max-width:780px;margin:0 auto;padding:26px 22px 80px}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:22px}
+.stat{background:var(--paper);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow-sm);text-align:center}
+.stat-number{font-family:var(--font-display);font-weight:800;font-size:32px;color:var(--ink)}
+.stat-label{font-size:12px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em}
+.stat.streak .stat-number{color:var(--sun)}
+.stat.mastered .stat-number{color:var(--leaf)}
+.stat.total .stat-number{color:var(--sky-dark)}
+.session{background:var(--paper);border-radius:var(--radius);padding:30px;box-shadow:var(--shadow);min-height:360px}
+.session-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.session-progress{font-weight:800;color:var(--ink-soft);font-size:14px}
+.session-box-tag{display:inline-block;font-size:11px;font-weight:800;padding:3px 10px;border-radius:999px;text-transform:uppercase;letter-spacing:.05em}
+.session-box-tag.box-1{background:#fde8e1;color:var(--animal)}
+.session-box-tag.box-2{background:#fff3d6;color:#9a6a00}
+.session-box-tag.box-3{background:#e9f7ef;color:var(--leaf-dark)}
+.flashcard{background:linear-gradient(180deg,#fff,#fcfaf3);border:2px solid #eee;border-radius:14px;padding:36px 24px;cursor:pointer;text-align:center;min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;transition:transform .2s, border-color .2s}
+.flashcard:hover{transform:translateY(-2px);border-color:var(--sun)}
+.flashcard.flipped{background:linear-gradient(180deg,#fff9ea,#fff);border-color:var(--sun)}
+.fc-emoji{font-size:48px;margin-bottom:6px}
+.fc-word{font-family:var(--font-display);font-weight:800;font-size:28px;color:var(--ink);margin:6px 0}
+.fc-prompt{font-size:13px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em}
+.fc-defn{font-size:18px;line-height:1.4;color:var(--ink);max-width:500px}
+.fc-example{font-size:14px;color:var(--ink-soft);font-style:italic;margin-top:8px}
+.fc-chapter{font-size:11px;color:var(--ink-soft);margin-top:10px}
+.session-actions{display:flex;gap:12px;justify-content:center;margin-top:20px;flex-wrap:wrap}
+.btn{border:none;padding:14px 28px;border-radius:12px;font-weight:800;font-family:inherit;cursor:pointer;font-size:15px;display:inline-flex;align-items:center;gap:8px}
+.btn.forgot{background:#fde8e1;color:var(--animal);border:2px solid var(--animal)}
+.btn.forgot:hover{background:var(--animal);color:#fff}
+.btn.gotit{background:#e9f7ef;color:var(--leaf-dark);border:2px solid var(--leaf)}
+.btn.gotit:hover{background:var(--leaf);color:#fff}
+.btn.start{background:var(--ink);color:#fff;padding:16px 32px;font-size:16px}
+.btn.start:hover{background:var(--berry)}
+.session-prompt{text-align:center;color:var(--ink-soft);margin-top:14px;font-size:13px}
+.complete-screen{text-align:center;padding:40px 20px}
+.complete-emoji{font-size:80px;margin-bottom:14px}
+.complete-title{font-family:var(--font-display);font-size:36px;margin-bottom:14px}
+.complete-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:24px 0}
+.complete-stat{background:#fafaf4;border-radius:10px;padding:14px}
+.sync-status{margin-top:18px;font-size:13px;color:var(--ink-soft);min-height:20px}
+.empty-state{text-align:center;padding:50px 20px;color:var(--ink-soft)}
+.empty-state h2{color:var(--ink)}
+.empty-emoji{font-size:64px;margin-bottom:14px}
+.no-token-note{background:#fff3d6;border-left:4px solid var(--sun);padding:12px 16px;border-radius:10px;margin-top:16px;font-size:13px}
+.deck-list{margin-top:30px;background:var(--paper);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow-sm)}
+.deck-list h3{margin-top:0}
+.deck-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:14px}
+.deck-row:last-child{border-bottom:none}
+.deck-row .deck-stats{font-size:12px;color:var(--ink-soft)}
+</style></head><body>
+
+<nav class="topnav">
+  <div class="brand"><span class="logo">🃏</span> Word Jar</div>
+  <div class="nav-spacer"></div>
+  <button class="nav-btn" onclick="window.location.href='index.html'">🏠 Home</button>
+</nav>
+
+<div class="container">
+  <h1 style="margin:10px 0 4px;">🃏 Daily Word Review</h1>
+  <p style="color:var(--ink-soft);">Spaced repetition keeps your bee vocabulary sharp. ~5 minutes a day.</p>
+
+  <div class="stats-row" id="stats-row"></div>
+
+  <div id="main-area"></div>
+
+  <div class="deck-list" id="deck-list"></div>
+</div>
+
+<script>
+/* === WORD JAR — Leitner spaced repetition + Notion sync === */
+const WJ_PROXY = 'https://anthropic-proxy.shelikag.workers.dev';
+const WJ_DB_ID = '2b950200f7804b219b6c9bc311be47f1';   // 🃏 Sarah Word Cards
+const WJ_DAILY_DB = 'f5fb1cbf41824e36adde8a47820a000d';   // 📅 Sarah Daily Bee Sessions
+
+// Leitner promotion intervals (days)
+const BOX_INTERVAL = { 1: 1, 2: 3, 3: 7 };   // Box N → review after N days
+
+let wjAllCards = [];       // [{ word, definition, example, emoji, difficulty, chapter, topic }]
+let wjState = {};          // { 'chapter:word': { box, lastReviewed, correctStreak, wrongStreak, totalReviews } }
+let wjSession = [];        // today's queued cards
+let wjSessionIdx = 0;
+let wjSessionResults = []; // [{ key, wasCorrect, prevBox, newBox }]
+let wjFlipped = false;
+
+function wjLoadCards() {
+  wjAllCards = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (!key.startsWith('wc-cards-')) continue;
+    try {
+      const obj = JSON.parse(localStorage.getItem(key));
+      const chapter = obj.chapter || key.replace('wc-cards-', '');
+      const topic = obj.topic || '';
+      const cards = obj.cards || obj;
+      for (const c of cards) {
+        wjAllCards.push({ ...c, chapter, topic });
+      }
+    } catch (e) { console.warn('Bad cards key', key, e); }
+  }
+}
+
+function wjLoadState() {
+  wjState = JSON.parse(localStorage.getItem('wj-state') || '{}');
+}
+
+function wjSaveState() {
+  localStorage.setItem('wj-state', JSON.stringify(wjState));
+}
+
+function wjKey(card) { return `${card.chapter}:${card.word}`; }
+
+function wjGetCardState(card) {
+  const k = wjKey(card);
+  if (!wjState[k]) {
+    wjState[k] = { box: 1, lastReviewed: null, correctStreak: 0, wrongStreak: 0, totalReviews: 0 };
+  }
+  return wjState[k];
+}
+
+function wjIsDue(card) {
+  const s = wjGetCardState(card);
+  if (!s.lastReviewed) return true;
+  const days = (Date.now() - new Date(s.lastReviewed).getTime()) / (1000 * 60 * 60 * 24);
+  return days >= BOX_INTERVAL[s.box];
+}
+
+function wjBuildSession() {
+  const newCards = [], learningCards = [], masteredCards = [];
+  for (const card of wjAllCards) {
+    const s = wjGetCardState(card);
+    if (!wjIsDue(card)) continue;
+    if (s.box === 1) newCards.push(card);
+    else if (s.box === 2) learningCards.push(card);
+    else masteredCards.push(card);
+  }
+  // Shuffle each pool
+  const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  shuffle(newCards); shuffle(learningCards); shuffle(masteredCards);
+  // Take 3 + 3 + 2 = 8 (or fewer if not enough due)
+  return [
+    ...newCards.slice(0, 3),
+    ...learningCards.slice(0, 3),
+    ...masteredCards.slice(0, 2)
+  ];
+}
+
+function wjStats() {
+  let total = wjAllCards.length, mastered = 0, learning = 0;
+  for (const card of wjAllCards) {
+    const s = wjGetCardState(card);
+    if (s.box === 3) mastered++;
+    else if (s.box === 2) learning++;
+  }
+  const dailyLog = JSON.parse(localStorage.getItem('wj-daily') || '[]');
+  let streak = 0;
+  if (dailyLog.length) {
+    const today = new Date().toISOString().slice(0, 10);
+    let curDate = new Date(today);
+    for (let i = dailyLog.length - 1; i >= 0; i--) {
+      const d = dailyLog[i].date;
+      const expected = curDate.toISOString().slice(0, 10);
+      if (d === expected) { streak++; curDate.setDate(curDate.getDate() - 1); }
+      else break;
+    }
+  }
+  return { total, mastered, learning, streak };
+}
+
+function wjRenderStats() {
+  const s = wjStats();
+  document.getElementById('stats-row').innerHTML = `
+    <div class="stat total"><div class="stat-number">${s.total}</div><div class="stat-label">total cards</div></div>
+    <div class="stat"><div class="stat-number">${s.learning}</div><div class="stat-label">learning</div></div>
+    <div class="stat mastered"><div class="stat-number">${s.mastered}</div><div class="stat-label">mastered</div></div>
+    <div class="stat streak"><div class="stat-number">🔥 ${s.streak}</div><div class="stat-label">day streak</div></div>
+  `;
+}
+
+function wjRenderDeckList() {
+  const byChapter = {};
+  for (const c of wjAllCards) {
+    if (!byChapter[c.chapter]) byChapter[c.chapter] = { topic: c.topic, total: 0, mastered: 0 };
+    byChapter[c.chapter].total++;
+    if (wjGetCardState(c).box === 3) byChapter[c.chapter].mastered++;
+  }
+  const rows = Object.entries(byChapter).map(([ch, info]) =>
+    `<div class="deck-row"><span><b>${ch}</b> · ${info.topic || '(no topic)'}</span><span class="deck-stats">${info.mastered}/${info.total} mastered</span></div>`
+  ).join('');
+  document.getElementById('deck-list').innerHTML = `<h3>📚 Decks loaded</h3>${rows || '<p class="empty-state">No chapter decks loaded yet. Open a chapter once to import its cards.</p>'}`;
+}
+
+function wjRenderStartScreen() {
+  wjSession = wjBuildSession();
+  if (wjAllCards.length === 0) {
+    document.getElementById('main-area').innerHTML = `
+      <div class="session"><div class="empty-state">
+        <div class="empty-emoji">📭</div>
+        <h2>No cards yet</h2>
+        <p>Open a chapter (like <a href="chapter-d3a-directions.html">chapter-d3a</a>) and visit the 🐝 Bee Quiz tab to import its cards. They'll show up here automatically.</p>
+      </div></div>`;
+    return;
+  }
+  if (wjSession.length === 0) {
+    document.getElementById('main-area').innerHTML = `
+      <div class="session"><div class="empty-state">
+        <div class="empty-emoji">✨</div>
+        <h2>All caught up!</h2>
+        <p>No cards are due for review right now. Come back tomorrow.</p>
+        <button class="btn start" onclick="wjForceReview()">📝 Practice anyway</button>
+      </div></div>`;
+    return;
+  }
+  document.getElementById('main-area').innerHTML = `
+    <div class="session">
+      <h2 style="margin-top:0;">Today's session</h2>
+      <p>You have <b>${wjSession.length} card${wjSession.length===1?'':'s'}</b> to review (~${Math.ceil(wjSession.length*30/60)} min).</p>
+      <div style="text-align:center;margin-top:20px;"><button class="btn start" onclick="wjStartSession()">🚀 Start review</button></div>
+    </div>`;
+}
+
+function wjForceReview() {
+  // Force-include all cards regardless of due date, take 8
+  wjSession = wjAllCards.slice();
+  for (let i = wjSession.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [wjSession[i], wjSession[j]] = [wjSession[j], wjSession[i]]; }
+  wjSession = wjSession.slice(0, 8);
+  wjStartSession();
+}
+
+function wjStartSession() {
+  wjSessionIdx = 0;
+  wjSessionResults = [];
+  wjRenderCard();
+}
+
+function wjRenderCard() {
+  if (wjSessionIdx >= wjSession.length) return wjShowComplete();
+  const card = wjSession[wjSessionIdx];
+  const state = wjGetCardState(card);
+  wjFlipped = false;
+  document.getElementById('main-area').innerHTML = `
+    <div class="session">
+      <div class="session-header">
+        <div class="session-progress">Card ${wjSessionIdx+1} of ${wjSession.length}</div>
+        <span class="session-box-tag box-${state.box}">${state.box===1?'NEW':state.box===2?'LEARNING':'MASTERED'}</span>
+      </div>
+      <div class="flashcard" id="flashcard">
+        <div class="fc-front" id="fc-front">
+          <div class="fc-emoji">${card.emoji||'📇'}</div>
+          <div class="fc-word">${card.word}</div>
+          <div class="fc-prompt">tap to see definition</div>
+          <div class="fc-chapter">${card.chapter} · ${card.topic||''}</div>
+        </div>
+        <div class="fc-back hide" id="fc-back" style="display:none;">
+          <div class="fc-defn">${card.definition}</div>
+          <div class="fc-example">${card.example||''}</div>
+          <div class="fc-chapter">${card.chapter} · ${card.topic||''}</div>
+        </div>
+      </div>
+      <div class="session-actions" id="session-actions" style="display:none;">
+        <button class="btn forgot" onclick="wjRecord(false)">❌ Forgot</button>
+        <button class="btn gotit" onclick="wjRecord(true)">✅ Got it</button>
+      </div>
+      <div class="session-prompt" id="session-prompt">Tap the card to flip it</div>
+    </div>`;
+  document.getElementById('flashcard').onclick = () => {
+    if (wjFlipped) return;
+    wjFlipped = true;
+    document.getElementById('fc-front').style.display = 'none';
+    document.getElementById('fc-back').style.display = 'block';
+    document.getElementById('flashcard').classList.add('flipped');
+    document.getElementById('session-actions').style.display = 'flex';
+    document.getElementById('session-prompt').textContent = 'How well did you remember it?';
+  };
+}
+
+function wjRecord(wasCorrect) {
+  const card = wjSession[wjSessionIdx];
+  const k = wjKey(card);
+  const s = wjGetCardState(card);
+  const prevBox = s.box;
+  if (wasCorrect) { s.box = Math.min(3, s.box + 1); s.correctStreak++; s.wrongStreak = 0; }
+  else { s.box = 1; s.wrongStreak++; s.correctStreak = 0; }
+  s.lastReviewed = new Date().toISOString().slice(0, 10);
+  s.totalReviews++;
+  wjState[k] = s;
+  wjSessionResults.push({ key: k, card, wasCorrect, prevBox, newBox: s.box });
+  wjSaveState();
+  wjSessionIdx++;
+  if (wjSessionIdx < wjSession.length) wjRenderCard();
+  else wjShowComplete();
+}
+
+function wjShowComplete() {
+  const correct = wjSessionResults.filter(r => r.wasCorrect).length;
+  const total = wjSessionResults.length;
+  const newlyMastered = wjSessionResults.filter(r => r.prevBox < 3 && r.newBox === 3).length;
+  // Log daily
+  const today = new Date().toISOString().slice(0, 10);
+  const dailyLog = JSON.parse(localStorage.getItem('wj-daily') || '[]');
+  const todayEntry = dailyLog.find(d => d.date === today);
+  if (todayEntry) { todayEntry.cardsReviewed += total; todayEntry.wordsMastered += newlyMastered; }
+  else dailyLog.push({ date: today, cardsReviewed: total, wordsMastered: newlyMastered });
+  localStorage.setItem('wj-daily', JSON.stringify(dailyLog));
+  wjRenderStats();
+
+  document.getElementById('main-area').innerHTML = `
+    <div class="session">
+      <div class="complete-screen">
+        <div class="complete-emoji">🎉</div>
+        <div class="complete-title">Session complete!</div>
+        <div class="complete-stats">
+          <div class="complete-stat"><div class="stat-number">${correct}/${total}</div><div class="stat-label">remembered</div></div>
+          <div class="complete-stat"><div class="stat-number">${newlyMastered}</div><div class="stat-label">newly mastered</div></div>
+        </div>
+        <button class="btn start" onclick="wjReset()">🏠 Back</button>
+        <div class="sync-status" id="wj-sync-status"></div>
+      </div>
+    </div>`;
+  wjSyncToNotion(correct, total, newlyMastered);
+}
+
+async function wjSyncToNotion(correct, total, newlyMastered) {
+  const tEl = document.getElementById('wj-sync-status');
+  const TK = localStorage.getItem('hs-notion-key');
+  if (!TK) {
+    tEl.innerHTML = '<div class="no-token-note">⚠️ Notion sync off — paste your Notion key in dashboard settings to enable cross-device sync</div>';
+    return;
+  }
+  tEl.innerHTML = '⏳ Syncing to Notion...';
+  const today = new Date().toISOString().slice(0, 10);
+  const allDaily = JSON.parse(localStorage.getItem('wj-daily') || '[]');
+  const todayEntry = allDaily.find(d => d.date === today) || { cardsReviewed: total, wordsMastered: newlyMastered };
+  const stats = wjStats();
+  // 1. Sync each card state change
+  let cardErrors = 0;
+  for (const r of wjSessionResults) {
+    try {
+      await fetch(`${WJ_PROXY}/notion/v1/pages`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-notion-key': TK },
+        body: JSON.stringify({
+          parent: { database_id: WJ_DB_ID },
+          properties: {
+            Word: { title: [{ text: { content: r.card.word } }] },
+            Chapter: { rich_text: [{ text: { content: r.card.chapter } }] },
+            Box: { select: { name: r.newBox === 1 ? '1-NEW' : r.newBox === 2 ? '2-LEARNING' : '3-MASTERED' } },
+            'Last Reviewed': { date: { start: today } },
+            'Correct Streak': { number: wjState[r.key].correctStreak },
+            'Wrong Streak': { number: wjState[r.key].wrongStreak },
+            'Total Reviews': { number: wjState[r.key].totalReviews }
+          }
+        })
+      });
+    } catch (e) { cardErrors++; }
+  }
+  // 2. Sync today's daily session
+  try {
+    await fetch(`${WJ_PROXY}/notion/v1/pages`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-notion-key': TK },
+      body: JSON.stringify({
+        parent: { database_id: WJ_DAILY_DB },
+        properties: {
+          Date: { title: [{ text: { content: today } }] },
+          'Cards Reviewed': { number: todayEntry.cardsReviewed },
+          'Words Mastered Today': { number: todayEntry.wordsMastered },
+          'Streak Days': { number: stats.streak }
+        }
+      })
+    });
+    tEl.innerHTML = cardErrors ? `⚠️ Synced with ${cardErrors} card error(s)` : '✅ Synced to Notion';
+  } catch (e) {
+    tEl.innerHTML = `⚠️ Sync error: ${e.message}`;
+  }
+}
+
+function wjReset() {
+  wjLoadCards();
+  wjLoadState();
+  wjRenderStats();
+  wjRenderDeckList();
+  wjRenderStartScreen();
+}
+
+// Init
+wjLoadCards();
+wjLoadState();
+wjRenderStats();
+wjRenderDeckList();
+wjRenderStartScreen();
+</script>
+</body></html>

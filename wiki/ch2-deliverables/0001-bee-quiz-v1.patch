@@ -1,0 +1,343 @@
+From a0f4930553eaad882bd2346f0c13eb71c4bbad42 Mon Sep 17 00:00:00 2001
+From: Shell <shelikagupta@gmail.com>
+Date: Mon, 27 Apr 2026 14:49:57 +0000
+Subject: [PATCH] A/B-1 bee-quiz v1: embed Gemini-approved quiz JSON
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Apply Beprep strategy Gemini review feedback (verdict: APPROVED):
+- 15 MCQs (3 vocab + 3 recall + 3 misconception + 3 sequence + 3 negative-selection)
+- 10 word cards
+- Q4: example-to-category — fruits (was mammals; reduced mammal over-rep)
+- Q5: librarian/purpose recall (closes purpose coverage gap)
+- Q9: position rebalance (b->c)
+- Q10: reframed from chunk-count drop (recall mislabel) to oddball-options ordering (true sequence)
+- Q13/Q14/Q15: bolded NOT for visual emphasis
+- Categorisation card: definition rewritten to remove self-reference echo
+
+Distribution: a:3 b:4 c:4 d:4. Half-right: Q1,Q3,Q7. Example-to-category: Q4,Q7. Buzzer-rear-loaded: 12/12.
+
+Spec: wiki/tools/bee-quiz-generation-spec.md
+Reviewer prompt: wiki/tools/gemini-review-prompt.md (v3)
+Reviewed in: Science Bee Prep Strategy and Feedback (Gemini)
+---
+ index.html | 303 +++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 303 insertions(+)
+
+diff --git a/index.html b/index.html
+index dde70b7..c95441d 100644
+--- a/index.html
++++ b/index.html
+@@ -1005,5 +1005,308 @@ function restartQuiz(){
+ // init on load
+ initSorting();
+ </script>
++
++<!-- ============================================================
++     Bee Quiz Data — Chapter A/B-1: Organising Things into Categories
++     Version: 1 (Gemini APPROVED 2026-04-27, fixes applied)
++     Source spec: wiki/tools/bee-quiz-generation-spec.md
++     Reviewer: wiki/tools/gemini-review-prompt.md (v3, Beprep strategy chat)
++     ============================================================ -->
++<script type="application/json" id="bee-quiz-data">
++{
++  "chapter": "A/B-1",
++  "seq": 2,
++  "topic": "Organising Things into Categories",
++  "source_url": "https://shelikag-ops.github.io/Organising-Things/",
++  "bee_quiz": [
++    {
++      "id": 1,
++      "category": "vocab",
++      "difficulty": "easy",
++      "question": "The science word for a group of things that share something in common is what?",
++      "choices": {
++        "a": "categorization",
++        "b": "category",
++        "c": "section",
++        "d": "collection"
++      },
++      "correct": "b",
++      "distractor_strategy": "half-right"
++    },
++    {
++      "id": 2,
++      "category": "vocab",
++      "difficulty": "medium",
++      "question": "In memory science, a 'chunk' best describes what?",
++      "choices": {
++        "a": "a single random number",
++        "b": "a group of related items remembered together",
++        "c": "the smallest piece of food",
++        "d": "a long unsorted list"
++      },
++      "correct": "b",
++      "distractor_strategy": "plausible"
++    },
++    {
++      "id": 3,
++      "category": "vocab",
++      "difficulty": "medium",
++      "question": "An animal that is warm-blooded, has fur or hair, gives birth to live babies, and feeds them milk is called a what?",
++      "choices": {
++        "a": "mammal",
++        "b": "reptile",
++        "c": "warm-blooded reptile",
++        "d": "fish"
++      },
++      "correct": "a",
++      "distractor_strategy": "half-right"
++    },
++    {
++      "id": 4,
++      "category": "recall",
++      "difficulty": "easy",
++      "question": "Apples, bananas, and grapes are sweet and grow on plants — they are all examples of which category?",
++      "choices": {
++        "a": "Vegetables",
++        "b": "Pets",
++        "c": "School Supplies",
++        "d": "Fruits"
++      },
++      "correct": "d",
++      "distractor_strategy": "plausible"
++    },
++    {
++      "id": 5,
++      "category": "recall",
++      "difficulty": "easy",
++      "question": "A librarian who organises her books by their colour instead of by topic has chosen the wrong what?",
++      "choices": {
++        "a": "shelf",
++        "b": "book",
++        "c": "library",
++        "d": "purpose"
++      },
++      "correct": "d",
++      "distractor_strategy": "plausible"
++    },
++    {
++      "id": 6,
++      "category": "recall",
++      "difficulty": "medium",
++      "question": "The chapter says the human brain can comfortably hold a number of chunks roughly between what range?",
++      "choices": {
++        "a": "1 to 2",
++        "b": "4 to 7",
++        "c": "10 to 15",
++        "d": "20 to 25"
++      },
++      "correct": "b",
++      "distractor_strategy": "plausible"
++    },
++    {
++      "id": 7,
++      "category": "misconception",
++      "difficulty": "medium",
++      "question": "A whale lives in the ocean and looks like a fish, but it is best classified as a member of which group?",
++      "choices": {
++        "a": "Mammal Family",
++        "b": "Fish",
++        "c": "Mammals",
++        "d": "Reptiles"
++      },
++      "correct": "c",
++      "distractor_strategy": "half-right",
++      "misconception_targeted": "Whales look fish-like, so kids assume they're fish — but the four mammal traits (warm-blooded, fur, live birth, milk) classify them with dogs."
++    },
++    {
++      "id": 8,
++      "category": "misconception",
++      "difficulty": "medium",
++      "question": "How do scientists actually decide which category an animal belongs to?",
++      "choices": {
++        "a": "by what color it is",
++        "b": "by how big it grows",
++        "c": "by hidden shared rules like body traits",
++        "d": "by where it lives only"
++      },
++      "correct": "c",
++      "distractor_strategy": "common-misconception",
++      "misconception_targeted": "Categories are based on looks — kids assume looks decide groups, but it's hidden traits like fur, warm-blood, etc."
++    },
++    {
++      "id": 9,
++      "category": "misconception",
++      "difficulty": "hard",
++      "question": "Mia turns 18 random items into 3 grouped categories and now remembers them all. What changed in her brain?",
++      "choices": {
++        "a": "she learned new facts",
++        "b": "she got smarter overnight",
++        "c": "only how the same information was organised",
++        "d": "she added more storage space"
++      },
++      "correct": "c",
++      "distractor_strategy": "common-misconception",
++      "misconception_targeted": "Better memory = more info learned. Actually, organising changes how existing info is held, not how much you know."
++    },
++    {
++      "id": 10,
++      "category": "sequence",
++      "difficulty": "medium",
++      "question": "When scientists meet a new oddball animal, the FIRST option the chapter lists for sorting it is to do what?",
++      "choices": {
++        "a": "name it after the closest existing animal",
++        "b": "put it in the category with the MOST features in common",
++        "c": "create a brand new category",
++        "d": "ignore it until more is known"
++      },
++      "correct": "b",
++      "distractor_strategy": "plausible"
++    },
++    {
++      "id": 11,
++      "category": "sequence",
++      "difficulty": "easy",
++      "question": "Of these chunk counts — 3, 7, and 18 — which is hardest for the brain to hold?",
++      "choices": {
++        "a": "3",
++        "b": "7",
++        "c": "all the same",
++        "d": "18"
++      },
++      "correct": "d",
++      "distractor_strategy": "plausible"
++    },
++    {
++      "id": 12,
++      "category": "sequence",
++      "difficulty": "medium",
++      "question": "When scientists first saw a platypus, before they figured out its category, they did what?",
++      "choices": {
++        "a": "thought someone was playing a trick on them",
++        "b": "called it a brand new kingdom",
++        "c": "placed it with reptiles",
++        "d": "immediately knew it was a mammal"
++      },
++      "correct": "a",
++      "distractor_strategy": "plausible"
++    },
++    {
++      "id": 13,
++      "category": "negative-selection",
++      "difficulty": "medium",
++      "question": "Which of the following is **NOT** one of the four hidden traits all mammals share?",
++      "choices": {
++        "a": "warm-blooded",
++        "b": "feeds babies milk",
++        "c": "gives birth to live babies",
++        "d": "lays eggs"
++      },
++      "correct": "d",
++      "distractor_strategy": "common-misconception"
++    },
++    {
++      "id": 14,
++      "category": "negative-selection",
++      "difficulty": "medium",
++      "question": "Which of these is **NOT** a benefit of organising things into categories, according to the chapter?",
++      "choices": {
++        "a": "makes a system look pretty no matter what",
++        "b": "saves time",
++        "c": "reveals patterns",
++        "d": "helps your memory"
++      },
++      "correct": "a",
++      "distractor_strategy": "common-misconception"
++    },
++    {
++      "id": 15,
++      "category": "negative-selection",
++      "difficulty": "easy",
++      "question": "Which of these is **NOT** something a category must have, according to the chapter?",
++      "choices": {
++        "a": "at least 2 items",
++        "b": "a similarity or purpose shared by the items",
++        "c": "all items the same color",
++        "d": "a clear rule"
++      },
++      "correct": "c",
++      "distractor_strategy": "plausible"
++    }
++  ],
++  "word_cards": [
++    {
++      "word": "Category",
++      "definition": "A group of things put together because they all share something the same.",
++      "example": "Apples, bananas, and grapes belong together as 'fruits' because they all grow on plants and taste sweet.",
++      "emoji": "🗂️",
++      "difficulty": "easy"
++    },
++    {
++      "word": "Chunk",
++      "definition": "A small group of related ideas or items that your brain holds together as one single piece.",
++      "example": "Remembering the four numbers 1-9-8-4 as just '1984 — the year my dad was born' is one of these.",
++      "emoji": "🧠",
++      "difficulty": "medium"
++    },
++    {
++      "word": "Mammal",
++      "definition": "An animal that is warm-blooded, has fur or hair, gives birth to live babies, and feeds those babies milk.",
++      "example": "A dog, a whale, a bat, and you all belong to this group — even though you all look very different.",
++      "emoji": "🐶",
++      "difficulty": "medium"
++    },
++    {
++      "word": "Pattern",
++      "definition": "Something that repeats in a way you can notice — the same shape, colour, or rule showing up again and again.",
++      "example": "Stripes on a tiger, the way Mondays always feel tired, or how rain often follows dark clouds.",
++      "emoji": "🔄",
++      "difficulty": "easy"
++    },
++    {
++      "word": "Purpose",
++      "definition": "The reason something is being done — what you are trying to use it for.",
++      "example": "A library is sorted by topic, not by colour, because the reason people come is to find books about a subject.",
++      "emoji": "🎯",
++      "difficulty": "easy"
++    },
++    {
++      "word": "Similarity",
++      "definition": "Something two or more things have in common — a way they are the same.",
++      "example": "A cat and a dog are not the same animal, but they share that both have fur and four legs.",
++      "emoji": "👯",
++      "difficulty": "easy"
++    },
++    {
++      "word": "Oddball",
++      "definition": "A thing that doesn't fit neatly into the groups you already have.",
++      "example": "A tomato is a famous one — it grows like a fruit but tastes like a vegetable, so people argue where it goes.",
++      "emoji": "🍅",
++      "difficulty": "medium"
++    },
++    {
++      "word": "Sort",
++      "definition": "To put a pile of things into separate groups based on a rule you choose.",
++      "example": "At the supermarket, milk, cheese, and butter all go on the dairy shelf — that's a rule about what they are.",
++      "emoji": "🧺",
++      "difficulty": "easy"
++    },
++    {
++      "word": "Reptile",
++      "definition": "An animal that is cold-blooded, has scales, and usually lays eggs.",
++      "example": "A snake, a lizard, a turtle, and a crocodile are all in this group.",
++      "emoji": "🦎",
++      "difficulty": "medium"
++    },
++    {
++      "word": "Categorisation",
++      "definition": "The process of looking at a bunch of items and deciding which groups they belong in.",
++      "example": "When a librarian decides which shelf each new book belongs on, that's what she is doing.",
++      "emoji": "📚",
++      "difficulty": "medium"
++    }
++  ]
++}
++</script>
++
+ </body>
+ </html>
+-- 
+2.34.1
+

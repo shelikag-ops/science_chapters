@@ -1,0 +1,274 @@
+{
+  "chapter": "A-2",
+  "seq": 3,
+  "topic": "Solids, Liquids, and Gases",
+  "source_url": "https://shelikag-ops.github.io/Solids-Liquids/",
+  "bee_quiz": [
+    {
+      "id": 1,
+      "category": "vocab",
+      "difficulty": "easy",
+      "question": "The state of matter that flows and pours and takes the shape of its container is called what?",
+      "choices": { "a": "gas", "b": "flowing solid", "c": "plasma", "d": "liquid" },
+      "correct": "d",
+      "distractor_strategy": "half-right"
+    },
+    {
+      "id": 2,
+      "category": "vocab",
+      "difficulty": "medium",
+      "question": "Anything that has weight and takes up space is given the science name of what?",
+      "choices": { "a": "matter", "b": "energy", "c": "volume", "d": "substance" },
+      "correct": "a",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 3,
+      "category": "vocab",
+      "difficulty": "easy",
+      "question": "The change from solid to liquid when heat is added is called what?",
+      "choices": { "a": "burning", "b": "freezing", "c": "heating", "d": "melting" },
+      "correct": "d",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 4,
+      "category": "recall",
+      "difficulty": "medium",
+      "question": "In the metric system used by scientists, the unit for measuring how hot or cold water is is called what?",
+      "choices": { "a": "Degrees Fahrenheit", "b": "Degrees Celsius", "c": "Grams", "d": "Litres" },
+      "correct": "b",
+      "distractor_strategy": "half-right"
+    },
+    {
+      "id": 5,
+      "category": "recall",
+      "difficulty": "easy",
+      "question": "The state of matter that spreads out completely to fill any container is called a what?",
+      "choices": { "a": "liquid", "b": "solid", "c": "gas", "d": "spreading liquid" },
+      "correct": "c",
+      "distractor_strategy": "half-right"
+    },
+    {
+      "id": 6,
+      "category": "recall",
+      "difficulty": "medium",
+      "question": "Teeth, bones, and nails inside your body are all examples of which state of matter?",
+      "choices": { "a": "liquid", "b": "gas", "c": "solid", "d": "energy" },
+      "correct": "c",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 7,
+      "category": "misconception",
+      "difficulty": "medium",
+      "question": "A candle flame has no weight and takes up no space, so a flame is best described as what?",
+      "choices": {
+        "a": "a hot solid",
+        "b": "a tiny liquid",
+        "c": "a form of energy, not matter",
+        "d": "a kind of gas"
+      },
+      "correct": "c",
+      "distractor_strategy": "common-misconception",
+      "misconception_targeted": "Flames look physical so kids assume they are matter — but flame is light + heat, which is energy, not matter."
+    },
+    {
+      "id": 8,
+      "category": "misconception",
+      "difficulty": "medium",
+      "question": "A bag of sugar pours just like a liquid, but according to the chapter sugar is best classified as what?",
+      "choices": {
+        "a": "a flowing liquid",
+        "b": "a solid",
+        "c": "a gas",
+        "d": "a special liquid"
+      },
+      "correct": "b",
+      "distractor_strategy": "common-misconception",
+      "misconception_targeted": "Sugar pours and flows, so kids assume it is a liquid — but each grain keeps its own shape, making it a solid."
+    },
+    {
+      "id": 9,
+      "category": "misconception",
+      "difficulty": "hard",
+      "question": "Ice melts and can refreeze, but when wood is burned the wood does what?",
+      "choices": {
+        "a": "cannot return to its original shape",
+        "b": "becomes a colder solid",
+        "c": "turns into invisible water",
+        "d": "stays exactly the same"
+      },
+      "correct": "a",
+      "distractor_strategy": "common-misconception",
+      "misconception_targeted": "Kids assume melting and burning are the same kind of change — but melting is reversible and burning is not."
+    },
+    {
+      "id": 10,
+      "category": "sequence",
+      "difficulty": "easy",
+      "question": "Heating water goes through these states in order: ice (solid) → ? → steam (gas). The middle step is what?",
+      "choices": { "a": "ice", "b": "liquid water", "c": "gas", "d": "frozen vapour" },
+      "correct": "b",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 11,
+      "category": "sequence",
+      "difficulty": "medium",
+      "question": "If you seal a sample of each state inside a jar, which one will always expand to touch every part of the jar's inside?",
+      "choices": { "a": "solid", "b": "liquid", "c": "none of them", "d": "gas" },
+      "correct": "d",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 12,
+      "category": "sequence",
+      "difficulty": "easy",
+      "question": "An ice lolly melts faster on a hot day than on a cool day. Melting happens FASTER on which day?",
+      "choices": {
+        "a": "the cool day",
+        "b": "the hot day",
+        "c": "both are the same",
+        "d": "it depends on the lolly's colour"
+      },
+      "correct": "b",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 13,
+      "category": "negative-selection",
+      "difficulty": "medium",
+      "question": "Which of these is **NOT** matter?",
+      "choices": {
+        "a": "a rock",
+        "b": "a glass of water",
+        "c": "a candle flame",
+        "d": "the air in a balloon"
+      },
+      "correct": "c",
+      "distractor_strategy": "common-misconception"
+    },
+    {
+      "id": 14,
+      "category": "negative-selection",
+      "difficulty": "medium",
+      "question": "Which of these is **NOT** a property of liquids, according to the chapter?",
+      "choices": {
+        "a": "keeps its own shape with no container",
+        "b": "flows and pours",
+        "c": "takes the shape of its container",
+        "d": "you can see how full the container is"
+      },
+      "correct": "a",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 15,
+      "category": "negative-selection",
+      "difficulty": "easy",
+      "question": "Which of these is **NOT** one of the three states of matter taught in this chapter?",
+      "choices": { "a": "solid", "b": "liquid", "c": "energy", "d": "gas" },
+      "correct": "c",
+      "distractor_strategy": "common-misconception"
+    }
+  ],
+  "word_cards": [
+    {
+      "word": "Matter",
+      "definition": "Anything that has weight and takes up space — almost everything you can touch.",
+      "example": "A rock, a glass of water, and the air inside a balloon are all this.",
+      "emoji": "⚖️",
+      "difficulty": "medium"
+    },
+    {
+      "word": "Solid",
+      "definition": "A form of matter that keeps its own shape and does not need a container.",
+      "example": "A book, a coin, and an ice cube — set them on a table and they stay put.",
+      "emoji": "🪨",
+      "difficulty": "easy"
+    },
+    {
+      "word": "Liquid",
+      "definition": "A form of matter that flows and pours and takes the shape of whatever is holding it.",
+      "example": "Water in a glass is glass-shaped. Pour it into a bowl and it becomes bowl-shaped.",
+      "emoji": "💧",
+      "difficulty": "easy"
+    },
+    {
+      "word": "Gas",
+      "definition": "A form of matter that spreads out and fills any container all the way.",
+      "example": "Blow up a balloon — the air inside fills every corner of the rubber skin.",
+      "emoji": "💨",
+      "difficulty": "easy"
+    },
+    {
+      "word": "Melting",
+      "definition": "When a solid is warmed up so much that it changes into a liquid.",
+      "example": "An ice cube on a warm table slowly turns into a puddle of water.",
+      "emoji": "🫠",
+      "difficulty": "medium"
+    },
+    {
+      "word": "Freezing",
+      "definition": "When a liquid is cooled down so much that it changes into a solid.",
+      "example": "Hot lava from a volcano slowly cools at the surface and turns into hard rock — that's the same kind of change.",
+      "emoji": "🧊",
+      "difficulty": "medium"
+    },
+    {
+      "word": "Evaporation",
+      "definition": "When a liquid slowly changes into a gas that floats away into the air.",
+      "example": "A wet cloth hung in the sun gets dry — the water did not vanish; it gently became an invisible gas.",
+      "emoji": "💦",
+      "difficulty": "hard"
+    },
+    {
+      "word": "Condensation",
+      "definition": "When a gas turns back into tiny drops of liquid, usually because it touched something cold.",
+      "example": "Breathe onto a cold window and a foggy patch of water drops appears.",
+      "emoji": "🌫️",
+      "difficulty": "hard"
+    },
+    {
+      "word": "Energy",
+      "definition": "A kind of 'stuff' that has no weight and takes up no space — like light, heat, and sound.",
+      "example": "A candle flame and the warmth from the sun are both this, not matter.",
+      "emoji": "⚡",
+      "difficulty": "medium"
+    },
+    {
+      "word": "Reversible",
+      "definition": "A change that can be undone to get back what you started with.",
+      "example": "Ice melts to water, and you can re-freeze the water back to ice — that's a change you can undo.",
+      "emoji": "🔄",
+      "difficulty": "medium"
+    }
+  ],
+  "_self_check": {
+    "version": 2,
+    "v2_changes": [
+      "Q4: rewritten per Gemini to test the unit name (Degrees Celsius) directly, not just the value",
+      "Q6: rewritten as example-to-category for the SOLID side (teeth/bones/nails -> solid). Adds 3rd example-to-category and reduces 'liquid examples' over-rep",
+      "Q11: rewritten to a concrete sealed-jar scenario per Gemini (clearer than 'fills MOST completely')",
+      "Freezing card: example replaced (lava cooling) to remove 'freezer' self-reference",
+      "Evaporation card: 'water vapour' synonym removed; simplified to 'invisible gas'"
+    ],
+    "category_counts": { "vocab": 3, "recall": 3, "misconception": 3, "sequence": 3, "negative-selection": 3 },
+    "half_right_count": 3,
+    "half_right_question_ids": [1, 4, 5],
+    "example_to_category_count": 3,
+    "example_to_category_question_ids": [6, 7, 8],
+    "rear_loaded_non_neg_count": 12,
+    "rear_loaded_non_neg_total": 12,
+    "instrument_or_unit_required": true,
+    "instrument_or_unit_question_ids": [4],
+    "instrument_or_unit_reason": "Chapter teaches melting/freezing temperatures (0°C). Q4 now tests the unit name (Degrees Celsius) directly per Gemini's recommendation.",
+    "correct_answer_position_counts": { "a": 3, "b": 4, "c": 5, "d": 3 },
+    "longest_stem_word_count": 24,
+    "word_card_count": 10,
+    "all_stems_under_25_words": true,
+    "no_word_in_own_definition": true,
+    "no_harder_synonyms_in_definitions": true
+  }
+}

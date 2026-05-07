@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.sarah-science-chapters.auto-push</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>/Users/nitin/Documents/Claude/Projects/Sarah Science Chapters/auto-push.sh</string>
+    </array>
+
+    <!-- Start at login + restart if it dies. -->
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+
+    <!-- Throttle restart attempts so a broken script doesn't spin. -->
+    <key>ThrottleInterval</key>
+    <integer>30</integer>
+
+    <!-- Surface stdout/stderr to log files for debugging. -->
+    <key>StandardOutPath</key>
+    <string>/Users/nitin/Documents/Claude/Projects/Sarah Science Chapters/.auto-push.stdout.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/nitin/Documents/Claude/Projects/Sarah Science Chapters/.auto-push.stderr.log</string>
+
+    <!-- Ensure /usr/local/bin and /opt/homebrew/bin are on PATH so fswatch resolves. -->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
+</dict>
+</plist>

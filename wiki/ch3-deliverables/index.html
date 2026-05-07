@@ -1,0 +1,2846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solids, Liquids & Gases! 🧪</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --solid: #FF7043;
+      --liquid: #1E88E5;
+      --gas: #26A69A;
+      --game: #7B2FBE;
+      --quiz: #E91E8C;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #111;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    /* ── SLIDE SYSTEM ── */
+    #app { width: 100vw; height: 100vh; position: relative; }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 80px 60px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+    .slide.active { opacity: 1; pointer-events: all; }
+
+    /* ── NAVIGATION ── */
+    .nav-arrow {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      font-size: 22px;
+      z-index: 200;
+      background: rgba(255,255,255,0.18);
+      color: white;
+      backdrop-filter: blur(6px);
+      transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nav-arrow:hover { background: rgba(255,255,255,0.38); transform: translateY(-50%) scale(1.12); }
+    #prev-btn { left: 14px; }
+    #next-btn { right: 14px; }
+    .nav-arrow:disabled { opacity: 0.2; cursor: default; }
+    .nav-arrow:disabled:hover { transform: translateY(-50%) scale(1); background: rgba(255,255,255,0.18); }
+
+    .dots {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 200;
+    }
+    .dot {
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+    .dot.active { background: white; transform: scale(1.4); }
+
+    /* ── SHARED TYPOGRAPHY ── */
+    .slide-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(28px, 5vw, 58px);
+      color: white;
+      text-align: center;
+      margin-bottom: 3vh;
+      text-shadow: 0 3px 12px rgba(0,0,0,0.25);
+    }
+    .slide-title.dark { color: #1a1a2e; text-shadow: none; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes bounceIn {
+      0%   { transform: scale(0.4); opacity: 0; }
+      60%  { transform: scale(1.05); }
+      80%  { transform: scale(0.96); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pop {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50%       { transform: translateY(-14px); }
+    }
+    @keyframes confetti-fall {
+      0%   { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+    }
+    @keyframes shimmer {
+      0%, 100% { opacity: 0.7; }
+      50%       { opacity: 1; }
+    }
+
+    /* ════════════════════════════════════════
+       SLIDE 1 — TITLE
+    ════════════════════════════════════════ */
+    #slide-1 {
+      background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+      overflow: hidden;
+    }
+    .atoms-bg {
+      position: absolute; inset: 0;
+      pointer-events: none; overflow: hidden;
+    }
+    .atom-dot {
+      position: absolute;
+      border-radius: 50%;
+      animation: rise linear infinite;
+    }
+    @keyframes rise {
+      0%   { transform: translateY(110vh) rotate(0deg) scale(1); opacity: 0.7; }
+      100% { transform: translateY(-20vh) rotate(540deg) scale(0.5); opacity: 0; }
+    }
+    .t-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(42px, 9vw, 108px);
+      color: white;
+      text-align: center;
+      line-height: 1.0;
+      text-shadow: 0 0 40px rgba(120,80,255,0.6), 0 4px 20px rgba(0,0,0,0.4);
+      animation: bounceIn 0.9s ease both;
+      z-index: 1;
+    }
+    .t-sub {
+      font-size: clamp(14px, 2.2vw, 26px);
+      color: rgba(255,255,255,0.82);
+      margin-top: 18px;
+      text-align: center;
+      animation: fadeUp 0.9s ease 0.4s both;
+      z-index: 1;
+    }
+    .t-icons {
+      display: flex; gap: 4vw;
+      margin-top: 4vh;
+      font-size: clamp(32px, 6vw, 72px);
+      animation: fadeUp 1s ease 0.7s both;
+      z-index: 1;
+    }
+    .t-icon { animation: float 3s ease-in-out infinite; }
+    .t-icon:nth-child(2) { animation-delay: 0.5s; }
+    .t-icon:nth-child(3) { animation-delay: 1s; }
+
+    /* ════════════════════════════════════════
+       SLIDE 2 — GOALS
+    ════════════════════════════════════════ */
+    #slide-2 {
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    }
+    .goals-row {
+      display: flex; gap: 3vw; justify-content: center; flex-wrap: wrap;
+    }
+    .goal-card {
+      background: rgba(255,255,255,0.15);
+      border: 2px solid rgba(255,255,255,0.3);
+      backdrop-filter: blur(8px);
+      border-radius: 24px;
+      padding: 3vh 2.5vw;
+      text-align: center;
+      color: white;
+      width: 26vw; min-width: 180px; max-width: 280px;
+      animation: fadeUp 0.7s ease both;
+    }
+    .goal-card:nth-child(1) { animation-delay: 0.1s; }
+    .goal-card:nth-child(2) { animation-delay: 0.25s; }
+    .goal-card:nth-child(3) { animation-delay: 0.4s; }
+    .goal-emoji { font-size: clamp(30px, 5vw, 58px); margin-bottom: 10px; }
+    .goal-label {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(16px, 2.2vw, 26px);
+      margin-bottom: 8px;
+    }
+    .goal-desc { font-size: clamp(12px, 1.4vw, 16px); opacity: 0.88; line-height: 1.5; }
+
+    /* ════════════════════════════════════════
+       SLIDE 3 — THE 3 STATES
+    ════════════════════════════════════════ */
+    #slide-3 { background: #f8f9ff; }
+    .states-row {
+      display: flex; gap: 3vw; justify-content: center; flex-wrap: wrap;
+    }
+    .state-card {
+      border-radius: 28px;
+      padding: 3.5vh 2.5vw;
+      text-align: center;
+      color: white;
+      width: 26vw; min-width: 190px; max-width: 300px;
+      animation: fadeUp 0.7s ease both;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    }
+    .state-card.solid  { background: linear-gradient(145deg, #FF8C42, #FF5733); animation-delay: 0.1s; }
+    .state-card.liquid { background: linear-gradient(145deg, #42B0FF, #1565C0); animation-delay: 0.2s; }
+    .state-card.gas    { background: linear-gradient(145deg, #42E2B8, #00897B); animation-delay: 0.3s; }
+    .state-big-emoji { font-size: clamp(44px, 7vw, 80px); margin-bottom: 12px; animation: float 3s ease-in-out infinite; }
+    .state-card.liquid .state-big-emoji { animation-delay: 0.7s; }
+    .state-card.gas    .state-big-emoji { animation-delay: 1.4s; }
+    .state-name {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(22px, 3.2vw, 40px);
+      margin-bottom: 10px;
+    }
+    .state-rule { font-size: clamp(12px, 1.5vw, 17px); opacity: 0.92; line-height: 1.55; }
+    .state-examples { margin-top: 10px; font-size: clamp(18px, 2.5vw, 30px); }
+
+    /* ════════════════════════════════════════
+       SLIDE 4 — SORTING GAME
+    ════════════════════════════════════════ */
+    #slide-4 { background: linear-gradient(160deg, #1c0533 0%, #3d1278 100%); }
+
+    .game-score-bar {
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 2vh;
+      font-family: 'Fredoka One', cursive;
+      color: white;
+      font-size: clamp(14px, 2vw, 22px);
+    }
+    .game-score-val {
+      background: rgba(255,255,255,0.15);
+      border-radius: 30px;
+      padding: 4px 18px;
+      font-size: clamp(16px, 2.2vw, 26px);
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+
+    #items-bank {
+      display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+      min-height: 70px;
+      background: rgba(255,255,255,0.08);
+      border: 2px dashed rgba(255,255,255,0.3);
+      border-radius: 20px;
+      padding: 14px 20px;
+      width: 100%;
+      margin-bottom: 2vh;
+    }
+
+    .drag-item {
+      background: white;
+      border-radius: 50px;
+      padding: 8px 18px;
+      font-size: clamp(14px, 1.8vw, 20px);
+      font-weight: 700;
+      cursor: grab;
+      user-select: none;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      animation: fadeUp 0.4s ease both;
+    }
+    .drag-item:active { cursor: grabbing; transform: scale(1.1); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+    .drag-item.dragging { opacity: 0.4; }
+
+    .drop-zones {
+      display: flex; gap: 2vw; width: 100%; justify-content: center;
+    }
+    .drop-zone {
+      flex: 1; max-width: 28vw;
+      border-radius: 20px;
+      padding: 16px 12px;
+      min-height: 140px;
+      border: 3px dashed rgba(255,255,255,0.4);
+      transition: border-color 0.2s, background 0.2s;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .drop-zone.over { border-style: solid; background: rgba(255,255,255,0.1); }
+    .drop-zone[data-cat="solid"]  { border-color: #FF8C42; }
+    .drop-zone[data-cat="liquid"] { border-color: #42B0FF; }
+    .drop-zone[data-cat="gas"]    { border-color: #42E2B8; }
+    .drop-zone-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(16px, 2.2vw, 26px);
+      color: white;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .drop-zone[data-cat="solid"]  .drop-zone-title { color: #FF8C42; }
+    .drop-zone[data-cat="liquid"] .drop-zone-title { color: #42B0FF; }
+    .drop-zone[data-cat="gas"]    .drop-zone-title { color: #42E2B8; }
+    .drop-zone-items { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+
+    .sorted-item {
+      border-radius: 40px;
+      padding: 5px 14px;
+      font-size: clamp(12px, 1.5vw, 16px);
+      font-weight: 700;
+      color: white;
+    }
+    .sorted-item.correct   { background: #22c55e; }
+    .sorted-item.incorrect { background: #ef4444; }
+
+    .game-reset-btn {
+      margin-top: 14px;
+      background: rgba(255,255,255,0.15);
+      border: 2px solid rgba(255,255,255,0.4);
+      color: white;
+      border-radius: 50px;
+      padding: 8px 24px;
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(13px, 1.7vw, 18px);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .game-reset-btn:hover { background: rgba(255,255,255,0.3); transform: scale(1.05); }
+
+    /* ════════════════════════════════════════
+       SLIDES 5, 6, 7 — SOLIDS / LIQUIDS / GASES
+    ════════════════════════════════════════ */
+    #slide-5 { background: linear-gradient(145deg, #fff4ee, #ffe0cc); }
+    #slide-6 { background: linear-gradient(145deg, #e8f4ff, #cce4ff); }
+    #slide-7 { background: linear-gradient(145deg, #e0faf5, #b2ede5); }
+
+    .info-layout {
+      display: flex; gap: 4vw; align-items: center; width: 100%;
+    }
+    .info-left { flex: 1; }
+    .info-right { flex: 1; display: flex; flex-direction: column; gap: 14px; }
+
+    .big-icon-circle {
+      width: clamp(100px, 16vw, 200px);
+      height: clamp(100px, 16vw, 200px);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: clamp(48px, 8vw, 100px);
+      margin: 0 auto 20px;
+      animation: float 3s ease-in-out infinite;
+    }
+    .solid-circle  { background: linear-gradient(145deg, #FF8C42, #FF5733); }
+    .liquid-circle { background: linear-gradient(145deg, #42B0FF, #1565C0); }
+    .gas-circle    { background: linear-gradient(145deg, #42E2B8, #00897B); }
+
+    .def-box {
+      border-radius: 20px;
+      padding: 18px 22px;
+      font-size: clamp(13px, 1.6vw, 18px);
+      line-height: 1.6;
+      font-weight: 600;
+    }
+    .solid-def  { background: rgba(255,112,67,0.12); border-left: 5px solid #FF7043; color: #7a2d0e; }
+    .liquid-def { background: rgba(30,136,229,0.12); border-left: 5px solid #1E88E5; color: #0d3b6e; }
+    .gas-def    { background: rgba(38,166,154,0.12); border-left: 5px solid #26A69A; color: #0d4a44; }
+
+    .example-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+    }
+    .example-item {
+      border-radius: 16px;
+      padding: 12px 8px;
+      text-align: center;
+      font-weight: 700;
+      font-size: clamp(12px, 1.4vw, 16px);
+      animation: fadeUp 0.5s ease both;
+    }
+    .solid-ex  { background: rgba(255,112,67,0.15); color: #7a2d0e; }
+    .liquid-ex { background: rgba(30,136,229,0.15); color: #0d3b6e; }
+    .gas-ex    { background: rgba(38,166,154,0.15); color: #0d4a44; }
+    .ex-emoji  { font-size: clamp(22px, 3vw, 36px); display: block; margin-bottom: 4px; }
+
+    .fun-fact-box {
+      border-radius: 16px;
+      padding: 14px 18px;
+      font-size: clamp(12px, 1.4vw, 15px);
+      line-height: 1.55;
+      font-weight: 600;
+    }
+    .solid-fact  { background: #FF7043; color: white; }
+    .liquid-fact { background: #1E88E5; color: white; }
+    .gas-fact    { background: #26A69A; color: white; }
+
+    /* ════════════════════════════════════════
+       SLIDE 8 & 11 — VIDEOS
+    ════════════════════════════════════════ */
+    #slide-8, #slide-11 {
+      background: linear-gradient(160deg, #0d1117 0%, #1a1f35 100%);
+    }
+    .video-wrapper {
+      width: min(80vw, 800px);
+      aspect-ratio: 16/9;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 12px 48px rgba(0,0,0,0.5);
+      border: 3px solid rgba(255,255,255,0.1);
+    }
+    .video-wrapper iframe { width: 100%; height: 100%; border: none; }
+    .video-note {
+      color: rgba(255,255,255,0.55);
+      font-size: clamp(11px, 1.3vw, 14px);
+      margin-top: 12px;
+      text-align: center;
+    }
+    .yt-link {
+      display: inline-block;
+      margin-top: 10px;
+      background: #FF0000;
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      padding: 8px 22px;
+      font-weight: 700;
+      font-size: clamp(12px, 1.4vw, 16px);
+      transition: all 0.2s;
+    }
+    .yt-link:hover { background: #cc0000; transform: scale(1.05); }
+
+    /* ════════════════════════════════════════
+       SLIDE 9 — TEMPERATURE SLIDER
+    ════════════════════════════════════════ */
+    #slide-9 { background: linear-gradient(145deg, #e3f2fd, #e8eaf6); }
+
+    .temp-display {
+      display: flex;
+      gap: 4vw;
+      align-items: center;
+      justify-content: center;
+      margin: 2vh 0;
+    }
+    .temp-state {
+      text-align: center;
+      transition: all 0.5s ease;
+    }
+    .temp-emoji {
+      font-size: clamp(48px, 8vw, 96px);
+      display: block;
+      transition: all 0.5s ease;
+    }
+    .temp-label {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(16px, 2.2vw, 26px);
+      margin-top: 8px;
+      transition: color 0.5s ease;
+    }
+    .temp-arrow {
+      font-size: clamp(24px, 4vw, 48px);
+      color: #888;
+      transition: opacity 0.4s;
+    }
+
+    .temp-slider-wrap {
+      width: min(70vw, 600px);
+      text-align: center;
+      margin: 2vh auto;
+    }
+    .temp-slider {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 16px;
+      border-radius: 30px;
+      outline: none;
+      cursor: pointer;
+      background: linear-gradient(to right, #42B0FF 0%, #FF8C42 50%, #FF3300 100%);
+    }
+    .temp-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: white;
+      border: 4px solid #555;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      cursor: pointer;
+    }
+    .temp-labels {
+      display: flex; justify-content: space-between;
+      font-weight: 700;
+      font-size: clamp(11px, 1.4vw, 16px);
+      margin-top: 8px;
+      color: #555;
+    }
+    .temp-desc {
+      background: white;
+      border-radius: 16px;
+      padding: 14px 22px;
+      font-size: clamp(13px, 1.6vw, 18px);
+      font-weight: 600;
+      color: #333;
+      text-align: center;
+      margin-top: 1vh;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      min-height: 60px;
+      transition: all 0.3s;
+    }
+
+    /* ════════════════════════════════════════
+       SLIDE 10 — MELTING EXAMPLES
+    ════════════════════════════════════════ */
+    #slide-10 { background: linear-gradient(145deg, #fff8e1, #fff3cd); }
+
+    .melt-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 2vw;
+      width: 100%;
+      margin-bottom: 2.5vh;
+    }
+    .melt-card {
+      background: white;
+      border-radius: 20px;
+      padding: 16px 10px;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      animation: fadeUp 0.5s ease both;
+    }
+    .melt-card:nth-child(1) { animation-delay: 0.05s; }
+    .melt-card:nth-child(2) { animation-delay: 0.1s; }
+    .melt-card:nth-child(3) { animation-delay: 0.15s; }
+    .melt-card:nth-child(4) { animation-delay: 0.2s; }
+    .melt-card:nth-child(5) { animation-delay: 0.25s; }
+    .melt-emoji { font-size: clamp(28px, 4.5vw, 52px); }
+    .melt-name {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(13px, 1.6vw, 18px);
+      color: #333;
+      margin: 8px 0 4px;
+    }
+    .melt-tag {
+      font-size: clamp(10px, 1.2vw, 14px);
+      border-radius: 30px;
+      padding: 3px 12px;
+      font-weight: 700;
+    }
+    .tag-low  { background: #fff3e0; color: #e65100; }
+    .tag-high { background: #fff8e1; color: #f57f17; }
+
+    .no-melt-box {
+      background: #fce4ec;
+      border-radius: 20px;
+      padding: 16px 24px;
+      text-align: center;
+      font-weight: 700;
+      font-size: clamp(13px, 1.6vw, 18px);
+      color: #880e4f;
+      animation: fadeUp 0.6s ease 0.35s both;
+    }
+
+    /* ════════════════════════════════════════
+       SLIDE 12 — WHAT IS MATTER?
+    ════════════════════════════════════════ */
+    #slide-12 { background: linear-gradient(160deg, #0a0a23 0%, #1a1a5e 100%); }
+
+    .matter-reveal {
+      background: linear-gradient(135deg, #FFD700, #FF8C00);
+      border-radius: 28px;
+      padding: 2.5vh 4vw;
+      text-align: center;
+      margin: 2vh 0;
+      animation: bounceIn 0.7s ease both;
+    }
+    .matter-reveal h2 {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(22px, 3.5vw, 42px);
+      color: #3a1a00;
+      text-shadow: none;
+    }
+
+    .matter-row {
+      display: flex; gap: 2.5vw; justify-content: center; width: 100%; margin: 2vh 0;
+    }
+    .matter-pill {
+      background: rgba(255,255,255,0.12);
+      border: 2px solid rgba(255,255,255,0.25);
+      border-radius: 50px;
+      padding: 10px 22px;
+      color: white;
+      font-size: clamp(13px, 1.7vw, 20px);
+      font-weight: 700;
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    .energy-box {
+      background: rgba(255,100,100,0.15);
+      border: 2px solid rgba(255,100,100,0.4);
+      border-radius: 20px;
+      padding: 14px 24px;
+      text-align: center;
+      color: rgba(255,200,200,0.9);
+      font-size: clamp(13px, 1.6vw, 18px);
+      font-weight: 600;
+      margin-top: 1vh;
+    }
+    .energy-box span {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(15px, 2vw, 22px);
+      color: #FF8A80;
+    }
+
+    /* ════════════════════════════════════════
+       SLIDE 13 — BODY EXPLORER (CLASS ACTIVITY 1)
+    ════════════════════════════════════════ */
+    #slide-13 { background: linear-gradient(145deg, #e8f5e9, #c8e6c9); }
+
+    .body-layout {
+      display: flex; gap: 3vw; width: 100%; align-items: flex-start;
+    }
+    .body-col {
+      flex: 1; display: flex; flex-direction: column; gap: 14px;
+    }
+    .reveal-card {
+      border-radius: 20px;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+      user-select: none;
+    }
+    .reveal-card:hover { transform: scale(1.02); }
+    .reveal-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 20px;
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(16px, 2.2vw, 24px);
+      color: white;
+    }
+    .reveal-header .rh-icon { font-size: clamp(22px, 3vw, 34px); }
+    .reveal-hint {
+      font-size: clamp(10px, 1.2vw, 13px);
+      opacity: 0.8;
+      margin-left: auto;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 600;
+    }
+    .reveal-body {
+      background: white;
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s ease;
+      font-size: clamp(12px, 1.5vw, 16px);
+      color: #333;
+      font-weight: 600;
+      line-height: 1.6;
+    }
+    .reveal-body.open {
+      max-height: 200px;
+      padding: 14px 20px;
+    }
+    .reveal-card.solid-card .reveal-header  { background: linear-gradient(135deg, #FF8C42, #FF5733); }
+    .reveal-card.liquid-card .reveal-header { background: linear-gradient(135deg, #42B0FF, #1565C0); }
+    .reveal-card.gas-card .reveal-header    { background: linear-gradient(135deg, #42E2B8, #00897B); }
+
+    .body-funfact {
+      background: linear-gradient(135deg, #7B2FBE, #4f46e5);
+      border-radius: 18px;
+      padding: 14px 20px;
+      color: white;
+      font-size: clamp(12px, 1.5vw, 16px);
+      font-weight: 600;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    /* ════════════════════════════════════════
+       SLIDE 14 — REAL LIFE MYSTERIES (CLASS ACTIVITY 2)
+    ════════════════════════════════════════ */
+    #slide-14 { background: linear-gradient(160deg, #0d1b4b 0%, #1e3a8a 100%); }
+
+    .mysteries-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5vw; width: 100%;
+    }
+    .mystery-card {
+      background: rgba(255,255,255,0.08);
+      border: 2px solid rgba(255,255,255,0.2);
+      border-radius: 22px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s, border-color 0.3s;
+    }
+    .mystery-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.45); }
+    .mystery-card.solved { border-color: #22c55e; }
+    .mystery-top {
+      padding: 20px 18px 14px;
+      text-align: center;
+    }
+    .mystery-emoji { font-size: clamp(36px, 5.5vw, 64px); display: block; margin-bottom: 10px; }
+    .mystery-q {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(13px, 1.55vw, 18px);
+      color: white;
+      line-height: 1.35;
+    }
+    .mystery-btn {
+      width: 100%;
+      background: rgba(255,255,255,0.12);
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.7);
+      padding: 10px;
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(13px, 1.6vw, 17px);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .mystery-btn:hover { background: rgba(255,255,255,0.22); }
+    .mystery-answer {
+      background: rgba(34,197,94,0.2);
+      border-top: 2px solid #22c55e;
+      padding: 0 16px;
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s;
+      font-size: clamp(12px, 1.4vw, 15px);
+      color: #bbf7d0;
+      font-weight: 600;
+      line-height: 1.55;
+    }
+    .mystery-answer.open { max-height: 160px; padding: 12px 16px; }
+
+    /* ════════════════════════════════════════
+       SLIDE 15 — HOMEWORK
+    ════════════════════════════════════════ */
+    #slide-15 { background: linear-gradient(145deg, #fff8e1, #fff3cd); }
+
+    .hw-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2vw;
+      width: 100%;
+    }
+    .hw-card {
+      background: white;
+      border-radius: 20px;
+      padding: 16px 14px;
+      text-align: center;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+      animation: fadeUp 0.6s ease both;
+      border-top: 5px solid;
+    }
+    .hw-card:nth-child(1) { border-color: #FF7043; animation-delay: 0.05s; }
+    .hw-card:nth-child(2) { border-color: #1E88E5; animation-delay: 0.1s; }
+    .hw-card:nth-child(3) { border-color: #26A69A; animation-delay: 0.15s; }
+    .hw-card:nth-child(4) { border-color: #7B2FBE; animation-delay: 0.2s; }
+    .hw-card:nth-child(5) { border-color: #E91E8C; animation-delay: 0.25s; }
+    .hw-emoji { font-size: clamp(28px, 4vw, 48px); margin-bottom: 8px; }
+    .hw-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(14px, 1.8vw, 20px);
+      color: #222;
+      margin-bottom: 6px;
+    }
+    .hw-desc { font-size: clamp(11px, 1.3vw, 14px); color: #555; line-height: 1.5; font-weight: 600; }
+
+    /* ════════════════════════════════════════
+       SLIDE 16 — QUIZ
+    ════════════════════════════════════════ */
+    #slide-16 { background: linear-gradient(135deg, #1a0533 0%, #3d0a78 100%); }
+
+    .quiz-progress {
+      display: flex; gap: 8px; margin-bottom: 2vh;
+    }
+    .q-dot {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      transition: all 0.3s;
+    }
+    .q-dot.answered { background: #22c55e; }
+    .q-dot.current  { background: white; transform: scale(1.3); }
+
+    .quiz-card {
+      background: rgba(255,255,255,0.1);
+      border: 2px solid rgba(255,255,255,0.2);
+      border-radius: 28px;
+      padding: 3vh 3vw;
+      width: min(80vw, 720px);
+      text-align: center;
+    }
+    .q-number {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(12px, 1.5vw, 16px);
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 8px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .q-text {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(18px, 2.8vw, 32px);
+      color: white;
+      margin-bottom: 3vh;
+      line-height: 1.3;
+    }
+    .q-options {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+    }
+    .q-btn {
+      background: rgba(255,255,255,0.12);
+      border: 2px solid rgba(255,255,255,0.25);
+      border-radius: 16px;
+      padding: 14px 16px;
+      color: white;
+      font-family: 'Nunito', sans-serif;
+      font-size: clamp(13px, 1.7vw, 19px);
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .q-btn:hover:not(:disabled) { background: rgba(255,255,255,0.25); transform: scale(1.03); }
+    .q-btn.correct   { background: #22c55e; border-color: #16a34a; animation: pop 0.4s ease; }
+    .q-btn.incorrect { background: #ef4444; border-color: #dc2626; }
+    .q-btn:disabled  { cursor: default; }
+
+    .q-feedback {
+      margin-top: 16px;
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(16px, 2.2vw, 24px);
+      min-height: 36px;
+      transition: all 0.3s;
+    }
+    .q-feedback.good { color: #86efac; }
+    .q-feedback.bad  { color: #fca5a5; }
+
+    .q-next-btn {
+      margin-top: 16px;
+      background: white;
+      color: #3d0a78;
+      border: none;
+      border-radius: 50px;
+      padding: 10px 30px;
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(14px, 1.8vw, 20px);
+      cursor: pointer;
+      display: none;
+      transition: all 0.2s;
+    }
+    .q-next-btn:hover { transform: scale(1.05); }
+    .q-next-btn.show  { display: inline-block; }
+
+    .quiz-score-badge {
+      position: absolute;
+      top: 20px; right: 80px;
+      background: rgba(255,255,255,0.15);
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50px;
+      padding: 6px 18px;
+      color: white;
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(14px, 1.8vw, 20px);
+    }
+
+    /* ════════════════════════════════════════
+       SLIDE 17 — CELEBRATION
+    ════════════════════════════════════════ */
+    #slide-17 {
+      background: linear-gradient(160deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+      overflow: hidden;
+    }
+    .confetti-piece {
+      position: absolute;
+      width: 12px; height: 12px;
+      border-radius: 2px;
+      animation: confetti-fall linear infinite;
+      pointer-events: none;
+    }
+    .star-final {
+      font-size: clamp(54px, 10vw, 120px);
+      animation: bounceIn 0.8s ease both, float 3s ease-in-out 1s infinite;
+    }
+    .final-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(28px, 5.5vw, 66px);
+      color: #FFD700;
+      text-align: center;
+      text-shadow: 0 0 30px rgba(255,215,0,0.5);
+      animation: fadeUp 0.8s ease 0.3s both;
+    }
+    .final-score {
+      background: rgba(255,255,255,0.12);
+      border: 2px solid rgba(255,255,255,0.25);
+      border-radius: 50px;
+      padding: 12px 36px;
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(18px, 3vw, 36px);
+      color: white;
+      margin: 2vh 0;
+      animation: fadeUp 0.8s ease 0.5s both;
+    }
+    .recap-row {
+      display: flex; gap: 2.5vw; justify-content: center;
+      margin-top: 1.5vh;
+      animation: fadeUp 0.8s ease 0.7s both;
+    }
+    .recap-pill {
+      border-radius: 50px;
+      padding: 10px 22px;
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(13px, 1.7vw, 20px);
+      color: white;
+    }
+    .recap-pill.solid  { background: linear-gradient(135deg, #FF8C42, #FF5733); }
+    .recap-pill.liquid { background: linear-gradient(135deg, #42B0FF, #1565C0); }
+    .recap-pill.gas    { background: linear-gradient(135deg, #42E2B8, #00897B); }
+
+    /* ════════════ PART HEADER SLIDES ════════════ */
+    .part-header-slide {
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      text-align:center;
+    }
+    .part-header-badge {
+      font-family:'Fredoka One',cursive; letter-spacing:4px; text-transform:uppercase;
+      font-size:clamp(13px,1.7vw,20px); color:rgba(255,255,255,0.5);
+      margin-bottom:1vh; animation:fadeUp 0.6s ease both;
+    }
+    .part-header-number {
+      font-family:'Fredoka One',cursive; line-height:1;
+      font-size:clamp(70px,13vw,140px); animation:bounceIn 0.7s ease 0.1s both;
+    }
+    .part-header-title {
+      font-family:'Fredoka One',cursive; color:white;
+      font-size:clamp(22px,4vw,52px); margin:1.5vh 0 1vh;
+      animation:fadeUp 0.7s ease 0.3s both;
+    }
+    .part-header-desc {
+      font-size:clamp(14px,1.7vw,20px); color:rgba(255,255,255,0.75);
+      max-width:68%; line-height:1.55; animation:fadeUp 0.7s ease 0.5s both;
+    }
+    .part-header-time {
+      margin-top:2.5vh; background:rgba(255,255,255,0.1);
+      border:1px solid rgba(255,255,255,0.22); border-radius:50px;
+      padding:8px 26px; font-family:'Fredoka One',cursive;
+      font-size:clamp(13px,1.5vw,18px); color:rgba(255,255,255,0.8);
+      animation:fadeUp 0.7s ease 0.6s both;
+    }
+    .part-header-icons {
+      font-size:clamp(28px,4.5vw,54px); margin-top:2vh; letter-spacing:14px;
+      animation:fadeUp 0.7s ease 0.7s both;
+    }
+    #slide-part1 { background:linear-gradient(160deg,#1a0a00 0%,#3d1500 50%,#100800 100%); }
+    #slide-part1 .part-header-number { color:#FF8C42; text-shadow:0 0 40px rgba(255,140,66,0.4); }
+    #slide-part2 { background:linear-gradient(160deg,#00152e 0%,#002f6c 50%,#000d1a 100%); }
+    #slide-part2 .part-header-number { color:#42B0FF; text-shadow:0 0 40px rgba(66,176,255,0.4); }
+    #slide-part3 { background:linear-gradient(160deg,#001a18 0%,#003a34 50%,#001510 100%); }
+    #slide-part3 .part-header-number { color:#42E2B8; text-shadow:0 0 40px rgba(66,226,184,0.4); }
+
+    /* ════════════ SESSION 1: CRITICAL THINKING ════════════ */
+    #slide-s1ct { background:linear-gradient(145deg,#1a0c00,#3d2200); }
+    .think-intro {
+      font-size:clamp(13px,1.6vw,18px); color:rgba(255,255,255,0.72);
+      text-align:center; margin-bottom:2.5vh; font-weight:700;
+    }
+    .think-grid { display:flex; flex-direction:column; gap:1.8vh; width:min(86vw,820px); }
+    .think-card {
+      background:rgba(255,255,255,0.08); border:2px solid rgba(255,255,255,0.18);
+      border-radius:18px; padding:14px 22px; display:flex; align-items:center; gap:18px;
+      animation:fadeUp 0.6s ease both;
+    }
+    .think-card:nth-child(1){ animation-delay:0.05s; border-left:5px solid #FF8C42; }
+    .think-card:nth-child(2){ animation-delay:0.15s; border-left:5px solid #42B0FF; }
+    .think-card:nth-child(3){ animation-delay:0.25s; border-left:5px solid #42E2B8; }
+    .think-num {
+      font-family:'Fredoka One',cursive; font-size:clamp(22px,3.2vw,38px);
+      color:rgba(255,255,255,0.28); min-width:36px; text-align:center;
+    }
+    .think-q {
+      font-family:'Nunito',sans-serif; font-size:clamp(13px,1.6vw,18px);
+      color:white; font-weight:700; line-height:1.5;
+    }
+    .think-badge {
+      display:inline-block; background:#FF8C42; color:#1a0500; border-radius:50px;
+      padding:4px 14px; font-family:'Fredoka One',cursive; font-size:clamp(11px,1.3vw,14px);
+      margin-top:6px;
+    }
+
+    /* ════════════ SESSION 1: QUIZ ════════════ */
+    #slide-s1quiz { background:linear-gradient(135deg,#2d0a00 0%,#7a2800 100%); }
+
+    /* ════════════ SESSION 1: HOMEWORK ════════════ */
+    #slide-s1hw { background:linear-gradient(145deg,#fff4ee,#ffe8d6); }
+
+    /* ════════════ SESSION 1: END ════════════ */
+    #slide-s1end { background:linear-gradient(160deg,#1a0c00 0%,#4a1f00 50%,#100800 100%); }
+    #slide-s1end .part-header-number { font-size:clamp(56px,10vw,110px); }
+    .s1end-checklist {
+      display:flex; gap:1.5vw; margin-top:2.5vh; animation:fadeUp 0.7s ease 0.5s both;
+      flex-wrap:wrap; justify-content:center;
+    }
+    .s1end-pill {
+      background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.22);
+      border-radius:50px; padding:8px 22px; font-family:'Fredoka One',cursive;
+      font-size:clamp(12px,1.5vw,17px); color:rgba(255,255,255,0.85);
+    }
+
+    /* ════════════ SESSION 2: CRITICAL THINKING ════════════ */
+    #slide-s2ct { background: linear-gradient(135deg, #001529 0%, #003366 60%, #001020 100%); }
+    .s2ct-grid { display:grid; grid-template-columns:1fr 1fr; gap:clamp(8px,1.5vw,18px); margin-top:2vh; }
+
+    /* ════════════ SESSION 2: QUIZ ════════════ */
+    #slide-s2quiz { background:linear-gradient(135deg,#001a2e 0%,#004080 100%); }
+
+    /* ════════════ SESSION 2: HOMEWORK ════════════ */
+    #slide-s2hw { background:linear-gradient(145deg,#e8f4fd,#cce8ff); }
+
+    /* ════════════ SESSION 2: END ════════════ */
+    #slide-s2end { background:linear-gradient(160deg,#000d1a 0%,#002040 50%,#000810 100%); }
+    #slide-s2end .part-header-number { font-size:clamp(56px,10vw,110px); }
+
+    /* ════════════ SESSION 3: CRITICAL THINKING ════════════ */
+    #slide-s3ct { background: linear-gradient(135deg, #001a18 0%, #003d36 60%, #001210 100%); }
+    .s3ct-grid { display:grid; grid-template-columns:1fr 1fr; gap:clamp(8px,1.5vw,18px); margin-top:2vh; }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ──────────────────── SLIDE 1: TITLE ──────────────────── -->
+  <div class="slide active" id="slide-1">
+    <div class="atoms-bg" id="atoms-bg"></div>
+    <div class="t-title">Solids, Liquids<br>&amp; Gases!</div>
+    <div class="t-sub">A science adventure just for you 🚀</div>
+    <div class="t-icons">
+      <span class="t-icon">🪨</span>
+      <span class="t-icon">💧</span>
+      <span class="t-icon">💨</span>
+    </div>
+  </div>
+
+  <!-- ──────────────────── PART 1 HEADER ──────────────────── -->
+  <div class="slide part-header-slide" id="slide-part1">
+    <div class="part-header-badge">Part 1 of 3</div>
+    <div class="part-header-number">1</div>
+    <div class="part-header-title">Identify the States!</div>
+    <div class="part-header-desc">Learn what makes something a solid, liquid, or gas — then sort real things yourself!</div>
+    <div class="part-header-time">⏱ About 40–50 minutes</div>
+    <div class="part-header-icons">🪨 💧 💨</div>
+  </div>
+
+  <!-- ──────────────────── SLIDE 2: GOALS ──────────────────── -->
+  <div class="slide" id="slide-2">
+    <div class="slide-title">What Will We Discover Today? 🔭</div>
+    <div class="goals-row">
+      <div class="goal-card">
+        <div class="goal-emoji">🧱</div>
+        <div class="goal-label">Name the 3 States</div>
+        <div class="goal-desc">Learn what makes something a solid, liquid, or gas</div>
+      </div>
+      <div class="goal-card">
+        <div class="goal-emoji">🌡️</div>
+        <div class="goal-label">See Them Change</div>
+        <div class="goal-desc">Discover how heat and cold can change one state into another</div>
+      </div>
+      <div class="goal-card">
+        <div class="goal-emoji">🌍</div>
+        <div class="goal-label">What is Matter?</div>
+        <div class="goal-desc">Find out the word that includes ALL solids, liquids, and gases</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────────────── SLIDE 3: THE 3 STATES ──────────────────── -->
+  <div class="slide" id="slide-3">
+    <div class="slide-title dark">The 3 States of Matter</div>
+    <div class="states-row">
+      <div class="state-card solid">
+        <div class="state-big-emoji">🪨</div>
+        <div class="state-name">SOLID</div>
+        <div class="state-rule">Keeps its own shape.<br>Doesn't need a container!</div>
+        <div class="state-examples">✏️ 🍎 📚 🪙</div>
+      </div>
+      <div class="state-card liquid">
+        <div class="state-big-emoji">💧</div>
+        <div class="state-name">LIQUID</div>
+        <div class="state-rule">Flows and pours.<br>Takes the shape of its container!</div>
+        <div class="state-examples">🥛 🍯 🧴 🧃</div>
+      </div>
+      <div class="state-card gas">
+        <div class="state-big-emoji">💨</div>
+        <div class="state-name">GAS</div>
+        <div class="state-rule">Spreads out everywhere.<br>Fills any container completely!</div>
+        <div class="state-examples">🌬️ ♨️ 🎈 💭</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────────────── SLIDE 4: SORTING GAME ──────────────────── -->
+  <div class="slide" id="slide-4">
+    <div class="slide-title">🎮 Sort It! Drag each item to the right box</div>
+    <div class="game-score-bar">
+      Score: <span class="game-score-val" id="game-score">0</span> / <span id="game-total">9</span>
+      <button class="game-reset-btn" onclick="resetGame()">🔄 Reset</button>
+    </div>
+    <div id="items-bank"></div>
+    <div class="drop-zones">
+      <div class="drop-zone" data-cat="solid" id="zone-solid">
+        <div class="drop-zone-title">🪨 SOLID</div>
+        <div class="drop-zone-items" id="zone-solid-items"></div>
+      </div>
+      <div class="drop-zone" data-cat="liquid" id="zone-liquid">
+        <div class="drop-zone-title">💧 LIQUID</div>
+        <div class="drop-zone-items" id="zone-liquid-items"></div>
+      </div>
+      <div class="drop-zone" data-cat="gas" id="zone-gas">
+        <div class="drop-zone-title">💨 GAS</div>
+        <div class="drop-zone-items" id="zone-gas-items"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────────────── SLIDE 5: SOLIDS ──────────────────── -->
+  <div class="slide" id="slide-5">
+    <div class="slide-title dark">🪨 All About Solids</div>
+    <div class="info-layout">
+      <div class="info-left">
+        <div class="big-icon-circle solid-circle">🪨</div>
+        <div class="def-box solid-def">
+          A solid <strong>keeps its shape</strong> all by itself. Leave it alone and it stays the same — it doesn't flow, and it doesn't need a container to hold it together!
+        </div>
+        <div class="fun-fact-box solid-fact" style="margin-top:14px;">
+          💡 Even sugar and sand are solids — they can make a pile that stays put! Liquids always spread out flat.
+        </div>
+      </div>
+      <div class="info-right">
+        <div class="example-grid">
+          <div class="example-item solid-ex" style="animation-delay:0.05s"><span class="ex-emoji">🪨</span>Rock</div>
+          <div class="example-item solid-ex" style="animation-delay:0.1s"><span class="ex-emoji">✏️</span>Pencil</div>
+          <div class="example-item solid-ex" style="animation-delay:0.15s"><span class="ex-emoji">🍎</span>Apple</div>
+          <div class="example-item solid-ex" style="animation-delay:0.2s"><span class="ex-emoji">📚</span>Book</div>
+          <div class="example-item solid-ex" style="animation-delay:0.25s"><span class="ex-emoji">🪙</span>Coin</div>
+          <div class="example-item solid-ex" style="animation-delay:0.3s"><span class="ex-emoji">🧊</span>Ice cube</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────────────── SLIDE 6: LIQUIDS ──────────────────── -->
+  <div class="slide" id="slide-6">
+    <div class="slide-title dark">💧 All About Liquids</div>
+    <div class="info-layout">
+      <div class="info-left">
+        <div class="big-icon-circle liquid-circle">💧</div>
+        <div class="def-box liquid-def">
+          A liquid <strong>flows and pours</strong>. It takes the shape of whatever container it's in — but it doesn't fill the whole container. You can always see how full or empty it is!
+        </div>
+        <div class="fun-fact-box liquid-fact" style="margin-top:14px;">
+          🌊 Honey flows very slowly, but it's still a liquid! If something flows at all, it's a liquid.
+        </div>
+      </div>
+      <div class="info-right">
+        <div class="example-grid">
+          <div class="example-item liquid-ex" style="animation-delay:0.05s"><span class="ex-emoji">💧</span>Water</div>
+          <div class="example-item liquid-ex" style="animation-delay:0.1s"><span class="ex-emoji">🥛</span>Milk</div>
+          <div class="example-item liquid-ex" style="animation-delay:0.15s"><span class="ex-emoji">🍯</span>Honey</div>
+          <div class="example-item liquid-ex" style="animation-delay:0.2s"><span class="ex-emoji">🧃</span>Juice</div>
+          <div class="example-item liquid-ex" style="animation-delay:0.25s"><span class="ex-emoji">🛁</span>Shampoo</div>
+          <div class="example-item liquid-ex" style="animation-delay:0.3s"><span class="ex-emoji">🍋</span>Lemonade</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────────────── SLIDE 7: GASES ──────────────────── -->
+  <div class="slide" id="slide-7">
+    <div class="slide-title dark">💨 All About Gases</div>
+    <div class="info-layout">
+      <div class="info-left">
+        <div class="big-icon-circle gas-circle">💨</div>
+        <div class="def-box gas-def">
+          A gas <strong>spreads out to fill any container completely</strong>. You usually can't see gas — but you can feel it! Air is a gas, and it's all around you right now.
+        </div>
+        <div class="fun-fact-box gas-fact" style="margin-top:14px;">
+          👃 Every smell you've ever smelled is a tiny bit of liquid turning into gas and floating to your nose!
+        </div>
+      </div>
+      <div class="info-right">
+        <div class="example-grid">
+          <div class="example-item gas-ex" style="animation-delay:0.05s"><span class="ex-emoji">💨</span>Air</div>
+          <div class="example-item gas-ex" style="animation-delay:0.1s"><span class="ex-emoji">♨️</span>Steam</div>
+          <div class="example-item gas-ex" style="animation-delay:0.15s"><span class="ex-emoji">🎈</span>Balloon air</div>
+          <div class="example-item gas-ex" style="animation-delay:0.2s"><span class="ex-emoji">🌬️</span>Breath</div>
+          <div class="example-item gas-ex" style="animation-delay:0.25s"><span class="ex-emoji">🌫️</span>Smoke</div>
+          <div class="example-item gas-ex" style="animation-delay:0.3s"><span class="ex-emoji">🌸</span>Perfume smell</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────────────── SLIDE 8: VIDEO 1 ──────────────────── -->
+  <div class="slide" id="slide-8">
+    <div class="slide-title">🎬 Watch: States of Matter!</div>
+    <div class="video-wrapper">
+      <!-- States of Matter for Kids - SciShow Kids -->
+      <iframe
+        src="https://www.youtube.com/embed/QQsybALJoew?rel=0&modestbranding=1"
+        title="States of Matter for Kids"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+    <div class="video-note">Can't see the video?</div>
+    <a class="yt-link" href="https://www.youtube.com/watch?v=QQsybALJoew" target="_blank">▶ Watch on YouTube</a>
+  </div>
+
+  <!-- ──────────────────── SESSION 1: CRITICAL THINKING ──────────────────── -->
+  <div class="slide" id="slide-s1ct">
+    <div class="slide-title" style="color:white;">🤔 Think It Through — Discussion Questions</div>
+    <div class="think-intro">There's no single right answer — think out loud and explain your reasoning! 💬</div>
+    <div class="think-grid">
+      <div class="think-card">
+        <div class="think-num">1</div>
+        <div>
+          <div class="think-q">Sugar pours out of a bag and you need a container to hold it — just like a liquid! So is sugar a liquid? What test could you do to find out for sure?</div>
+          <span class="think-badge">💡 What's the key rule that separates solids from liquids?</span>
+        </div>
+      </div>
+      <div class="think-card">
+        <div class="think-num">2</div>
+        <div>
+          <div class="think-q">Steam comes out of a boiling kettle. You can see it floating in the air. Is steam a solid, liquid, or gas? It came from liquid water — so has something changed?</div>
+          <span class="think-badge">💡 Does steam keep a shape? Does it fill a space? Does it flow?</span>
+        </div>
+      </div>
+      <div class="think-card">
+        <div class="think-num">3</div>
+        <div>
+          <div class="think-q">If you put air (a gas) into a glass, could you fill the glass only halfway with air — like you can with water? Why or why not? What does this tell us about gases?</div>
+          <span class="think-badge">💡 What's the KEY difference between how a gas and a liquid fill a container?</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────────────── SESSION 1: QUIZ ──────────────────── -->
+  <div class="slide" id="slide-s1quiz">
+    <div class="slide-title" style="color:white;">🎯 Session 1 Quiz!</div>
+    <div class="quiz-score-badge">⭐ <span id="s1-score-display">0</span> / 5</div>
+    <div class="quiz-progress" id="s1-progress"></div>
+    <div class="quiz-card">
+      <div class="q-number" id="s1-qnum">QUESTION 1 OF 5</div>
+      <div class="q-text" id="s1-qtext"></div>
+      <div class="q-options" id="s1-opts"></div>
+      <div class="q-feedback" id="s1-feedback"></div>
+      <button class="q-next-btn" id="s1-next-btn" onclick="s1NextQuestion()">Next Question →</button>
+    </div>
+  </div>
+
+  <!-- ──────────────────── SESSION 1: HOMEWORK ──────────────────── -->
+  <div class="slide" id="slide-s1hw">
+    <div class="slide-title dark">🏠 Session 1 Homework: States Spotter!</div>
+    <div style="color:#555;font-size:clamp(12px,1.5vw,17px);font-weight:700;margin-bottom:2vh;text-align:center;">
+      Find all 3 states of matter in your everyday life — bring your findings back! 📋
+    </div>
+    <div class="hw-grid">
+      <div class="hw-card">
+        <div class="hw-emoji">🍽️</div>
+        <div class="hw-title">Dinner Detective</div>
+        <div class="hw-desc">At your next meal, find at least 2 solids, 2 liquids, and 1 gas on the table. Draw each one and label its state. Can you find a tricky one that puzzles you?</div>
+      </div>
+      <div class="hw-card">
+        <div class="hw-emoji">🛁</div>
+        <div class="hw-title">Bathroom Explorer</div>
+        <div class="hw-desc">During your next bath or shower, find all 3 states of matter. Where is the steam (gas)? What is liquid? What is solid? List at least 2 examples of each.</div>
+      </div>
+      <div class="hw-card">
+        <div class="hw-emoji">🎲</div>
+        <div class="hw-title">20 Questions Game</div>
+        <div class="hw-desc">Play with someone at home! Think of a solid, liquid, or gas. They ask yes/no questions to guess it. Start every game with: "Is it matter?" (It always is!)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────────────── SESSION 1: END ──────────────────── -->
+  <div class="slide part-header-slide" id="slide-s1end">
+    <div class="part-header-badge">Session 1 Complete!</div>
+    <div class="part-header-number">🎉</div>
+    <div class="part-header-title">Brilliant Work Today!</div>
+    <div class="part-header-desc">You can now identify solids, liquids, and gases — and you know what makes each one different. Don't forget your homework!</div>
+    <div class="s1end-checklist">
+      <div class="s1end-pill">🍽️ Dinner Detective</div>
+      <div class="s1end-pill">🛁 Bathroom Explorer</div>
+      <div class="s1end-pill">❓ 20 Questions Game</div>
+    </div>
+    <div class="part-header-time" style="margin-top:3vh;">👋 See you next time for Parts 2 &amp; 3!</div>
+  </div>
+
+  <!-- ──────────────────── PART 2 HEADER ──────────────────── -->
+  <div class="slide part-header-slide" id="slide-part2">
+    <div class="part-header-badge">Part 2 of 3</div>
+    <div class="part-header-number">2</div>
+    <div class="part-header-title">Temperature Changes Everything!</div>
+    <div class="part-header-desc">See how heating and cooling can transform the same substance from solid to liquid to gas — and back again!</div>
+    <div class="part-header-time">⏱ About 20–30 minutes</div>
+    <div class="part-header-icons">🧊 🌡️ ♨️</div>
+  </div>
+
+  <!-- ──────────────────── SLIDE 9: TEMPERATURE SLIDER ──────────────────── -->
+  <div class="slide" id="slide-9">
+    <div class="slide-title dark">🌡️ Temperature Changes Everything!</div>
+    <div class="temp-display">
+      <div class="temp-state">
+        <span class="temp-emoji" id="state-emoji-1">🧊</span>
+        <div class="temp-label" id="state-label-1" style="color:#1E88E5">ICE (Solid)</div>
+      </div>
+      <div class="temp-arrow" id="arrow-1">→</div>
+      <div class="temp-state">
+        <span class="temp-emoji" id="state-emoji-2">💧</span>
+        <div class="temp-label" id="state-label-2" style="color:#888">WATER (Liquid)</div>
+      </div>
+      <div class="temp-arrow" id="arrow-2">→</div>
+      <div class="temp-state">
+        <span class="temp-emoji" id="state-emoji-3">♨️</span>
+        <div class="temp-label" id="state-label-3" style="color:#888">STEAM (Gas)</div>
+      </div>
+    </div>
+
+    <div class="temp-slider-wrap">
+      <input type="range" class="temp-slider" id="temp-slider" min="0" max="100" value="10">
+      <div class="temp-labels">
+        <span>🥶 Very Cold</span>
+        <span>🌡️ Room Temp</span>
+        <span>🔥 Very Hot</span>
+      </div>
+    </div>
+    <div class="temp-desc" id="temp-desc">
+      ❄️ At freezing temperatures, water is a <strong>solid</strong> — an ice cube! It keeps its shape.
+    </div>
+  </div>
+
+  <!-- ──────────────────── SLIDE 10: MELTING EXAMPLES ──────────────────── -->
+  <div class="slide" id="slide-10">
+    <div class="slide-title dark">🔥 Things That Melt When Hot!</div>
+    <div class="melt-grid">
+      <div class="melt-card">
+        <div class="melt-emoji">🧊</div>
+        <div class="melt-name">Ice</div>
+        <div class="melt-tag tag-low">Melts at 0°C</div>
+      </div>
+      <div class="melt-card">
+        <div class="melt-emoji">🧈</div>
+        <div class="melt-name">Butter</div>
+        <div class="melt-tag tag-low">Melts when warm</div>
+      </div>
+      <div class="melt-card">
+        <div class="melt-emoji">🍫</div>
+        <div class="melt-name">Chocolate</div>
+        <div class="melt-tag tag-low">Melts in your hands!</div>
+      </div>
+      <div class="melt-card">
+        <div class="melt-emoji">🌋</div>
+        <div class="melt-name">Rock (Lava!)</div>
+        <div class="melt-tag tag-high">Needs extreme heat</div>
+      </div>
+      <div class="melt-card">
+        <div class="melt-emoji">⚙️</div>
+        <div class="melt-name">Metal</div>
+        <div class="melt-tag tag-high">Very high temp!</div>
+      </div>
+    </div>
+    <div class="no-melt-box">
+      🌳 But wood and paper DON'T melt — they just burn and crumble away. And they can't go back to their original shape!
+    </div>
+  </div>
+
+  <!-- ──────────────────── SLIDE 11: VIDEO 2 ──────────────────── -->
+  <div class="slide" id="slide-11">
+    <div class="slide-title">🎬 Watch: Water Changing States!</div>
+    <div class="video-wrapper">
+      <!-- Water cycle / changing states of water -->
+      <iframe
+        src="https://www.youtube.com/embed/oIYyeFhZ7eE?rel=0&modestbranding=1"
+        title="Water changing states for kids"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+    <div class="video-note">Can't see the video?</div>
+    <a class="yt-link" href="https://www.youtube.com/watch?v=oIYyeFhZ7eE" target="_blank">▶ Watch on YouTube</a>
+  </div>
+
+  <!-- ──────────────────── SESSION 2: CRITICAL THINKING ──────────────────── -->
+  <div class="slide" id="slide-s2ct">
+    <div class="slide-title" style="color:white;">🤔 Think It Through — Temperature &amp; Change</div>
+    <div style="color:rgba(255,255,255,0.75);font-size:clamp(12px,1.5vw,16px);text-align:center;margin-bottom:2vh;">
+      Discuss these questions — there are no wrong answers, only good thinking! 💭
+    </div>
+    <div class="s2ct-grid">
+      <div class="think-card" style="border-color:#42B0FF;">
+        <div class="think-num" style="background:#42B0FF;">1</div>
+        <div class="think-q">Your ice lolly melts faster on a hot day than a cool day. What does this tell you about what <em>causes</em> melting?</div>
+        <div class="think-badge" style="background:rgba(66,176,255,0.15);">🌡️ Heat &amp; Change</div>
+      </div>
+      <div class="think-card" style="border-color:#FF8C42;">
+        <div class="think-num" style="background:#FF8C42;">2</div>
+        <div class="think-q">Ice melts and can refreeze. But when wood burns, you can never get the wood back. Why are these two changes <em>different</em>?</div>
+        <div class="think-badge" style="background:rgba(255,140,66,0.15);">🔥 Reversible vs Permanent</div>
+      </div>
+      <div class="think-card" style="border-color:#42E2B8;">
+        <div class="think-num" style="background:#42E2B8;">3</div>
+        <div class="think-q">If you breathe on a cold window, a foggy patch appears — then disappears. Can you explain BOTH events using state change words?</div>
+        <div class="think-badge" style="background:rgba(66,226,184,0.15);">🌫️ Two State Changes</div>
+      </div>
+      <div class="think-card" style="border-color:#FFD700;">
+        <div class="think-num" style="background:#FFD700;color:#333;">4</div>
+        <div class="think-q">Water is the only thing we easily see in all three states in everyday life. Can you name ONE place where you see water as a solid, liquid, and gas?</div>
+        <div class="think-badge" style="background:rgba(255,215,0,0.15);">💧 Water's 3 States</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────────────── SESSION 2: QUIZ ──────────────────── -->
+  <div class="slide" id="slide-s2quiz">
+    <div class="slide-title" style="color:white;">🎯 Session 2 Quiz — Temperature &amp; Change!</div>
+    <div class="quiz-score-badge">⭐ <span id="s2-score-display">0</span> / 10</div>
+    <div class="quiz-progress" id="s2-progress"></div>
+    <div class="quiz-card">
+      <div class="q-number" id="s2-qnum">QUESTION 1 OF 10</div>
+      <div class="q-text" id="s2-qtext"></div>
+      <div class="q-options" id="s2-opts"></div>
+      <div class="q-feedback" id="s2-feedback"></div>
+      <button class="q-next-btn" id="s2-next-btn" onclick="s2NextQuestion()">Next Question →</button>
+    </div>
+  </div>
+
+  <!-- ──────────────────── SESSION 2: HOMEWORK ──────────────────── -->
+  <div class="slide" id="slide-s2hw">
+    <div class="slide-title dark">🏠 Session 2 Homework: Change Detective!</div>
+    <div style="color:#555;font-size:clamp(12px,1.5vw,17px);font-weight:700;margin-bottom:2vh;text-align:center;">
+      Catch state changes happening in your everyday life! 🌡️
+    </div>
+    <div class="hw-grid">
+      <div class="hw-card">
+        <div class="hw-emoji">🧈</div>
+        <div class="hw-title">Melt &amp; Freeze Detective</div>
+        <div class="hw-desc">Find something that melts at home — butter on warm toast, ice in a drink, or chocolate in your hand. Draw a before-and-after. Then ask: can this change be reversed? Why or why not?</div>
+      </div>
+      <div class="hw-card">
+        <div class="hw-emoji">💧</div>
+        <div class="hw-title">Evaporation Racer</div>
+        <div class="hw-desc">Wet two small cloths with equal water. Place one in a warm sunny spot, one in a cool shaded spot. Check after 30 minutes — which dried faster? Write down your explanation using science words.</div>
+      </div>
+      <div class="hw-card">
+        <div class="hw-emoji">🌫️</div>
+        <div class="hw-title">Condensation Finder</div>
+        <div class="hw-desc">Find an example of condensation at home — a foggy bathroom mirror, a "sweating" cold drink can, or dew on a window. Draw it and explain: where did the water droplets come from?</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────────────── SESSION 2: END ──────────────────── -->
+  <div class="slide part-header-slide" id="slide-s2end">
+    <div class="part-header-badge">Session 2 Complete!</div>
+    <div class="part-header-number">🌡️</div>
+    <div class="part-header-title">Temperature Detective!</div>
+    <div class="part-header-desc">You now understand how heat and cold cause matter to change state — and which changes are reversible! Don't forget your homework.</div>
+    <div class="s1end-checklist">
+      <div class="s1end-pill">🧈 Melt &amp; Freeze Detective</div>
+      <div class="s1end-pill">💧 Evaporation Racer</div>
+      <div class="s1end-pill">🌫️ Condensation Finder</div>
+    </div>
+    <div class="part-header-time" style="margin-top:3vh;">👋 See you next time for Part 3 — What is Matter?</div>
+  </div>
+
+  <!-- ──────────────────── PART 3 HEADER ──────────────────── -->
+  <div class="slide part-header-slide" id="slide-part3">
+    <div class="part-header-badge">Part 3 of 3</div>
+    <div class="part-header-number">3</div>
+    <div class="part-header-title">What is Matter?</div>
+    <div class="part-header-desc">Discover the one word that covers every solid, liquid, and gas — and find out what ISN'T matter!</div>
+    <div class="part-header-time">⏱ About 30–40 minutes</div>
+    <div class="part-header-icons">🌍 ⚖️ 💡</div>
+  </div>
+
+  <!-- ──────────────────── SLIDE 12: WHAT IS MATTER? ──────────────────── -->
+  <div class="slide" id="slide-12">
+    <div class="slide-title">🌍 What is MATTER?</div>
+    <div class="matter-reveal">
+      <h2>MATTER = Everything that has WEIGHT and takes up SPACE</h2>
+    </div>
+    <div class="matter-row">
+      <div class="matter-pill">🪨 Solid matter</div>
+      <div class="matter-pill">💧 Liquid matter</div>
+      <div class="matter-pill">💨 Gas matter</div>
+    </div>
+    <div class="matter-row">
+      <div class="matter-pill">👤 Your body is matter</div>
+      <div class="matter-pill">🌊 Oceans are matter</div>
+      <div class="matter-pill">🌬️ Air is matter too!</div>
+    </div>
+    <div class="energy-box">
+      But what about 💡 <span>light</span> and 🔥 <span>heat</span>? They don't have weight and don't take up space — so they're NOT matter. They are forms of <span>ENERGY</span>! A whole different thing.
+    </div>
+  </div>
+
+  <!-- ──────────────────── SLIDE 13: CLASS ACTIVITY — BODY EXPLORER ──────────────────── -->
+  <div class="slide" id="slide-13">
+    <div class="slide-title dark">🧍 Your Body Has All 3 States of Matter!</div>
+    <div style="color:#555; font-size:clamp(13px,1.5vw,17px); font-weight:700; margin-bottom:2vh; text-align:center;">
+      Can you guess what's inside you before clicking? 👇
+    </div>
+    <div class="body-layout">
+      <div class="body-col">
+        <div class="reveal-card solid-card" onclick="toggleReveal(this)">
+          <div class="reveal-header">
+            <span class="rh-icon">🪨</span> SOLIDS in your body
+            <span class="reveal-hint">Click to reveal</span>
+          </div>
+          <div class="reveal-body">
+            🦷 Teeth &nbsp;|&nbsp; 🦴 Bones &nbsp;|&nbsp; 💅 Nails &nbsp;|&nbsp; 💇 Hair &nbsp;|&nbsp; 🖐️ Skin<br>
+            These are solid because they keep their shape by themselves!
+          </div>
+        </div>
+        <div class="reveal-card liquid-card" onclick="toggleReveal(this)">
+          <div class="reveal-header">
+            <span class="rh-icon">💧</span> LIQUIDS in your body
+            <span class="reveal-hint">Click to reveal</span>
+          </div>
+          <div class="reveal-body">
+            🩸 Blood &nbsp;|&nbsp; 💦 Saliva (spit) &nbsp;|&nbsp; 😢 Tears &nbsp;|&nbsp; 🧃 Stomach juice<br>
+            These flow around inside you — just like any liquid!
+          </div>
+        </div>
+        <div class="reveal-card gas-card" onclick="toggleReveal(this)">
+          <div class="reveal-header">
+            <span class="rh-icon">💨</span> GASES in your body
+            <span class="reveal-hint">Click to reveal</span>
+          </div>
+          <div class="reveal-body">
+            🫁 Air in your lungs &nbsp;|&nbsp; 😮‍💨 The breath you breathe out<br>
+            Every time you breathe, you're moving gas in and out!
+          </div>
+        </div>
+      </div>
+      <div class="body-col">
+        <div class="body-funfact">
+          🤔 <strong>Think About It!</strong><br><br>
+          You breathe about <strong>17,000 times every day</strong>. That's a lot of gas moving in and out!<br><br>
+          Now think: could a living creature be made of <em>only one</em> state of matter? What would it look like? Could it survive?
+        </div>
+        <div class="reveal-card" style="cursor:default; box-shadow:0 4px 18px rgba(0,0,0,0.1);">
+          <div class="reveal-header" style="background: linear-gradient(135deg, #E91E8C, #9C27B0);">
+            <span class="rh-icon">🌍</span> The whole Earth too!
+          </div>
+          <div class="reveal-body open">
+            🪨 <strong>Land</strong> = solid &nbsp;|&nbsp; 🌊 <strong>Oceans</strong> = liquid &nbsp;|&nbsp; 🌬️ <strong>Atmosphere</strong> = gas<br>
+            The entire planet is made of all three states of matter!
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────────────── SLIDE 14: CLASS ACTIVITY — REAL LIFE MYSTERIES ──────────────────── -->
+  <div class="slide" id="slide-14">
+    <div class="slide-title">🕵️ Real Life Mysteries — Can You Solve Them?</div>
+    <div style="color:rgba(255,255,255,0.7); font-size:clamp(12px,1.5vw,17px); font-weight:600; margin-bottom:2.5vh; text-align:center;">
+      Think about it first, then click "Reveal Answer"
+    </div>
+    <div class="mysteries-grid">
+      <div class="mystery-card" id="myst-0">
+        <div class="mystery-top">
+          <span class="mystery-emoji">🚿</span>
+          <div class="mystery-q">Why does your bathroom mirror fog up after a hot shower?</div>
+        </div>
+        <button class="mystery-btn" onclick="revealMystery(0)">🔍 Reveal Answer</button>
+        <div class="mystery-answer" id="myst-ans-0">
+          Hot water turns into steam (a gas). When the gas hits the cold mirror, it cools down and turns back into tiny liquid water droplets — that's the fog! Gas → Liquid.
+        </div>
+      </div>
+      <div class="mystery-card" id="myst-1">
+        <div class="mystery-top">
+          <span class="mystery-emoji">🍦</span>
+          <div class="mystery-q">You hold an ice cream cone on a summer day. Why does it drip?</div>
+        </div>
+        <button class="mystery-btn" onclick="revealMystery(1)">🔍 Reveal Answer</button>
+        <div class="mystery-answer" id="myst-ans-1">
+          Your hand and the warm air heat up the solid ice cream. As temperature rises, the solid changes state and becomes liquid. Solid → Liquid (melting)!
+        </div>
+      </div>
+      <div class="mystery-card" id="myst-2">
+        <div class="mystery-top">
+          <span class="mystery-emoji">🥤</span>
+          <div class="mystery-q">When you open a fizzy drink, bubbles rush out. What are the bubbles?</div>
+        </div>
+        <button class="mystery-btn" onclick="revealMystery(2)">🔍 Reveal Answer</button>
+        <div class="mystery-answer" id="myst-ans-2">
+          The bubbles are carbon dioxide — a gas! It was dissolved and trapped in the liquid. When you open the bottle, the pressure drops and the gas escapes as bubbles. It's a gas inside a liquid!
+        </div>
+      </div>
+      <div class="mystery-card" id="myst-3">
+        <div class="mystery-top">
+          <span class="mystery-emoji">🍪</span>
+          <div class="mystery-q">You're upstairs and smell cookies baking in the kitchen. How?</div>
+        </div>
+        <button class="mystery-btn" onclick="revealMystery(3)">🔍 Reveal Answer</button>
+        <div class="mystery-answer" id="myst-ans-3">
+          Every smell is a gas! Tiny gas particles from the warm cookies escape into the air and spread all around — even upstairs. Gas fills every space, remember?
+        </div>
+      </div>
+      <div class="mystery-card" id="myst-4">
+        <div class="mystery-top">
+          <span class="mystery-emoji">🕯️</span>
+          <div class="mystery-q">A candle has a flame. Is the flame solid, liquid, or gas?</div>
+        </div>
+        <button class="mystery-btn" onclick="revealMystery(4)">🔍 Reveal Answer</button>
+        <div class="mystery-answer" id="myst-ans-4">
+          Trick question! A flame is neither. It's light and heat — that's ENERGY, not matter! It has no weight and doesn't take up space. This one fools lots of grown-ups too!
+        </div>
+      </div>
+      <div class="mystery-card" id="myst-5">
+        <div class="mystery-top">
+          <span class="mystery-emoji">☁️</span>
+          <div class="mystery-q">Clouds float in the sky. Are they solid, liquid, or gas?</div>
+        </div>
+        <button class="mystery-btn" onclick="revealMystery(5)">🔍 Reveal Answer</button>
+        <div class="mystery-answer" id="myst-ans-5">
+          Clouds are actually tiny liquid water droplets (or ice crystals — solids!) floating in air. The air (gas) carries them. So clouds can be liquid OR solid — inside a gas!
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────────────── SESSION 3: CRITICAL THINKING ──────────────────── -->
+  <div class="slide" id="slide-s3ct">
+    <div class="slide-title" style="color:white;">🤔 Think It Through — What is Matter?</div>
+    <div style="color:rgba(255,255,255,0.75);font-size:clamp(12px,1.5vw,16px);text-align:center;margin-bottom:2vh;">
+      These are the big questions scientists ask — what do YOU think? 🔬
+    </div>
+    <div class="s3ct-grid">
+      <div class="think-card" style="border-color:#42E2B8;">
+        <div class="think-num" style="background:#42E2B8;color:#003;">1</div>
+        <div class="think-q">Is a shadow made of matter? Does it have weight? Does it take up space? How do you <em>know</em>?</div>
+        <div class="think-badge" style="background:rgba(66,226,184,0.15);">👤 Shadow Test</div>
+      </div>
+      <div class="think-card" style="border-color:#FFD700;">
+        <div class="think-num" style="background:#FFD700;color:#333;">2</div>
+        <div class="think-q">You can feel heat from the Sun on your skin. Is that heat a form of matter or energy? Use the matter test to explain your answer.</div>
+        <div class="think-badge" style="background:rgba(255,215,0,0.15);">☀️ Heat Test</div>
+      </div>
+      <div class="think-card" style="border-color:#FF8C42;">
+        <div class="think-num" style="background:#FF8C42;">3</div>
+        <div class="think-q">If matter did not exist, what would the world be like? Could YOU exist? Could anything exist?</div>
+        <div class="think-badge" style="background:rgba(255,140,66,0.15);">🌍 Big Question</div>
+      </div>
+      <div class="think-card" style="border-color:#42B0FF;">
+        <div class="think-num" style="background:#42B0FF;">4</div>
+        <div class="think-q">Could a living creature be made of only ONE state of matter — only solid, or only liquid, or only gas? What problems would it have?</div>
+        <div class="think-badge" style="background:rgba(66,176,255,0.15);">🦠 Living Matter</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────────────── SLIDE 16: QUIZ ──────────────────── -->
+  <div class="slide" id="slide-16">
+    <div class="slide-title">🎯 Quiz Time!</div>
+    <div class="quiz-score-badge">⭐ <span id="quiz-score-display">0</span> / 10</div>
+    <div class="quiz-progress" id="quiz-progress"></div>
+    <div class="quiz-card">
+      <div class="q-number" id="q-number">QUESTION 1 OF 5</div>
+      <div class="q-text" id="q-text"></div>
+      <div class="q-options" id="q-options"></div>
+      <div class="q-feedback" id="q-feedback"></div>
+      <button class="q-next-btn" id="q-next-btn" onclick="nextQuestion()">Next Question →</button>
+    </div>
+  </div>
+
+  <!-- ──────────────────── SLIDE 15: SESSION 3 HOMEWORK ──────────────────── -->
+  <div class="slide" id="slide-15">
+    <div class="slide-title dark">🏠 Session 3 Homework: Matter Explorer!</div>
+    <div style="color:#555; font-size:clamp(12px,1.5vw,17px); font-weight:700; margin-bottom:2vh; text-align:center;">
+      Investigate matter vs. energy and find the three states all around you! 🔬
+    </div>
+    <div class="hw-grid">
+      <div class="hw-card">
+        <div class="hw-emoji">🫀</div>
+        <div class="hw-title">Body States Map</div>
+        <div class="hw-desc">Draw an outline of your body. Label at least 2 examples of each state of matter (solid: bones, nails; liquid: blood, saliva; gas: air in lungs). Then label one example of energy your body produces.</div>
+      </div>
+      <div class="hw-card">
+        <div class="hw-emoji">⚡</div>
+        <div class="hw-title">Matter or Energy?</div>
+        <div class="hw-desc">Walk around your home and find 6 things. For each one, decide: is it matter or energy? (Examples to investigate: a lamp's glow, sunlight, a rock, your breath, heat from an oven, a shadow.) Write the reason for each answer.</div>
+      </div>
+      <div class="hw-card">
+        <div class="hw-emoji">🌍</div>
+        <div class="hw-title">World Matter Survey</div>
+        <div class="hw-desc">Look at a photo or picture of a landscape (or go outside). Identify at least one solid, one liquid, and one gas you can see or know is present. Label what state each one is and prove it using the matter properties you've learned.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ──────────────────── SLIDE 17: CELEBRATION ──────────────────── -->
+  <div class="slide" id="slide-17">
+    <div id="confetti-container"></div>
+    <div class="star-final">⭐</div>
+    <div class="final-title">You're a Science Star!</div>
+    <div class="final-score" id="final-score-text">Score: — / 10</div>
+    <div class="recap-row">
+      <div class="recap-pill solid">🪨 Solids keep shape</div>
+      <div class="recap-pill liquid">💧 Liquids flow</div>
+      <div class="recap-pill gas">💨 Gases fill space</div>
+    </div>
+    <div style="color:rgba(255,255,255,0.7); font-size:clamp(13px,1.6vw,18px); margin-top:2vh; font-weight:600; animation: fadeUp 0.8s ease 1s both;">
+      Everything around you — solids, liquids, and gases — is all <strong style="color:#FFD700;">MATTER</strong>! 🌍
+    </div>
+  </div>
+
+</div><!-- #app -->
+
+<!-- NAV ARROWS -->
+<button class="nav-arrow" id="prev-btn" onclick="changeSlide(-1)">&#8592;</button>
+<button class="nav-arrow" id="next-btn" onclick="changeSlide(1)">&#8594;</button>
+<div class="dots" id="dots"></div>
+
+<script>
+/* ════════════════════════════════════
+   SLIDE NAVIGATION
+════════════════════════════════════ */
+const TOTAL_SLIDES = 29;
+let current = 0;
+
+function showSlide(n) {
+  const slides = document.querySelectorAll('.slide');
+  slides[current].classList.remove('active');
+  current = Math.max(0, Math.min(n, TOTAL_SLIDES - 1));
+  slides[current].classList.add('active');
+  updateDots();
+  updateArrows();
+  onSlideEnter(current);
+}
+
+function changeSlide(dir) { showSlide(current + dir); }
+
+function updateDots() {
+  document.querySelectorAll('.dot').forEach((d, i) => {
+    d.classList.toggle('active', i === current);
+  });
+}
+
+function updateArrows() {
+  document.getElementById('prev-btn').disabled = (current === 0);
+  document.getElementById('next-btn').disabled = (current === TOTAL_SLIDES - 1);
+}
+
+// Build dots
+const dotsEl = document.getElementById('dots');
+for (let i = 0; i < TOTAL_SLIDES; i++) {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.onclick = () => showSlide(i);
+  dotsEl.appendChild(d);
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+    e.preventDefault(); changeSlide(1);
+  }
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+    e.preventDefault(); changeSlide(-1);
+  }
+});
+
+updateArrows();
+
+/* ════════════════════════════════════
+   SLIDE 1: FLOATING ATOMS
+════════════════════════════════════ */
+function buildAtoms() {
+  const bg = document.getElementById('atoms-bg');
+  const colors = ['FF7043','1E88E5','26A69A','7B2FBE','FFD740','E91E8C'];
+  for (let i = 0; i < 28; i++) {
+    const d = document.createElement('div');
+    d.className = 'atom-dot';
+    const size = 10 + Math.random() * 30;
+    d.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random()*100}%;
+      background:#${colors[Math.floor(Math.random()*colors.length)]};
+      animation-duration:${6 + Math.random()*10}s;
+      animation-delay:${-Math.random()*12}s;
+    `;
+    bg.appendChild(d);
+  }
+}
+buildAtoms();
+
+/* ════════════════════════════════════
+   SLIDE 4: SORTING GAME
+════════════════════════════════════ */
+const GAME_ITEMS = [
+  { id:'rock',     label:'🪨 Rock',    cat:'solid'  },
+  { id:'pencil',   label:'✏️ Pencil',  cat:'solid'  },
+  { id:'apple',    label:'🍎 Apple',   cat:'solid'  },
+  { id:'coin',     label:'🪙 Coin',    cat:'solid'  },
+  { id:'water',    label:'💧 Water',   cat:'liquid' },
+  { id:'milk',     label:'🥛 Milk',    cat:'liquid' },
+  { id:'honey',    label:'🍯 Honey',   cat:'liquid' },
+  { id:'air',      label:'💨 Air',     cat:'gas'    },
+  { id:'steam',    label:'♨️ Steam',   cat:'gas'    },
+];
+
+let gameScore = 0;
+let dragItem = null;
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function buildGame() {
+  gameScore = 0;
+  document.getElementById('game-score').textContent = '0';
+  const bank = document.getElementById('items-bank');
+  bank.innerHTML = '';
+  ['solid','liquid','gas'].forEach(cat => {
+    document.getElementById('zone-' + cat + '-items').innerHTML = '';
+  });
+
+  shuffle(GAME_ITEMS).forEach((item, idx) => {
+    const el = document.createElement('div');
+    el.className = 'drag-item';
+    el.textContent = item.label;
+    el.dataset.id = item.id;
+    el.dataset.cat = item.cat;
+    el.style.animationDelay = (idx * 0.06) + 's';
+    el.setAttribute('draggable', true);
+
+    el.addEventListener('dragstart', e => {
+      dragItem = item;
+      el.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    el.addEventListener('dragend', () => el.classList.remove('dragging'));
+
+    // Touch support
+    let touchItem = null;
+    el.addEventListener('touchstart', e => {
+      touchItem = item;
+      el.style.opacity = '0.5';
+    }, { passive: true });
+    el.addEventListener('touchend', e => {
+      el.style.opacity = '1';
+      const touch = e.changedTouches[0];
+      const target = document.elementFromPoint(touch.clientX, touch.clientY);
+      const zone = target && target.closest('.drop-zone');
+      if (zone && touchItem) dropOnZone(zone.dataset.cat, touchItem, el);
+      touchItem = null;
+    });
+
+    bank.appendChild(el);
+  });
+}
+
+function dropOnZone(zoneCat, item, el) {
+  const correct = (zoneCat === item.cat);
+  if (correct) gameScore++;
+  document.getElementById('game-score').textContent = gameScore;
+
+  const badge = document.createElement('div');
+  badge.className = 'sorted-item ' + (correct ? 'correct' : 'incorrect');
+  badge.textContent = item.label + (correct ? ' ✓' : ' ✗');
+  document.getElementById('zone-' + zoneCat + '-items').appendChild(badge);
+
+  if (el) el.remove();
+}
+
+function resetGame() { buildGame(); }
+
+// Drop zone events
+['solid','liquid','gas'].forEach(cat => {
+  const zone = document.getElementById('zone-' + cat);
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('over'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('over'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.classList.remove('over');
+    if (!dragItem) return;
+    const el = document.querySelector('[data-id="' + dragItem.id + '"]');
+    dropOnZone(cat, dragItem, el);
+    dragItem = null;
+  });
+});
+
+buildGame();
+
+/* ════════════════════════════════════
+   SLIDE 9: TEMPERATURE SLIDER
+════════════════════════════════════ */
+const tempDescs = [
+  { range: [0, 33],  desc: '❄️ At freezing temperatures, water is a <strong>solid</strong> — an ice cube! It keeps its shape.' },
+  { range: [34, 66], desc: '💧 At room temperature, ice <strong>melts into liquid water</strong>. It flows and takes the shape of any container.' },
+  { range: [67, 100],desc: '♨️ At boiling temperatures, water turns into <strong>steam (gas)</strong>! It spreads out and fills the air.' },
+];
+
+document.getElementById('temp-slider').addEventListener('input', function() {
+  const v = parseInt(this.value);
+  const e1 = document.getElementById('state-emoji-1');
+  const e2 = document.getElementById('state-emoji-2');
+  const e3 = document.getElementById('state-emoji-3');
+  const l1 = document.getElementById('state-label-1');
+  const l2 = document.getElementById('state-label-2');
+  const l3 = document.getElementById('state-label-3');
+  const a1 = document.getElementById('arrow-1');
+  const a2 = document.getElementById('arrow-2');
+  const desc = document.getElementById('temp-desc');
+
+  if (v <= 33) {
+    e1.style.fontSize = 'clamp(54px,9vw,108px)'; l1.style.color = '#1E88E5'; l1.style.fontWeight = '900';
+    e2.style.fontSize = 'clamp(38px,6vw,72px)'; l2.style.color = '#888'; l2.style.fontWeight = '600';
+    e3.style.fontSize = 'clamp(28px,4vw,52px)'; l3.style.color = '#aaa'; l3.style.fontWeight = '600';
+    a1.style.opacity = '0.3'; a2.style.opacity = '0.15';
+    desc.innerHTML = tempDescs[0].desc;
+  } else if (v <= 66) {
+    e1.style.fontSize = 'clamp(28px,4vw,52px)'; l1.style.color = '#aaa'; l1.style.fontWeight = '600';
+    e2.style.fontSize = 'clamp(54px,9vw,108px)'; l2.style.color = '#1E88E5'; l2.style.fontWeight = '900';
+    e3.style.fontSize = 'clamp(28px,4vw,52px)'; l3.style.color = '#aaa'; l3.style.fontWeight = '600';
+    a1.style.opacity = '1'; a2.style.opacity = '0.3';
+    desc.innerHTML = tempDescs[1].desc;
+  } else {
+    e1.style.fontSize = 'clamp(28px,4vw,52px)'; l1.style.color = '#aaa'; l1.style.fontWeight = '600';
+    e2.style.fontSize = 'clamp(38px,6vw,72px)'; l2.style.color = '#888'; l2.style.fontWeight = '600';
+    e3.style.fontSize = 'clamp(54px,9vw,108px)'; l3.style.color = '#FF7043'; l3.style.fontWeight = '900';
+    a1.style.opacity = '0.5'; a2.style.opacity = '1';
+    desc.innerHTML = tempDescs[2].desc;
+  }
+});
+
+/* ════════════════════════════════════
+   SESSION 1 QUIZ (5 questions — Part 1: identification)
+════════════════════════════════════ */
+const S1_QUESTIONS = [
+  {
+    q: 'Honey is thick and slow-moving, but it pours and takes the shape of its bowl. What state of matter is honey?',
+    opts: ['🪨 Solid — it\'s thick and heavy', '💧 Liquid — it flows and takes the container\'s shape', '💨 Gas — it spreads out', '🌟 A special fourth state'],
+    ans: 1,
+    feedback: [
+      'Solids keep their OWN shape — they don\'t pour or flow at all!',
+      '🎉 Yes! Even though honey is slow, it still flows and takes the shape of its container. If it flows at all, it\'s a liquid!',
+      'A gas would escape the bowl and fill the whole room — you couldn\'t keep it in a bowl!',
+      'There are only 3 states of matter at everyday temperatures — and honey is definitely one of them!'
+    ]
+  },
+  {
+    q: 'You tip a bag of sugar and it pours out like water. But when you sweep it into a pile, the pile STAYS there. What state is sugar?',
+    opts: ['💧 Liquid — because it poured', '🪨 Solid — each tiny grain keeps its own shape and the pile stays put', '💨 Gas — it spreads out when poured', '❓ Neither — it\'s somewhere in between'],
+    ans: 1,
+    feedback: [
+      'Liquids spread flat when spilled — they can never make a pile! Sugar makes a pile that holds its shape.',
+      '🎉 Exactly! Sugar pours because it\'s made of millions of tiny SOLID grains. Each grain keeps its shape. Spill a liquid and it spreads flat — spill sugar and it makes a pile that stays. That\'s the solid test!',
+      'Gases are invisible and escape everywhere — sugar doesn\'t float away into the air!',
+      'The key test is: can you make a pile that stays? Yes for sugar! That proves each grain is a solid.'
+    ]
+  },
+  {
+    q: 'What is the BEST scientific description of a gas?',
+    opts: ['It keeps its own shape like a cube or ball', 'It flows into the shape of its container — you can see it\'s half full', 'It expands to fill the ENTIRE container — you can never see it as half full', 'It sinks to the bottom of any container'],
+    ans: 2,
+    feedback: [
+      'That\'s a solid! Solids keep their own shape without a container.',
+      'That\'s a liquid! Liquids take the container\'s shape but only partly fill it — you can always see a surface.',
+      '🎉 Perfect! A gas always spreads to fill every last bit of its container. You can NEVER have a container that\'s "half full" of gas — if there\'s gas in it, it fills all of it!',
+      'Gases are lighter than liquids — they rise and fill the whole space evenly. They don\'t sink!'
+    ]
+  },
+  {
+    q: 'A rock, a pencil, and a coin are all different sizes and shapes. What one property makes them ALL solids?',
+    opts: ['They are all heavy', 'They can all be put in a container', 'They all keep their own shape without needing a container', 'They cannot be picked up'],
+    ans: 2,
+    feedback: [
+      'Some solids (like a feather or a hollow box) are very light! Weight isn\'t the defining rule.',
+      'Lots of things can go in containers — water and air too! That\'s not what makes something a solid.',
+      '🎉 Yes! The solid rule is: leave it alone and it keeps its shape. A rock stays a rock shape. A pencil stays a pencil shape. No container needed!',
+      'All three can definitely be picked up! The rule is about keeping shape independently.'
+    ]
+  },
+  {
+    q: 'You feel a breeze on your face. The wind is moving air. What STATE of matter is air?',
+    opts: ['🪨 Solid — you can feel it hitting you', '💧 Liquid — it flows past you like water', '💨 Gas — it fills all space and you cannot see it', '❌ Air is not matter — it weighs nothing'],
+    ans: 2,
+    feedback: [
+      'You can feel a solid hit you — but solids keep a fixed shape. Wind moves freely through rooms and has no shape at all!',
+      'Liquids pool at the bottom and you can see their surface. Air fills every part of a space evenly!',
+      '🎉 Correct! Air is a gas. It spreads to fill any space, is invisible, and doesn\'t pool at the bottom. It\'s filling the entire room right now!',
+      'Air IS matter! A blown-up balloon is actually heavier than a flat one — that\'s the air\'s weight. Air also takes up space, which is why it inflates the balloon!'
+    ]
+  },
+  {
+    q: 'Sand can be poured from one container to another, just like water. Why is sand STILL classified as a solid and not a liquid?',
+    opts: ['Because sand is made of rock, and rocks are always solid', 'Because each tiny grain of sand keeps its own shape — spilled sand makes a pile that stays, while spilled liquid spreads flat', 'Because sand is too heavy to be a liquid', 'Because sand is not wet'],
+    ans: 1,
+    feedback: [
+      'The material something is made of doesn\'t always decide its state — iron can be a liquid at very high temperatures!',
+      '🎉 Exactly! Sand pours because millions of tiny SOLID grains slide past each other. Spill sand — it makes a pile. Spill water — it spreads flat. That difference proves each grain of sand is solid!',
+      'Many liquids are heavier than sand — liquid mercury is much denser. Weight isn\'t the test!',
+      'Liquids don\'t have to feel wet — liquid mercury, for example, is not "wet" in the usual sense!'
+    ]
+  },
+  {
+    q: 'You open a perfume bottle across the room and seconds later you can smell it. Which state of matter travels to your nose?',
+    opts: ['Tiny solid particles floating in air', 'Liquid droplets spraying across the room', 'Gas particles spreading through the air in all directions', 'Sound waves carrying the scent'],
+    ans: 2,
+    feedback: [
+      'Solid particles are too heavy to float far through the air on their own — they would fall to the floor!',
+      'A liquid spray travels a short distance. But perfume scent fills an entire room — only a gas can spread everywhere!',
+      '🎉 Correct! Every smell is a gas. Tiny liquid perfume particles evaporate into gas molecules that spread through the air in all directions. That\'s why a smell eventually fills an entire room!',
+      'Sound carries vibrations, not chemical particles — and you hear sound, not smell it!'
+    ]
+  },
+  {
+    q: 'A sponge soaked in water sits in a bowl. Which states of matter are present in this scene?',
+    opts: ['Solid only — the sponge is solid', 'Liquid and solid only', 'Solid, liquid, AND gas', 'Solid and gas only'],
+    ans: 2,
+    feedback: [
+      'There is also water (liquid) inside the sponge, and trapped air (gas) in the pores!',
+      'Think carefully — what fills the tiny holes in a sponge when it is NOT fully waterlogged? Air! So there is still some trapped gas inside.',
+      '🎉 All three! The sponge itself is solid. The water soaked through it is liquid. Air trapped in the small pores (holes) of the sponge is gas. Many everyday objects contain all three states at once!',
+      'The water soaked into the sponge is clearly there — that is liquid! There is no sponge with just solid and gas but no liquid water!'
+    ]
+  },
+  {
+    q: 'Ice cream is taken from the freezer. After 10 minutes it begins to drip. What scientific process is happening and why?',
+    opts: ['Evaporation — the ice cream is turning into an invisible gas', 'Condensation — water from the air is landing on it and dripping off', 'Melting — the solid ice cream is absorbing heat from the warmer room and changing to liquid', 'Freezing — the ice cream is getting colder and releasing liquid'],
+    ans: 2,
+    feedback: [
+      'Evaporation is liquid turning into gas. The ice cream is dripping, not disappearing into the air!',
+      'Condensation does cause water droplets on cold surfaces — but those drips are coming from the ice cream itself changing state, not from the air!',
+      '🎉 Melting! Room temperature (around 20°C) is above the freezing point of ice cream. Heat flows from the warmer room into the cold ice cream, providing enough energy for the solid to change into a liquid. That is why ice cream must be stored in the freezer!',
+      'The ice cream is getting WARMER, not colder. Heat always flows from warm areas to cold ones — from room to ice cream, not the other way!'
+    ]
+  },
+  {
+    q: 'A fizzy drink contains liquid cola and bubbles of CO₂ gas dissolved inside. The bottle is sealed. Which states of matter are in the sealed bottle?',
+    opts: ['Solid and liquid only', 'Liquid only — the gas fully dissolves and disappears', 'Liquid and gas', 'Solid, liquid, and gas'],
+    ans: 2,
+    feedback: [
+      'There is no solid in a sealed bottle of cola — unless you have added ice cubes!',
+      'The CO₂ gas is dissolved in the liquid, but it has not disappeared! Opening the cap or shaking releases the dissolved gas as visible bubbles. That is why cola goes flat when left open.',
+      '🎉 Correct! A fizzy drink contains liquid (the cola) and gas (CO₂ dissolved inside that forms bubbles). You can hear and see the gas escape when you open the bottle!',
+      'Unless ice cubes have been added, there is no solid in the bottle — only liquid cola and dissolved gas!'
+    ]
+  },
+];
+
+let s1qIdx = 0, s1Score = 0, s1answered = false;
+
+function s1BuildProgress() {
+  const p = document.getElementById('s1-progress'); p.innerHTML = '';
+  S1_QUESTIONS.forEach((_,i) => {
+    const d = document.createElement('div');
+    d.className = 'q-dot' + (i < s1qIdx ? ' answered' : '') + (i === s1qIdx ? ' current' : '');
+    p.appendChild(d);
+  });
+}
+
+function s1LoadQuestion() {
+  s1answered = false;
+  const q = S1_QUESTIONS[s1qIdx];
+  document.getElementById('s1-qnum').textContent = 'QUESTION '+(s1qIdx+1)+' OF '+S1_QUESTIONS.length;
+  document.getElementById('s1-qtext').textContent = q.q;
+  document.getElementById('s1-feedback').textContent = '';
+  document.getElementById('s1-feedback').className = 'q-feedback';
+  document.getElementById('s1-next-btn').classList.remove('show');
+  const opts = document.getElementById('s1-opts'); opts.innerHTML = '';
+  q.opts.forEach((opt,i) => {
+    const btn = document.createElement('button');
+    btn.className = 'q-btn'; btn.textContent = opt;
+    btn.onclick = () => s1AnswerQuestion(i, btn);
+    opts.appendChild(btn);
+  });
+  document.getElementById('s1-score-display').textContent = s1Score;
+  s1BuildProgress();
+}
+
+function s1AnswerQuestion(idx, btn) {
+  if (s1answered) return;
+  s1answered = true;
+  const q = S1_QUESTIONS[s1qIdx];
+  const correct = (idx === q.ans);
+  if (correct) s1Score++;
+  document.querySelectorAll('#s1-opts .q-btn').forEach((b,i) => {
+    b.disabled = true;
+    if (i === q.ans) b.classList.add('correct');
+  });
+  if (!correct) btn.classList.add('incorrect');
+  const fb = document.getElementById('s1-feedback');
+  fb.textContent = q.feedback[idx];
+  fb.className = 'q-feedback ' + (correct ? 'good' : 'bad');
+  document.getElementById('s1-score-display').textContent = s1Score;
+  const nextBtn = document.getElementById('s1-next-btn');
+  nextBtn.classList.add('show');
+  if (s1qIdx === S1_QUESTIONS.length - 1) {
+    nextBtn.textContent = 'See My Score! 🏅';
+    nextBtn.onclick = () => showSlide(12); // Session 1 End slide
+  }
+}
+
+function s1NextQuestion() {
+  s1qIdx++;
+  if (s1qIdx < S1_QUESTIONS.length) s1LoadQuestion();
+  else showSlide(12); // Session 1 End slide
+}
+
+/* ════════════════════════════════════
+   SESSION 2 QUIZ — Temperature & State Changes (10 Qs, Grade 3–5)
+════════════════════════════════════ */
+const S2_QUESTIONS = [
+  {
+    q: 'What is the correct scientific term for a LIQUID turning into a GAS when heated?',
+    opts: ['Freezing', 'Condensation', 'Evaporation', 'Melting'],
+    ans: 2,
+    feedback: [
+      'Freezing is the opposite — liquid turning into solid by LOSING heat. That\'s the wrong direction!',
+      'Condensation is when gas turns back INTO liquid — the reverse process!',
+      '🎉 Evaporation! When a liquid gains enough heat energy, its particles move fast enough to escape into the air as gas. This is why puddles disappear and wet clothes dry on a washing line.',
+      'Melting is solid → liquid. Evaporation is liquid → gas — a completely different state change!'
+    ]
+  },
+  {
+    q: 'A puddle on the pavement disappears completely on a sunny day. Where has the water gone?',
+    opts: ['It soaked through the solid pavement into the ground', 'It turned into solid ice underneath the hot pavement', 'The sun\'s heat evaporated it — the liquid water became water vapour gas in the air', 'Water disappears when temperatures are very high'],
+    ans: 2,
+    feedback: [
+      'Pavements are mostly solid and barely allow water through — very little soaks in!',
+      'The sun makes things WARMER, not colder. Ice only forms when things get very cold!',
+      '🎉 Exactly! The sun\'s heat gave the water molecules enough energy to evaporate. The liquid water became water vapour (an invisible gas) that rose into the air. The water didn\'t vanish — it changed state!',
+      'Matter NEVER disappears — it only changes from one state to another. The water is now invisible gas in the atmosphere!'
+    ]
+  },
+  {
+    q: 'Butter melts when heated in a warm pan. If you place the liquid butter in the fridge, what happens — and what does this tell you about melting?',
+    opts: ['It stays liquid forever — once something melts, the change is permanent', 'It turns into a gas in the cold air of the fridge', 'It returns to solid — melting is a REVERSIBLE physical change', 'It becomes a completely different substance when it cools'],
+    ans: 2,
+    feedback: [
+      'Melting is a physical change — not a permanent one! The butter can return to its original solid form.',
+      'Cooling causes freezing (liquid → solid), not evaporation. Evaporation requires heat, not cold!',
+      '🎉 Reversible! Heat melts butter (solid → liquid). Cold refreezes it (liquid → solid). The butter has the same chemical make-up throughout — it is still butter. No new substance was created!',
+      'Melting and freezing are PHYSICAL changes — the substance stays the same throughout. Butter remains butter!'
+    ]
+  },
+  {
+    q: 'Paper and wood BURN when heated, but they do NOT melt like ice. What is the critical difference between burning and melting?',
+    opts: ['Burning happens faster than melting', 'Melting is reversible — cool it and you get the original back. Burning is irreversible — new substances are created and the original is gone forever', 'Melting requires much more heat than burning', 'Burning only happens to biological materials like plants and animals'],
+    ans: 1,
+    feedback: [
+      'Speed is not the key difference — some things melt quickly and some burn slowly!',
+      '🎉 The key difference is reversibility! Melt ice → water → refreeze to ice. Burn wood → ash + CO₂ + water vapour. Those products are completely different substances — you can never turn ash back into wood. Burning is a chemical change; melting is a physical change.',
+      'Paper burns at around 233°C, while ice melts at just 0°C. Burning often needs LESS heat than you might think!',
+      'Metals and some plastics also burn. And many biological materials (like ice cream) melt perfectly without burning!'
+    ]
+  },
+  {
+    q: 'Which material has the HIGHEST melting point — requiring the most heat to become liquid?',
+    opts: ['Ice — because it is always cold', 'Chocolate — because it is hard when cold', 'Butter — because it is solid at room temperature', 'Iron and steel — because they are metals with very high melting points'],
+    ans: 3,
+    feedback: [
+      'Ice melts at just 0°C — the lowest of all these options! It is actually the easiest to melt.',
+      'Chocolate melts at around 32–34°C — so low that it melts in your hand at body temperature (37°C)!',
+      'Butter melts around 32–35°C — similar to chocolate, and it melts well below body temperature.',
+      '🎉 Iron and steel! Iron melts at approximately 1538°C — far beyond any kitchen temperature. That is why iron frying pans do not melt on a stove. Every substance has its own unique melting point determined by its chemical structure!'
+    ]
+  },
+  {
+    q: 'On a cold morning you breathe out and see a small white cloud in front of your face. What state change is occurring?',
+    opts: ['Evaporation — the water in your breath is turning into gas', 'Condensation — warm water vapour gas in your breath cools rapidly and turns into tiny liquid droplets you can see', 'Freezing — your breath is turning directly into solid ice crystals', 'Sublimation — solid water inside you is becoming gas'],
+    ans: 1,
+    feedback: [
+      'Evaporation is liquid → gas. But the cloud you see is FORMING, not disappearing — it is liquid droplets appearing!',
+      '🎉 Condensation! Your lungs contain warm, moist air with water vapour (gas). When it hits the cold outside air, it loses heat and the gas condenses into tiny liquid water droplets you can see as a white cloud. The same thing happens on a cold bathroom mirror after a shower!',
+      'At very cold temperatures, ice crystals can form in breath — but in most winter conditions, what you see is liquid droplets from condensation, not solid ice!',
+      'Sublimation is when a solid goes directly to gas. Your warm breath starts as water vapour — it is already a gas before it leaves your mouth!'
+    ]
+  },
+  {
+    q: 'A scientist says: "The same substance can exist in all three states." Which everyday substance BEST demonstrates all three states in NORMAL everyday life?',
+    opts: ['Iron — solid in tools, liquid in volcanic lava, gas in industrial processing', 'Wood — solid trees, liquid sap, gas from burning', 'Oxygen — solid in laboratories, liquid in hospitals, gas in the air', 'Water — solid ice, liquid water, and steam gas — all seen in everyday life'],
+    ans: 3,
+    feedback: [
+      'Iron CAN exist in all three states, but you would never encounter liquid or gas iron in normal everyday life!',
+      'Wood burning creates entirely different substances (ash, CO₂) through a chemical change — that is NOT a state change. And sap is not the same substance as solid wood.',
+      'Oxygen does exist in all three states, but liquid and solid oxygen require extreme laboratory conditions most people never encounter!',
+      '🎉 Water! Ice in the freezer (solid), water from the tap (liquid), steam from a kettle (gas) — you see all three states of the SAME substance (H₂O) in everyday life. That is what makes water so scientifically remarkable!'
+    ]
+  },
+  {
+    q: 'Deep inside the Earth, rock and iron exist as liquids — even though they are solids on the surface. What explains this?',
+    opts: ['Metals secretly change to liquid form when underground', 'Underground pressure crushes metals into liquid form', 'The Earth\'s interior has extreme temperatures — far exceeding the melting points of rock and iron', 'There is no gravity deep underground, so metals float as liquids'],
+    ans: 2,
+    feedback: [
+      'Matter does not change state secretly — state changes always have a physical cause: a change in temperature or pressure!',
+      'Pressure does affect melting points, but the dominant reason for liquid rock deep in the Earth is the enormous HEAT produced by the planet\'s interior radioactive decay and original formation heat.',
+      '🎉 Correct! The Earth\'s interior reaches thousands of degrees Celsius — far above the melting points of iron (~1538°C) and rock (~700–1200°C). That is why the outer core is liquid iron and volcanoes erupt liquid rock (lava)!',
+      'Gravity is actually stronger at some depths within the Earth! Temperature — not gravity — is what causes the melting.'
+    ]
+  },
+  {
+    q: 'Evaporation is liquid → gas. What is the scientific name for the REVERSE: gas turning back into liquid?',
+    opts: ['Melting', 'Freezing', 'Condensation', 'Sublimation'],
+    ans: 2,
+    feedback: [
+      'Melting is solid → liquid. That is a different state change — involving different states!',
+      'Freezing is liquid → solid. That is also a different change — wrong states involved!',
+      '🎉 Condensation! When a gas loses heat and cools enough, it turns back into a liquid. Examples: foggy bathroom mirrors (steam → droplets), clouds forming in the sky (water vapour → tiny droplets), a cold drink can "sweating" (air moisture condensing on cold surface).',
+      'Sublimation is when a SOLID turns directly into a GAS — skipping the liquid stage entirely. Dry ice is the most common example!'
+    ]
+  },
+  {
+    q: 'A puddle dries faster on a windy day than a calm day — even when both days have the same temperature. What is the BEST scientific explanation?',
+    opts: ['Wind physically blows the liquid water molecules away like a broom', 'Wind lowers the air temperature, causing the water to freeze and vanish', 'Wind removes water vapour from above the puddle, allowing more liquid molecules to keep evaporating into drier air', 'Wind contains special chemicals that help break down water into gas'],
+    ans: 2,
+    feedback: [
+      'Wind cannot physically sweep away individual liquid water molecules — they must evaporate (change state to gas) first!',
+      'Wind at the same temperature does not lower the temperature of the water enough to freeze it — and freezing would not make it disappear!',
+      '🎉 Excellent scientific reasoning! Still air above a puddle becomes saturated with water vapour — slowing evaporation. Wind constantly sweeps this moist air away and replaces it with drier air, so evaporation can continue at its maximum rate. That is why laundry dries faster on a breezy day!',
+      'Wind is simply moving air — it contains no special chemicals. The drying effect is purely a physical process!'
+    ]
+  },
+];
+
+let s2qIdx = 0, s2Score = 0, s2answered = false;
+
+function s2BuildProgress() {
+  const p = document.getElementById('s2-progress'); p.innerHTML = '';
+  S2_QUESTIONS.forEach((_,i) => {
+    const d = document.createElement('div');
+    d.className = 'q-dot' + (i < s2qIdx ? ' answered' : '') + (i === s2qIdx ? ' current' : '');
+    p.appendChild(d);
+  });
+}
+
+function s2LoadQuestion() {
+  s2answered = false;
+  const q = S2_QUESTIONS[s2qIdx];
+  document.getElementById('s2-qnum').textContent = 'QUESTION '+(s2qIdx+1)+' OF '+S2_QUESTIONS.length;
+  document.getElementById('s2-qtext').textContent = q.q;
+  document.getElementById('s2-feedback').textContent = '';
+  document.getElementById('s2-feedback').className = 'q-feedback';
+  document.getElementById('s2-next-btn').classList.remove('show');
+  const opts = document.getElementById('s2-opts'); opts.innerHTML = '';
+  q.opts.forEach((opt,i) => {
+    const btn = document.createElement('button');
+    btn.className = 'q-btn'; btn.textContent = opt;
+    btn.onclick = () => s2AnswerQuestion(i, btn);
+    opts.appendChild(btn);
+  });
+  document.getElementById('s2-score-display').textContent = s2Score;
+  s2BuildProgress();
+}
+
+function s2AnswerQuestion(idx, btn) {
+  if (s2answered) return;
+  s2answered = true;
+  const q = S2_QUESTIONS[s2qIdx];
+  const correct = (idx === q.ans);
+  if (correct) s2Score++;
+  document.querySelectorAll('#s2-opts .q-btn').forEach((b,i) => {
+    b.disabled = true;
+    if (i === q.ans) b.classList.add('correct');
+  });
+  if (!correct) btn.classList.add('incorrect');
+  const fb = document.getElementById('s2-feedback');
+  fb.textContent = q.feedback[idx];
+  fb.className = 'q-feedback ' + (correct ? 'good' : 'bad');
+  document.getElementById('s2-score-display').textContent = s2Score;
+  const nextBtn = document.getElementById('s2-next-btn');
+  nextBtn.classList.add('show');
+  if (s2qIdx === S2_QUESTIONS.length - 1) {
+    nextBtn.textContent = 'See My Score! 🏅';
+    nextBtn.onclick = () => showSlide(20); // Session 2 End slide (idx 20)
+  }
+}
+
+function s2NextQuestion() {
+  s2qIdx++;
+  if (s2qIdx < S2_QUESTIONS.length) s2LoadQuestion();
+  else showSlide(20); // Session 2 End slide (idx 20)
+}
+
+/* ════════════════════════════════════
+   SESSION 3 QUIZ — What is Matter? Matter vs Energy (10 Qs, Grade 3–5)
+════════════════════════════════════ */
+const QUESTIONS = [
+  {
+    q: 'All solids, liquids, and gases together are referred to by one special scientific word. What is it?',
+    opts: ['Energy', 'Material', 'Matter', 'Substance'],
+    ans: 2,
+    feedback: [
+      'Energy is the ability to do work — like heat, light, and movement. It is different from matter!',
+      '"Material" is an everyday word but not the precise scientific term. The scientific word is "matter".',
+      '🎉 Matter! Everything that has weight and takes up space — whether solid, liquid, or gas — is called MATTER. Solids, liquids, and gases are the three fundamental states of matter.',
+      '"Substance" is used in chemistry for pure materials, but the broad scientific term for anything with weight and volume is "matter"!'
+    ]
+  },
+  {
+    q: 'Which is the BEST scientific definition of matter?',
+    opts: ['Anything you can see or touch', 'Anything that has weight AND takes up space', 'Only solids and liquids — gases are too light', 'Objects made in science laboratories or factories'],
+    ans: 1,
+    feedback: [
+      'You can see light and rainbows — but they are not matter! You can feel wind (which IS matter) and sound vibrations (which is energy). Seeing or touching is not the scientific test.',
+      '🎉 Exactly! The two-part matter test: (1) Does it have weight? (2) Does it take up space? If YES to both, it is matter. This includes all solids, liquids, and gases — even invisible air!',
+      'Air is a gas and air is definitely matter! A blown-up balloon is heavier than a flat one — that extra weight IS the air inside.',
+      'Matter is everywhere in nature — rocks, water, and air are all matter without any laboratory needed!'
+    ]
+  },
+  {
+    q: 'Your friend says light is matter because you can see it. How would you scientifically explain that your friend is wrong?',
+    opts: ['Your friend is right — if you can see something, it must be matter', 'Your friend is wrong — light has no weight and takes up no space, so it fails the matter test completely', 'Your friend is wrong — light is a solid, just extremely thin', 'Your friend is partially correct — visible light is matter but ultraviolet light is not'],
+    ans: 1,
+    feedback: [
+      'Seeing something does not make it matter — you can see a shadow, a rainbow, and a mirage. None of them are matter!',
+      '🎉 Correct reasoning! Matter must have weight AND take up space. Light has neither. Can you weigh light? Can you put light in a sealed box and close the lid? No! Light is a form of electromagnetic ENERGY, not matter.',
+      'Light is not a solid of any kind! It is a form of electromagnetic energy — it has no physical state whatsoever.',
+      'All light — visible, ultraviolet, infrared — is electromagnetic energy. None of it is matter at any wavelength.'
+    ]
+  },
+  {
+    q: 'A shadow appears on a wall when you block light. Is a shadow matter? How can you prove your answer scientifically?',
+    opts: ['Yes — it has a defined shape, so it must take up space and be matter', 'Yes — it is dark, meaning it is filled with dark particles of matter', 'No — a shadow is just an area where light is absent. It has no weight and occupies no space', 'No — only because you cannot physically touch a shadow with your hand'],
+    ans: 2,
+    feedback: [
+      'Having a visible shape does not make something matter! A shadow\'s shape shows where light is blocked — there is nothing physically present in that space.',
+      'There are no "dark particles"! Darkness is simply the ABSENCE of light — there is nothing there at all.',
+      '🎉 Exactly right! A shadow is not a thing — it is an absence of light. There is nothing physical in a shadow. It has no weight (you cannot weigh it) and does not occupy space (it has no volume). It completely fails both parts of the matter test.',
+      'The scientific reason is: a shadow has no weight and no volume — the two requirements for matter. Not being touchable is a consequence, not the cause!'
+    ]
+  },
+  {
+    q: 'Heat from the Sun warms your skin on a summer day. Is this solar heat a form of matter or a form of energy?',
+    opts: ['Matter — because you can feel it on your skin', 'Matter — because heat is related to temperature, which is a physical property', 'Energy — because heat has no weight and takes up no space', 'Energy — but only heat from the Sun; heat from a fire would be matter'],
+    ans: 2,
+    feedback: [
+      'You can also feel wind (which IS matter) and sound vibrations (which is energy). Feeling something does not decide whether it is matter or energy!',
+      'Temperature is a measure of how much energy the PARTICLES of matter have — but the heat radiating from the Sun is infrared radiation, a form of energy, not matter itself.',
+      '🎉 Energy! Heat has no weight and takes up no space. You cannot put "heat" in a sealed bottle and close the lid. Solar heat is a form of electromagnetic energy — the same as light, just at a different wavelength.',
+      'All heat — whether from the Sun, a fire, or a radiator — is a form of energy. The source does not change what it fundamentally is!'
+    ]
+  },
+  {
+    q: 'Which scene contains ALL THREE states of matter at the same moment?',
+    opts: ['A glass of ice water with ice cubes floating in liquid water, with air above it', 'A solid block of ice sitting alone in a freezer', 'A pot of boiling water producing steam (no ice present)', 'A balloon filled with air floating in a warm room'],
+    ans: 0,
+    feedback: [
+      '🎉 Yes! The ice cubes are solid water. The liquid water in the glass is liquid. The air space above the water (inside the glass) is gas. Three states of matter in one ordinary glass!',
+      'A solid ice block contains only one state — solid. There is no liquid or gas present in a pure solid ice block.',
+      'Boiling water has liquid water and water vapour gas — two states. But you need a solid too for all three!',
+      'A balloon has solid rubber (the balloon material) and gas (air inside) — two states. There is no liquid present!'
+    ]
+  },
+  {
+    q: 'The human body contains all three states of matter simultaneously. Which list correctly identifies bones, blood, and the air in your lungs?',
+    opts: ['Bones = liquid, Blood = solid, Air in lungs = gas', 'Bones = solid, Blood = gas, Air in lungs = liquid', 'Bones = solid, Blood = liquid, Air in lungs = gas', 'Bones = gas, Blood = liquid, Air in lungs = solid'],
+    ans: 2,
+    feedback: [
+      'Bones are rigid and keep their own shape — that is the solid test! Blood pours and flows — that is liquid!',
+      'Blood definitely flows through vessels and pours — it is liquid! And the air in your lungs is gas, not liquid.',
+      '🎉 Correct! Bones are solid (they maintain their own rigid shape). Blood is liquid (it flows and fills the shape of blood vessels). Air in the lungs is gas (it completely fills the lung space). Your body is a remarkable combination of all three states of matter!',
+      'Bones are solid — they keep their hard shape independently! Gases fill spaces completely — exactly what air does in your lungs!'
+    ]
+  },
+  {
+    q: 'A candle is burning and you see a flame. Is the flame itself a form of matter? Explain your reasoning.',
+    opts: ['Yes — it has a visible shape and takes up space in the air', 'Yes — it is hot, which means particles of matter are releasing energy', 'No — a flame is visible light and heat, both of which are forms of energy with no weight and no volume', 'No — only because flames have no fixed colour'],
+    ans: 2,
+    feedback: [
+      'Flames have a shape, but so do shadows and rainbows — and neither is matter! Visible shape alone is not the matter test.',
+      'Hot solid objects DO contain energy — but the flame itself (the visible burning light) is the RELEASE of that energy, not a form of matter. The wax and air are matter; the flame is energy.',
+      '🎉 Correct! A flame is visible light and radiant heat — both are forms of energy. Energy has no weight and takes up no space. The wax candle (solid matter) reacts with oxygen (gas matter), but the flame you see is an energy release — not matter itself!',
+      'Flames come in many colours (yellow, blue, orange, red) — and none of them are matter! Colour is irrelevant to the matter test.'
+    ]
+  },
+  {
+    q: 'Could a living organism survive if it were made entirely of only ONE state of matter — for example, only solid? Explain your scientific reasoning.',
+    opts: ['Yes — a jellyfish is almost entirely liquid and it survives fine', 'Yes — bacteria are made entirely of solid proteins, so a solid-only creature could work', 'No — living things need solid for structure, liquid for transporting materials, and gas for breathing. One state cannot do all three jobs', 'No — because matter always naturally comes in all three states together'],
+    ans: 2,
+    feedback: [
+      'Jellyfish are about 95% water, but they still have solid tissue structures and carry out gas exchange with their environment. No living thing is purely one state!',
+      'Cells contain proteins and DNA (solid-like), but they are suspended in liquid cytoplasm and water, and they exchange gases. A purely solid organism cannot carry out life processes!',
+      '🎉 Exactly! Living organisms need: solid state for structural support (bones, cell walls, shells), liquid state for transporting nutrients and gases (blood, sap, cytoplasm), and gas state for exchanging oxygen and CO₂ (breathing, gas exchange). No single state of matter can perform all three functions!',
+      'Matter can absolutely exist in a single state — a pure block of gold is solid only. It is specifically LIVING things that require all three states to carry out the processes of life!'
+    ]
+  },
+  {
+    q: 'HARDEST! A campfire produces flames, heat, smoke, and leaves behind ash. Classify each component as MATTER or ENERGY.',
+    opts: ['Flames = matter; Heat = matter; Smoke = energy; Ash = matter', 'Flames = energy; Heat = matter; Smoke = matter; Ash = energy', 'Flames = energy (light + heat); Heat = energy; Smoke = matter (tiny solid + gas particles); Ash = solid matter', 'Flames = matter; Heat = energy; Smoke = matter; Ash = energy'],
+    ans: 2,
+    feedback: [
+      'Flames are NOT matter — they are light and heat energy! Smoke, however, is made of tiny solid carbon particles and gas — real matter with weight.',
+      'Heat has no weight and takes up no space — it is a form of energy, not matter. And ash is solid matter — it has weight and you can scoop it up!',
+      '🎉 Outstanding! Flames = visible light + radiant heat = ENERGY (no weight, no volume). Heat = infrared radiation = ENERGY. Smoke = microscopic solid carbon particles + gas particles = MATTER (has weight, takes space). Ash = solid residue = MATTER (has weight, takes space). This campfire distinction is one of the most important in physical science!',
+      'Flames are light and heat — both are energy, not matter. And ash is solid matter that you can collect and weigh — definitely matter with weight and volume!'
+    ]
+  },
+];
+
+let qIndex = 0;
+let quizScore = 0;
+let answered = false;
+
+function buildQuizProgress() {
+  const p = document.getElementById('quiz-progress');
+  p.innerHTML = '';
+  QUESTIONS.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'q-dot' + (i < qIndex ? ' answered' : '') + (i === qIndex ? ' current' : '');
+    p.appendChild(d);
+  });
+}
+
+function loadQuestion() {
+  answered = false;
+  const q = QUESTIONS[qIndex];
+  document.getElementById('q-number').textContent = 'QUESTION ' + (qIndex+1) + ' OF ' + QUESTIONS.length;
+  document.getElementById('q-text').textContent = q.q;
+  document.getElementById('q-feedback').textContent = '';
+  document.getElementById('q-feedback').className = 'q-feedback';
+  document.getElementById('q-next-btn').classList.remove('show');
+
+  const opts = document.getElementById('q-options');
+  opts.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'q-btn';
+    btn.textContent = opt;
+    btn.onclick = () => answerQuestion(i, btn);
+    opts.appendChild(btn);
+  });
+
+  document.getElementById('quiz-score-display').textContent = quizScore;
+  buildQuizProgress();
+}
+
+function answerQuestion(chosen, btn) {
+  if (answered) return;
+  answered = true;
+  const q = QUESTIONS[qIndex];
+  const correct = (chosen === q.ans);
+  if (correct) quizScore++;
+
+  document.querySelectorAll('#q-options .q-btn').forEach((b, i) => {
+    b.disabled = true;
+    if (i === q.ans) b.classList.add('correct');
+    else if (i === chosen && !correct) b.classList.add('incorrect');
+  });
+
+  const fb = document.getElementById('q-feedback');
+  fb.innerHTML = q.feedback[chosen];
+  fb.className = 'q-feedback ' + (correct ? 'good' : 'bad');
+
+  document.getElementById('quiz-score-display').textContent = quizScore;
+
+  if (qIndex < QUESTIONS.length - 1) {
+    document.getElementById('q-next-btn').classList.add('show');
+    document.getElementById('q-next-btn').textContent = 'Next Question →';
+  } else {
+    document.getElementById('q-next-btn').classList.add('show');
+    document.getElementById('q-next-btn').textContent = 'See My Score! 🎉';
+    document.getElementById('q-next-btn').onclick = () => {
+      const total = QUESTIONS.length;
+      const stars = quizScore === total ? '⭐⭐⭐' : quizScore >= total * 0.7 ? '⭐⭐' : '⭐';
+      document.getElementById('final-score-text').textContent =
+        'Score: ' + quizScore + ' / ' + total + '  ' + stars;
+      launchConfetti();
+      showSlide(28);  // 0-indexed: slide 29 = celebration
+    };
+  }
+}
+
+function nextQuestion() {
+  qIndex++;
+  loadQuestion();
+}
+
+/* ════════════════════════════════════
+   SLIDE 17: CONFETTI
+════════════════════════════════════ */
+function launchConfetti() {
+  const container = document.getElementById('confetti-container');
+  container.innerHTML = '';
+  const colors = ['FF7043','1E88E5','26A69A','FFD740','E91E8C','7B2FBE','FFFFFF'];
+  for (let i = 0; i < 60; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.cssText = `
+      left: ${Math.random() * 100}%;
+      background: #${colors[Math.floor(Math.random() * colors.length)]};
+      width: ${8 + Math.random() * 10}px;
+      height: ${8 + Math.random() * 10}px;
+      border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+      animation-duration: ${2.5 + Math.random() * 3}s;
+      animation-delay: ${Math.random() * 2}s;
+    `;
+    container.appendChild(piece);
+  }
+}
+
+/* ════════════════════════════════════
+   SLIDE ENTER HOOKS
+════════════════════════════════════ */
+function toggleReveal(card) {
+  const body = card.querySelector('.reveal-body');
+  const hint = card.querySelector('.reveal-hint');
+  body.classList.toggle('open');
+  if (hint) hint.textContent = body.classList.contains('open') ? 'Click to hide' : 'Click to reveal';
+}
+
+function revealMystery(idx) {
+  const card = document.getElementById('myst-' + idx);
+  const ans  = document.getElementById('myst-ans-' + idx);
+  const btn  = card.querySelector('.mystery-btn');
+  ans.classList.toggle('open');
+  card.classList.toggle('solved', ans.classList.contains('open'));
+  btn.textContent = ans.classList.contains('open') ? '🔒 Hide Answer' : '🔍 Reveal Answer';
+}
+
+function onSlideEnter(idx) {
+  if (idx === 10) {  // S1 Quiz (slide-s1quiz)
+    s1qIdx = 0; s1Score = 0; s1answered = false; s1LoadQuestion();
+  }
+  if (idx === 18) {  // S2 Quiz (slide-s2quiz)
+    s2qIdx = 0; s2Score = 0; s2answered = false; s2LoadQuestion();
+  }
+  if (idx === 26) {  // S3 Quiz (slide-16)
+    qIndex = 0; quizScore = 0; answered = false; loadQuestion();
+  }
+}
+</script>
+
+<!-- ============================================================
+     Bee Quiz Data — Chapter A-2 (seq #3): Solids, Liquids, and Gases
+     Version: 1 (Gemini APPROVED WITH MINOR FIXES, all applied 2026-04-27)
+     Source spec: wiki/tools/bee-quiz-generation-spec.md
+     Reviewer: wiki/tools/gemini-review-prompt.md (v3, Beprep strategy chat)
+     ============================================================ -->
+<script type="application/json" id="bee-quiz-data">
+{
+  "chapter": "A-2",
+  "seq": 3,
+  "topic": "Solids, Liquids, and Gases",
+  "source_url": "https://shelikag-ops.github.io/Solids-Liquids/",
+  "bee_quiz": [
+    {
+      "id": 1,
+      "category": "vocab",
+      "difficulty": "easy",
+      "question": "The state of matter that flows and pours and takes the shape of its container is called what?",
+      "choices": {
+        "a": "gas",
+        "b": "flowing solid",
+        "c": "plasma",
+        "d": "liquid"
+      },
+      "correct": "d",
+      "distractor_strategy": "half-right"
+    },
+    {
+      "id": 2,
+      "category": "vocab",
+      "difficulty": "medium",
+      "question": "Anything that has weight and takes up space is given the science name of what?",
+      "choices": {
+        "a": "matter",
+        "b": "energy",
+        "c": "volume",
+        "d": "substance"
+      },
+      "correct": "a",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 3,
+      "category": "vocab",
+      "difficulty": "easy",
+      "question": "The change from solid to liquid when heat is added is called what?",
+      "choices": {
+        "a": "burning",
+        "b": "freezing",
+        "c": "heating",
+        "d": "melting"
+      },
+      "correct": "d",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 4,
+      "category": "recall",
+      "difficulty": "medium",
+      "question": "In the metric system used by scientists, the unit for measuring how hot or cold water is is called what?",
+      "choices": {
+        "a": "Degrees Fahrenheit",
+        "b": "Degrees Celsius",
+        "c": "Grams",
+        "d": "Litres"
+      },
+      "correct": "b",
+      "distractor_strategy": "half-right"
+    },
+    {
+      "id": 5,
+      "category": "recall",
+      "difficulty": "easy",
+      "question": "The state of matter that spreads out completely to fill any container is called a what?",
+      "choices": {
+        "a": "liquid",
+        "b": "solid",
+        "c": "gas",
+        "d": "spreading liquid"
+      },
+      "correct": "c",
+      "distractor_strategy": "half-right"
+    },
+    {
+      "id": 6,
+      "category": "recall",
+      "difficulty": "medium",
+      "question": "Teeth, bones, and nails inside your body are all examples of which state of matter?",
+      "choices": {
+        "a": "liquid",
+        "b": "gas",
+        "c": "solid",
+        "d": "energy"
+      },
+      "correct": "c",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 7,
+      "category": "misconception",
+      "difficulty": "medium",
+      "question": "A candle flame has no weight and takes up no space, so a flame is best described as what?",
+      "choices": {
+        "a": "a hot solid",
+        "b": "a tiny liquid",
+        "c": "a form of energy, not matter",
+        "d": "a kind of gas"
+      },
+      "correct": "c",
+      "distractor_strategy": "common-misconception",
+      "misconception_targeted": "Flames look physical so kids assume they are matter — but flame is light + heat, which is energy, not matter."
+    },
+    {
+      "id": 8,
+      "category": "misconception",
+      "difficulty": "medium",
+      "question": "A bag of sugar pours just like a liquid, but according to the chapter sugar is best classified as what?",
+      "choices": {
+        "a": "a flowing liquid",
+        "b": "a solid",
+        "c": "a gas",
+        "d": "a special liquid"
+      },
+      "correct": "b",
+      "distractor_strategy": "common-misconception",
+      "misconception_targeted": "Sugar pours and flows, so kids assume it is a liquid — but each grain keeps its own shape, making it a solid."
+    },
+    {
+      "id": 9,
+      "category": "misconception",
+      "difficulty": "hard",
+      "question": "Ice melts and can refreeze, but when wood is burned the wood does what?",
+      "choices": {
+        "a": "cannot return to its original shape",
+        "b": "becomes a colder solid",
+        "c": "turns into invisible water",
+        "d": "stays exactly the same"
+      },
+      "correct": "a",
+      "distractor_strategy": "common-misconception",
+      "misconception_targeted": "Kids assume melting and burning are the same kind of change — but melting is reversible and burning is not."
+    },
+    {
+      "id": 10,
+      "category": "sequence",
+      "difficulty": "easy",
+      "question": "Heating water goes through these states in order: ice (solid) → ? → steam (gas). The middle step is what?",
+      "choices": {
+        "a": "ice",
+        "b": "liquid water",
+        "c": "gas",
+        "d": "frozen vapour"
+      },
+      "correct": "b",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 11,
+      "category": "sequence",
+      "difficulty": "medium",
+      "question": "If you seal a sample of each state inside a jar, which one will always expand to touch every part of the jar's inside?",
+      "choices": {
+        "a": "solid",
+        "b": "liquid",
+        "c": "none of them",
+        "d": "gas"
+      },
+      "correct": "d",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 12,
+      "category": "sequence",
+      "difficulty": "easy",
+      "question": "An ice lolly melts faster on a hot day than on a cool day. Melting happens FASTER on which day?",
+      "choices": {
+        "a": "the cool day",
+        "b": "the hot day",
+        "c": "both are the same",
+        "d": "it depends on the lolly's colour"
+      },
+      "correct": "b",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 13,
+      "category": "negative-selection",
+      "difficulty": "medium",
+      "question": "Which of these is **NOT** matter?",
+      "choices": {
+        "a": "a rock",
+        "b": "a glass of water",
+        "c": "a candle flame",
+        "d": "the air in a balloon"
+      },
+      "correct": "c",
+      "distractor_strategy": "common-misconception"
+    },
+    {
+      "id": 14,
+      "category": "negative-selection",
+      "difficulty": "medium",
+      "question": "Which of these is **NOT** a property of liquids, according to the chapter?",
+      "choices": {
+        "a": "keeps its own shape with no container",
+        "b": "flows and pours",
+        "c": "takes the shape of its container",
+        "d": "you can see how full the container is"
+      },
+      "correct": "a",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 15,
+      "category": "negative-selection",
+      "difficulty": "easy",
+      "question": "Which of these is **NOT** one of the three states of matter taught in this chapter?",
+      "choices": {
+        "a": "solid",
+        "b": "liquid",
+        "c": "energy",
+        "d": "gas"
+      },
+      "correct": "c",
+      "distractor_strategy": "common-misconception"
+    }
+  ],
+  "word_cards": [
+    {
+      "word": "Matter",
+      "definition": "Anything that has weight and takes up space — almost everything you can touch.",
+      "example": "A rock, a glass of water, and the air inside a balloon are all this.",
+      "emoji": "⚖️",
+      "difficulty": "medium"
+    },
+    {
+      "word": "Solid",
+      "definition": "A form of matter that keeps its own shape and does not need a container.",
+      "example": "A book, a coin, and an ice cube — set them on a table and they stay put.",
+      "emoji": "🪨",
+      "difficulty": "easy"
+    },
+    {
+      "word": "Liquid",
+      "definition": "A form of matter that flows and pours and takes the shape of whatever is holding it.",
+      "example": "Water in a glass is glass-shaped. Pour it into a bowl and it becomes bowl-shaped.",
+      "emoji": "💧",
+      "difficulty": "easy"
+    },
+    {
+      "word": "Gas",
+      "definition": "A form of matter that spreads out and fills any container all the way.",
+      "example": "Blow up a balloon — the air inside fills every corner of the rubber skin.",
+      "emoji": "💨",
+      "difficulty": "easy"
+    },
+    {
+      "word": "Melting",
+      "definition": "When a solid is warmed up so much that it changes into a liquid.",
+      "example": "An ice cube on a warm table slowly turns into a puddle of water.",
+      "emoji": "🫠",
+      "difficulty": "medium"
+    },
+    {
+      "word": "Freezing",
+      "definition": "When a liquid is cooled down so much that it changes into a solid.",
+      "example": "Hot lava from a volcano slowly cools at the surface and turns into hard rock — that's the same kind of change.",
+      "emoji": "🧊",
+      "difficulty": "medium"
+    },
+    {
+      "word": "Evaporation",
+      "definition": "When a liquid slowly changes into a gas that floats away into the air.",
+      "example": "A wet cloth hung in the sun gets dry — the water did not vanish; it gently became an invisible gas.",
+      "emoji": "💦",
+      "difficulty": "hard"
+    },
+    {
+      "word": "Condensation",
+      "definition": "When a gas turns back into tiny drops of liquid, usually because it touched something cold.",
+      "example": "Breathe onto a cold window and a foggy patch of water drops appears.",
+      "emoji": "🌫️",
+      "difficulty": "hard"
+    },
+    {
+      "word": "Energy",
+      "definition": "A kind of 'stuff' that has no weight and takes up no space — like light, heat, and sound.",
+      "example": "A candle flame and the warmth from the sun are both this, not matter.",
+      "emoji": "⚡",
+      "difficulty": "medium"
+    },
+    {
+      "word": "Reversible",
+      "definition": "A change that can be undone to get back what you started with.",
+      "example": "Ice melts to water, and you can re-freeze the water back to ice — that's a change you can undo.",
+      "emoji": "🔄",
+      "difficulty": "medium"
+    }
+  ]
+}
+</script>
+
+</body>
+</html>

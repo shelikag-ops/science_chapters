@@ -1,0 +1,312 @@
+diff --git a/chapter-d1-gravity-1.html b/chapter-d1-gravity-1.html
+index e3dfe98..53e981f 100644
+--- a/chapter-d1-gravity-1.html
++++ b/chapter-d1-gravity-1.html
+@@ -215,4 +215,306 @@ document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='
+ function showToast(msg){let t=document.getElementById('toast');if(!t){t=document.createElement('div');t.id='toast';t.style.cssText='position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 22px;border-radius:999px;font-weight:700;z-index:200;';document.body.appendChild(t);}t.textContent=msg;setTimeout(()=>t.style.opacity='0',2800);}
+ showSlide(1);renderHomework();applyTeacherMode();
+ document.addEventListener('keydown',e=>{if(!document.getElementById('panel-lesson').classList.contains('active'))return;if(e.target.matches('input, textarea'))return;if(e.key==='ArrowRight')nextSlide();if(e.key==='ArrowLeft')prevSlide();});
+-</script></body></html>
++</script>
++<!-- ============================================================
++     Bee Quiz Data — Chapter D-1 (seq #5): Gravity I
++     Version: 1 (auto-pilot — Gemini round-trip pending)
++     Source spec: wiki/tools/bee-quiz-generation-spec.md
++     ============================================================ -->
++<script type="application/json" id="bee-quiz-data">
++{
++  "chapter": "D-1",
++  "seq": 5,
++  "topic": "Gravity I — Why Things Fall Down",
++  "source_file": "chapter-d1-gravity-1.html",
++  "bee_quiz": [
++    {
++      "id": 1,
++      "category": "vocab",
++      "difficulty": "easy",
++      "question": "The invisible force that pulls every object with mass toward every other object with mass is called what?",
++      "choices": {
++        "a": "tension",
++        "b": "gravity",
++        "c": "friction",
++        "d": "momentum"
++      },
++      "correct": "b",
++      "distractor_strategy": "plausible"
++    },
++    {
++      "id": 2,
++      "category": "vocab",
++      "difficulty": "medium",
++      "question": "The curving path of the Moon as it travels around Earth is called what?",
++      "choices": {
++        "a": "orbit",
++        "b": "trajectory",
++        "c": "revolution",
++        "d": "orbital ring"
++      },
++      "correct": "a",
++      "distractor_strategy": "half-right"
++    },
++    {
++      "id": 3,
++      "category": "vocab",
++      "difficulty": "medium",
++      "question": "The amount of stuff (matter) inside an object is called its what?",
++      "choices": {
++        "a": "mass",
++        "b": "weight",
++        "c": "gravity",
++        "d": "volume"
++      },
++      "correct": "a",
++      "distractor_strategy": "plausible"
++    },
++    {
++      "id": 4,
++      "category": "recall",
++      "difficulty": "medium",
++      "question": "The metric system unit used to measure how much mass an object has is called what?",
++      "choices": {
++        "a": "kilogram",
++        "b": "gram",
++        "c": "litre",
++        "d": "kilometre"
++      },
++      "correct": "a",
++      "distractor_strategy": "half-right"
++    },
++    {
++      "id": 5,
++      "category": "recall",
++      "difficulty": "easy",
++      "question": "Roughly what fraction of Earth's gravity does the Moon have?",
++      "choices": {
++        "a": "one half",
++        "b": "one hundredth",
++        "c": "one out of three hundred thousand",
++        "d": "one sixth"
++      },
++      "correct": "d",
++      "distractor_strategy": "plausible"
++    },
++    {
++      "id": 6,
++      "category": "recall",
++      "difficulty": "easy",
++      "question": "An apple falling, rain falling, and a child sliding down a slide are all examples of which force at work?",
++      "choices": {
++        "a": "friction",
++        "b": "gravity",
++        "c": "magnetism",
++        "d": "wind"
++      },
++      "correct": "b",
++      "distractor_strategy": "plausible"
++    },
++    {
++      "id": 7,
++      "category": "misconception",
++      "difficulty": "medium",
++      "question": "Without air, a feather and a hammer dropped from the same height will land when?",
++      "choices": {
++        "a": "the hammer first because it is heavier",
++        "b": "at exactly the same time",
++        "c": "the feather first because it floats",
++        "d": "it depends on the planet"
++      },
++      "correct": "b",
++      "distractor_strategy": "common-misconception",
++      "misconception_targeted": "Heavier objects fall faster — kids assume mass affects falling speed, but in a vacuum all objects fall at the same rate."
++    },
++    {
++      "id": 8,
++      "category": "misconception",
++      "difficulty": "medium",
++      "question": "Astronauts on the ISS appear to float not because gravity is gone but because of what?",
++      "choices": {
++        "a": "gravity is much weaker that high up",
++        "b": "air pushes them up",
++        "c": "magnets in their suits",
++        "d": "they and their station are falling around Earth together"
++      },
++      "correct": "d",
++      "distractor_strategy": "common-misconception",
++      "misconception_targeted": "Kids think astronauts float because there is no gravity in space — but the ISS is only 400 km up; they're actually in free-fall."
++    },
++    {
++      "id": 9,
++      "category": "misconception",
++      "difficulty": "medium",
++      "question": "On the Moon, your body has the same matter as on Earth but you weigh less. The thing that changed is what?",
++      "choices": {
++        "a": "your body's mass got smaller",
++        "b": "gravity has disappeared",
++        "c": "the Moon's gravity is weaker than Earth's",
++        "d": "the Moon has less air resistance"
++      },
++      "correct": "c",
++      "distractor_strategy": "half-right",
++      "misconception_targeted": "Kids confuse mass with weight — moving to the Moon doesn't change mass, only weight (which depends on gravity)."
++    },
++    {
++      "id": 10,
++      "category": "sequence",
++      "difficulty": "medium",
++      "question": "From STRONGEST gravity to weakest, the chapter compares Sun, Jupiter, Earth, and Moon in what order?",
++      "choices": {
++        "a": "Sun, Jupiter, Earth, Moon",
++        "b": "Earth, Sun, Jupiter, Moon",
++        "c": "Sun, Earth, Jupiter, Moon",
++        "d": "all four are equal"
++      },
++      "correct": "a",
++      "distractor_strategy": "plausible"
++    },
++    {
++      "id": 11,
++      "category": "sequence",
++      "difficulty": "easy",
++      "question": "A roller-coaster drop, a bottle falling out of your hand, and astronauts in the ISS are all examples of what?",
++      "choices": {
++        "a": "anti-gravity",
++        "b": "magnetic levitation",
++        "c": "air pressure lifting",
++        "d": "free-fall"
++      },
++      "correct": "d",
++      "distractor_strategy": "plausible"
++    },
++    {
++      "id": 12,
++      "category": "sequence",
++      "difficulty": "easy",
++      "question": "Earth completes one full orbit around the Sun about how often?",
++      "choices": {
++        "a": "once a day",
++        "b": "once a month",
++        "c": "once a year",
++        "d": "once a decade"
++      },
++      "correct": "c",
++      "distractor_strategy": "plausible"
++    },
++    {
++      "id": 13,
++      "category": "negative-selection",
++      "difficulty": "medium",
++      "question": "Which of these is **NOT** something the chapter says gravity does?",
++      "choices": {
++        "a": "holds the air around our planet",
++        "b": "keeps the Moon orbiting Earth",
++        "c": "gives your body weight",
++        "d": "makes things invisible to our eyes"
++      },
++      "correct": "d",
++      "distractor_strategy": "plausible"
++    },
++    {
++      "id": 14,
++      "category": "negative-selection",
++      "difficulty": "medium",
++      "question": "Which of these is **NOT** true about the difference between MASS and WEIGHT?",
++      "choices": {
++        "a": "mass changes when you visit the Moon while weight stays the same",
++        "b": "mass measures matter; weight measures gravity's pull on it",
++        "c": "weight depends on which planet you are on",
++        "d": "mass does not change between Earth and the Moon"
++      },
++      "correct": "a",
++      "distractor_strategy": "common-misconception"
++    },
++    {
++      "id": 15,
++      "category": "negative-selection",
++      "difficulty": "easy",
++      "question": "Which of these is **NOT** what causes air to slow a falling object?",
++      "choices": {
++        "a": "the surface area of the object",
++        "b": "the colour of the object",
++        "c": "the shape of the object",
++        "d": "how thick the air is"
++      },
++      "correct": "b",
++      "distractor_strategy": "plausible"
++    }
++  ],
++  "word_cards": [
++    {
++      "word": "Gravity",
++      "definition": "An invisible pulling force that exists between every two things that have matter.",
++      "example": "When you drop a pencil, this force pulls it down toward the centre of the Earth.",
++      "emoji": "⬇️",
++      "difficulty": "easy"
++    },
++    {
++      "word": "Mass",
++      "definition": "The amount of stuff (matter) packed inside an object — does not change if you go to the Moon.",
++      "example": "A 30 kg child has 30 kg of body whether they are on Earth, the Moon, or floating in space.",
++      "emoji": "🧱",
++      "difficulty": "medium"
++    },
++    {
++      "word": "Weight",
++      "definition": "How hard gravity is pulling on an object — changes depending on which planet or moon you are on.",
++      "example": "A 30 kg child weighs about 30 kg on Earth but only 5 kg on the Moon, even though their body is the same.",
++      "emoji": "⚖️",
++      "difficulty": "medium"
++    },
++    {
++      "word": "Force",
++      "definition": "A push or a pull that can make something move, slow down, speed up, or change direction.",
++      "example": "Throwing a ball is a push; pulling a wagon is a pull; both are this.",
++      "emoji": "💪",
++      "difficulty": "easy"
++    },
++    {
++      "word": "Orbit",
++      "definition": "A curving path that one object follows as it goes around another, larger object.",
++      "example": "The Moon traces a giant circle around Earth once each month — that is the path it follows.",
++      "emoji": "🪐",
++      "difficulty": "medium"
++    },
++    {
++      "word": "Free-fall",
++      "definition": "When an object is falling and the only force acting on it is gravity.",
++      "example": "On a roller-coaster drop, for a split second nothing else holds you up — that is what astronauts feel all the time.",
++      "emoji": "🎢",
++      "difficulty": "hard"
++    },
++    {
++      "word": "Air resistance",
++      "definition": "The force of the air pushing back on an object as it moves through it, slowing it down.",
++      "example": "A flat sheet of paper drifts down slowly, but a crumpled ball drops fast because there is less surface for the air to push on.",
++      "emoji": "🪶",
++      "difficulty": "medium"
++    },
++    {
++      "word": "Vacuum",
++      "definition": "A space with no air or any other matter inside it.",
++      "example": "Astronauts on the Moon proved that a feather and a hammer fall at the same time when there is no air around them.",
++      "emoji": "🌌",
++      "difficulty": "hard"
++    },
++    {
++      "word": "Kilogram (kg)",
++      "definition": "The metric unit scientists use to measure how much matter is inside an object.",
++      "example": "A small dog weighing about 5 of these is the same size of body whether it is on Earth or on the Moon.",
++      "emoji": "⚖️",
++      "difficulty": "medium"
++    },
++    {
++      "word": "Newton (Isaac)",
++      "definition": "The famous English scientist who first explained how gravity works.",
++      "example": "An apple is said to have fallen near him, and he wondered if the same pull worked on the Moon — and he was right.",
++      "emoji": "🍎",
++      "difficulty": "medium"
++    }
++  ]
++}
++</script>
++
++</body></html>

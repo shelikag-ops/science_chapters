@@ -1,0 +1,308 @@
+{
+  "chapter": "b3",
+  "topic": "The Plant & Animal Kingdoms",
+  "bee_quiz": [
+    {
+      "id": 1,
+      "category": "vocab",
+      "difficulty": "easy",
+      "question": "The two big groups scientists use to sort all living things on Earth are called what?",
+      "choices": {
+        "a": "families",
+        "b": "kingdoms",
+        "c": "sections",
+        "d": "categories"
+      },
+      "correct": "b",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 2,
+      "category": "vocab",
+      "difficulty": "medium",
+      "question": "The process plants use to turn sunlight, air, and water into their own food is called what?",
+      "choices": {
+        "a": "photosynthesis",
+        "b": "photoreception",
+        "c": "digestion",
+        "d": "respiration"
+      },
+      "correct": "a",
+      "distractor_strategy": "half-right"
+    },
+    {
+      "id": 3,
+      "category": "vocab",
+      "difficulty": "medium",
+      "question": "A mushroom growing in a cave is best classified as a member of which group?",
+      "choices": {
+        "a": "Fungus Kingdom",
+        "b": "Plant Kingdom",
+        "c": "Animal Kingdom",
+        "d": "Fungus Family"
+      },
+      "correct": "a",
+      "distractor_strategy": "half-right"
+    },
+    {
+      "id": 4,
+      "category": "recall",
+      "difficulty": "easy",
+      "question": "The body part every animal in the Animal Kingdom has, no matter how strange the animal looks, is a what?",
+      "choices": {
+        "a": "eye",
+        "b": "leg",
+        "c": "brain",
+        "d": "mouth"
+      },
+      "correct": "d",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 5,
+      "category": "recall",
+      "difficulty": "medium",
+      "question": "The original source of the energy used by every living thing on Earth is what?",
+      "choices": {
+        "a": "the soil",
+        "b": "the wind",
+        "c": "ocean water",
+        "d": "the Sun"
+      },
+      "correct": "d",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 6,
+      "category": "recall",
+      "difficulty": "easy",
+      "question": "The one substance that every living thing on Earth must have to stay alive is what?",
+      "choices": {
+        "a": "sugar",
+        "b": "water",
+        "c": "air",
+        "d": "salt"
+      },
+      "correct": "b",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 7,
+      "category": "misconception",
+      "difficulty": "medium",
+      "question": "Most of a plant's body is actually built from which two things?",
+      "choices": {
+        "a": "soil and water",
+        "b": "plant food and water",
+        "c": "air and water",
+        "d": "air and soil"
+      },
+      "correct": "c",
+      "distractor_strategy": "common-misconception",
+      "misconception_targeted": "Plants eat soil — kids think a plant's body is built from the dirt it grows in, not from air and water."
+    },
+    {
+      "id": 8,
+      "category": "misconception",
+      "difficulty": "medium",
+      "question": "A coral on a reef is best classified as a member of which kingdom?",
+      "choices": {
+        "a": "Plant Kingdom",
+        "b": "Animal Kingdom",
+        "c": "Fungus Kingdom",
+        "d": "Mineral Kingdom"
+      },
+      "correct": "b",
+      "distractor_strategy": "common-misconception",
+      "misconception_targeted": "Coral looks plant-like or rock-like, so kids assume it isn't an animal — but coral has a mouth and eats other living things."
+    },
+    {
+      "id": 9,
+      "category": "misconception",
+      "difficulty": "hard",
+      "question": "A bag at the store labeled 'Plant Food' is more accurately called what?",
+      "choices": {
+        "a": "plant fuel",
+        "b": "plant sugar",
+        "c": "plant fertilizer",
+        "d": "plant fiber"
+      },
+      "correct": "c",
+      "distractor_strategy": "half-right",
+      "misconception_targeted": "Kids assume a bag labeled 'Plant Food' is the plant's food — but it's minerals (a fertilizer) with no energy in it. The Burn Test proves real plant food is sunlight, air, and water."
+    },
+    {
+      "id": 10,
+      "category": "sequence",
+      "difficulty": "medium",
+      "question": "In the energy chain Sun → grass → cow → wolf, the wolf occupies which step?",
+      "choices": {
+        "a": "the first step",
+        "b": "the second step",
+        "c": "the third step",
+        "d": "the fourth step"
+      },
+      "correct": "d",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 11,
+      "category": "sequence",
+      "difficulty": "medium",
+      "question": "Plants are called the 'producers' of food, so the animals that eat the plants are called the what?",
+      "choices": {
+        "a": "constructors",
+        "b": "producers",
+        "c": "consumers",
+        "d": "reducers"
+      },
+      "correct": "c",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 12,
+      "category": "sequence",
+      "difficulty": "easy",
+      "question": "Tracing a pizza back to its energy source, the very last step — the original source — is what?",
+      "choices": {
+        "a": "the Sun",
+        "b": "the cow",
+        "c": "the wheat",
+        "d": "the cheese"
+      },
+      "correct": "a",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 13,
+      "category": "negative-selection",
+      "difficulty": "medium",
+      "question": "Which of the following is NOT a member of the Plant Kingdom?",
+      "choices": {
+        "a": "moss",
+        "b": "jellyfish",
+        "c": "cactus",
+        "d": "pine tree"
+      },
+      "correct": "b",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 14,
+      "category": "negative-selection",
+      "difficulty": "medium",
+      "question": "Which of the following is NOT something that every animal has?",
+      "choices": {
+        "a": "legs",
+        "b": "a mouth",
+        "c": "a way to take in food",
+        "d": "the ability to eat other living things"
+      },
+      "correct": "a",
+      "distractor_strategy": "plausible"
+    },
+    {
+      "id": 15,
+      "category": "negative-selection",
+      "difficulty": "easy",
+      "question": "Which of these is NOT one of the three things a plant needs to make its own food?",
+      "choices": {
+        "a": "sunlight",
+        "b": "air",
+        "c": "soil",
+        "d": "water"
+      },
+      "correct": "c",
+      "distractor_strategy": "common-misconception"
+    }
+  ],
+  "word_cards": [
+    {
+      "word": "Kingdom",
+      "definition": "One of the very big groups scientists use to sort all the living things in the world.",
+      "example": "Tigers, ants, and people are all on the Animal team. Trees, ferns, and grass are on the Plant team.",
+      "emoji": "👑",
+      "difficulty": "easy"
+    },
+    {
+      "word": "Photosynthesis",
+      "definition": "How a plant makes its own food by mixing sunlight, air, and water inside its leaves.",
+      "example": "A blade of grass uses sunlight to build its body — that's why grass turns yellow if you cover it with a board for a week.",
+      "emoji": "🌞🍃",
+      "difficulty": "hard"
+    },
+    {
+      "word": "Producer",
+      "definition": "A living thing that makes its own food using sunlight. These living things are at the start of every food chain.",
+      "example": "A tomato plant in the garden builds its whole body from sunlight, air, and water.",
+      "emoji": "🌱",
+      "difficulty": "medium"
+    },
+    {
+      "word": "Consumer",
+      "definition": "A living thing that has to eat other living things to get its energy.",
+      "example": "A wolf, a deer, a worm, and you — none of you can build food from sunlight, so you all eat to live.",
+      "emoji": "🍽",
+      "difficulty": "medium"
+    },
+    {
+      "word": "Vertebrate",
+      "definition": "An animal that has a backbone — a row of bones running down its back.",
+      "example": "A dog, a fish, a bird, and you all have a spine inside.",
+      "emoji": "🦴",
+      "difficulty": "medium"
+    },
+    {
+      "word": "Invertebrate",
+      "definition": "An animal that does NOT have a backbone inside its body.",
+      "example": "A worm, a jellyfish, an octopus, and a butterfly all have no spine.",
+      "emoji": "🪱",
+      "difficulty": "medium"
+    },
+    {
+      "word": "Carbon dioxide",
+      "definition": "An invisible gas in the air that plants pull in through their leaves to build their bodies.",
+      "example": "When you breathe out, you let out this gas — and a leaf right next to your mouth could grab it to grow.",
+      "emoji": "💨",
+      "difficulty": "hard"
+    },
+    {
+      "word": "Fertilizer",
+      "definition": "A bag of minerals that helps plants grow better, but it is NOT the plant's food and has no energy inside.",
+      "example": "Sprinkling it on soil is like giving a plant a vitamin — helpful, but not lunch.",
+      "emoji": "🧂",
+      "difficulty": "medium"
+    },
+    {
+      "word": "Fungus",
+      "definition": "A living thing that is not a plant and not an animal — it gets food by breaking down dead stuff around it.",
+      "example": "A mushroom on a forest floor and moldy bread on the kitchen counter are both in this group.",
+      "emoji": "🍄",
+      "difficulty": "medium"
+    },
+    {
+      "word": "Energy",
+      "definition": "The hidden power that makes things move, grow, glow, or get warm.",
+      "example": "The power in your legs that lets you run came from breakfast — and breakfast's power started in the sun.",
+      "emoji": "⚡",
+      "difficulty": "easy"
+    }
+  ],
+  "_self_check": {
+    "category_counts": { "vocab": 3, "recall": 3, "misconception": 3, "sequence": 3, "negative-selection": 3 },
+    "half_right_count": 3,
+    "half_right_question_ids": [2, 3, 9],
+    "example_to_category_count": 2,
+    "example_to_category_question_ids": [3, 8],
+    "rear_loaded_non_neg_count": 12,
+    "rear_loaded_non_neg_total": 12,
+    "instrument_or_unit_required": false,
+    "instrument_or_unit_reason": "Chapter has no measurement content (no temperatures, masses, volumes, distances, or instruments mentioned)",
+    "correct_answer_position_counts": { "a": 4, "b": 4, "c": 4, "d": 3 },
+    "longest_stem_word_count": 21,
+    "word_card_count": 10,
+    "all_stems_under_25_words": true,
+    "no_word_in_own_definition": true,
+    "no_harder_synonyms_in_definitions": true
+  }
+}

@@ -1,0 +1,340 @@
+From 6ddd151822bcf4f918575434ae04e2cde2bc8e18 Mon Sep 17 00:00:00 2001
+From: Shell <shelikagupta@gmail.com>
+Date: Mon, 27 Apr 2026 15:21:28 +0000
+Subject: [PATCH] A-3 v2 bee-quiz: embed Gemini-approved quiz JSON
+
+Apply Beprep strategy Gemini review (verdict: APPROVED WITH MINOR FIXES, all applied):
+- 15 MCQs (3 each: vocab/recall/misconception/sequence/negative-selection)
+- 10 word cards
+- Q3: example-to-category framing (bicycle-tire example)
+- Q11: removed colour distractor; replaced with weight-comparison
+- Q12: clean Gemini rewrite (popped/heavier/hotter/lighter)
+- Air card: 'stuff' replaced with 'gases'
+- Air pressure / Air resistance cards: rewritten to remove self-reference
+
+Distribution: a:3 b:4 c:5 d:3. Half-right: Q1,Q4,Q5. Example-to-category: Q3,Q6.
+Buzzer-rear-loaded: 12/12. Instrument: Q5 (balance, the chapter's actual demo tool).
+
+Spec: wiki/tools/bee-quiz-generation-spec.md
+Reviewer prompt: wiki/tools/gemini-review-prompt.md (v3)
+Reviewed in: Science Bee Prep Strategy and Feedback (Gemini)
+---
+ chapter-a3-air-substance.html | 305 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 304 insertions(+), 1 deletion(-)
+
+diff --git a/chapter-a3-air-substance.html b/chapter-a3-air-substance.html
+index 6713bdc..a786626 100644
+--- a/chapter-a3-air-substance.html
++++ b/chapter-a3-air-substance.html
+@@ -211,4 +211,307 @@ document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='
+ function showToast(msg){let t=document.getElementById('toast');if(!t){t=document.createElement('div');t.id='toast';t.style.cssText='position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 22px;border-radius:999px;font-weight:700;z-index:200;';document.body.appendChild(t);}t.textContent=msg;setTimeout(()=>t.style.opacity='0',2800);}
+ showSlide(1);renderHomework();applyTeacherMode();
+ document.addEventListener('keydown',e=>{if(!document.getElementById('panel-lesson').classList.contains('active'))return;if(e.target.matches('input, textarea'))return;if(e.key==='ArrowRight')nextSlide();if(e.key==='ArrowLeft')prevSlide();});
+-</script></body></html>
++</script>
++<!-- ============================================================
++     Bee Quiz Data — Chapter A-3 (seq #4): Air Is a Substance
++     Version: 2 (Gemini APPROVED WITH MINOR FIXES, all applied 2026-04-27)
++     Source spec: wiki/tools/bee-quiz-generation-spec.md
++     Reviewer: wiki/tools/gemini-review-prompt.md (v3, Beprep strategy chat)
++     ============================================================ -->
++<script type="application/json" id="bee-quiz-data">
++{
++  "chapter": "A-3",
++  "seq": 4,
++  "topic": "Air Is a Substance",
++  "source_file": "chapter-a3-air-substance.html",
++  "bee_quiz": [
++    {
++      "id": 1,
++      "category": "vocab",
++      "difficulty": "easy",
++      "question": "The pushing force that air puts on objects all around us is called what?",
++      "choices": {
++        "a": "air pressure",
++        "b": "air weight",
++        "c": "air gravity",
++        "d": "air motion"
++      },
++      "correct": "a",
++      "distractor_strategy": "half-right"
++    },
++    {
++      "id": 2,
++      "category": "vocab",
++      "difficulty": "medium",
++      "question": "The blanket of air that surrounds Earth and lets us breathe is called the what?",
++      "choices": {
++        "a": "hemisphere",
++        "b": "atmosphere",
++        "c": "stratosphere",
++        "d": "sphere"
++      },
++      "correct": "b",
++      "distractor_strategy": "plausible"
++    },
++    {
++      "id": 3,
++      "category": "vocab",
++      "difficulty": "medium",
++      "question": "Air squeezed tightly inside a bicycle tire is an example of air being what?",
++      "choices": {
++        "a": "heated",
++        "b": "released",
++        "c": "cooled",
++        "d": "compressed"
++      },
++      "correct": "d",
++      "distractor_strategy": "plausible"
++    },
++    {
++      "id": 4,
++      "category": "recall",
++      "difficulty": "medium",
++      "question": "In the cup-in-water trick, the paper towel inside the cup stays dry because air did what?",
++      "choices": {
++        "a": "absorbed the water",
++        "b": "heated up the water",
++        "c": "weighed down the water",
++        "d": "took up space and blocked water from entering"
++      },
++      "correct": "d",
++      "distractor_strategy": "half-right"
++    },
++    {
++      "id": 5,
++      "category": "recall",
++      "difficulty": "medium",
++      "question": "To prove air has weight using two balloons, scientists in the chapter used a what?",
++      "choices": {
++        "a": "thermometer",
++        "b": "clock balance",
++        "c": "balance",
++        "d": "measuring tape"
++      },
++      "correct": "c",
++      "distractor_strategy": "half-right"
++    },
++    {
++      "id": 6,
++      "category": "recall",
++      "difficulty": "medium",
++      "question": "A parachute slowing your fall is an example of which property of air?",
++      "choices": {
++        "a": "air's weight",
++        "b": "air's heat",
++        "c": "air's resistance to movement",
++        "d": "air's invisibility"
++      },
++      "correct": "c",
++      "distractor_strategy": "plausible"
++    },
++    {
++      "id": 7,
++      "category": "misconception",
++      "difficulty": "medium",
++      "question": "Some people think air is just empty space. According to the chapter, air is actually what?",
++      "choices": {
++        "a": "only a feeling on your skin",
++        "b": "a real substance with weight and that takes up space",
++        "c": "only wind",
++        "d": "made of light"
++      },
++      "correct": "b",
++      "distractor_strategy": "common-misconception",
++      "misconception_targeted": "Air feels like nothing, so kids assume it's empty space — but it has weight, takes space, and pushes on things."
++    },
++    {
++      "id": 8,
++      "category": "misconception",
++      "difficulty": "medium",
++      "question": "A drink rises through a straw not because you 'pulled' it but because of what?",
++      "choices": {
++        "a": "gravity reversing",
++        "b": "the drink getting lighter",
++        "c": "air pressure outside the cup pushing the drink up",
++        "d": "the straw squeezing the drink"
++      },
++      "correct": "c",
++      "distractor_strategy": "common-misconception",
++      "misconception_targeted": "Kids think sucking pulls the drink — actually outside air pressure pushes the drink up because you removed the air inside the straw."
++    },
++    {
++      "id": 9,
++      "category": "misconception",
++      "difficulty": "medium",
++      "question": "A parachute slows a falling person not because the parachute is heavy but because of what?",
++      "choices": {
++        "a": "air pushing back against the parachute",
++        "b": "gravity getting weaker high up",
++        "c": "the parachute being slippery",
++        "d": "the person getting lighter"
++      },
++      "correct": "a",
++      "distractor_strategy": "common-misconception",
++      "misconception_targeted": "Kids assume a parachute helps because of its weight — but the real cause is air pushing back on the wide surface."
++    },
++    {
++      "id": 10,
++      "category": "sequence",
++      "difficulty": "medium",
++      "question": "In a hot-air balloon the order of events is: the air is heated → the air does what → the balloon rises?",
++      "choices": {
++        "a": "freezes solid",
++        "b": "escapes through the fabric",
++        "c": "expands and becomes lighter",
++        "d": "gets heavier"
++      },
++      "correct": "c",
++      "distractor_strategy": "plausible"
++    },
++    {
++      "id": 11,
++      "category": "sequence",
++      "difficulty": "easy",
++      "question": "With a parachute on, you fall slowly. Without one, you fall fast. Falling SLOWER happens in which case?",
++      "choices": {
++        "a": "without the parachute",
++        "b": "if the parachute is heavier than the person",
++        "c": "both cases fall at the same speed",
++        "d": "with the parachute"
++      },
++      "correct": "d",
++      "distractor_strategy": "plausible"
++    },
++    {
++      "id": 12,
++      "category": "sequence",
++      "difficulty": "easy",
++      "question": "On the two-balloon balance, the side that sinks DOWN toward the ground is the side that is what?",
++      "choices": {
++        "a": "popped",
++        "b": "heavier",
++        "c": "hotter",
++        "d": "lighter"
++      },
++      "correct": "b",
++      "distractor_strategy": "plausible"
++    },
++    {
++      "id": 13,
++      "category": "negative-selection",
++      "difficulty": "medium",
++      "question": "Which of these is **NOT** a property of air, according to the chapter?",
++      "choices": {
++        "a": "air takes up space",
++        "b": "air can be seen with your eyes normally",
++        "c": "air has weight",
++        "d": "air pushes on things"
++      },
++      "correct": "b",
++      "distractor_strategy": "common-misconception"
++    },
++    {
++      "id": 14,
++      "category": "negative-selection",
++      "difficulty": "medium",
++      "question": "Which of these is **NOT** something the chapter says air does?",
++      "choices": {
++        "a": "creates rocks on the ground",
++        "b": "carries sounds and smells",
++        "c": "can be heated and expand",
++        "d": "holds up airplanes"
++      },
++      "correct": "a",
++      "distractor_strategy": "plausible"
++    },
++    {
++      "id": 15,
++      "category": "negative-selection",
++      "difficulty": "easy",
++      "question": "Which of these is **NOT** a place where you would normally find air?",
++      "choices": {
++        "a": "inside a balloon",
++        "b": "in your lungs",
++        "c": "in outer space far from Earth",
++        "d": "in a bicycle tire"
++      },
++      "correct": "c",
++      "distractor_strategy": "common-misconception"
++    }
++  ],
++  "word_cards": [
++    {
++      "word": "Air",
++      "definition": "The mix of invisible gases all around us that we breathe — it has weight and takes up space.",
++      "example": "Blow into a balloon and the balloon swells — that's the same gases you're breathing right now.",
++      "emoji": "💨",
++      "difficulty": "easy"
++    },
++    {
++      "word": "Atmosphere",
++      "definition": "The blanket of breathable gases that wraps around our planet Earth.",
++      "example": "Astronauts leave this blanket when they fly to space, which is why their suits carry oxygen.",
++      "emoji": "🌍",
++      "difficulty": "medium"
++    },
++    {
++      "word": "Air pressure",
++      "definition": "The force that the invisible gases all around us put on every surface they touch.",
++      "example": "Sucking on a straw lets the outside push do the real work — your drink rises because of this.",
++      "emoji": "🌬️",
++      "difficulty": "medium"
++    },
++    {
++      "word": "Compressed",
++      "definition": "Squeezed into a smaller space than it normally takes up.",
++      "example": "The hard rubber on a bicycle tire is full of squeezed-tight gas — that's what makes it bouncy.",
++      "emoji": "🛞",
++      "difficulty": "medium"
++    },
++    {
++      "word": "Substance",
++      "definition": "A real thing in the world that has weight and takes up space.",
++      "example": "Water, rock, and air are each one of these — they are all real, not nothing.",
++      "emoji": "🪨",
++      "difficulty": "medium"
++    },
++    {
++      "word": "Air resistance",
++      "definition": "The force that pushes back against a moving object and slows it down as it travels through it.",
++      "example": "A parachute opens wide so MORE pushing-back happens, and the person falls slowly.",
++      "emoji": "🪂",
++      "difficulty": "medium"
++    },
++    {
++      "word": "Vacuum",
++      "definition": "A space with no air (or any other gas) in it at all.",
++      "example": "Outer space, far from any planet, is mostly this — sound cannot travel there because sound needs air to carry it.",
++      "emoji": "🚀",
++      "difficulty": "hard"
++    },
++    {
++      "word": "Balance",
++      "definition": "A simple tool that compares the weight of two things by hanging them on either side of a stick.",
++      "example": "Tie a full balloon and a popped balloon to a stick — the full side hangs lower because it's heavier.",
++      "emoji": "⚖️",
++      "difficulty": "medium"
++    },
++    {
++      "word": "Weight",
++      "definition": "How heavy something is — the pull of Earth's gravity on it.",
++      "example": "A full bag of air is a tiny bit heavier than the same bag empty.",
++      "emoji": "🏋️",
++      "difficulty": "easy"
++    },
++    {
++      "word": "Wind",
++      "definition": "Air that is moving through the world from one place to another.",
++      "example": "On a stormy day you can FEEL the air pushing on your jacket — that's the same thing happening.",
++      "emoji": "🌬️",
++      "difficulty": "easy"
++    }
++  ]
++}
++</script>
++
++</body></html>
+-- 
+2.34.1
+
