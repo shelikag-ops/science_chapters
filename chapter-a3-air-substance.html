@@ -197,7 +197,7 @@ function nextQ(){if(quizIndex<QUIZ.length-1){quizIndex++;renderQuizNav();renderQ
 function skipQ(){if(quizFinished)return;if(!quizAnswers[quizIndex])quizSkipped.add(quizIndex);if(quizIndex<QUIZ.length-1)quizIndex++;renderQuizNav();renderQ();}
 function flagQ(){if(quizFlags.has(quizIndex))quizFlags.delete(quizIndex);else quizFlags.add(quizIndex);renderQuizNav();renderQ();}
 function confirmFinishQuiz(){const u=[];for(let i=0;i<QUIZ.length;i++)if(!quizAnswers[i])u.push(i+1);let h='<p>Finish?</p>';if(u.length)h+=`<p class="small">⚠️ ${u.length} unanswered</p>`;openModal('🏁 Finish?',h,[{label:'Yes',cls:'btn success',onClick:'finishQuiz()'},{label:'Not yet',cls:'btn ghost',onClick:'closeModal()'}]);}
-async function finishQuiz(){closeModal();quizFinished=true;const n=document.getElementById('quiz-student-name').value.trim();const list=QUIZ.map((q,i)=>({q:q.q,...(quizAnswers[i]||{unanswered:true}),flagged:quizFlags.has(i)}));const auto=list.filter(a=>typeof a.correct==='boolean');const ac=auto.filter(a=>a.correct).length;const oc=list.filter(a=>a.correct===null).length;const p={type:'quiz',chapter:'A-3',student:n,ts:new Date().toISOString(),autoCorrect:ac,autoTotal:auto.length,openCount:oc,answers:list};submissions.push(p);localStorage.setItem(PFX+'submissions',JSON.stringify(submissions));let sent=false;if(settings.webhookUrl)try{const r=await fetch(settings.webhookUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});sent=r.ok;}catch(e){}const pct=auto.length?Math.round((ac/auto.length)*100):0;document.getElementById('quizArea').classList.add('hide');document.getElementById('quizResult').classList.remove('hide');const msg=pct===100?'🌟 PERFECT!':pct>=85?'🚀 Amazing!':pct>=70?'👏 Great!':pct>=50?'💪 Good!':'🌱 Keep going!';const emailLink=(!sent&&settings.teacherEmail)?`<a class="btn secondary" href="mailto:${settings.teacherEmail}?subject=${encodeURIComponent('Quiz A-3 from '+n)}&body=${encodeURIComponent(JSON.stringify(p,null,2))}">📧 Email</a>`:'';document.getElementById('quizResult').innerHTML=`<div class="quiz-result"><h2>${msg}</h2><div class="score-donut" style="--p:${pct}"><span>${ac}/${auto.length}</span></div>${oc?`<p>Plus ${oc} open answers.</p>`:''}<div class="submit-row" style="justify-content:center;">${emailLink}<button class="btn" onclick="reviewAnswers()">🔍 Review answers</button><button class="btn ghost" onclick="location.reload()">🔁 Retake</button></div></div>`;}
+async function finishQuiz(){closeModal();quizFinished=true;const n=document.getElementById('quiz-student-name').value.trim();const list=QUIZ.map((q,i)=>{const ex=quizAnswers[i]||{unanswered:true};const kind=(ex.type==='open'||ex.type==='experiment')?'open':(ex.type==='fill'?'fill':'mcq');return{qid:i,q:q.q,kind,...ex,flagged:quizFlags.has(i),skipped:quizSkipped.has(i)};});const auto=list.filter(a=>typeof a.correct==='boolean');const ac=auto.filter(a=>a.correct).length;const oc=list.filter(a=>a.correct===null).length;const p={type:'quiz',chapter:'A-3',student:n,ts:new Date().toISOString(),autoCorrect:ac,autoTotal:auto.length,openCount:oc,answers:list};const pct=auto.length?Math.round((ac/auto.length)*100):0;document.getElementById('quizArea').classList.add('hide');document.getElementById('quizResult').classList.remove('hide');const msg=pct===100?'🌟 PERFECT!':pct>=85?'🚀 Amazing!':pct>=70?'👏 Great!':pct>=50?'💪 Good!':'🌱 Keep going!';document.getElementById('quizResult').innerHTML=`<div class="quiz-result"><h2>${msg}</h2><div class="score-donut" style="--p:${pct}"><span>${ac}/${auto.length}</span></div>${oc?`<p>Plus ${oc} open answers — getting AI feedback…</p>`:''}<div class="submit-row" style="justify-content:center;flex-wrap:wrap;"><button class="btn" onclick="reviewAnswers()">🔍 Review answers</button><button class="btn secondary" onclick="ChapterSync.openPrintReport()">📄 Print feedback report</button><button class="btn ghost" onclick="location.reload()">🔁 Retake</button></div></div>`;ChapterSync.submitFinal(p);}
 function reviewAnswers(){document.getElementById('quizResult').classList.add('hide');document.getElementById('quizArea').classList.remove('hide');renderQuizLayout();}
 function backToScore(){document.getElementById('quizArea').classList.add('hide');document.getElementById('quizResult').classList.remove('hide');}
 function renderTeacher(){document.getElementById('apiKey').value=localStorage.getItem(PFX+'apiKey')||'';document.getElementById('apiStatus').textContent=localStorage.getItem(PFX+'apiKey')?'✓ Saved':'';document.getElementById('teacherEmail').value=settings.teacherEmail||'';document.getElementById('webhookUrl').value=settings.webhookUrl||'';const d=document.getElementById('submissionsTable');if(!submissions.length)d.innerHTML='<p class="small">None yet.</p>';else d.innerHTML='<table class="submissions-table"><tr><th>When</th><th>Student</th><th>Type</th><th>Result</th></tr>'+submissions.map(s=>`<tr><td>${new Date(s.ts).toLocaleString()}</td><td>${s.student||'?'}</td><td>${s.type}</td><td>${s.type==='quiz'?s.autoCorrect+'/'+s.autoTotal:Object.values(s.answers||{}).filter(Boolean).length+' ans'}</td></tr>`).join('')+'</table>';}
@@ -211,6 +211,373 @@ document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='
 function showToast(msg){let t=document.getElementById('toast');if(!t){t=document.createElement('div');t.id='toast';t.style.cssText='position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 22px;border-radius:999px;font-weight:700;z-index:200;';document.body.appendChild(t);}t.textContent=msg;setTimeout(()=>t.style.opacity='0',2800);}
 showSlide(1);renderHomework();applyTeacherMode();
 document.addEventListener('keydown',e=>{if(!document.getElementById('panel-lesson').classList.contains('active'))return;if(e.target.matches('input, textarea'))return;if(e.key==='ArrowRight')nextSlide();if(e.key==='ArrowLeft')prevSlide();});
+
+/* ============================================================
+ * ChapterSync — cross-device sync, mid-quiz autosave,
+ * AI-graded per-question feedback, and printable PDF report.
+ * Backed by anthropic-proxy Worker /chapter-quiz endpoints.
+ * Falls back gracefully to localStorage when offline.
+ * ============================================================ */
+const ChapterSync = (function(){
+  const CHAPTER_ID = 'a3';
+  const CHAPTER_TITLE = 'A-3: Air Is a Substance';
+  const WORKER_BASE = 'https://anthropic-proxy.shelikag.workers.dev';
+  const AUTOSAVE_DEBOUNCE_MS = 1500;
+  let autosaveTimer = null;
+  let lastRowId = null;
+  let pendingPoll = null;
+  let cachedAttempts = [];
+
+  function studentName(){
+    const el = document.getElementById('quiz-student-name');
+    return (el && el.value && el.value.trim()) || localStorage.getItem(PFX+'student') || '';
+  }
+  function setStatus(state, label){
+    let pill = document.getElementById('syncPill');
+    if(!pill){
+      pill = document.createElement('div');
+      pill.id = 'syncPill';
+      pill.style.cssText = 'position:fixed;bottom:14px;right:14px;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:700;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.12);';
+      document.body.appendChild(pill);
+    }
+    const colors = {
+      synced: '#16a34a', saving: '#ca8a04', offline: '#dc2626',
+      evaluating: '#7c3aed', idle: '#64748b'
+    };
+    pill.style.background = colors[state] || '#64748b';
+    pill.style.color = '#fff';
+    pill.textContent = label;
+    pill.dataset.state = state;
+  }
+
+  async function fetchAttempts(){
+    const student = studentName();
+    if(!student) return [];
+    try {
+      const r = await fetch(`${WORKER_BASE}/chapter-quiz?student=${encodeURIComponent(student)}&chapter=${CHAPTER_ID}`);
+      if(!r.ok) return [];
+      const d = await r.json();
+      cachedAttempts = d.attempts || [];
+      return cachedAttempts;
+    } catch(_){ return []; }
+  }
+
+  async function fetchInProgress(){
+    const student = studentName();
+    if(!student) return null;
+    try {
+      const r = await fetch(`${WORKER_BASE}/chapter-quiz/inprogress?student=${encodeURIComponent(student)}&chapter=${CHAPTER_ID}`);
+      if(!r.ok) return null;
+      return await r.json();
+    } catch(_){ return null; }
+  }
+
+  function snapshotState(){
+    return {
+      quizAnswers,
+      quizFlags: Array.from(quizFlags),
+      quizHintsRevealed,
+      quizSkipped: Array.from(quizSkipped),
+      currentIndex: quizIndex,
+      lastEdited: new Date().toISOString(),
+      device: navigator.userAgent.slice(0, 100),
+    };
+  }
+  function restoreState(s){
+    if(!s || s.empty) return false;
+    quizAnswers = s.quizAnswers || {};
+    quizFlags = new Set(s.quizFlags || []);
+    quizHintsRevealed = s.quizHintsRevealed || {};
+    quizSkipped = new Set(s.quizSkipped || []);
+    quizIndex = s.currentIndex || 0;
+    return true;
+  }
+
+  function scheduleAutosave(){
+    if(quizFinished || !quizStarted) return;
+    setStatus('saving', '🟡 Saving…');
+    clearTimeout(autosaveTimer);
+    autosaveTimer = setTimeout(async ()=>{
+      const student = studentName();
+      if(!student) { setStatus('offline', '🔴 Offline (saved locally)'); return; }
+      // Local fallback first — never lose data
+      try { localStorage.setItem(PFX+'inprogress', JSON.stringify(snapshotState())); } catch(_){ }
+      try {
+        const r = await fetch(`${WORKER_BASE}/chapter-quiz/inprogress`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ student, chapter: CHAPTER_ID, state: snapshotState() }),
+        });
+        setStatus(r.ok ? 'synced' : 'offline', r.ok ? '🟢 Synced' : '🔴 Offline (saved locally)');
+      } catch(_){ setStatus('offline', '🔴 Offline (saved locally)'); }
+    }, AUTOSAVE_DEBOUNCE_MS);
+  }
+
+  async function checkResume(){
+    const student = studentName();
+    if(!student) return;
+    localStorage.setItem(PFX+'student', student);
+    const remote = await fetchInProgress();
+    const local = (()=>{ try { return JSON.parse(localStorage.getItem(PFX+'inprogress')||'null'); } catch(_){ return null; }})();
+    const slot = (remote && !remote.empty) ? remote.state : local;
+    if(slot && Object.keys(slot.quizAnswers||{}).length){
+      const answered = Object.keys(slot.quizAnswers).length;
+      const when = slot.lastEdited ? new Date(slot.lastEdited).toLocaleString() : 'recently';
+      const yes = confirm(`Resume your in-progress attempt?\n\nLast saved: ${when}\nProgress: ${answered}/${QUIZ.length} answered\n\n[OK] Resume   [Cancel] Start fresh`);
+      if(yes){
+        restoreState(slot);
+        renderQuizLayout();
+        setStatus('synced', '🟢 Resumed');
+        return;
+      }
+    }
+    setStatus('synced', '🟢 Synced');
+  }
+
+  async function submitFinal(payload){
+    const student = studentName();
+    setStatus('saving', '🟡 Submitting…');
+    // localStorage fallback always
+    try {
+      submissions.push(payload);
+      localStorage.setItem(PFX+'submissions', JSON.stringify(submissions));
+    } catch(_){ }
+    try {
+      const r = await fetch(`${WORKER_BASE}/chapter-quiz`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ student, chapter: CHAPTER_ID, type: 'quiz', payload }),
+      });
+      if(!r.ok){ setStatus('offline', '🔴 Saved locally — sync failed'); return null; }
+      const data = await r.json();
+      lastRowId = data.id;
+      // Clear in-progress slot client-side (server clears too)
+      try { localStorage.removeItem(PFX+'inprogress'); } catch(_){ }
+      if(payload.openCount > 0){
+        setStatus('evaluating', '🟣 Grading open answers…');
+        pollForEval();
+      } else {
+        setStatus('synced', '🟢 Submitted');
+      }
+      return data;
+    } catch(_){ setStatus('offline', '🔴 Saved locally — sync failed'); return null; }
+  }
+
+  async function pollForEval(){
+    if(!lastRowId) return;
+    let tries = 0;
+    const maxTries = 30; // ~60s at 2s interval
+    clearInterval(pendingPoll);
+    pendingPoll = setInterval(async ()=>{
+      tries++;
+      const list = await fetchAttempts();
+      const row = list.find(a => a.id === lastRowId);
+      if(row && row.aiStatus === 'evaluated'){
+        clearInterval(pendingPoll);
+        setStatus('synced', '🟢 Feedback ready');
+        showFeedbackInResult(row);
+      } else if(row && row.aiStatus === 'error'){
+        clearInterval(pendingPoll);
+        setStatus('offline', '🔴 Grading failed');
+      } else if(tries >= maxTries){
+        clearInterval(pendingPoll);
+        setStatus('offline', '🟡 Grading taking longer — check back later');
+      }
+    }, 2000);
+  }
+
+  function showFeedbackInResult(row){
+    const result = document.getElementById('quizResult');
+    if(!result) return;
+    let answers = []; let summary = {};
+    try { answers = JSON.parse(row.answersJSON || '[]'); } catch(_){ }
+    try { summary = JSON.parse(row.aiEvaluation || '{}'); } catch(_){ }
+    const openItems = answers.filter(a => a.ai);
+    const fbBlock = openItems.length ? `
+      <div class="ai-feedback-block" style="margin-top:24px;padding:18px;background:#faf5ff;border:2px solid #c4b5fd;border-radius:14px;text-align:left;">
+        <h3 style="margin-top:0;">✨ Feedback on your open answers</h3>
+        ${openItems.map(a=>`
+          <div style="margin:14px 0;padding:12px;background:#fff;border-radius:10px;">
+            <div style="font-weight:700;color:#5b21b6;">${a.q}</div>
+            <div style="margin:8px 0;font-style:italic;color:#475569;">Your answer: "${a.answer || ''}"</div>
+            <div style="margin:8px 0;color:#7c3aed;font-weight:600;">Score: ${'⭐'.repeat(a.ai.score||0)}${'☆'.repeat(3-(a.ai.score||0))}</div>
+            <div style="background:#f0fdf4;padding:8px;border-radius:6px;color:#166534;">💬 ${a.ai.comment_for_sarah||''}</div>
+          </div>`).join('')}
+        ${summary.overall_summary ? `<div style="margin-top:16px;padding:12px;background:#eff6ff;border-radius:10px;"><b>📋 Overall:</b> ${summary.overall_summary}</div>` : ''}
+        ${summary.three_things_to_revisit && summary.three_things_to_revisit.length ? `<div style="margin-top:8px;"><b>📚 Three things to revisit:</b><ul>${summary.three_things_to_revisit.map(t=>`<li>${t}</li>`).join('')}</ul></div>` : ''}
+      </div>`: '';
+    const existingFb = result.querySelector('.ai-feedback-block');
+    if(existingFb) existingFb.remove();
+    if(fbBlock) result.querySelector('.quiz-result').insertAdjacentHTML('beforeend', fbBlock);
+  }
+
+  // ========= Print-to-PDF feedback report =========
+  async function openPrintReport(){
+    setStatus('saving', '🟡 Loading report…');
+    const student = studentName() || 'Sarah';
+    const attempts = await fetchAttempts();
+    const evaluated = attempts.filter(a => a.aiStatus === 'evaluated');
+    const reportHtml = buildReportHtml(student, evaluated);
+    let host = document.getElementById('printHost');
+    if(!host){
+      host = document.createElement('div');
+      host.id = 'printHost';
+      document.body.appendChild(host);
+    }
+    host.innerHTML = reportHtml;
+    setStatus('synced', '🟢 Report ready');
+    setTimeout(()=>window.print(), 250);
+  }
+
+  function buildReportHtml(student, attempts){
+    if(!attempts.length){
+      return `<div class="print-report"><h1>${CHAPTER_TITLE} — Feedback Report</h1><p>No completed attempts yet for ${student}. Finish a quiz first.</p></div>`;
+    }
+    return `<div class="print-report">
+      <header>
+        <h1>${CHAPTER_TITLE}</h1>
+        <h2>Feedback Report for ${student}</h2>
+        <p class="meta">Generated ${new Date().toLocaleString()} · ${attempts.length} attempt${attempts.length>1?'s':''}</p>
+      </header>
+      ${attempts.map((row, idx) => renderAttempt(row, idx+1)).join('')}
+      <footer><p>Sarah Homeschooling · BFSU Science Chapters · 2027 NSB prep</p></footer>
+    </div>`;
+  }
+
+  function renderAttempt(row, n){
+    let answers = []; let summary = {};
+    try { answers = JSON.parse(row.answersJSON || '[]'); } catch(_){ }
+    try { summary = JSON.parse(row.aiEvaluation || '{}'); } catch(_){ }
+    const date = row.date || (row.syncedAt ? row.syncedAt.slice(0,10) : '—');
+    return `<section class="attempt">
+      <h3>Attempt ${n} — ${date}</h3>
+      <div class="score-row">
+        <span class="badge"><b>Auto-graded:</b> ${row.autoScore}/${row.autoTotal} (${row.percent}%)</span>
+        ${row.openCount ? `<span class="badge open"><b>Open answers:</b> ${row.openCount}</span>` : ''}
+        ${summary.ready_to_advance !== undefined ? `<span class="badge ${summary.ready_to_advance?'ready':'review'}">${summary.ready_to_advance?'✓ Ready to advance':'↻ Needs review'}</span>` : ''}
+      </div>
+      ${summary.overall_summary ? `<div class="summary"><b>Overall:</b> ${summary.overall_summary}</div>` : ''}
+      ${summary.three_things_to_revisit && summary.three_things_to_revisit.length ? `<div class="revisit"><b>Three things to revisit:</b><ol>${summary.three_things_to_revisit.map(t=>`<li>${t}</li>`).join('')}</ol></div>` : ''}
+      <h4>Per-question detail</h4>
+      ${answers.map((a, i)=> renderAnswerRow(a, i+1)).join('')}
+    </section>`;
+  }
+
+  function renderAnswerRow(a, n){
+    // Determine question kind + Sarah's answer text (never reveal correct answer)
+    const kind = a.kind || (a.type === 'open' || a.type === 'experiment' ? 'open' : a.type === 'fill' ? 'fill' : 'mcq');
+    const isOpen = kind === 'open';
+    const isFill = kind === 'fill';
+    const wasAttempted = !a.unanswered && (a.selected !== undefined || a.raw !== undefined || a.answer !== undefined);
+
+    let studentAns, statusLabel, statusCls;
+    if (a.unanswered && a.skipped) { studentAns = '(skipped)';        statusLabel = '⊘ Skipped';     statusCls = 'skip'; }
+    else if (a.unanswered)         { studentAns = '(not attempted)';  statusLabel = '— Not attempted'; statusCls = 'skip'; }
+    else if (isOpen)               { studentAns = a.answer || '(blank)';                       statusLabel = '◯ Open answer';  statusCls = 'open'; }
+    else if (isFill)               { studentAns = a.raw || '(blank)';
+      statusLabel = a.correct === true ? '✓ Submitted' : a.correct === false ? '✗ Submitted' : '— Submitted';
+      statusCls = a.correct === true ? 'right' : a.correct === false ? 'wrong' : 'skip';
+    }
+    else /* MCQ */ {
+      const letter = (typeof a.selected === 'number') ? String.fromCharCode(65 + a.selected) : '?';
+      studentAns = `Choice ${letter}`;
+      statusLabel = a.correct === true ? '✓ Submitted' : a.correct === false ? '✗ Submitted' : '— Submitted';
+      statusCls = a.correct === true ? 'right' : a.correct === false ? 'wrong' : 'skip';
+    }
+
+    let aiBlock = '';
+    if (isOpen && a.ai) {
+      const stars = '★'.repeat(a.ai.score||0) + '☆'.repeat(3-(a.ai.score||0));
+      aiBlock = `<div class="ai">
+        <div><b>AI score:</b> <span class="stars">${stars}</span></div>
+        ${a.ai.strengths ? `<div><b>Strengths:</b> ${a.ai.strengths}</div>` : ''}
+        ${a.ai.gaps ? `<div><b>Gaps:</b> ${a.ai.gaps}</div>` : ''}
+        ${a.ai.misconception_flag ? `<div class="misconception"><b>⚠️ Misconception:</b> ${a.ai.misconception_flag}</div>` : ''}
+        ${a.ai.comment_for_sarah ? `<div class="forsarah"><b>For Sarah:</b> ${a.ai.comment_for_sarah}</div>` : ''}
+      </div>`;
+    }
+    const flag = a.flagged ? ' <span class="flag">🚩 flagged for review</span>' : '';
+    return `<div class="qrow">
+      <div class="q"><span class="verdict ${statusCls}">${statusLabel}</span> <b>Q${n}.</b> ${a.q || '(question text not stored)'}${flag}</div>
+      <div class="ans"><b>Sarah's answer:</b> ${studentAns}</div>
+      ${aiBlock}
+    </div>`;
+  }
+
+  function injectPrintCss(){
+    if(document.getElementById('chapterSyncPrintCss')) return;
+    const css = document.createElement('style');
+    css.id = 'chapterSyncPrintCss';
+    css.textContent = `
+      #printHost { display: none; }
+      @media print {
+        body > *:not(#printHost) { display: none !important; }
+        #printHost { display: block !important; padding: 0; }
+        .print-report { font-family: Georgia, serif; color: #1f2937; max-width: 760px; margin: 0 auto; }
+        .print-report header { border-bottom: 3px solid #5b21b6; padding-bottom: 12px; margin-bottom: 18px; }
+        .print-report h1 { color: #5b21b6; margin: 0 0 4px; font-size: 26px; }
+        .print-report h2 { color: #475569; margin: 0 0 6px; font-size: 18px; font-weight: normal; }
+        .print-report .meta { color: #94a3b8; font-size: 12px; margin: 0; }
+        .print-report section.attempt { page-break-after: always; padding: 14px 0; }
+        .print-report section.attempt:last-of-type { page-break-after: auto; }
+        .print-report h3 { color: #1e293b; border-bottom: 1px solid #e5e7eb; padding-bottom: 4px; }
+        .print-report h4 { color: #334155; margin-top: 18px; }
+        .print-report .score-row { margin: 8px 0 14px; display: flex; gap: 10px; flex-wrap: wrap; }
+        .print-report .badge { padding: 4px 10px; border-radius: 999px; background: #f1f5f9; font-size: 12px; }
+        .print-report .badge.open { background: #f3e8ff; color: #6b21a8; }
+        .print-report .badge.ready { background: #dcfce7; color: #166534; }
+        .print-report .badge.review { background: #fef3c7; color: #92400e; }
+        .print-report .summary { background: #eff6ff; padding: 10px; border-left: 3px solid #3b82f6; margin: 10px 0; font-size: 13px; }
+        .print-report .revisit { background: #fefce8; padding: 10px; border-left: 3px solid #eab308; margin: 10px 0; font-size: 13px; }
+        .print-report .qrow { margin: 12px 0; padding: 10px; border: 1px solid #e5e7eb; border-radius: 6px; page-break-inside: avoid; font-size: 13px; }
+        .print-report .qrow .q { font-weight: 600; margin-bottom: 6px; }
+        .print-report .qrow .ans { color: #475569; margin-bottom: 6px; font-style: italic; }
+        .print-report .qrow .ai { background: #faf5ff; padding: 8px; border-radius: 4px; font-size: 12px; }
+        .print-report .qrow .ai > div { margin: 3px 0; }
+        .print-report .qrow .ai .misconception { color: #b91c1c; }
+        .print-report .qrow .ai .forsarah { background: #f0fdf4; padding: 6px; border-radius: 4px; color: #166534; margin-top: 4px; }
+        .print-report .verdict { display: inline-block; width: 18px; text-align: center; font-weight: 700; }
+        .print-report .verdict.right { color: #16a34a; }
+        .print-report .verdict.wrong { color: #dc2626; }
+        .print-report .verdict.open { color: #7c3aed; }
+        .print-report .verdict.skip { color: #64748b; font-style: italic; }
+        .print-report .flag { color: #ca8a04; font-size: 11px; font-weight: normal; margin-left: 6px; }
+        .print-report .stars { color: #ca8a04; letter-spacing: 2px; }
+        .print-report footer { margin-top: 24px; border-top: 1px solid #e5e7eb; padding-top: 8px; color: #94a3b8; font-size: 11px; text-align: center; }
+        @page { margin: 0.6in; }
+      }
+    `;
+    document.head.appendChild(css);
+  }
+
+  // ========= Wire-up: monkey-patch mutators for autosave =========
+  function wireAutosave(){
+    ['pick','subFill','subOpen','revealHint','skipQ','flagQ'].forEach(fn=>{
+      const orig = window[fn];
+      if(typeof orig !== 'function') return;
+      window[fn] = function(...args){
+        const r = orig.apply(this, args);
+        try { scheduleAutosave(); } catch(_){ }
+        return r;
+      };
+    });
+    const origStart = window.startQuiz;
+    window.startQuiz = function(...args){
+      const r = origStart.apply(this, args);
+      setTimeout(()=>checkResume(), 80);
+      return r;
+    };
+  }
+
+  function init(){
+    injectPrintCss();
+    wireAutosave();
+    setStatus('idle', '⚪ Ready');
+  }
+
+  return { init, scheduleAutosave, submitFinal, openPrintReport, fetchAttempts, setStatus };
+})();
+ChapterSync.init();
 </script>
 <!-- ============================================================
      Bee Quiz Data — Chapter A-3 (seq #4): Air Is a Substance
