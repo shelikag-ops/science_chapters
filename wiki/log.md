@@ -76,6 +76,21 @@ Session note `sessions/2026-04-29.md` filed to capture the multi-day arc: bee pl
 
 Shell asked to verify the wiki is structured per Karpathy's gist (`gist.github.com/karpathy/442a6bf555914893e9891c11519de94f`). Confirmed: the project's wiki has been built on this pattern since the Apr 25 bootstrap. All three layers (raw sources, wiki, CLAUDE.md schema), all three operations (Ingest/Query/Lint), and both special files (index.md, log.md with `## [YYYY-MM-DD] kind | title` prefix) are in place.
 
+## [2026-04-29] ingest | First Gemini review pass complete — BDK approved with minor fixes
+
+Drove Gemini in Chrome (logged-in account, Fast model) using the v3 reviewer prompt + condensed BDK source content + the v1 JSON. Verdict: **APPROVED WITH MINOR FIXES**. Five real fixes applied to produce v2 of `bee-content/01-bdk.json`:
+1. Position rebalance (Q1 c→a, Q10 c→d) — fixes C-overrepresentation
+2. Q6 replaced (cherry-picking → Some is NOT All) — closes coverage gap on Tool #5
+3. Q9 stem shortened (25→21 words)
+4. "Threat" word card reworded to avoid concept-circular framing
+5. "Independent Test" card simplified for 3rd-grade language
+
+One Gemini suggestion skipped — lowercase NOT/EXCEPT in Q13-15. Misread of the v3 spec which requires capitalization for buzzer visibility; root cause was my condensed prompt wording. Lesson: future reviews should paste the full wiki version of the rule, not abbreviated.
+
+Full review archived at `wiki/sources/2026-04-29-gemini-review-bdk.md`. v1 → v2 history embedded in the JSON's `review_history` array.
+
+Production-line validation: ✅ The two-LLM loop works. Ready to scale to remaining 40 chapters.
+
 ## [2026-04-29] ingest | First chapter through the bee-quiz production line — BDK
 
 Generated bee quiz JSON for chapter 1 (Baloney Detection Kit, sequence #1 in the project's chapter ordering — `index.html` line 212). Source content fetched directly from `shelikag-ops.github.io/Baloney-Detection-Kit/` via curl since the microsite isn't a local file.
