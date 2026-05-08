@@ -6,7 +6,8 @@
   "topic": "Critical thinking — Carl Sagan's Baloney Detection Kit, adapted for 3rd grade as 8 Detective Tools",
   "framework_version": "v3 (5 categories × 3 + cross-cutting rules)",
   "generated": "2026-04-29",
-  "review_status": "pending Gemini review",
+  "review_status": "APPROVED WITH MINOR FIXES (Gemini, 2026-04-29) — fixes applied in v2",
+  "version": "v2",
   "bee_quiz": [
     {
       "id": 1,
@@ -14,12 +15,12 @@
       "difficulty": "easy",
       "question": "Saying \"How do you know that?\" before believing a claim is using which detective tool?",
       "choices": {
-        "a": "Coincidence Trap",
-        "b": "Cherry-Pick Alert",
-        "c": "Show Me The Evidence!",
+        "a": "Show Me The Evidence!",
+        "b": "Coincidence Trap",
+        "c": "Cherry-Pick Alert",
         "d": "Some is NOT All"
       },
-      "correct": "c",
+      "correct": "a",
       "distractor_strategy": "plausible"
     },
     {
@@ -82,15 +83,16 @@
       "id": 6,
       "category": "recall",
       "difficulty": "medium",
-      "question": "Showing only the evidence that supports your side and hiding the rest is called what?",
+      "question": "Trying 3 strawberries from one shop and calling all strawberries sour breaks which detective rule?",
       "choices": {
-        "a": "cherry-picking",
-        "b": "coincidence",
-        "c": "hearsay",
-        "d": "ad hominem"
+        "a": "Cherry-Pick Alert",
+        "b": "Some is NOT All",
+        "c": "Hearsay",
+        "d": "Coincidence Trap"
       },
-      "correct": "a",
-      "distractor_strategy": "plausible"
+      "correct": "b",
+      "distractor_strategy": "plausible",
+      "_note": "Replaces v1's cherry-picking question per Gemini coverage-gap finding (Tool #5 was defined but never tested)."
     },
     {
       "id": 7,
@@ -126,7 +128,7 @@
       "id": 9,
       "category": "misconception",
       "difficulty": "hard",
-      "question": "An advert says \"9 out of 10 dentists recommend BrightSmile!\" — but they tested 200 dentists. The smartest question to ask is:",
+      "question": "An advert says \"9 of 10 dentists recommend BrightSmile!\" but they tested 200. The smartest question to ask is:",
       "choices": {
         "a": "Are dentists usually right?",
         "b": "What did the other 190 dentists say?",
@@ -145,10 +147,10 @@
       "choices": {
         "a": "Your best friend told you so",
         "b": "An advert says it on TV",
-        "c": "Many independent scientists tested it and got the same result",
-        "d": "Lots of people on the internet agree"
+        "c": "Lots of people on the internet agree",
+        "d": "Many independent scientists tested it and got the same result"
       },
-      "correct": "c",
+      "correct": "d",
       "distractor_strategy": "plausible"
     },
     {
@@ -274,7 +276,7 @@
     },
     {
       "word": "Independent Test",
-      "definition": "When different people or scientists check the same thing on their own. If they all get the same answer, the proof is much stronger.",
+      "definition": "When different people check the same idea on their own. If everyone gets the same answer, the idea is likely true.",
       "example": "Three labs in three different countries each test a medicine and all find the same result.",
       "emoji": "🔬",
       "difficulty": "hard"
@@ -288,19 +290,37 @@
     },
     {
       "word": "Threat (as a trick)",
-      "definition": "When someone says \"bad things will happen if you don't believe me\" or \"good things if you do.\" That's a fear-or-bribery trick — not real proof.",
-      "example": "\"Share this with 20 friends or BAD THINGS will happen!\" Real claims don't need threats.",
+      "definition": "Telling someone that bad luck or scary things will happen unless they believe a claim. It's a fear trick, not proof.",
+      "example": "\"Share this with 20 friends or BAD THINGS will happen!\" Real claims don't need fear.",
       "emoji": "⚠️",
       "difficulty": "medium"
     }
   ],
   "self_check": {
     "category_distribution": "3 vocab + 3 recall + 3 misconception + 3 sequence + 3 negative-selection = 15",
-    "half_right_distractors": "Q5 (Coincidence Trap variants), Q11 (Tool #N variants), Q15 (statistic-style distractor) = 3",
+    "half_right_distractors": "Q5, Q11, Q15 = 3 (Q12 is plausible-not-half-right per re-review)",
     "instrument_or_unit": "BDK has no measurement content; rule does not apply",
-    "example_to_category_count": "Q11 + Q12 = 2",
+    "example_to_category_count": "Q6, Q11, Q12 = 3",
     "buzzer_friendly_rear_loaded": "Q1, Q2, Q3, Q4, Q5, Q6, Q12 = 7 of 12 non-negative-selection (≥ half)",
     "max_stem_words": 21,
-    "correct_answer_positions": "a=3, b=3, c=5, d=4 (no position ≥6)"
-  }
+    "correct_answer_positions_v2": "a=3 (Q1,Q3,Q8) | b=4 (Q5,Q6,Q9,Q12) | c=4 (Q4,Q7,Q11,Q13) | d=4 (Q2,Q10,Q14,Q15) — balanced"
+  },
+  "review_history": [
+    {
+      "version": "v1",
+      "date": "2026-04-29",
+      "reviewer": "Gemini Fast (in-Chrome)",
+      "verdict": "APPROVED WITH MINOR FIXES",
+      "fixes_applied": [
+        "Position rebalance: Q1 correct moved c→a, Q10 correct moved c→d",
+        "Q6 replaced: was cherry-picking recall, now Some is NOT All recall (closes coverage gap)",
+        "Q9 stem shortened: 25→21 words",
+        "Threat card: reworded to avoid concept-circular framing",
+        "Independent Test card: simplified definition"
+      ],
+      "fixes_skipped": [
+        "Lowercase NOT/EXCEPT in Q13-15 — Gemini misread the spec; capitalization is required for buzzer visibility per the v3 framework. My condensed prompt was ambiguous; future reviews will use the full wiki version of the rule."
+      ]
+    }
+  ]
 }
