@@ -317,6 +317,59 @@ async function evaluateAttempt(pageId, attempt, env) {
       },
     }),
   });
+
+  // Forward final, AI-enriched attempt to the Apps Script web app
+  // (Sheets + Drive PDF export). Best-effort — failures here don't undo Notion.
+  const autoAnswers = attempt.answers.filter((a) => typeof a.correct === 'boolean');
+  const autoCorrect = autoAnswers.filter((a) => a.correct).length;
+  const autoTotal = autoAnswers.length;
+  const wrongIds = autoAnswers.filter((a) => a.correct === false).map((a) => a.qid).join(',');
+  const percent = autoTotal ? Math.round((autoCorrect / autoTotal) * 100) : 0;
+  const isoDate = (attempt.payload?.ts || new Date().toISOString()).slice(0, 10);
+  await postToAppsScript(
+    {
+      attemptId: pageId,
+      student: attempt.student,
+      chapter: attempt.chapter,
+      type: attempt.type,
+      date: isoDate,
+      autoScore: autoCorrect,
+      autoTotal,
+      openCount: enrichedAnswers.filter((a) => a.ai).length,
+      percent,
+      wrongQuestionIds: wrongIds,
+      answers: enrichedAnswers,
+      aiSummary: evalResult.summary || null,
+      notionUrl: `https://www.notion.so/${String(pageId).replace(/-/g, '')}`,
+    },
+    env
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Apps Script forwarder — Sheets row + Drive PDF
+// ---------------------------------------------------------------------------
+
+async function postToAppsScript(payload, env) {
+  if (!env.APPS_SCRIPT_URL || !env.APPS_SCRIPT_SECRET) {
+    // Not configured — silently skip. Lets the Worker run before Apps Script
+    // is wired up without breaking the Notion path.
+    return;
+  }
+  try {
+    const res = await fetch(env.APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...payload, secret: env.APPS_SCRIPT_SECRET }),
+      // Apps Script web apps follow a 302 to googleusercontent.com on success;
+      // fetch follows redirects by default which is what we want.
+    });
+    if (!res.ok) {
+      console.warn(`Apps Script POST failed: ${res.status}`);
+    }
+  } catch (err) {
+    console.warn(`Apps Script POST threw: ${err.message}`);
+  }
 }
 
 async function patchEvalError(pageId, env, message) {
