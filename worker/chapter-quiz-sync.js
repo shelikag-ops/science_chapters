@@ -206,8 +206,32 @@ async function createAttempt(request, env, ctx) {
 
   // If there are open answers, evaluate asynchronously. ctx.waitUntil keeps the
   // Worker alive for the eval+PATCH cycle without making the chapter app wait.
+  // The Apps Script POST happens at the END of evaluateAttempt so the PDF has
+  // the AI feedback baked in.
   if (openCount > 0) {
     ctx.waitUntil(evaluateAttempt(created.id, { student, chapter, type, answers, payload }, env));
+  } else {
+    // No AI eval needed — forward to Apps Script immediately (best-effort).
+    ctx.waitUntil(
+      postToAppsScript(
+        {
+          attemptId: created.id,
+          student,
+          chapter,
+          type,
+          date: isoDate,
+          autoScore: autoCorrect,
+          autoTotal,
+          openCount,
+          percent,
+          wrongQuestionIds: wrongIds,
+          answers,
+          aiSummary: null,
+          notionUrl: created.url || `https://www.notion.so/${created.id.replace(/-/g, '')}`,
+        },
+        env
+      )
+    );
   }
 
   // Clear the in-progress slot — submission means she's done.
