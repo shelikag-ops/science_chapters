@@ -335,7 +335,8 @@ const ChapterSync = (function(){
   }
 
   async function submitFinal(payload){
-    const student = studentName();
+    const student = payload.student || studentName();
+    const submissionType = payload.type || 'quiz';
     setStatus('saving', '🟡 Submitting…');
     // localStorage fallback always
     try {
@@ -346,7 +347,7 @@ const ChapterSync = (function(){
       const r = await fetch(`${WORKER_BASE}/chapter-quiz`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ student, chapter: CHAPTER_ID, type: 'quiz', payload }),
+        body: JSON.stringify({ student, chapter: CHAPTER_ID, type: submissionType, payload }),
       });
       if(!r.ok){ setStatus('offline', '🔴 Saved locally — sync failed'); return null; }
       const data = await r.json();
