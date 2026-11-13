@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BFSU A-11 · Jiggling Particles: Brownian Motion &amp; Diffusion (v3)</title>
+<style>
+:root{
+  --bg:#faf8f3; --panel:#ffffff; --ink:#1d2433; --muted:#566074; --line:#d9d4c7;
+  --accent:#0f6b6b; --accent-2:#e9f3f2; --dye:#8a2b7a; --dye-soft:#f4e6f1;
+  --good:#1f6f3a; --good-bg:#e5f3e8; --bad:#9a2c1f; --bad-bg:#fbe9e5; --warn-bg:#fff4d6;
+  --o2:#d9730d; --co2:#4a5568; --radius:10px; --fs:17px;
+}
+*{box-sizing:border-box}
+html{font-size:var(--fs)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;line-height:1.5}
+body.hc{--bg:#ffffff;--panel:#ffffff;--ink:#000;--muted:#222;--line:#000;--accent:#004d4d;--accent-2:#dff;--dye:#6a0f5c}
+body.hc .card,body.hc .panel{border-width:2px}
+h1,h2,h3{line-height:1.2;margin:.2em 0 .5em}
+h1{font-size:1.45rem} h2{font-size:1.3rem;color:var(--accent)} h3{font-size:1.08rem}
+p{margin:.45em 0 .7em}
+a{color:var(--accent)}
+button,select,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:1.5px solid var(--accent);background:var(--panel);color:var(--accent);border-radius:8px;padding:.35em .8em;min-height:2.3em}
+button:hover{background:var(--accent-2)}
+button.primary{background:var(--accent);color:#fff}
+button.primary:hover{filter:brightness(1.1)}
+button[disabled]{opacity:.45;cursor:not-allowed}
+button[aria-pressed="true"]{background:var(--accent);color:#fff}
+:focus-visible{outline:3px solid #f0a500;outline-offset:2px}
+textarea{width:100%;min-height:4.5em;border:1.5px solid var(--line);border-radius:8px;padding:.5em;background:#fff;resize:vertical}
+input[type=text],select{border:1.5px solid var(--line);border-radius:6px;padding:.3em .4em;background:#fff}
+header.top{position:sticky;top:0;z-index:20;background:var(--panel);border-bottom:2px solid var(--line);padding:.5rem 1rem}
+.toprow{display:flex;flex-wrap:wrap;gap:.6rem 1rem;align-items:center;justify-content:space-between}
+.brand small{display:block;color:var(--muted);font-size:.78rem}
+.controls{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center}
+.controls button{padding:.25em .6em;min-height:2.1em;font-size:.88rem}
+.progress{display:flex;align-items:center;gap:.5rem;font-size:.88rem}
+.bar{width:150px;height:12px;border:1.5px solid var(--accent);border-radius:8px;overflow:hidden;background:#fff}
+.bar>span{display:block;height:100%;background:var(--accent);width:0}
+nav.tabs{display:flex;flex-wrap:wrap;gap:.3rem;padding:.5rem 1rem;background:var(--bg);border-bottom:1px solid var(--line)}
+nav.tabs button{font-size:.88rem;padding:.25em .7em;min-height:2.1em;border-radius:20px}
+nav.tabs button[aria-selected="true"]{background:var(--accent);color:#fff}
+nav.tabs button .tick{font-weight:700}
+main{max-width:1050px;margin:0 auto;padding:1rem 1rem 4rem}
+body.projector main{max-width:1500px}
+body.projector{--fs:21px}
+body.projector .adult{display:none!important}
+section.tab{display:none}
+section.tab.active{display:block}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:1rem 1.1rem;margin:0 0 1rem}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem}
+@media (max-width:800px){.grid2,.grid3{grid-template-columns:1fr}}
+.callout{border-left:5px solid var(--accent);background:var(--accent-2);padding:.6rem .9rem;border-radius:0 8px 8px 0;margin:.6rem 0}
+.callout.dye{border-color:var(--dye);background:var(--dye-soft)}
+.callout.warn{border-color:#b7791f;background:var(--warn-bg)}
+.tag{display:inline-block;font-size:.75rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;padding:.1em .5em;border-radius:4px;background:var(--accent-2);color:var(--accent);margin-right:.3em}
+.tag.dye{background:var(--dye-soft);color:var(--dye)}
+.time{font-size:.8rem;color:var(--muted);font-weight:600}
+details{border:1px solid var(--line);border-radius:8px;padding:.4rem .8rem;margin:.5rem 0;background:#fff}
+details summary{cursor:pointer;font-weight:650;padding:.2rem 0}
+details.adult{border-style:dashed;border-color:#b7791f;background:#fffdf5}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid var(--line);padding:.35em .45em;text-align:left;vertical-align:top}
+th{background:var(--accent-2);font-size:.88rem}
+td input[type=text]{width:100%}
+.checklist{list-style:none;padding-left:0}
+.checklist li{margin:.25em 0}
+.checklist label{display:flex;gap:.5em;align-items:flex-start;cursor:pointer}
+.checklist input{margin-top:.3em;transform:scale(1.25)}
+.sectionfoot{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:space-between;align-items:center;margin-top:1.2rem;padding-top:.8rem;border-top:1px dashed var(--line)}
+.kbd{font-family:ui-monospace,Menlo,Consolas,monospace;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 .35em;background:#fff;font-size:.85em}
+/* model */
+.modelwrap{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:.8rem}
+.modelwrap:fullscreen{padding:1rem;background:#fff;overflow:auto}
+.modebar,.ctrlbar{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center;margin:.3rem 0 .6rem}
+.ctrlbar label{display:flex;align-items:center;gap:.35em;font-size:.92rem}
+canvas{display:block;width:100%;height:auto;margin:0 auto;border:1.5px solid var(--line);border-radius:8px;background:#fdfdfb;touch-action:none}
+.readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.4rem;margin-top:.6rem}
+.readout div{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:.3rem .5rem;font-size:.9rem}
+.readout b{font-size:1.05rem}
+.legend{font-size:.88rem;color:var(--muted)}
+#mCanvas{width:min(100%, calc(52vh * 900 / 460))}
+body.projector header.top{position:static}
+.modelwrap:fullscreen #mCanvas{width:min(100%, calc(72vh * 900 / 460))}
+.dot{display:inline-block;width:.8em;height:.8em;border-radius:50%;vertical-align:-.05em;margin-right:.2em}
+.sq{display:inline-block;width:.75em;height:.75em;vertical-align:-.05em;margin-right:.2em}
+/* glass */
+.glassrow{display:flex;gap:1rem;flex-wrap:wrap;align-items:flex-end}
+/* cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:.9rem 1rem;display:flex;flex-direction:column}
+.card h3{margin-top:0}
+.card .num{font-size:.78rem;color:var(--muted);font-weight:700;letter-spacing:.05em}
+.opts{list-style:none;padding:0;margin:.4rem 0}
+.opts li{margin:.3rem 0}
+.opts label{display:flex;gap:.55em;align-items:flex-start;border:1.5px solid var(--line);border-radius:8px;padding:.45em .6em;cursor:pointer;background:#fff}
+.opts label:hover{border-color:var(--accent)}
+.opts input{margin-top:.3em;transform:scale(1.2)}
+.opts label.sel{border-color:var(--accent);background:var(--accent-2)}
+.opts label.right{border-color:var(--good);background:var(--good-bg)}
+.opts label.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.fb{border-radius:8px;padding:.6rem .8rem;margin:.5rem 0}
+.fb.ok{background:var(--good-bg);border:1.5px solid var(--good)}
+.fb.no{background:var(--bad-bg);border:1.5px solid var(--bad)}
+.fb.info{background:var(--warn-bg);border:1.5px solid #b7791f}
+.fb strong{display:block;margin-bottom:.15em}
+.hidden{display:none!important}
+/* quiz */
+.qnav{display:flex;flex-wrap:wrap;gap:.3rem;margin:.4rem 0 .8rem}
+.qnav button{min-width:2.6em;padding:.2em .4em;border-radius:6px}
+.qnav button.cur{outline:3px solid #f0a500}
+.qnav button.okq{background:var(--good-bg);border-color:var(--good);color:var(--good)}
+.qnav button.noq{background:var(--bad-bg);border-color:var(--bad);color:var(--bad)}
+.score{font-weight:700;font-size:1.05rem;background:var(--accent-2);border:1.5px solid var(--accent);border-radius:8px;padding:.4rem .7rem;display:inline-block}
+.allfb li{margin:.35em 0}
+.stimer{font-size:2.2rem;font-weight:800;font-variant-numeric:tabular-nums;color:var(--accent)}
+.stimer.done{color:var(--bad)}
+svg text{font-family:inherit}
+.fallbackbtns{display:flex;flex-wrap:wrap;gap:.5rem}
+table.evid{margin:.4rem 0 .6rem;font-size:.95rem;background:#fff}
+table.evid caption{text-align:left;font-weight:700;padding:.2rem 0;color:var(--accent)}
+.figure{margin:.4rem 0 .6rem}
+.badge-sim{display:inline-block;background:#fff4d6;border:1.5px solid #b7791f;color:#7a4e0a;font-weight:800;font-size:.78rem;letter-spacing:.05em;padding:.1em .5em;border-radius:4px;text-transform:uppercase}
+.badge-real{display:inline-block;background:var(--good-bg);border:1.5px solid var(--good);color:var(--good);font-weight:800;font-size:.78rem;letter-spacing:.05em;padding:.1em .5em;border-radius:4px;text-transform:uppercase}
+.recommend{background:var(--good-bg);border:1.5px solid var(--good);color:var(--good);border-radius:6px;padding:.3rem .5rem;font-size:.9rem;font-weight:600;margin:.2rem 0 .5rem}
+.card.rec{border:2px solid var(--good)}
+#cueBtn{display:none}
+body.projector #cueBtn{display:inline-block}
+#cuePanel{position:fixed;right:1rem;bottom:1rem;max-width:min(520px,92vw);z-index:50;background:#fffdf5;border:2px dashed #b7791f;border-radius:10px;padding:.8rem 1rem;box-shadow:0 6px 24px rgba(0,0,0,.18)}
+#cuePanel h3{margin:0 0 .3rem;color:#7a4e0a}
+#cuePanel ul{margin:.2rem 0 .5rem;padding-left:1.2rem}
+.noscript{background:var(--bad-bg);padding:1rem;border:2px solid var(--bad)}
+</style>
+</head>
+<body>
+<noscript><div class="noscript">This lesson needs JavaScript for its model, quiz, and saved answers. Please open it in Chrome, Edge, Safari, or Firefox with JavaScript on. The written sections still work.</div></noscript>
+
+<header class="top">
+  <div class="toprow">
+    <div class="brand"><h1 style="margin:0">A-11 · Jiggling Particles: Brownian Motion &amp; Diffusion</h1>
+      <small>BFSU Volume II (2nd ed.), Lesson A-11 · One-on-one, upper elementary · Two sessions of about 45–50 minutes · Version 3</small></div>
+    <div class="progress" aria-live="polite"><span id="progText">0 of 10 sections done</span><div class="bar" aria-hidden="true"><span id="progBar"></span></div></div>
+  </div>
+  <div class="toprow" style="margin-top:.35rem">
+    <div class="controls" role="group" aria-label="Projection controls">
+      <button id="fsDown" title="Smaller text" aria-label="Smaller text">A−</button>
+      <button id="fsUp" title="Bigger text" aria-label="Bigger text">A+</button>
+      <button id="projBtn" aria-pressed="false" title="Bigger text, wider page, adult notes hidden">Projector mode</button>
+      <button id="hcBtn" aria-pressed="false">High contrast</button>
+      <button id="cueBtn" aria-expanded="false" aria-controls="cuePanel" title="Opens the adult cues for the current section. Hidden again when you close it or change section.">Adult cue (this section)</button>
+    </div>
+    <div class="controls">
+      <span id="saveNote" class="time" aria-live="polite"></span>
+      <button id="resetAll" title="Clears all answers in this lesson">Reset all answers</button>
+    </div>
+  </div>
+</header>
+
+<div id="cuePanel" class="hidden" role="region" aria-label="Adult cues for this section" tabindex="-1"><h3>Adult cue · <span id="cueTitle"></span></h3><ul id="cueList"></ul><button id="cueClose">Close (Esc)</button> <span class="legend">Closes automatically when you change section.</span></div>
+<nav class="tabs" role="tablist" aria-label="Lesson sections" id="tablist"></nav>
+
+<main>
+
+<!-- ===================== 1. START HERE ===================== -->
+<section class="tab" id="t-start" role="tabpanel" data-title="Start Here">
+  <div class="panel">
+    <h2>Start Here</h2>
+    <p>Today's question: <strong>Do the tiny particles that make up matter sit still, or are they always moving?</strong> You'll gather two kinds of evidence, <em>Brownian motion</em> and <em>diffusion</em>, and learn to tell them apart from ordinary stirring and currents.</p>
+    <div class="callout"><strong>No materials yet, or short on time?</strong> Everything below has an on-screen version that works offline. Start straight away:
+      <div class="fallbackbtns" style="margin-top:.5rem">
+        <button class="primary" data-go="model" data-mode="brownian">Open the Brownian model</button>
+        <button class="primary" data-go="model" data-mode="diffusion">Open the Diffusion model</button>
+        <button class="primary" data-go="diffusion" data-anchor="vglass">Open the virtual glass</button>
+      </div></div>
+  </div>
+
+  <div class="grid2">
+    <div class="panel">
+      <h3>Materials <span class="time">(tick as you gather)</span></h3>
+      <p class="legend"><strong>Needed:</strong></p>
+      <ul class="checklist">
+        <li><label><input type="checkbox" data-save="mat1"> 2 identical clear glasses or cups, the same amount of water in each</label></li>
+        <li><label><input type="checkbox" data-save="mat2"> Food coloring (any dark color)</label></li>
+        <li><label><input type="checkbox" data-save="mat3"> Ruler, plus a strip of masking tape on each glass</label></li>
+        <li><label><input type="checkbox" data-save="mat4"> Spoon, and a sheet of white paper to stand behind the glasses</label></li>
+        <li><label><input type="checkbox" data-save="mat5"> Station: 3 more clear cups, 1 tsp each of sugar, milk, and soil, and a phone flashlight</label></li>
+      </ul>
+      <p class="legend"><strong>Optional (the lesson works without these):</strong></p>
+      <ul class="checklist">
+        <li><label><input type="checkbox" data-save="mat6"> Microscope (100–400×), slide, and cover slip, with a little whole milk</label></li>
+        <li><label><input type="checkbox" data-save="mat7"> Phone camera for time-lapse photos of the glasses</label></li>
+        <li><label><input type="checkbox" data-save="mat8"> Science notebook (all prompts can also be typed here)</label></li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>In-class setup <span class="time">(done together during Session 1, about 3 minutes)</span></h3>
+      <ol>
+        <li>At the very start, fill both glasses with room-temperature water, the same amount in each. They'll sit still while you do the Bridge section.</li>
+        <li>Put them side by side on a steady surface, away from windows, heaters, and vents, with white paper behind them.</li>
+        <li>Stick a strip of tape up the side of each glass. Label them <strong>A (still)</strong> and <strong>B (stir once)</strong>.</li>
+        <li>Open the <em>Diffusion</em> section's data table. When the Bridge section says so, add one drop of dye to each glass.</li>
+      </ol>
+      <p class="legend">Nothing has to be set up before the lesson. If the water was cold from the tap, the Bridge section gives it time to settle.</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Activity steps</h3>
+    <table>
+      <thead><tr><th style="width:9em">When</th><th>What you'll do</th><th style="width:6em">Section</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Session 1</strong><br><span class="time">≈ 50 min</span></td><td>
+          1. Bridge from Volume I: the particle model, plus predictions (8 min). Add the dye drops.<br>
+          2. Brownian motion: microscope or model (12 min)<br>
+          3. Diffusion: first readings, stir Glass B, and random vs. net spreading in the Model Lab (12 min)<br>
+          4. Practical station (8 min)<br>
+          5. Mystery cards 1–3 (8 min), then a glass reading before you stop</td><td>Bridge<br>Brownian<br>Diffusion, Model Lab<br>Station<br>Mysteries</td></tr>
+        <tr><td><strong>Between</strong><br><span class="time">2 min each</span></td><td>Quick glass readings at about +2 h, +4 h, bedtime, and next morning. No stirring, no bumping.</td><td>Diffusion</td></tr>
+        <tr><td><strong>Session 2</strong><br><span class="time">≈ 45 min, next day</span></td><td>
+          6. Final glass reading and comparison with the virtual glass (7 min)<br>
+          7. Life depends on diffusion (10 min)<br>
+          8. Mystery cards 4–6 (7 min)<br>
+          9. Quiz, Q1–Q10 (16 min)<br>
+          10. Exit check (4 min) and choose homework (1 min)</td><td>Diffusion<br>Life<br>Mysteries<br>Quiz<br>Exit &amp; Homework</td></tr>
+        <tr><td><strong>Later</strong><br><span class="time">3 min each</span></td><td>Retrieval prompts at the start of the next science session and again one week later (in the Exit &amp; Homework section).</td><td>Exit &amp; Homework</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel">
+    <h3>Projection &amp; keyboard</h3>
+    <p><strong>Projector mode</strong> (top bar) makes the text bigger, widens the page, and hides the adult notes. In projector mode, an <strong>Adult cue (this section)</strong> button appears. It opens a small panel with the cues for the current activity only, and the panel closes when you change section. <strong>A− / A+</strong> change the text size. <strong>High contrast</strong> strengthens colors for washed-out screens. In the Model Lab, <strong>Full screen</strong> fills the projector with the model.</p>
+    <p>Keyboard: <span class="kbd">Tab</span> moves between controls, and <span class="kbd">Enter</span>/<span class="kbd">Space</span> presses buttons. On the section bar, use <span class="kbd">←</span> <span class="kbd">→</span>. In the Model Lab (when you're not typing): <span class="kbd">Space</span> play/pause, <span class="kbd">S</span> step, <span class="kbd">R</span> reset, <span class="kbd">1</span> <span class="kbd">2</span> <span class="kbd">3</span> switch model. Answers save automatically in this browser.</p>
+  </div>
+
+  <details class="adult"><summary>Adult cue: timing</summary>
+    <ul>
+      <li>Session 1 is the only one with hands-on setup. The dye drop happens about 8–10 minutes in, after the water has had time to settle.</li>
+      <li>Stir Glass B once, gently (3 slow circles), about 10 minutes after the dye goes in. This gives a bulk-flow comparison.</li>
+      <li>If you only have one session, do Bridge → Model Lab (Brownian + Diffusion) → Mysteries 1, 4, 6 → Quiz, and use the virtual glass instead of the real one. Read the real glasses whenever convenient.</li>
+      <li>The microscope is optional. Learning to make a slide can add 10–15 minutes. If it runs long, switch to the model and come back to the microscope another day.</li>
+    </ul>
+  </details>
+  <details class="adult"><summary>Adult cue: safety</summary>
+    <ul>
+      <li>Food coloring stains clothes, counters, and grout. Work on a tray or towel.</li>
+      <li>Nothing from the investigation glasses or station cups is for drinking. The only tasting is in Homework option 2, with its own clean glass and straw.</li>
+      <li>Slides and cover slips are thin glass. Handle them by the edges.</li>
+      <li>Wash hands after handling soil. Never shine the flashlight into anyone's eyes.</li>
+      <li>Check for milk or latex allergies before the milk activities or the optional balloon homework. Balloons are inflated only with a needleless hand pump, never by mouth, or use the bag-in-jar version.</li>
+    </ul>
+  </details>
+  <details class="adult"><summary>Adult cue: troubleshooting</summary>
+    <ul>
+      <li><strong>Swirls or curls of color in Glass A:</strong> the water is moving (temperature differences or a bump). That's bulk flow. Note it in the table. It's a good talking point, not a failure.</li>
+      <li><strong>Glass A fully colored within an hour:</strong> it was probably bumped, stirred, or warmed on one side. Compare it with the virtual glass and talk about currents.</li>
+      <li><strong>Glass A barely changes overnight:</strong> that's normal. True diffusion in water is very slow: only a centimeter or two in the first day. The virtual glass shows why.</li>
+      <li><strong>Can't see Brownian motion:</strong> dilute the milk more (about 1 tsp in ½ cup of water), use only a small drop under a cover slip, turn the light down, use 400×, and wait 30 seconds for any drifting to stop. Specks all sliding the same way are being carried by a current; Brownian motion is each speck jiggling on its own.</li>
+      <li><strong>Model looks blank or frozen:</strong> press <em>Play</em>. If it still doesn't move, reload the page. Answers are kept.</li>
+      <li><strong>Answers didn't save after reloading:</strong> some browsers block saving for files opened directly from disk. The lesson still works; answers just last until you close the tab.</li>
+    </ul>
+  </details>
+  <details class="adult"><summary>Adult cue: teaching note on the explanation</summary>
+    <p>The chapter also pictures dye particles bumping each other apart. This lesson leads with the counting explanation: every particle moves randomly, and more particles leave a crowded region than enter it. That reasoning works even when dye particles almost never meet, it matches the model's crossing counters, and it supports "motion continues once the mix is even." Both ideas point to the same cause: atomic and molecular motion.</p>
+  </details>
+  <div class="sectionfoot"><span></span><button class="doneBtn" data-sec="start">Mark section done</button><button class="nextBtn">Next: Bridge →</button></div>
+</section>
+
+<!-- ===================== 2. BRIDGE ===================== -->
+<section class="tab" id="t-bridge" role="tabpanel" data-title="Bridge">
+  <div class="panel">
+    <span class="tag">Bridge from Volume I · A-4</span>
+    <h2>What we already know about particles</h2>
+    <p>In Volume I (Lesson A-4 and later lessons) you built a <strong>particle model</strong> of matter. Before we use it, check it. Which of these fit that model?</p>
+    <ul class="opts" id="bridgeChecks"></ul>
+    <button id="bridgeCheckBtn">Check my model</button>
+    <div id="bridgeFb"></div>
+    <div class="callout"><strong>New words for old ideas.</strong> From now on we'll call these particles by their scientific names: <strong>atoms</strong> and <strong>molecules</strong>. A molecule is a group of two or more atoms joined together, like a water molecule. You don't need to know more about atoms yet.</div>
+  </div>
+  <div class="panel">
+    <h3>The big question</h3>
+    <p>Do atoms and molecules sit still like bricks in a wall, or do they jiggle about all the time? Make your case before you look at any evidence.</p>
+    <label for="bigq"><strong>I think they…</strong> because…</label>
+    <textarea id="bigq" data-save="bigq" placeholder="My prediction and reason"></textarea>
+  </div>
+  <div class="panel">
+    <span class="tag dye">Phenomenon</span>
+    <h3>The still-water glass</h3>
+    <p>Your two glasses of water have been sitting still while you worked. Soon you'll put one drop of food coloring into each glass. Nobody will stir Glass A, ever. (Glass B gets one gentle stir later, for comparison.)</p>
+    <p><strong>Predict Glass A:</strong> what will it look like at each time?</p>
+    <div class="grid3">
+      <div><label for="p1h"><strong>After 1 hour</strong></label><textarea id="p1h" data-save="p1h"></textarea></div>
+      <div><label for="p1d"><strong>After 1 day</strong></label><textarea id="p1d" data-save="p1d"></textarea></div>
+      <div><label for="p1w"><strong>After several days</strong></label><textarea id="p1w" data-save="p1w"></textarea></div>
+    </div>
+    <div class="callout dye"><strong>Do it now:</strong> Hold the bottle just above the water and let <strong>one drop</strong> fall into the middle of each glass. Don't touch the glasses afterwards. Watch closely for 30 seconds, then go to the <em>Diffusion</em> table and press <em>Stamp time</em> on the "Start" row.
+      <div style="margin-top:.5rem"><button data-go="diffusion" data-anchor="invest">Go to the data table</button></div></div>
+    <label for="firstlook"><strong>What did the drop do in the first 30 seconds?</strong></label>
+    <textarea id="firstlook" data-save="firstlook"></textarea>
+    <details><summary>Think about it, then open</summary>
+      <p>The drop falls and spreads across the bottom in seconds. That's <em>not</em> diffusion. Dye-water is denser (heavier for its size) than plain water, so the whole drop sinks as a lump. Moving as a lump like this is <strong>bulk flow</strong>. Our diffusion record starts once the dye has settled into a layer on the bottom.</p>
+    </details>
+  </div>
+  <div class="sectionfoot"><button class="prevBtn">← Back</button><button class="doneBtn" data-sec="bridge">Mark section done</button><button class="nextBtn">Next: Brownian motion →</button></div>
+</section>
+
+<!-- ===================== 3. BROWNIAN ===================== -->
+<section class="tab" id="t-brownian" role="tabpanel" data-title="Brownian">
+  <div class="panel">
+    <span class="tag">Evidence 1</span>
+    <h2>Brownian motion: the jiggle of visible specks</h2>
+    <div class="grid2">
+      <div>
+        <h3>Path A · With a microscope</h3>
+        <ol>
+          <li>Stir about 1 teaspoon of whole milk into ½ cup of water.</li>
+          <li>Put one small drop on a slide and lower a cover slip over it.</li>
+          <li>Focus at low power, then switch to 400×. Turn the light <em>down</em>.</li>
+          <li>Keep your hands off the microscope and wait about 30 seconds for any drifting to stop.</li>
+          <li>Watch the tiniest round specks (milk-fat droplets).</li>
+        </ol>
+      </div>
+      <div>
+        <h3>Path B · No microscope</h3>
+        <p><span class="badge-sim">Simulation</span> The model is a <strong>simulation</strong>: a computer following the rules scientists think are true. It helps you picture the idea, but <strong>it isn't evidence</strong>, because it can only show what it was programmed to do. Open it in Brownian mode with <em>Show water molecules</em> <strong>off</strong> first.</p>
+        <button class="primary" data-go="model" data-mode="brownian">Open Brownian model</button>
+        <p class="legend" style="margin-top:.5rem">Then turn the molecules on and watch what's really happening.</p>
+      </div>
+    </div>
+    <div class="panel" style="background:#fffdf5;margin:.6rem 0">
+      <p style="margin-top:0"><span class="badge-sim">Illustrative record, not real data</span> <strong>What a scientist's record looks like.</strong> Around 1908, Jean Perrin watched single tiny grains under a microscope and marked each grain's position every 30 seconds, joining the dots with straight lines. The drawing below was made in the same style to show the format. <strong>It was generated for this lesson and is not a real measurement.</strong> Real records of this kind are evidence because a person actually observed and marked them.</p>
+      <svg viewBox='0 0 460 300' role='img' aria-label='Illustrative record, not real data: a zig-zag line joining 31 dots, one every 30 seconds' style='width:100%;max-width:560px;height:auto;background:#fff;border:1.5px solid #d9d4c7;border-radius:6px'><rect x='0' y='0' width='460' height='14' fill='#fff4d6'/><text x='6' y='11' font-size='10' font-weight='800' fill='#7a4e0a'>ILLUSTRATIVE RECORD · GENERATED FOR THIS LESSON · NOT REAL DATA</text><line x1='0' y1='14' x2='0' y2='300' stroke='#e6e1d5'/><line x1='30' y1='14' x2='30' y2='300' stroke='#e6e1d5'/><line x1='60' y1='14' x2='60' y2='300' stroke='#e6e1d5'/><line x1='90' y1='14' x2='90' y2='300' stroke='#e6e1d5'/><line x1='120' y1='14' x2='120' y2='300' stroke='#e6e1d5'/><line x1='150' y1='14' x2='150' y2='300' stroke='#e6e1d5'/><line x1='180' y1='14' x2='180' y2='300' stroke='#e6e1d5'/><line x1='210' y1='14' x2='210' y2='300' stroke='#e6e1d5'/><line x1='240' y1='14' x2='240' y2='300' stroke='#e6e1d5'/><line x1='270' y1='14' x2='270' y2='300' stroke='#e6e1d5'/><line x1='300' y1='14' x2='300' y2='300' stroke='#e6e1d5'/><line x1='330' y1='14' x2='330' y2='300' stroke='#e6e1d5'/><line x1='360' y1='14' x2='360' y2='300' stroke='#e6e1d5'/><line x1='390' y1='14' x2='390' y2='300' stroke='#e6e1d5'/><line x1='420' y1='14' x2='420' y2='300' stroke='#e6e1d5'/><line x1='450' y1='14' x2='450' y2='300' stroke='#e6e1d5'/><line x1='0' y1='14' x2='460' y2='14' stroke='#e6e1d5'/><line x1='0' y1='44' x2='460' y2='44' stroke='#e6e1d5'/><line x1='0' y1='74' x2='460' y2='74' stroke='#e6e1d5'/><line x1='0' y1='104' x2='460' y2='104' stroke='#e6e1d5'/><line x1='0' y1='134' x2='460' y2='134' stroke='#e6e1d5'/><line x1='0' y1='164' x2='460' y2='164' stroke='#e6e1d5'/><line x1='0' y1='194' x2='460' y2='194' stroke='#e6e1d5'/><line x1='0' y1='224' x2='460' y2='224' stroke='#e6e1d5'/><line x1='0' y1='254' x2='460' y2='254' stroke='#e6e1d5'/><line x1='0' y1='284' x2='460' y2='284' stroke='#e6e1d5'/><path d='M100.6 232.1 L110.1 270.0 L61.6 250.3 L107.7 223.3 L113.3 256.5 L105.1 221.0 L118.6 210.9 L120.6 222.4 L151.6 174.6 L128.8 131.6 L139.0 159.0 L108.5 162.7 L153.4 127.1 L126.6 78.0 L126.0 81.5 L84.0 80.7 L69.3 120.3 L81.5 136.2 L107.8 101.4 L90.3 86.1 L117.7 72.2 L124.4 55.8 L138.9 62.2 L156.2 127.3 L151.5 135.7 L163.6 141.2 L137.9 107.1 L75.2 90.5 L53.7 62.1 L44.8 65.3 L24.0 38.0' fill='none' stroke='#8a2b7a' stroke-width='1.5'/><circle cx='100.6' cy='232.1' r='3' fill='#8a2b7a'/><circle cx='110.1' cy='270.0' r='3' fill='#8a2b7a'/><circle cx='61.6' cy='250.3' r='3' fill='#8a2b7a'/><circle cx='107.7' cy='223.3' r='3' fill='#8a2b7a'/><circle cx='113.3' cy='256.5' r='3' fill='#8a2b7a'/><circle cx='105.1' cy='221.0' r='3' fill='#8a2b7a'/><circle cx='118.6' cy='210.9' r='3' fill='#8a2b7a'/><circle cx='120.6' cy='222.4' r='3' fill='#8a2b7a'/><circle cx='151.6' cy='174.6' r='3' fill='#8a2b7a'/><circle cx='128.8' cy='131.6' r='3' fill='#8a2b7a'/><circle cx='139.0' cy='159.0' r='3' fill='#8a2b7a'/><circle cx='108.5' cy='162.7' r='3' fill='#8a2b7a'/><circle cx='153.4' cy='127.1' r='3' fill='#8a2b7a'/><circle cx='126.6' cy='78.0' r='3' fill='#8a2b7a'/><circle cx='126.0' cy='81.5' r='3' fill='#8a2b7a'/><circle cx='84.0' cy='80.7' r='3' fill='#8a2b7a'/><circle cx='69.3' cy='120.3' r='3' fill='#8a2b7a'/><circle cx='81.5' cy='136.2' r='3' fill='#8a2b7a'/><circle cx='107.8' cy='101.4' r='3' fill='#8a2b7a'/><circle cx='90.3' cy='86.1' r='3' fill='#8a2b7a'/><circle cx='117.7' cy='72.2' r='3' fill='#8a2b7a'/><circle cx='124.4' cy='55.8' r='3' fill='#8a2b7a'/><circle cx='138.9' cy='62.2' r='3' fill='#8a2b7a'/><circle cx='156.2' cy='127.3' r='3' fill='#8a2b7a'/><circle cx='151.5' cy='135.7' r='3' fill='#8a2b7a'/><circle cx='163.6' cy='141.2' r='3' fill='#8a2b7a'/><circle cx='137.9' cy='107.1' r='3' fill='#8a2b7a'/><circle cx='75.2' cy='90.5' r='3' fill='#8a2b7a'/><circle cx='53.7' cy='62.1' r='3' fill='#8a2b7a'/><circle cx='44.8' cy='65.3' r='3' fill='#8a2b7a'/><circle cx='24.0' cy='38.0' r='3' fill='#8a2b7a'/><text x='107' y='226' font-size='12' font-weight='700' fill='#1f6f3a'>start</text><text x='30' y='32' font-size='12' font-weight='700' fill='#9a2c1f'>after 15 min</text></svg>
+      <p class="legend">How to read it: each dot is where the grain was at one 30-second mark; the lines don't show the path in between (the real path zig-zags even more). A real record should look like this: no favored direction, and steps of very different sizes.</p>
+    </div>
+    <label for="bm0"><strong>Which evidence did you actually observe yourself today?</strong> (for example, "milk drop at 400×", or "none yet, model only")</label>
+    <input type="text" id="bm0" data-save="bm0" style="width:100%;margin-bottom:.6rem">
+    <label for="bm1"><strong>Describe the motion you see.</strong> Does each speck move the same way as its neighbors? Does it ever stop?</label>
+    <textarea id="bm1" data-save="bm1"></textarea>
+    <div class="callout warn"><strong>Real jiggle or table bump?</strong> A bump jolts every speck at once, all in the same direction. Brownian motion is each speck jiggling on its own, all the time, even when nobody touches anything.</div>
+  </div>
+  <div class="panel">
+    <h3>How can we explain it?</h3>
+    <label for="bm2">Your explanation, before you read on:</label>
+    <textarea id="bm2" data-save="bm2"></textarea>
+    <details><summary>Read the scientists' explanation</summary>
+      <p>A fat droplet is made of millions of atoms. It's surrounded by water molecules, far too small to see, that are moving all the time and keep crashing into it. At any instant a few more hits land on one side than the other, so the droplet is nudged one way, then another, then another. You can't see the molecules, but you can see what their hits do.</p>
+      <p>The jiggle is named after <strong>Robert Brown</strong>, who described it carefully in 1827. For decades no one could explain it. In 1905, <strong>Albert Einstein</strong> worked out how strongly moving molecules should jiggle a speck, and a few years later <strong>Jean Perrin</strong> measured specks under the microscope and found they moved just as predicted. That convinced most scientists that atoms and molecules are real.</p>
+    </details>
+  </div>
+  <div class="panel">
+    <h3>Why don't big things jiggle?</h3>
+    <p>In the model, switch the speck size from <em>small</em> to <em>large</em>. Then think about a desk, or the glass itself.</p>
+    <label for="bm3"><strong>Give two reasons a big object doesn't jiggle.</strong></label>
+    <textarea id="bm3" data-save="bm3"></textarea>
+    <details><summary>Check your reasons</summary>
+      <ol>
+        <li><strong>More hits at once:</strong> a bigger object is hit by enormous numbers of molecules from every side at the same instant, so the pushes almost exactly cancel.</li>
+        <li><strong>More mass:</strong> a bigger object has more inertia, so whatever tiny push is left over barely moves it.</li>
+      </ol>
+      <p>The atoms <em>inside</em> a desk are jiggling too, but in every direction at once. For the desk to hop, trillions of them would all have to lurch the same way at the same moment. That essentially never happens.</p>
+    </details>
+  </div>
+  <div class="panel">
+    <h3>Evidence and its limits</h3>
+    <div class="grid2">
+      <div><p><strong>What this shows</strong> (from <span class="badge-real">real observations</span> only): Specks that were never alive (milk fat, ink, dust) jiggle endlessly with no push from outside. Something invisible must be moving and hitting them.</p></div>
+      <div><p><strong>What it can't show:</strong> We never see the molecules themselves, only the specks they hit. Bumps, drifting currents, or evaporation at the edge of the slide can make specks move too, so we have to rule those out.</p></div>
+    </div>
+    <label for="bm4"><strong>Notebook sketch prompt:</strong> Describe (or draw in your notebook) one speck with arrows showing uneven hits, and its zig-zag path.</label>
+    <textarea id="bm4" data-save="bm4"></textarea>
+  </div>
+  <div class="sectionfoot"><button class="prevBtn">← Back</button><button class="doneBtn" data-sec="brownian">Mark section done</button><button class="nextBtn">Next: Diffusion →</button></div>
+</section>
+
+<!-- ===================== 4. DIFFUSION ===================== -->
+<section class="tab" id="t-diffusion" role="tabpanel" data-title="Diffusion">
+  <div class="panel" id="invest">
+    <span class="tag">Evidence 2 · Household investigation</span>
+    <h2>Diffusion: dissolved particles spreading with no stirring</h2>
+    <p><strong>Fair test:</strong> Glass A and Glass B are the same in every way, except that B gets one gentle stir (3 slow circles) about 10 minutes after the dye goes in. Measure the height of the <strong>colored layer</strong> in Glass A with the ruler (in cm, from the bottom up to where the color fades out).</p>
+    <div style="overflow-x:auto">
+    <table id="dataTable">
+      <thead><tr><th>Reading</th><th>Clock time</th><th>Elapsed</th><th>Glass A layer height (cm)</th><th>Glass A notes: fuzzy top edge? darker at bottom? swirls?</th><th>Glass B notes</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+    <p class="legend">Press <em>Stamp time</em> at each reading. Elapsed time is counted from the Start row.</p>
+    <div class="grid2">
+      <div><label for="inv1"><strong>Pattern in Glass A over time:</strong></label><textarea id="inv1" data-save="inv1"></textarea></div>
+      <div><label for="inv2"><strong>How was Glass B different, and why?</strong></label><textarea id="inv2" data-save="inv2"></textarea></div>
+    </div>
+  </div>
+
+  <div class="panel" id="vglass">
+    <span class="tag">On-screen fallback · Virtual glass</span> <span class="badge-sim">Calculated model, not a real glass</span>
+    <h3>Virtual glass: what pure diffusion alone would do</h3>
+    <p>This calculates how food-dye molecules spread through 10 cm of perfectly still water at room temperature, starting as a thin bottom layer. Drag the time slider. Compare it with the same glass when gentle currents help, and with a stirred glass.</p>
+    <div class="ctrlbar">
+      <label for="vgTime">Time</label>
+      <input type="range" id="vgTime" min="0" max="336" step="1" value="0" style="flex:1;min-width:220px" aria-describedby="vgTimeOut">
+      <output id="vgTimeOut">0 h</output>
+      <button id="vgPlay">▶ Play</button>
+      <button id="vgReset">Reset</button>
+    </div>
+    <canvas id="vgCanvas" width="900" height="330" role="img" aria-label="Three virtual glasses showing dye spreading over time"></canvas>
+    <p id="vgRead" class="legend" aria-live="polite"></p>
+    <div class="callout warn"><strong>Limit to notice:</strong> In perfectly still water, the colored layer grows only about 1–2 cm in the first day, then more and more slowly. Evening out a whole glass by diffusion alone would take months, because liquid particles are packed close and each dye particle gets bumped back and forth constantly. Real glasses often spread faster, because tiny temperature changes in a room set up gentle currents. So if your Glass A fills in faster than the "pure diffusion" glass, currents are helping. That's why the scientists' rule is <em>no stirring</em>, and why we measure, not just look. (The "gentle currents" glass is an illustration. Real currents vary from home to home.)</div>
+    <label for="vg1"><strong>Compare:</strong> Is your real Glass A closer to the pure-diffusion glass or the gentle-currents glass? What might explain it?</label>
+    <textarea id="vg1" data-save="vg1"></textarea>
+  </div>
+
+  <div class="panel">
+    <h3>Why does diffusion happen?</h3>
+    <label for="df1">Your idea first. Could it be the same cause as Brownian motion?</label>
+    <textarea id="df1" data-save="df1"></textarea>
+    <details><summary>Read the explanation</summary>
+      <p>Dissolved dye molecules are single molecules, even smaller than the specks in Brownian motion. Water molecules knock each one in a random direction, again and again. Picture a cluster of pool balls hammered from every side by fast marbles: the cluster gets broken up and scattered. <strong>Diffusion is what we see when molecular motion carries dissolved particles through a liquid or a gas.</strong></p>
+    </details>
+  </div>
+
+  <div class="panel">
+    <h3>Random motion, but a definite direction?</h3>
+    <p>Here's the puzzle. Every particle moves randomly, so why does the color always spread from where there's <em>more</em> to where there's <em>less</em>, and never gather back into a blob?</p>
+    <button class="primary" data-go="model" data-mode="diffusion">Test it in the Model Lab</button>
+    <p class="legend">Turn on <em>Track one particle</em> and watch its path. Then watch the two crossing counters at the middle line.</p>
+    <label for="df2"><strong>What did the tracked particle do? What did the crossing counters show?</strong></label>
+    <textarea id="df2" data-save="df2"></textarea>
+    <details><summary>Check your reasoning</summary>
+      <p>The tracked particle wanders aimlessly: left, right, back again. It isn't heading anywhere. But where particles are crowded, more of them happen to wander out than wander in, simply because there are more of them there to move. So particles cross in <em>both</em> directions, and more cross from the crowded side. The overall result (the <strong>net</strong> movement) is spreading from more to less.</p>
+      <p>Scientists say particles diffuse <strong>down a concentration gradient</strong>. That's a big-word way of saying "from where there's more to where there's less." A <em>concentration gradient</em> is just a gradual change from crowded to sparse.</p>
+      <p><strong>When the color is even, does diffusion stop?</strong> The <em>net</em> spreading stops, but the particles never do. Equal numbers now cross each way, so the color stays even. In the model, both counters keep climbing at the same rate.</p>
+    </details>
+  </div>
+
+  <div class="panel">
+    <h3>Diffusion vs. bulk flow</h3>
+    <table>
+      <thead><tr><th></th><th>Diffusion</th><th>Bulk flow (stirring, currents, wind, sinking)</th></tr></thead>
+      <tbody>
+        <tr><th>What moves?</th><td>Individual particles, each on its own random path</td><td>A whole mass of water or air moving together</td></tr>
+        <tr><th>Cause</th><td>Atomic/molecular motion, always going on</td><td>A push from outside: a spoon, wind, a fan, warm water rising, dense liquid sinking</td></tr>
+        <tr><th>Speed</th><td>Slow in liquids. Faster in gases, but still slow over meters</td><td>Can be very fast</td></tr>
+        <tr><th>Direction</th><td>Net movement from more to less</td><td>Wherever the flow goes, even toward "more"</td></tr>
+        <tr><th>Can both happen at once?</th><td colspan="2">Yes. Diffusion never switches off. It keeps going inside moving air or water, and bulk flow gives the particles a fast ride on top of it.</td></tr>
+        <tr><th>In our glasses</th><td>The slow growth of Glass A's colored layer</td><td>The drop falling at the start; Glass B's stir</td></tr>
+      </tbody>
+    </table>
+    <p class="legend" style="margin-top:.5rem">In the Model Lab's Diffusion mode, switch on <em>Add a current</em> to see bulk flow mix the particles much faster.</p>
+  </div>
+
+  <div class="panel">
+    <h3>Quick sort: will it diffuse?</h3>
+    <p>Decide for each case, then reveal. Think about how free the particles are to move among one another.</p>
+    <div id="qsort"></div>
+  </div>
+
+  <div class="panel">
+    <h3>Gases vs. liquids</h3>
+    <p>A perfume bottle opened across a room is smelled sooner than a dye drop colors a glass. Gas particles are far apart and not held together, so each one travels much farther before it hits anything. In liquids, particles slip and slide around each other but stay close together, so each dye particle is bumped back almost at once.</p>
+    <label for="df3"><strong>Summary in your words:</strong> Where can diffusion happen, and what is always its cause?</label>
+    <textarea id="df3" data-save="df3"></textarea>
+  </div>
+  <div class="sectionfoot"><button class="prevBtn">← Back</button><button class="doneBtn" data-sec="diffusion">Mark section done</button><button class="nextBtn">Next: Model Lab →</button></div>
+</section>
+
+<!-- ===================== 5. MODEL LAB ===================== -->
+<section class="tab" id="t-model" role="tabpanel" data-title="Model Lab">
+  <div class="modelwrap" id="modelWrap">
+    <h2 style="margin-top:0">Model Lab <span class="badge-sim">Simulation, not an observation</span></h2>
+    <div class="modebar" role="group" aria-label="Model mode">
+      <button id="mBrown" data-mode="brownian" aria-pressed="true">1 · Brownian motion</button>
+      <button id="mDiff" data-mode="diffusion" aria-pressed="false">2 · Diffusion</button>
+      <button id="mLung" data-mode="lung" aria-pressed="false">3 · Lungs: gas exchange</button>
+      <span style="flex:1"></span>
+      <button id="mFull">⛶ Full screen</button>
+    </div>
+    <div class="ctrlbar">
+      <button id="mPlay" class="primary">⏸ Pause</button>
+      <button id="mStep">Step</button>
+      <button id="mReset">Reset</button>
+      <label>Speed <input type="range" id="mSpeed" min="0.25" max="3" step="0.25" value="1" aria-label="Simulation speed"></label>
+    </div>
+    <div class="ctrlbar" id="ctlBrown">
+      <label><input type="checkbox" id="bShowMol"> Show water molecules</label>
+      <label><input type="checkbox" id="bTrail" checked> Show path</label>
+      <label>Speck size
+        <select id="bSize"><option value="8" selected>small</option><option value="16">medium</option><option value="32">large</option></select></label>
+    </div>
+    <div class="ctrlbar hidden" id="ctlDiff">
+      <label><input type="checkbox" id="dTrack" checked> Track one particle</label>
+      <label><input type="checkbox" id="dCurrent"> Add a current (bulk flow)</label>
+      <label><input type="checkbox" id="dHist" checked> Show how many in each strip</label>
+    </div>
+    <div class="ctrlbar hidden" id="ctlLung">
+      <label><input type="checkbox" id="lBreath" checked> Keep breathing (fresh air in)</label>
+      <label><input type="checkbox" id="lBlood" checked> Blood keeps flowing</label>
+      <label><input type="checkbox" id="lStuffy"> Stuffy air (lots of CO₂)</label>
+    </div>
+    <canvas id="mCanvas" width="900" height="460" tabindex="0" aria-describedby="mCaption"></canvas>
+    <p id="mCaption" class="legend"></p>
+    <div class="readout" id="mReadout"></div>
+  </div>
+  <div class="panel" style="margin-top:1rem">
+    <h3>Model challenges</h3>
+    <ol>
+      <li><strong>Brownian:</strong> With molecules hidden, describe the speck's motion. Then show the molecules. Look at the hit counters. Are hits ever exactly even?</li>
+      <li><strong>Brownian:</strong> Compare small, medium, and large specks. Which barely moves, and why?</li>
+      <li><strong>Diffusion:</strong> Wait until the strips are about even. Do the crossing counters stop? What does that tell you?</li>
+      <li><strong>Diffusion:</strong> Reset and turn on the current. How much faster does it even out? Is that diffusion?</li>
+      <li><strong>Lungs:</strong> Turn off <em>Keep breathing</em>. What happens to oxygen flow into the blood after a while? Then try <em>Stuffy air</em>.</li>
+    </ol>
+    <label for="mc1"><strong>My findings:</strong></label>
+    <textarea id="mc1" data-save="mc1"></textarea>
+    <div class="callout"><strong>Model limits:</strong> Real water molecules are about 3,000 times smaller than a 1-micrometer speck, and there are vastly more of them, packed tightly. The model is flat (2-D), shows far fewer particles, and runs much faster than real life. It shows the <em>idea</em>, not the real sizes or speeds.</div>
+  </div>
+  <div class="sectionfoot"><button class="prevBtn">← Back</button><button class="doneBtn" data-sec="model">Mark section done</button><button class="nextBtn">Next: Life →</button></div>
+</section>
+
+<!-- ===================== 6. LIFE ===================== -->
+<section class="tab" id="t-life" role="tabpanel" data-title="Life">
+  <div class="panel">
+    <span class="tag">Biology</span>
+    <h2>Life depends on diffusion</h2>
+    <p>Every living thing has to get what it needs <em>in</em> and its wastes <em>out</em>. Pumping things takes energy, and energy is precious. Diffusion moves things for free, as long as there's a difference in concentration.</p>
+  </div>
+  <div class="grid2">
+    <div class="panel">
+      <h3>Inside your lungs</h3>
+      <svg viewBox="0 0 470 300" role="img" aria-labelledby="lungT lungD" style="width:100%;height:auto">
+        <title id="lungT">Lungs and an alveolus</title>
+        <desc id="lungD">The windpipe branches like a tree into smaller tubes ending in tiny air sacs (alveoli). In a close-up of one air sac, oxygen moves from the air into the blood in the capillary, and carbon dioxide moves from the blood into the air.</desc>
+        <g stroke="#0f6b6b" stroke-width="7" fill="none" stroke-linecap="round">
+          <path d="M100 20 V90"/><path d="M100 90 L60 130"/><path d="M100 90 L140 130"/>
+          <path d="M60 130 L40 170" stroke-width="5"/><path d="M60 130 L75 175" stroke-width="5"/>
+          <path d="M140 130 L125 175" stroke-width="5"/><path d="M140 130 L160 170" stroke-width="5"/>
+          <path d="M40 170 L30 200" stroke-width="3"/><path d="M40 170 L48 202" stroke-width="3"/>
+          <path d="M75 175 L68 205" stroke-width="3"/><path d="M75 175 L86 204" stroke-width="3"/>
+          <path d="M125 175 L116 205" stroke-width="3"/><path d="M125 175 L134 204" stroke-width="3"/>
+          <path d="M160 170 L152 202" stroke-width="3"/><path d="M160 170 L170 200" stroke-width="3"/>
+        </g>
+        <g fill="#f2c6c0" stroke="#9a2c1f" stroke-width="1.5">
+          <circle cx="30" cy="206" r="6"/><circle cx="48" cy="208" r="6"/><circle cx="68" cy="211" r="6"/><circle cx="86" cy="210" r="6"/>
+          <circle cx="116" cy="211" r="6"/><circle cx="134" cy="210" r="6"/><circle cx="152" cy="208" r="6"/><circle cx="170" cy="206" r="6"/>
+        </g>
+        <text x="110" y="35" font-size="14" fill="#1d2433">windpipe</text>
+        <text x="10" y="245" font-size="13" fill="#1d2433">air sacs (alveoli):</text>
+        <text x="10" y="262" font-size="13" fill="#1d2433">hundreds of millions</text>
+        <path d="M178 208 C 210 200, 225 170, 245 160" stroke="#566074" stroke-dasharray="4 3" fill="none"/>
+        <circle cx="320" cy="140" r="78" fill="#fdecea" stroke="#9a2c1f" stroke-width="2"/>
+        <text x="282" y="110" font-size="13" fill="#1d2433">air in sac</text>
+        <path d="M250 205 C 290 235, 350 235, 395 200" stroke="#b83227" stroke-width="16" fill="none" opacity=".75"/>
+        <text x="270" y="262" font-size="13" fill="#9a2c1f">capillary (blood)</text>
+        <g font-size="13" font-weight="700">
+          <path d="M300 130 L300 195" stroke="#d9730d" stroke-width="3" marker-end="url(#ao)"/>
+          <text x="196" y="132" fill="#d9730d">O₂ in</text>
+          <path d="M345 200 L345 135" stroke="#4a5568" stroke-width="3" marker-end="url(#ac)"/>
+          <text x="404" y="165" fill="#4a5568">CO₂ out</text>
+        </g>
+        <defs>
+          <marker id="ao" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8z" fill="#d9730d"/></marker>
+          <marker id="ac" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8z" fill="#4a5568"/></marker>
+        </defs>
+      </svg>
+      <p>The windpipe branches again and again, like a tree, ending in hundreds of millions of tiny air sacs (<strong>alveoli</strong>), each wrapped in tiny blood vessels. The walls between air and blood are thin and moist.</p>
+      <label for="lf1"><strong>Using concentrations, explain which way oxygen moves and which way carbon dioxide moves.</strong></label>
+      <textarea id="lf1" data-save="lf1"></textarea>
+      <details><summary>Check</summary>
+        <p>Your body uses oxygen, so blood arriving at the lungs has <em>less</em> oxygen than fresh air in the sacs. Oxygen diffuses from the air into the blood. Your body makes carbon dioxide as waste, so the blood has <em>more</em> carbon dioxide than the air in the sacs. Carbon dioxide diffuses out of the blood. <strong>Both happen at the same time, in opposite directions</strong>, each gas going from more to less. The only energy needed is for breathing, which keeps the air fresh, and for the heart, which keeps the blood moving. Together they keep both differences large.</p>
+      </details>
+      <button data-go="model" data-mode="lung">See it in the Lungs model</button>
+    </div>
+    <div class="panel">
+      <h3>Think deeper</h3>
+      <label for="lf2"><strong>1.</strong> Air with the normal amount of oxygen, but far too much carbon dioxide, can be deadly. Why?</label>
+      <textarea id="lf2" data-save="lf2"></textarea>
+      <label for="lf3"><strong>2.</strong> During hard exercise you can breathe as fast as you can and still feel short of air. What limits how fast oxygen gets in?</label>
+      <textarea id="lf3" data-save="lf3"></textarea>
+      <details><summary>Hints</summary>
+        <p>1: What happens to the <em>difference</em> in carbon dioxide between blood and air? 2: Think about the area of the lung surface, how fast diffusion can cross it, how fast the blood carries oxygen away, and how fast you can refresh the air.</p>
+      </details>
+      <h3 style="margin-top:1rem">Plants</h3>
+      <p>In daylight, a leaf uses carbon dioxide to make food (photosynthesis), so the air inside the leaf has <em>less</em> carbon dioxide than the air outside. Carbon dioxide diffuses <em>in</em> through tiny pores. Photosynthesis also makes oxygen, so oxygen diffuses <em>out</em>. It's the same rule as our lungs, with the directions reversed.</p>
+      <h3>Fish</h3>
+      <p>Fish need oxygen too. Oxygen from the air diffuses into the water at the surface (a gas into a liquid). Then it diffuses from the water across the thin surfaces of the gills into the fish's blood.</p>
+      <label for="lf4"><strong>3.</strong> Trace oxygen from the air above a pond to a fish's blood. Name each "more → less" step.</label>
+      <textarea id="lf4" data-save="lf4"></textarea>
+    </div>
+  </div>
+  <div class="sectionfoot"><button class="prevBtn">← Back</button><button class="doneBtn" data-sec="life">Mark section done</button><button class="nextBtn">Next: Station →</button></div>
+</section>
+
+<!-- ===================== 7. STATION ===================== -->
+<section class="tab" id="t-station" role="tabpanel" data-title="Station">
+  <div class="panel">
+    <span class="tag">Olympiad practical</span>
+    <h2 id="stTitle"></h2>
+    <p><strong>Materials:</strong> <span id="stMat"></span></p>
+    <div class="ctrlbar"><span class="stimer" id="stTimer" aria-live="off">8:00</span>
+      <button id="stStart" class="primary">Start timer</button><button id="stReset">Reset timer</button>
+      <span class="legend">Work like a competition: observe, record, then explain.</span></div>
+    <div id="stTasks"></div>
+    <p class="legend">Your adult scores this out of 10 using the Answer Reference.</p>
+  </div>
+  <div class="sectionfoot"><button class="prevBtn">← Back</button><button class="doneBtn" data-sec="station">Mark section done</button><button class="nextBtn">Next: Mysteries →</button></div>
+</section>
+
+<!-- ===================== 8. MYSTERIES ===================== -->
+<section class="tab" id="t-mysteries" role="tabpanel" data-title="Mysteries">
+  <div class="panel">
+    <h2>Real-life mystery cards</h2>
+    <p>For each card: make your call, give a reason, <strong>lock it in</strong>, then reveal. Each card reveals on its own. Some cases can't be settled by looking alone. For those, choose a deciding test.</p>
+  </div>
+  <div class="cards" id="mysteryCards"></div>
+  <div class="sectionfoot"><button class="prevBtn">← Back</button><button class="doneBtn" data-sec="mysteries">Mark section done</button><button class="nextBtn">Next: Quiz →</button></div>
+</section>
+
+<!-- ===================== 9. QUIZ ===================== -->
+<section class="tab" id="t-quiz" role="tabpanel" data-title="Quiz">
+  <div class="panel">
+    <h2>Olympiad-style quiz</h2>
+    <p>Ten questions, each harder than the one before. For Q1–Q9, choose one answer and press <em>Check</em>. <strong>Your first checked answer is the one that's scored.</strong> After checking, you can open the feedback for every option. Q5, Q7, and Q9 also ask for your <strong>reason</strong> before you can check. Q10 is a synthesis you can write, bullet, draw, or say aloud.</p>
+    <p><span class="score" id="qScore">Auto-scored: 0 / 9 correct (Q1–Q9, first checked answer)</span> <span class="legend" id="qScore10">Q10: scored by an adult out of 8 with the rubric</span></p>
+    <div class="qnav" id="qNav" role="group" aria-label="Question navigator"></div>
+    <div id="qBody"></div>
+    <div class="ctrlbar"><button id="qPrev">← Previous</button><button id="qNext">Next →</button><span style="flex:1"></span><button id="qReset">Reset quiz</button></div>
+  </div>
+  <div class="sectionfoot"><button class="prevBtn">← Back</button><button class="doneBtn" data-sec="quiz">Mark section done</button><button class="nextBtn">Next: Exit &amp; Homework →</button></div>
+</section>
+
+<!-- ===================== 10. HOMEWORK ===================== -->
+<section class="tab" id="t-homework" role="tabpanel" data-title="Exit &amp; Homework">
+  <div class="panel">
+    <span class="tag">Core route</span>
+    <h2>Exit check: three new situations <span class="time">(about 4 minutes)</span></h2>
+    <p>Use what you learned in situations you haven't seen. Write a short answer, commit it, then reveal a sample answer and compare.</p>
+    <div id="exitBox"></div>
+  </div>
+  <div class="panel">
+    <h2>Homework: choose one of five</h2>
+    <p>Pick one investigation. <strong>Two are recommended</strong> (marked in green), but any of the five counts. In your write-up, use the words <em>particles</em>, <em>diffusion</em>, and <em>bulk flow</em>, and name one limit of your evidence.</p>
+  </div>
+  <div class="cards" id="hwCards"></div>
+  <div class="panel" style="margin-top:1rem">
+    <label for="hwPlan"><strong>My plan:</strong> what I'll do, when, and what I predict.</label>
+    <textarea id="hwPlan" data-save="hwPlan"></textarea>
+  </div>
+  <div class="panel" style="margin-top:1rem">
+    <h2>Remember it later: retrieval prompts</h2>
+    <p>Answer from memory first, with no looking back. Then open the lesson to check.</p>
+    <div class="grid2">
+      <div><h3>Start of the next science session</h3><ol id="retNext"></ol></div>
+      <div><h3>One week later</h3><ol id="retWeek"></ol></div>
+    </div>
+  </div>
+  <div class="sectionfoot"><button class="prevBtn">← Back</button><button class="doneBtn" data-sec="homework">Mark section done</button><span></span></div>
+</section>
+</main>
+
+<script>
+"use strict";
+const DATA = {"quiz": [{"id": "q1", "level": "Level 1 · Observe", "stem": "Leela puts one drop of very dilute milk on a slide and looks at it at 400×. Tiny round specks jiggle in short, jerky steps, and each speck moves differently from the specks next to it. What is the best explanation?", "realworld": false, "options": [{"t": "The specks are tiny living things swimming around.", "misc": true, "fb": "A common idea, but no. The same jiggle shows up with specks that were never alive, like milk-fat droplets, ink, or crushed charcoal. Something can move without being alive. Living swimmers also tend to make longer runs in one direction, not tiny random jitters."}, {"t": "Water molecules, far too small to see, keep hitting each speck, and the hits from different sides are never exactly even.", "ok": true, "fb": "Correct. This is Brownian motion. At any instant one side of the speck gets a few more hits than the other, so the speck is nudged one way, then another. You can't see the molecules. You see what their hits do."}, {"t": "The specks are dissolving, and dissolving makes them move.", "fb": "If they were dissolving, the specks would shrink and vanish. They stay the same size and keep jiggling for as long as you watch."}, {"t": "Small bumps to the table are shaking the slide.", "fb": "A bump jolts everything in view at once, all in the same direction. Here, neighboring specks move independently. Table bumps can't do that."}]}, {"id": "q2", "level": "Level 2 · Explain size", "stem": "In the same water, a fat speck about 1 micrometer across jiggles clearly, but a grain of sand on the bottom of the slide does not jiggle at all. Which explanation fits best?", "realworld": false, "options": [{"t": "Water molecules only hit very small things.", "fb": "Water molecules hit every surface they touch. The sand grain actually gets far more hits each instant than the speck does."}, {"t": "The particles inside the sand grain are not moving, so the grain stays still.", "misc": true, "fb": "A common idea, but no. The particles in a solid are jiggling too, in place. The grain doesn't hop because its trillions of particles jiggle in every direction at once, so their pushes cancel."}, {"t": "Sand is heavier than water, so it sinks and stops.", "fb": "That explains why the grain rests on the bottom, but not why it doesn't jiggle there. Water molecules still hit it. The real reasons are how evenly the hits balance and how much mass resists them."}, {"t": "The sand grain gets huge numbers of hits from every side at once, so they almost cancel out, and its much bigger mass resists being pushed.", "ok": true, "fb": "Correct. Two reasons work together. With so many hits at once, the pushes from opposite sides nearly balance. And the grain's large mass (its inertia) means any leftover push barely moves it."}]}, {"id": "q3", "level": "Level 3 · Separate what you see", "stem": "Arjun drops one drop of food coloring into a still glass of room-temperature water. In the first five seconds, a colored streak falls to the bottom and spreads out across it. Which statement is most accurate?", "realworld": true, "options": [{"t": "The falling streak is bulk movement because the denser dye sinks. Diffusion is the slow spreading that comes after.", "ok": true, "fb": "Correct. Scientists start the diffusion record after the dye has settled into a bottom layer. Everything before that is the drop sinking as a whole."}, {"t": "That falling streak is diffusion, the fastest part of it.", "misc": true, "fb": "A common idea, but no. Diffusion is slow. The drop falls because dye-water is denser than plain water, so the whole drop moves down as a lump. That is bulk movement, not particles spreading one by one."}, {"t": "The streak is Brownian motion of the dye drop.", "fb": "Brownian motion is a tiny, random jiggle of visible specks. A whole drop falling straight down in one direction is not random."}, {"t": "Gravity pulls each dye particle down, so diffusion only goes downward.", "fb": "If diffusion only went down, the color could never rise. Over the next hours and days the color creeps upward, against gravity."}]}, {"id": "q4", "level": "Level 4 · Real-world puzzle", "stem": "A jug of sweet iced tea sits in the fridge for three days. A glass poured from the top tastes just as sweet as the last glass from the bottom. A classmate says, \"That's odd. Sugar crystals sink, so the sugar should end up at the bottom.\" Which is the best reply?", "realworld": true, "options": [{"t": "Dissolved sugar is lighter than water, so it floats evenly.", "misc": true, "fb": "A common idea, but no. Dissolved sugar isn't floating or sinking as lumps at all. Once it dissolves, it's no longer crystals. It's separate molecules spread among the water molecules, part of the solution itself."}, {"t": "The cold fridge freezes the sugar molecules in place.", "fb": "Cold slows particle motion but doesn't stop it, and the tea is still a liquid. Nothing is frozen in place."}, {"t": "Once sugar dissolves, it's separate molecules mixed among the water molecules. Their constant random motion keeps a solution evenly mixed under normal conditions. Crystals sink only before they dissolve.", "ok": true, "fb": "Correct. Dissolving breaks a crystal into single molecules that spread through the water and keep moving. A solution like this doesn't settle out on its own. Settling is what happens to crystals that haven't dissolved, and to suspensions such as muddy water."}, {"t": "Dissolved sugar acts like the milk-fat specks: tiny specks spread through the water that will slowly settle in time.", "misc": true, "fb": "A common mix-up between a solution and a suspension. Milk fat and clay are specks made of many molecules, and some suspensions do settle slowly. Dissolved sugar isn't specks at all. It's single molecules, so there's nothing to settle."}]}, {"id": "q5", "level": "Level 5 · Random vs. net", "stem": "In the on-screen model, an imaginary line splits a box (see the diagram). The left half holds 80 dye particles and the right half holds 20. Every particle moves randomly. Over the next few seconds, which describes the crossings over the line? Choose an answer AND write your reason.", "figure": "<svg viewBox='0 0 420 150' role='img' aria-label='A box split by a dashed line: many dots on the left, few on the right' style='width:100%;max-width:440px;height:auto'><rect x='5' y='5' width='410' height='120' fill='#fff' stroke='#566074' stroke-width='2'/><line x1='210' y1='5' x2='210' y2='125' stroke='#0f6b6b' stroke-width='2' stroke-dasharray='6 4'/><circle cx='130' cy='90' r='3.6' fill='#8a2b7a'/><circle cx='162' cy='110' r='3.6' fill='#8a2b7a'/><circle cx='152' cy='108' r='3.6' fill='#8a2b7a'/><circle cx='19' cy='61' r='3.6' fill='#8a2b7a'/><circle cx='189' cy='80' r='3.6' fill='#8a2b7a'/><circle cx='182' cy='26' r='3.6' fill='#8a2b7a'/><circle cx='101' cy='39' r='3.6' fill='#8a2b7a'/><circle cx='115' cy='73' r='3.6' fill='#8a2b7a'/><circle cx='16' cy='36' r='3.6' fill='#8a2b7a'/><circle cx='66' cy='107' r='3.6' fill='#8a2b7a'/><circle cx='156' cy='30' r='3.6' fill='#8a2b7a'/><circle cx='162' cy='28' r='3.6' fill='#8a2b7a'/><circle cx='129' cy='27' r='3.6' fill='#8a2b7a'/><circle cx='14' cy='103' r='3.6' fill='#8a2b7a'/><circle cx='53' cy='36' r='3.6' fill='#8a2b7a'/><circle cx='197' cy='103' r='3.6' fill='#8a2b7a'/><circle cx='68' cy='112' r='3.6' fill='#8a2b7a'/><circle cx='114' cy='83' r='3.6' fill='#8a2b7a'/><circle cx='52' cy='110' r='3.6' fill='#8a2b7a'/><circle cx='142' cy='113' r='3.6' fill='#8a2b7a'/><circle cx='180' cy='44' r='3.6' fill='#8a2b7a'/><circle cx='81' cy='31' r='3.6' fill='#8a2b7a'/><circle cx='41' cy='21' r='3.6' fill='#8a2b7a'/><circle cx='70' cy='76' r='3.6' fill='#8a2b7a'/><circle cx='15' cy='83' r='3.6' fill='#8a2b7a'/><circle cx='77' cy='46' r='3.6' fill='#8a2b7a'/><circle cx='166' cy='63' r='3.6' fill='#8a2b7a'/><circle cx='73' cy='63' r='3.6' fill='#8a2b7a'/><circle cx='145' cy='20' r='3.6' fill='#8a2b7a'/><circle cx='195' cy='16' r='3.6' fill='#8a2b7a'/><circle cx='153' cy='100' r='3.6' fill='#8a2b7a'/><circle cx='17' cy='94' r='3.6' fill='#8a2b7a'/><circle cx='82' cy='73' r='3.6' fill='#8a2b7a'/><circle cx='16' cy='19' r='3.6' fill='#8a2b7a'/><circle cx='48' cy='111' r='3.6' fill='#8a2b7a'/><circle cx='51' cy='91' r='3.6' fill='#8a2b7a'/><circle cx='187' cy='110' r='3.6' fill='#8a2b7a'/><circle cx='78' cy='50' r='3.6' fill='#8a2b7a'/><circle cx='112' cy='93' r='3.6' fill='#8a2b7a'/><circle cx='34' cy='90' r='3.6' fill='#8a2b7a'/><circle cx='368' cy='102' r='3.6' fill='#8a2b7a'/><circle cx='227' cy='110' r='3.6' fill='#8a2b7a'/><circle cx='237' cy='49' r='3.6' fill='#8a2b7a'/><circle cx='334' cy='108' r='3.6' fill='#8a2b7a'/><circle cx='283' cy='108' r='3.6' fill='#8a2b7a'/><circle cx='321' cy='46' r='3.6' fill='#8a2b7a'/><circle cx='279' cy='32' r='3.6' fill='#8a2b7a'/><circle cx='235' cy='29' r='3.6' fill='#8a2b7a'/><circle cx='348' cy='116' r='3.6' fill='#8a2b7a'/><circle cx='250' cy='19' r='3.6' fill='#8a2b7a'/><text x='105' y='143' text-anchor='middle' font-size='13' fill='#1d2433'>Left: 80 particles<\/text><text x='315' y='143' text-anchor='middle' font-size='13' fill='#1d2433'>Right: 20 particles<\/text><\/svg><p class='legend'>Diagram: each dot stands for 2 particles.<\/p>", "reason": true, "reasonKey": "A strong reason says that every particle moves randomly (none 'knows' where to go), so crossings happen both ways, but four times as many particles on the left means more random moves carry particles across from the left.", "realworld": false, "options": [{"t": "Particles cross only from left to right, toward the emptier side.", "misc": true, "fb": "A common idea, but no. No particle 'knows' where the empty space is. Each one moves randomly, so some particles on the right cross to the left too. Watch the crossing counters in the Model Lab."}, {"t": "Particles cross both ways, but more cross left to right because there are more particles on the left making random moves.", "ok": true, "fb": "Correct. With four times as many particles on the left, about four times as many random moves carry particles across the line from that side. Random motion plus uneven numbers gives net spreading from more to less."}, {"t": "Equal numbers cross each way, so nothing changes.", "fb": "Equal crossings happen only once the two halves are already even. With 80 against 20, far more particles are on hand to wander right."}, {"t": "More cross right to left because particles are attracted to crowds.", "fb": "Dissolved dye particles don't seek each other out. If they did, the color would gather into blobs instead of spreading."}]}, {"id": "q6", "level": "Level 6 · After it's even", "stem": "A week later, Arjun's glass is evenly colored from top to bottom. What are the dye particles doing now?", "realworld": false, "options": [{"t": "They have stopped moving because diffusion is finished.", "misc": true, "fb": "A common idea, but no. The particles never stop jiggling. The net spreading is finished, but the motion goes on."}, {"t": "They slowly settle to the bottom again.", "fb": "If they settled, the bottom would get darker over time. Particle motion keeps dissolved dye spread out, just like the sugar in the iced tea."}, {"t": "They have joined with water into one new substance, so they can't move.", "fb": "Dissolving doesn't make a new substance. Let the water evaporate from a saucer and the dye is left behind."}, {"t": "They keep moving randomly, and about as many move up as down through any level, so the color stays even.", "ok": true, "fb": "Correct. Once the spread is even, the random crossings balance. Motion continues, and it simply keeps the mix even. The Model Lab shows both crossing counters climbing at the same rate."}]}, {"id": "q7", "level": "Level 7 · Weigh the evidence", "stem": "Maya peels an orange in the kitchen twice: once with the furnace fan off and the doors shut, and once with the fan on. Helpers in the hallway raise a hand as soon as they smell it. Everything else is kept the same. Use the table to choose the best-supported conclusion, and write your reason.", "figure": "<table class='evid'><caption>Maya's smell test · <span class='badge-sim'>Illustrative record: made-up data for this question<\/span> (same orange size, same room, same helpers)<\/caption><thead><tr><th>Helper's distance<\/th><th>Trial 1: fan OFF, doors shut<\/th><th>Trial 2: fan ON<\/th><\/tr><\/thead><tbody><tr><td>1 m<\/td><td>45 s<\/td><td>10 s<\/td><\/tr><tr><td>3 m<\/td><td>4 min<\/td><td>25 s<\/td><\/tr><tr><td>5 m<\/td><td>not smelled after 10 min<\/td><td>40 s<\/td><\/tr><tr><td>Thin tissue strip hung from a doorframe between kitchen and hallway<\/td><td>hangs still<\/td><td>flutters and leans toward the hallway<\/td><\/tr><\/tbody><\/table>", "reason": true, "reasonKey": "A strong reason uses the data: with only the fan changed, smell reached every distance much sooner, and the tissue strip showed air moving toward the hallway. So moving air (bulk flow) made a big difference. Diffusion still happens in both trials, including inside the moving air, which is why Trial 1 is slow but not zero.", "realworld": true, "options": [{"t": "Moving air from the fan sped up the spread a lot (the tissue strip shows air moving toward the hallway). Diffusion was happening in both trials, including within the moving air.", "ok": true, "fb": "Correct. Because only the fan changed, the faster times point to bulk flow as a major contributor. Diffusion doesn't switch off in moving air. Smell molecules keep spreading through the air as it's carried along, and in Trial 1 diffusion (plus small drafts) still moved the smell slowly."}, {"t": "Diffusion alone explains both trials equally well, because smell molecules diffuse quickly through air.", "fb": "The only change was the fan, yet the times dropped sharply and the tissue strip leaned toward the hallway. Diffusion alone can't explain that difference. Moving air must have helped."}, {"t": "With the fan on, diffusion stopped, and only the moving air carried the smell.", "misc": true, "fb": "A common idea, but no. Molecular motion never stops, so diffusion keeps going inside moving air. The moving air adds a fast ride on top of it."}, {"t": "The table shows that smells are not made of particles. They travel like light.", "fb": "Light would cross the hallway instantly in both trials. The slow, distance-dependent times and the effect of moving air fit smell molecules carried and spread through the air."}]}, {"id": "q8", "level": "Level 8 · Living systems", "stem": "Blood arriving at the lungs is low in oxygen and high in carbon dioxide. Air in the tiny air sacs (alveoli) is high in oxygen and low in carbon dioxide. Suppose someone breathes air with the normal amount of oxygen but much more carbon dioxide than normal. Why is this dangerous?", "realworld": true, "options": [{"t": "Two gases can't diffuse in opposite directions at the same time, so the carbon dioxide blocks the oxygen.", "misc": true, "fb": "A common idea, but no. Oxygen and carbon dioxide cross the same thin, moist walls in opposite directions at the same time. Each one moves from where it's more concentrated to where it's less."}, {"t": "The lungs have to pump carbon dioxide out using energy, and they get tired.", "fb": "Gas exchange in the air sacs needs no pumping. It's diffusion. Breathing uses energy only to keep refreshing the air."}, {"t": "The difference in carbon dioxide between the blood and the air sacs gets smaller, so less carbon dioxide diffuses out and it builds up in the blood.", "ok": true, "fb": "Correct. Diffusion depends on the difference in concentration. Shrink the difference and you shrink the net flow. The waste gas can't leave fast enough."}, {"t": "Carbon dioxide makes the body use oxygen up faster.", "fb": "The oxygen level here is normal. The problem is the waste gas getting out, not oxygen getting in."}]}, {"id": "q9", "level": "Level 9 · Judge an experiment", "stem": "Maya puts Glass A in a dark cupboard and Glass B on a sunny windowsill, then adds one drop of dye to each. She records the observations in the table and concludes: \"Sunlight makes diffusion faster.\" What is the strongest criticism? Choose an answer AND write your reason.", "figure": "<table class='evid'><caption>Maya's record · <span class='badge-sim'>Illustrative record: made-up data for this question<\/span><\/caption><thead><tr><th><\/th><th>Glass A: dark cupboard<\/th><th>Glass B: sunny windowsill<\/th><\/tr><\/thead><tbody><tr><td>Water temperature at 1 h<\/td><td>21 °C top, 21 °C bottom<\/td><td>27 °C on the sunny side, 23 °C on the shady side<\/td><\/tr><tr><td>At 20 min<\/td><td>flat colored layer on the bottom, fuzzy top edge<\/td><td>colored streaks curling up the sunny side<\/td><\/tr><tr><td>At 3 h<\/td><td>still clear above a 2 cm colored layer<\/td><td>evenly colored<\/td><\/tr><\/tbody><\/table>", "reason": true, "reasonKey": "A strong reason points to the evidence of currents: B was warmer on one side and showed curling streaks, which is a sign of bulk flow. Light, warmth and location all changed at once, so the test isn't fair. A fair test would change only one thing.", "realworld": true, "options": [{"t": "Her conclusion is right. Light gives the dye molecules energy to diffuse.", "fb": "Her own record shows uneven warming and curling streaks in B. That's evidence of currents, so light-powered diffusion isn't shown."}, {"t": "She should have used more dye in Glass A so it could catch up.", "fb": "Different amounts of dye would add another difference and make the test even less fair."}, {"t": "She should have stirred both glasses to make the test equal.", "fb": "Stirring would mix both glasses quickly and hide any difference in diffusion."}, {"t": "She changed more than one thing, and her record shows signs of currents in B (uneven warming, curling streaks). So she can't tell how much was diffusion. A fair test changes only one thing.", "ok": true, "fb": "Correct. Light, warmth, and location all changed. Water warmed on one side rises, and that sets up bulk flow that churns the glass. The streaks are the giveaway."}]}], "q10": {"id": "q10", "level": "Level 10 · Synthesis (open response)", "title": "The Still Pond", "stem": "It's a calm, windless morning at a small garden pond. Answer all four parts in whatever form works best for you: short paragraphs, bullet points, a labeled diagram with short notes, or explaining aloud while an adult jots down your key points.", "parts": ["Tiny clay specks in a drop of pond water jiggle under a microscope. Why? And why doesn't a pebble on the bottom jiggle?", "Purple juice from a split berry slowly spreads through the still water. How does it spread, and why does the overall spread go from more to less even though each particle moves randomly? What changes when a breeze starts stirring the pond?", "Trace oxygen from the air into a fish's blood. Then predict what an unbroken film of oil over the whole pond might do to the oxygen in the water over the next few days, and say what your prediction depends on.", "Give TWO specific pieces of evidence from this lesson that particles are always moving. Then give one fair follow-up test OR one limitation of that evidence."], "modes": ["Written paragraphs", "Bullet points", "Diagram + short notes (in my notebook)", "Spoken: an adult jotted my key points"], "selfcheck": ["I explained the jiggle with uneven hits from moving water molecules too small to see.", "I gave both reasons the pebble stays still: hits from all sides nearly cancel, and it has a large mass.", "I said that each juice particle moves randomly, and that more particles leave the crowded area than enter it.", "I said that a breeze moves water in bulk and mixes faster, while diffusion keeps going too.", "I traced oxygen from the air into the water, across the gills, and into the blood, each step going from more to less.", "My oil prediction says an unbroken film can slow oxygen getting in, and that oxygen falls only if it's used faster than it's replaced.", "I gave two specific pieces of evidence, not just \"particles move.\"", "I gave a fair follow-up test (changing only one thing) or a real limitation."], "sample": ["Clay specks: invisible water molecules keep hitting each speck, a few more on one side than the other at any instant, so it zig-zags. Pebble: hit from every side at once, so the pushes cancel, and its big mass resists.", "Juice: each particle is knocked in random directions. Near the berry there are many particles, farther away few, so more wander out than in, and the net spread goes from more to less. A breeze moves whole masses of water (bulk flow), so it mixes faster. Diffusion still goes on.", "Oxygen: from the air into the water (more in the air), then from the water across the gills into the blood (less in the blood). An unbroken oil film could slow oxygen getting in. If the fish and other living things use oxygen faster than it's replaced, the oxygen level drops. It depends on the film's thickness, how long it stays, and how much oxygen is used.", "Evidence: (1) non-living milk-fat specks jiggle under the microscope; (2) dye spread upward in our unstirred Glass A. Follow-up: set up two identical glasses, one plain water and one with gelatin to stop currents, and compare."]}, "exit": [{"id": "e1", "title": "Ink in jelly", "q": "A drop of food coloring placed in the middle of a bowl of set, plain gelatin spreads slowly into a fuzzy ball over 3 days. There are no swirls. Which process is this, and why is gelatin a useful setup?", "a": "Diffusion. The gel stops the water from flowing in bulk (no currents, no sinking streams), but dissolved dye molecules can still move through the watery spaces in the gel. So the spreading is diffusion alone, and the ball grows in every direction, even upward."}, {"id": "e2", "title": "Smoke under the microscope", "q": "Scientists looking at tiny smoke particles in still air through a microscope see them jiggle. A grain of sand in the same air does not. Explain both.", "a": "Smoke particles are tiny, so uneven hits from moving air molecules shove them about. That's Brownian motion, in a gas this time. A sand grain is hit from every side at once by huge numbers of molecules, so the pushes nearly cancel, and its larger mass resists (it also simply falls)."}, {"id": "e3", "title": "Closet test", "q": "An open bottle of nail-polish remover sits in a closed closet with no fan. By morning the whole closet smells of it. Name the process that was certainly happening, and describe one fair test to find out whether air currents helped.", "a": "Diffusion was certainly happening: molecules evaporated and spread from where there were more to where there were fewer. Small air currents may have helped. A fair test: repeat in the same closet for the same time, changing only one thing (for example, a small fan on vs. off), and compare when the smell is first noticed at the same distances."}], "retrieval": {"next": ["What's the difference between Brownian motion and diffusion? Give an example of each.", "Each particle moves randomly. Why does the overall spread still go from more to less?", "Name one way to tell diffusion apart from bulk flow in a real situation."], "week": ["Draw or describe a concentration gradient and show the net direction of diffusion.", "When a solution is evenly mixed, what are its particles doing?", "Explain in two steps how oxygen gets from the air into your blood, using 'more' and 'less'."]}, "cues": {"start": ["Fill both glasses at minute 0 so the water can settle during the Bridge.", "If there's only one session: Bridge → Model Lab → Mysteries 1, 4, 6 → Quiz, using the virtual glass."], "bridge": ["Add the dye at about minute 8–10. One drop, held just above the surface, into the middle.", "Food coloring stains. Work on a tray.", "The falling streak is bulk flow (density). Don't let it be recorded as diffusion."], "brownian": ["Microscope: 1 tsp milk in ½ cup water, a small drop under a cover slip, 400×, light turned down.", "Wait 30 s for drifting to stop. All specks sliding one way is a current, not Brownian motion.", "Without a microscope, say clearly that the model is a simulation. The real-observation evidence is the learner's own view or a scientist's record."], "diffusion": ["Stir Glass B once (3 slow circles) at +10 min.", "Swirls in Glass A mean currents. Record them; it's a good discussion point.", "Slow change in Glass A is normal: only a centimeter or two in the first day."], "model": ["Raise Speed to fast-forward the diffusion mode to even.", "Ask: 'Do the crossing counters stop when it's even?'"], "life": ["Push for 'more → less' language for each gas.", "Q2 answer: a CO₂-rich breath shrinks the CO₂ difference, so CO₂ builds up in the blood."], "station": ["Use sugar rather than salt (tap water with salt can look hazy).", "Wash hands after the soil. Keep the flashlight out of everyone's eyes.", "Score out of 10 with PDF Section 3."], "mysteries": ["Insist on 'lock in' before revealing.", "On ambiguous cards, give credit for choosing the deciding test."], "quiz": ["The first checked answer is scored. Q5, Q7, and Q9 need a written reason before checking.", "Q10 can be bullets, a diagram with notes, or spoken (you jot the key points). Score with the PDF rubric."], "homework": ["Exit check: about 4 min, done before choosing homework.", "Recommended homework: Smell Map or Settle-or-Suspend Jar. Vanilla Escape: use the bag-in-jar version, or a hand pump (never mouth) for balloons.", "Use the retrieval prompts at the start of the next session and again one week later."]}, "mysteries": [{"id": "m1", "title": "The Living Dust?", "ambiguous": true, "scene": "In 1827, a scientist watched bits from inside pollen grains, suspended in water, jiggling under his microscope. A visitor says: \"Of course they move. Pollen is alive!\"", "question": "What is causing the jiggling?", "choices": ["They're alive and swimming", "Brownian motion from moving water molecules", "Diffusion", "Can't decide yet: I need a test"], "best": 3, "step1": "Good scientists pause here. Living things can move, and moving particles can move things too. Looking alone can't tell the two apart. Which test would decide?", "tests": [{"t": "Look at the same pollen bits at a higher magnification.", "ok": false, "fb": "A closer look shows the same jiggle, just bigger. It doesn't separate 'alive' from 'pushed'."}, {"t": "Look at specks of the same size that were never alive, such as crushed charcoal, ink, or milk fat, in water.", "ok": true, "fb": "That's the deciding test, and Brown did something like it himself. Specks that were never alive jiggle in exactly the same way. Life isn't needed. The cause is the endless motion of the water molecules: Brownian motion."}, {"t": "Tap the table and see if the jiggling changes.", "ok": false, "fb": "Tapping adds a new jolt that moves everything together. It tests your table, not the specks."}], "reveal": "Answer: Brownian motion. A tiny speck gets uneven hits from moving water molecules. Moving does not mean living."}, {"id": "m2", "title": "Sweet to the Last Sip", "ambiguous": false, "scene": "Lemonade made yesterday tastes equally sweet at the top and the bottom of the pitcher, even though nobody has stirred it since.", "question": "What keeps the dissolved sugar evenly mixed?", "choices": ["Diffusion: dissolved sugar molecules keep moving and stay mixed", "Bulk flow: opening the fridge door stirs it", "Sugar specks float, like milk fat", "It isn't really mixed. Tongues can't tell the difference."], "best": 0, "reveal": "Answer: diffusion. Once sugar dissolves, it isn't crystals or specks anymore. It's separate molecules spread among the water molecules, always moving. A solution like this stays evenly mixed under normal conditions; it doesn't settle. Settling is what happens to suspensions (bigger specks, like soil in water) and to sugar crystals that never dissolved."}, {"id": "m3", "title": "The Cloudy Puddle", "ambiguous": false, "scene": "After a storm, a jar of puddle water sits on the windowsill. The sand sinks within a minute, but the water stays cloudy for days.", "question": "Why does the water stay cloudy long after the sand has sunk?", "choices": ["The tiniest clay specks settle far more slowly than sand. Brownian motion jiggles them but doesn't push them up.", "The sand is dissolving", "Bulk flow from the window", "The clay is alive"], "best": 0, "reveal": "Best answer: the tiniest clay specks settle much more slowly than sand, so the cloudiness lasts. Brownian motion makes small specks visibly jiggle, but it gives them no upward push. How long fine particles stay spread through the water depends on their size, their density, and whether they clump together into bigger, faster-sinking lumps. Some very fine particles can stay dispersed for a long time. A cloudy jar on its own doesn't prove which of these matters most. You'd need tests such as measuring how fast the cloudiness clears, or looking at the specks under a microscope. Water like this, with specks bigger than molecules spread through it, is called a suspension."}, {"id": "m4", "title": "Toast Alarm", "ambiguous": true, "scene": "Toast burns. In under half a minute, someone smells it two rooms away. The kitchen fan is on.", "question": "What carried the smell so far, so fast?", "choices": ["Diffusion alone", "Bulk flow: moving air", "Brownian motion of the toast", "Can't decide yet: I need a test"], "best": 3, "step1": "Both could play a part. Smell molecules diffuse through air all the time, and moving air can carry them too. One observation can't tell how much each contributed. Which test would?", "tests": [{"t": "Burn a second piece of toast and smell harder.", "ok": false, "fb": "More smell makes it easier to notice, but it doesn't show how the smell travelled."}, {"t": "Repeat with something smelly (like a peeled orange) in the same place, timing when people at fixed distances first smell it: once with the fan off and doors shut, once with the fan on. Hang a thin strip of tissue from a doorway to show whether the air is moving.", "ok": true, "fb": "That's a deciding test, because only the fan changes. If the fan-on times are much shorter and the tissue strip leans toward the far rooms, moving air was a major contributor. If the times are about the same, it wasn't. (Quiz Q7 shows one set of results like this.)"}, {"t": "Ask everyone if they like the smell of toast.", "ok": false, "fb": "Opinions don't measure how a smell moves."}], "reveal": "Likely answer: moving air helped carry the smell, and diffusion was spreading it the whole time, in still air and inside the moving air. A fan-off/fan-on comparison shows how big each part is. A very fast spread across rooms is a clue that air is moving, but the test is what confirms it."}, {"id": "m5", "title": "Gasping Goldfish", "ambiguous": false, "scene": "Cooking oil was spilled and spread into an unbroken film over the whole surface of a small outdoor fish tub. Two days later it's still there, and the fish are crowding at the top, gulping.", "question": "Which process has most likely slowed down?", "choices": ["Oxygen entering the water from the air by diffusion", "Brownian motion of the fish", "Bulk flow of the oil to the bottom", "Nothing has changed"], "best": 0, "reveal": "Best answer: oxygen getting into the water from the air. Fish take dissolved oxygen in through their gills, and much of it enters the water by diffusing in at the surface. An unbroken oil film can slow that exchange. How much depends on the oil, how thick the film is, and how long it stays. If the fish and other pond life use oxygen faster than it's replaced, the dissolved oxygen falls. (Warm, still water and rotting material can lower oxygen too, so a scientist would measure it rather than guess.)"}, {"id": "m6", "title": "Tea Streams", "ambiguous": false, "scene": "A tea bag is lowered into a still cup of water. Within seconds, dark brown ribbons pour down from the bag to the bottom of the cup.", "question": "What makes the fast, falling ribbons?", "choices": ["Diffusion", "Bulk flow: dense tea-water sinking", "Brownian motion", "Evaporation"], "best": 1, "reveal": "Answer: bulk flow. Water full of dissolved tea is denser than plain water, so it sinks in streams, the same way the food-coloring drop falls. Diffusion is the slow, fuzzy spreading at the edges of those streams, and the gradual evening-out afterwards."}], "homework": [{"id": "h1", "title": "Tea Bag Time-Lapse", "do": "Use room-temperature water in a clear glass. Lower a tea bag in gently and don't touch it again. Take a photo every 2 minutes for 10 minutes, then one more after an hour.", "bring": "Photos labeled 'sinking streams' (bulk flow) and 'fuzzy spreading' (diffusion), and one sentence on how you told them apart."}, {"id": "h2", "title": "Sweet Layers", "do": "Fill a tall glass with room-temperature water. Gently spoon 2 teaspoons of sugar onto the bottom. Don't stir. After 30 minutes and again the next morning, use a clean straw with a finger over the top to lift a tiny sip from the very top, then from the very bottom. Use your own glass and straw.", "bring": "A taste chart (top vs. bottom at each time) and an explanation of what changed and why."}, {"id": "h3", "title": "Smell Map", "recommended": "Recommended: it settles the diffusion vs. moving-air question from Q7 and the Toast Alarm card, with your own data.", "do": "Peel an orange at one end of your home with fans off and doors shut. Helpers stand 1 m, 3 m, and 6 m away and raise a hand when they smell it. Time each one. Repeat on another day with a fan on.", "bring": "A table of times for 'still' and 'fan', and your verdict: did moving air make a big difference? What was diffusion doing in each trial?"}, {"id": "h4", "title": "Settle-or-Suspend Jar", "recommended": "Recommended: it shows the difference between a solution and a suspension (Q4 and the station) over several days.", "do": "Shake two spoonfuls of garden or potting soil with water in a clear jar with a lid. Shine a flashlight through it after 1 minute, 1 hour, 1 day, and 3 days. Wash your hands after handling soil.", "bring": "Four labeled sketches of the layers, plus whether you could see the beam each time, and an explanation using particle size. What does the jar show, and what can't it show on its own?"}, {"id": "h5", "title": "Vanilla Escape", "do": "Main version (no balloon): put a cotton ball with 5 drops of vanilla extract in a zip-top sandwich bag, press out the air, seal it, and wipe the outside. Put it in a clean jar with a lid. Set up a second jar holding a sealed bag with a plain cotton ball (your control). Sniff each jar after 1 hour and the next day. Balloon version, with an adult only: add the vanilla through a funnel and inflate with a needleless hand pump, never by mouth. Skip balloons if anyone has a latex allergy. Vanilla extract is not for drinking.", "bring": "A sniff chart for both jars (or the balloon) at each time, and an explanation of how vanilla molecules got out with no hole you can see. If you smelled nothing, say what that might mean."}], "station": {"title": "Practical Station: Solution, Suspension, or Settler?", "minutes": 8, "materials": "3 clear cups, water, 1 tsp sugar, 1 tsp milk, 1 tsp soil, spoon, phone flashlight, dim room or dark backdrop", "tasks": [{"id": "s1", "t": "Set-up (1 min). Half-fill each cup with water. Cup A: stir in sugar until clear. Cup B: stir in milk. Cup C: stir in soil.", "input": null}, {"id": "s2", "t": "Beam test. In dim light, shine the flashlight through the side of each cup. Can you see the path of the beam inside the water?", "input": "beam"}, {"id": "s3", "t": "Settling watch. Look at each cup right after stirring and again 4 minutes later. What changed?", "input": "text"}, {"id": "s4", "t": "Classify each cup: solution, suspension that stays, or mixture that settles.", "input": "classify"}, {"id": "s5", "t": "Cup C did two different things: some of it sank quickly and some stayed cloudy. Explain the difference using particle size, and say one thing the cloudy cup alone can't tell you.", "input": "text"}, {"id": "s6", "t": "Predict: what would 400× show in Cup A compared with Cup B?", "input": "text"}]}, "quicksort": [["Perfume released into still room air", "Yes, it diffuses. Gas particles are far apart and move freely, so this is quicker than in water (though still slow over many meters)."], ["A drop of food coloring in still water", "Yes, but slowly. Liquid particles are packed close, so each dye particle can only move a tiny distance before it's bumped again."], ["Oxygen from the air into the top of a pond", "Yes. Diffusion can carry molecules from a gas into a liquid (and back out)."], ["A block of copper pressed against a block of aluminum for a year at room temperature", "Practically no. Particles in solids are held in place. (Over very long times or at high temperatures, a tiny amount can mix.)"], ["A drop of cooking oil in still water", "No real spreading. Oil doesn't dissolve in water, so it stays as separate drops or a layer."], ["Water vapor through a coffee filter", "Yes. Gases and liquids can diffuse through materials whose pores are big enough for molecules to pass."]]};
+const SECTIONS = ["start","bridge","brownian","diffusion","model","life","station","mysteries","quiz","homework"];
+const STORE_KEY = "bfsu-a11-v1";
+let S = {done:{}, f:{}, quiz:{}, myst:{}, rows:{}, hw:null, fs:17, proj:false, hc:false, tab:"start", bridge:{}, qs:{}, qcur:0};
+let canStore = true;
+try { const raw = localStorage.getItem(STORE_KEY); if (raw) S = Object.assign(S, JSON.parse(raw)); } catch(e) { canStore = false; }
+let saveTimer = null;
+function save(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>{
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(S)); note(canStore ? "Saved" : ""); }
+    catch(e){ canStore=false; note("Answers kept until this tab closes"); }
+  }, 250);
+}
+function note(t){ const n=document.getElementById("saveNote"); n.textContent=t; if(t==="Saved") setTimeout(()=>{ if(n.textContent==="Saved") n.textContent=""; },1500); }
+const $ = (s,r=document)=>r.querySelector(s);
+const $$ = (s,r=document)=>Array.from(r.querySelectorAll(s));
+function el(tag, attrs={}, html){ const e=document.createElement(tag); for(const k in attrs){ if(k==="class") e.className=attrs[k]; else if(k==="text") e.textContent=attrs[k]; else e.setAttribute(k,attrs[k]); } if(html!==undefined) e.innerHTML=html; return e; }
+function esc(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+
+/* ---------- tabs ---------- */
+const tablist = $("#tablist");
+SECTIONS.forEach((id,i)=>{
+  const sec = $("#t-"+id);
+  const b = el("button",{role:"tab",id:"tab-"+id,"aria-controls":"t-"+id,"aria-selected":"false",tabindex:"-1"});
+  b.innerHTML = (i+1)+". "+esc(sec.dataset.title)+' <span class="tick" aria-hidden="true"></span>';
+  b.addEventListener("click",()=>showTab(id,true));
+  tablist.appendChild(b);
+  sec.setAttribute("aria-labelledby","tab-"+id);
+});
+tablist.addEventListener("keydown",e=>{
+  const i = SECTIONS.indexOf(S.tab);
+  if(e.key==="ArrowRight"){ e.preventDefault(); showTab(SECTIONS[(i+1)%SECTIONS.length],true); }
+  if(e.key==="ArrowLeft"){ e.preventDefault(); showTab(SECTIONS[(i-1+SECTIONS.length)%SECTIONS.length],true); }
+  if(e.key==="Home"){ e.preventDefault(); showTab(SECTIONS[0],true); }
+  if(e.key==="End"){ e.preventDefault(); showTab(SECTIONS[SECTIONS.length-1],true); }
+});
+function showTab(id, focusTab){
+  if(!SECTIONS.includes(id)) id="start";
+  S.tab=id; save(); if(window.closeCue) closeCue();
+  SECTIONS.forEach(s=>{
+    const on = s===id;
+    $("#t-"+s).classList.toggle("active",on);
+    const b=$("#tab-"+s); b.setAttribute("aria-selected",on?"true":"false"); b.tabIndex = on?0:-1;
+  });
+  if(focusTab) $("#tab-"+id).focus();
+  if(id==="model"){ Model.visible(true); } else { Model.visible(false); }
+  if(id==="diffusion") VG.draw();
+  if(id==="model" && S.proj) setTimeout(()=>$("#modelWrap").scrollIntoView(),0); else window.scrollTo({top:0});
+}
+$$(".nextBtn").forEach(b=>b.addEventListener("click",()=>{ const i=SECTIONS.indexOf(S.tab); showTab(SECTIONS[Math.min(i+1,SECTIONS.length-1)]); }));
+$$(".prevBtn").forEach(b=>b.addEventListener("click",()=>{ const i=SECTIONS.indexOf(S.tab); showTab(SECTIONS[Math.max(i-1,0)]); }));
+$$("[data-go]").forEach(b=>b.addEventListener("click",()=>{
+  showTab(b.dataset.go);
+  if(b.dataset.mode) Model.setMode(b.dataset.mode);
+  if(b.dataset.anchor){ const t=document.getElementById(b.dataset.anchor); if(t) setTimeout(()=>t.scrollIntoView({behavior:"smooth"}),30); }
+}));
+
+/* ---------- progress ---------- */
+function renderProgress(){
+  const n = SECTIONS.filter(s=>S.done[s]).length;
+  $("#progText").textContent = n+" of 10 sections done";
+  $("#progBar").style.width = (n*10)+"%";
+  SECTIONS.forEach(s=>{
+    $("#tab-"+s+" .tick").textContent = S.done[s] ? "✓" : "";
+    const b = $('.doneBtn[data-sec="'+s+'"]');
+    if(b){ b.textContent = S.done[s] ? "✓ Done (click to undo)" : "Mark section done"; b.setAttribute("aria-pressed", S.done[s]?"true":"false"); }
+  });
+}
+$$(".doneBtn").forEach(b=>b.addEventListener("click",()=>{ S.done[b.dataset.sec]=!S.done[b.dataset.sec]; save(); renderProgress(); }));
+
+/* ---------- generic saved fields ---------- */
+function bindSaved(root=document){
+  $$("[data-save]",root).forEach(inp=>{
+    const k=inp.dataset.save;
+    if(S.f[k]!==undefined){ if(inp.type==="checkbox") inp.checked=!!S.f[k]; else inp.value=S.f[k]; }
+    inp.addEventListener(inp.type==="checkbox"||inp.tagName==="SELECT"?"change":"input",()=>{ S.f[k] = inp.type==="checkbox"?inp.checked:inp.value; save(); });
+  });
+}
+
+/* ---------- projection controls ---------- */
+function applyView(){
+  document.documentElement.style.setProperty("--fs", S.fs+"px");
+  document.body.classList.toggle("projector",S.proj);
+  document.body.classList.toggle("hc",S.hc);
+  $("#projBtn").setAttribute("aria-pressed",S.proj?"true":"false");
+  $("#hcBtn").setAttribute("aria-pressed",S.hc?"true":"false");
+}
+$("#fsUp").onclick=()=>{ S.fs=Math.min(30,S.fs+2); applyView(); save(); };
+$("#fsDown").onclick=()=>{ S.fs=Math.max(13,S.fs-2); applyView(); save(); };
+$("#projBtn").onclick=()=>{ if(window.closeCue) closeCue(); S.proj=!S.proj; if(S.proj&&S.fs<21) S.fs=21; if(!S.proj) S.fs=17; applyView(); save(); };
+$("#hcBtn").onclick=()=>{ S.hc=!S.hc; applyView(); save(); };
+
+/* ---------- reset all (two-step, no dialogs) ---------- */
+let resetArmed=false, resetT=null;
+$("#resetAll").onclick=()=>{
+  const b=$("#resetAll");
+  if(!resetArmed){ resetArmed=true; b.textContent="Click again to erase everything"; b.classList.add("primary"); resetT=setTimeout(()=>{ resetArmed=false; b.textContent="Reset all answers"; b.classList.remove("primary"); },4000); return; }
+  clearTimeout(resetT);
+  try{ localStorage.removeItem(STORE_KEY); }catch(e){}
+  const keepView = {fs:S.fs, proj:S.proj, hc:S.hc};
+  S = Object.assign({done:{}, f:{}, quiz:{}, myst:{}, rows:{}, hw:null, tab:"start", bridge:{}, qs:{}, qcur:0}, keepView);
+  location.reload();
+};
+
+/* ---------- bridge checks ---------- */
+const BRIDGE = [
+  {t:"All matter is made of particles far too small to see.", ok:true},
+  {t:"There are spaces between particles. When sugar dissolves, its particles fit in among the water particles.", ok:true},
+  {t:"In a liquid, particles slip and slide past each other but stay close together.", ok:true},
+  {t:"In a gas, particles are far apart and move about freely.", ok:true},
+  {t:"Particles in a solid are bigger than particles of the same substance as a liquid.", ok:false, why:"The particles themselves don't change size. In a solid they're held in place; in a liquid they slide past each other."},
+];
+(function(){
+  const ul=$("#bridgeChecks");
+  BRIDGE.forEach((b,i)=>{
+    const li=el("li"); const id="br"+i;
+    li.innerHTML='<label for="'+id+'"><input type="checkbox" id="'+id+'"> <span>'+esc(b.t)+'</span></label>';
+    ul.appendChild(li);
+    const cb=li.querySelector("input"); cb.checked=!!S.bridge[i];
+    cb.addEventListener("change",()=>{ S.bridge[i]=cb.checked; save(); });
+  });
+  $("#bridgeCheckBtn").onclick=()=>{
+    let wrong=[]; BRIDGE.forEach((b,i)=>{ if(!!S.bridge[i]!==b.ok) wrong.push(i); });
+    const fb=$("#bridgeFb");
+    if(!wrong.length) fb.innerHTML='<div class="fb ok"><strong>Your model matches Volume I.</strong>The first four fit. The last one doesn\'t: particles don\'t change size, they just change how freely they move.</div>';
+    else fb.innerHTML='<div class="fb no"><strong>Look again at: '+wrong.map(i=>"#"+(i+1)).join(", ")+'.</strong>'+(wrong.includes(4)?esc(BRIDGE[4].why):"Statements 1–4 all describe the particle model.")+'</div>';
+  };
+})();
+
+/* ---------- investigation table ---------- */
+const ROWS = ["Start (dye settled on bottom)","+10 min (then stir Glass B once)","+20 min","End of Session 1","About +2 h","About +4 h","Bedtime","Next morning","Session 2"];
+function fmtElapsed(ms){ if(ms<0) return "—"; const m=Math.round(ms/60000); if(m<60) return m+" min"; const h=Math.floor(m/60), r=m%60; return h+" h "+(r?r+" min":""); }
+function renderRows(){
+  const tb=$("#dataTable tbody"); tb.innerHTML="";
+  ROWS.forEach((label,i)=>{
+    const r=S.rows[i]||{};
+    const tr=el("tr");
+    const start=(S.rows[0]||{}).ts;
+    tr.innerHTML='<td><strong>'+esc(label)+'</strong></td>'+
+      '<td><span class="clk">'+(r.ts?new Date(r.ts).toLocaleTimeString([], {hour:"numeric",minute:"2-digit"}):"—")+'</span><br><button class="stamp" data-i="'+i+'" aria-label="Stamp time for '+esc(label)+'">Stamp time</button></td>'+
+      '<td>'+(r.ts&&start?fmtElapsed(r.ts-start):"—")+'</td>'+
+      '<td><input type="text" inputmode="decimal" aria-label="Glass A layer height in cm, '+esc(label)+'" data-row="'+i+'" data-k="h" value="'+esc(r.h||"")+'"></td>'+
+      '<td><input type="text" aria-label="Glass A notes, '+esc(label)+'" data-row="'+i+'" data-k="a" value="'+esc(r.a||"")+'"></td>'+
+      '<td><input type="text" aria-label="Glass B notes, '+esc(label)+'" data-row="'+i+'" data-k="b" value="'+esc(r.b||"")+'"></td>';
+    tb.appendChild(tr);
+  });
+  $$(".stamp",tb).forEach(b=>b.onclick=()=>{ const i=+b.dataset.i; S.rows[i]=Object.assign(S.rows[i]||{}, {ts:Date.now()}); save(); renderRows(); });
+  $$("input[data-row]",tb).forEach(inp=>inp.addEventListener("input",()=>{ const i=+inp.dataset.row; S.rows[i]=Object.assign(S.rows[i]||{}); S.rows[i][inp.dataset.k]=inp.value; save(); }));
+}
+
+/* ---------- quick sort ---------- */
+(function(){
+  const box=$("#qsort");
+  DATA.quicksort.forEach((q,i)=>{
+    const d=el("div",{class:"panel",style:"margin:.4rem 0;padding:.6rem .8rem"});
+    const cur=S.qs[i]||{};
+    d.innerHTML='<p style="margin:.1rem 0 .4rem"><strong>'+(i+1)+'. '+esc(q[0])+'</strong></p>'+
+      '<div class="ctrlbar" role="group" aria-label="Your call for case '+(i+1)+'">'+["Yes","Slowly","Practically no"].map(o=>'<button data-o="'+o+'" aria-pressed="'+(cur.c===o)+'">'+o+'</button>').join("")+
+      '<button class="rev" '+(cur.c?"":"disabled")+'>Reveal</button></div><div class="fb info '+(cur.r?"":"hidden")+'">'+esc(q[1])+'</div>';
+    box.appendChild(d);
+    $$("button[data-o]",d).forEach(b=>b.onclick=()=>{ S.qs[i]=Object.assign(S.qs[i]||{}, {c:b.dataset.o}); save(); $$("button[data-o]",d).forEach(x=>x.setAttribute("aria-pressed",x===b?"true":"false")); $(".rev",d).disabled=false; });
+    $(".rev",d).onclick=()=>{ S.qs[i].r=true; save(); $(".fb",d).classList.remove("hidden"); };
+  });
+})();
+
+/* ---------- station ---------- */
+(function(){
+  const st=DATA.station;
+  $("#stTitle").textContent=st.title; $("#stMat").textContent=st.materials;
+  const box=$("#stTasks");
+  st.tasks.forEach((t,i)=>{
+    const d=el("div",{class:"panel",style:"margin:.5rem 0"});
+    let inner='<p style="margin-top:0"><strong>Task '+(i+1)+'.</strong> '+esc(t.t)+'</p>';
+    const opt=(arr)=>'<option value="">—</option>'+arr.map(a=>'<option>'+a+'</option>').join("");
+    if(t.input==="beam") inner+='<div class="grid3">'+["A","B","C"].map(c=>'<label>Cup '+c+' <select data-save="st_beam_'+c+'">'+opt(["Beam clearly visible","Faint / barely","No beam visible"])+'</select></label>').join("")+'</div>';
+    if(t.input==="classify") inner+='<div class="grid3">'+["A","B","C"].map(c=>'<label>Cup '+c+' <select data-save="st_cls_'+c+'">'+opt(["Solution","Suspension that stays","Mixture that settles","Settles AND stays partly cloudy"])+'</select></label>').join("")+'</div>';
+    if(t.input==="text") inner+='<textarea aria-label="Answer for task '+(i+1)+'" data-save="st_'+t.id+'"></textarea>';
+    d.innerHTML=inner; box.appendChild(d);
+  });
+  let left=st.minutes*60, timer=null;
+  const show=()=>{ const m=Math.floor(left/60), s=left%60; const tEl=$("#stTimer"); tEl.textContent= left>0? m+":"+String(s).padStart(2,"0") : "Time!"; tEl.classList.toggle("done",left<=0); };
+  $("#stStart").onclick=()=>{
+    if(timer){ clearInterval(timer); timer=null; $("#stStart").textContent="Resume timer"; return; }
+    if(left<=0) left=st.minutes*60;
+    timer=setInterval(()=>{ left--; show(); if(left<=0){ clearInterval(timer); timer=null; $("#stStart").textContent="Start timer"; } },1000);
+    $("#stStart").textContent="Pause timer";
+  };
+  $("#stReset").onclick=()=>{ clearInterval(timer); timer=null; left=st.minutes*60; show(); $("#stStart").textContent="Start timer"; };
+  show();
+})();
+
+/* ---------- mystery cards ---------- */
+(function(){
+  const box=$("#mysteryCards");
+  DATA.mysteries.forEach((m,mi)=>{
+    const c=el("article",{class:"card","aria-labelledby":m.id+"-h"});
+    box.appendChild(c);
+    const render=()=>{
+      const st=S.myst[m.id]||{};
+      let h='<div class="num">CARD '+(mi+1)+' OF '+DATA.mysteries.length+(m.ambiguous?' · <span style="color:var(--dye)">NEEDS A TEST?</span>':'')+'</div>'+
+        '<h3 id="'+m.id+'-h">'+esc(m.title)+'</h3><p>'+esc(m.scene)+'</p><p><strong>'+esc(m.question)+'</strong></p>'+
+        '<fieldset style="border:0;padding:0;margin:0"><legend class="hidden">Your call</legend><ul class="opts">'+
+        m.choices.map((ch,ci)=>'<li><label class="'+(st.choice===ci?"sel":"")+'"><input type="radio" name="'+m.id+'" value="'+ci+'" '+(st.choice===ci?"checked":"")+' '+(st.locked?"disabled":"")+'> <span>'+esc(ch)+'</span></label></li>').join("")+
+        '</ul></fieldset>'+
+        '<label for="'+m.id+'-why" class="legend">My reason:</label><textarea id="'+m.id+'-why" '+(st.locked?"readonly":"")+'>'+esc(st.why||"")+'</textarea>';
+      if(!st.locked) h+='<div class="ctrlbar"><button class="lock primary" '+(st.choice===undefined?"disabled":"")+'>Lock in my call</button><span class="legend">'+(st.choice===undefined?"Choose first":"")+'</span></div>';
+      else if(!st.rev) h+='<div class="ctrlbar"><button class="reveal primary">Reveal</button><button class="unlock">Change my call</button></div>';
+      else {
+        if(m.ambiguous){
+          h+='<div class="fb info"><strong>'+(st.choice===m.best?"Good call: you spotted that looking isn't enough.":"Hold on. This one can't be settled by looking alone.")+'</strong>'+esc(m.step1)+'</div>';
+          h+='<ul class="opts">'+m.tests.map((t,ti)=>{ let cls= st.test===ti ? (t.ok?"right":"wrong") : ""; return '<li><label class="'+cls+'"><input type="radio" name="'+m.id+'-t" value="'+ti+'" '+(st.test===ti?"checked":"")+' '+(st.solved?"disabled":"")+'> <span>'+esc(t.t)+'</span></label></li>'; }).join("")+'</ul>';
+          if(!st.solved) h+='<div class="ctrlbar"><button class="runtest primary" '+(st.test===undefined?"disabled":"")+'>Run this test</button></div>';
+          if(st.test!==undefined && st.ran){ const t=m.tests[st.test]; h+='<div class="fb '+(t.ok?"ok":"no")+'"><strong>'+(t.ok?"That test decides it.":"That test can't decide it. Try another.")+'</strong>'+esc(t.fb)+'</div>'; }
+          if(st.solved) h+='<div class="fb ok"><strong>Solved</strong>'+esc(m.reveal)+'</div>';
+        } else {
+          const ok=st.choice===m.best;
+          h+='<div class="fb '+(ok?"ok":"no")+'"><strong>'+(ok?"Your call matches.":"Not quite. Here's what's going on.")+'</strong>'+esc(m.reveal)+'</div>';
+        }
+        h+='<div class="ctrlbar"><button class="hide">Hide &amp; reset this card</button></div>';
+      }
+      c.innerHTML=h;
+      $$('input[name="'+m.id+'"]',c).forEach(r=>r.onchange=()=>{ S.myst[m.id]=Object.assign(S.myst[m.id]||{}, {choice:+r.value}); save(); render(); c.querySelector('input[name="'+m.id+'"]:checked').focus(); });
+      const why=$("#"+m.id+"-why"); why.oninput=()=>{ S.myst[m.id]=Object.assign(S.myst[m.id]||{}, {why:why.value}); save(); };
+      const q=(s)=>c.querySelector(s);
+      if(q(".lock")) q(".lock").onclick=()=>{ S.myst[m.id].locked=true; save(); render(); q(".reveal").focus(); };
+      if(q(".unlock")) q(".unlock").onclick=()=>{ S.myst[m.id].locked=false; save(); render(); };
+      if(q(".reveal")) q(".reveal").onclick=()=>{ S.myst[m.id].rev=true; save(); render(); const f=q(".fb"); if(f){ f.setAttribute("tabindex","-1"); f.focus(); } };
+      $$('input[name="'+m.id+'-t"]',c).forEach(r=>r.onchange=()=>{ S.myst[m.id].test=+r.value; S.myst[m.id].ran=false; save(); render(); c.querySelector('input[name="'+m.id+'-t"]:checked').focus(); });
+      if(q(".runtest")) q(".runtest").onclick=()=>{ const st2=S.myst[m.id]; st2.ran=true; if(m.tests[st2.test].ok) st2.solved=true; save(); render(); };
+      if(q(".hide")) q(".hide").onclick=()=>{ S.myst[m.id]={}; save(); render(); };
+    };
+    render();
+  });
+})();
+
+/* ---------- quiz ---------- */
+const QUIZ = DATA.quiz, Q10 = DATA.q10;
+function quizScore(){ return QUIZ.filter(q=>S.quiz[q.id]&&S.quiz[q.id].first===true).length; }
+function renderQuiz(){
+  const nav=$("#qNav"); nav.innerHTML="";
+  const total=QUIZ.length+1;
+  for(let i=0;i<total;i++){
+    const id = i<QUIZ.length?QUIZ[i].id:"q10";
+    const st=S.quiz[id]||{};
+    const b=el("button",{"aria-label":"Question "+(i+1)+(st.checked?(st.first?", first answer correct":", first answer incorrect"):"")});
+    b.textContent="Q"+(i+1);
+    if(i===S.qcur) { b.classList.add("cur"); b.setAttribute("aria-current","step"); }
+    if(i<QUIZ.length && st.checked) b.classList.add(st.first?"okq":"noq");
+    if(i===QUIZ.length && (st.text||"").trim().length>20) b.textContent="Q10 ✎";
+    b.onclick=()=>{ S.qcur=i; save(); renderQuiz(); };
+    nav.appendChild(b);
+  }
+  $("#qScore").textContent="Auto-scored: "+quizScore()+" / 9 correct (Q1–Q9, first checked answer)";
+  const sc10=(S.quiz.q10&&S.quiz.q10.sc)||{}; const nsc=Object.values(sc10).filter(Boolean).length;
+  $("#qScore10").textContent="Q10 self-check: "+nsc+" / "+Q10.selfcheck.length+" items · adult scores Q10 out of 8 with the rubric";
+  const body=$("#qBody"); body.innerHTML="";
+  $("#qPrev").disabled = S.qcur===0; $("#qNext").disabled = S.qcur===total-1;
+  if(S.qcur<QUIZ.length){
+    const q=QUIZ[S.qcur], st=S.quiz[q.id]||{};
+    let h='<div class="panel" style="background:#fff"><div class="time">Question '+(S.qcur+1)+' of 10 · '+esc(q.level)+(q.realworld?' · <span class="tag dye">real-world</span>':'')+'</div>'+
+      '<p style="font-weight:650;font-size:1.05rem;margin:.3rem 0" id="'+q.id+'-stem">'+esc(q.stem)+'</p>'+(q.figure?'<div class="figure">'+q.figure+'</div>':'')+
+      '<fieldset style="border:0;padding:0;margin:.3rem 0" aria-labelledby="'+q.id+'-stem"><legend class="hidden">Options</legend><ul class="opts">';
+    q.options.forEach((o,oi)=>{
+      let cls="";
+      if(st.checked && st.lastSel===oi) cls = o.ok?"right":"wrong";
+      else if(st.sel===oi) cls="sel";
+      h+='<li><label class="'+cls+'"><input type="radio" name="'+q.id+'" value="'+oi+'" '+(st.sel===oi?"checked":"")+'> <span><strong>'+"ABCD"[oi]+'.</strong> '+esc(o.t)+'</span></label></li>';
+    });
+    const needR=!!q.reason, rOK=!needR||((st.reason||"").trim().length>=15);
+    h+='</ul></fieldset>';
+    if(needR) h+='<label for="qReason"><strong>My reason</strong> (required before checking, at least a short sentence):</label><textarea id="qReason" style="min-height:3.5em">'+esc(st.reason||"")+'</textarea>';
+    h+='<div class="ctrlbar"><button class="primary" id="qCheck" '+(st.sel===undefined||!rOK?"disabled":"")+'>Check</button>'+(needR&&!rOK?'<span class="legend" id="qNeed">Write your reason to unlock Check.</span>':'')+(st.checked?'<span class="legend">Scored answer: '+"ABCD"[st.firstSel]+(st.first?" (correct)":" (incorrect)")+'</span>':'')+'</div>';
+    if(st.checked && st.lastSel!==undefined){
+      const o=q.options[st.lastSel];
+      h+='<div class="fb '+(o.ok?"ok":"no")+'" id="qFb" tabindex="-1"><strong>'+(o.ok?"✓ ":"✗ ")+"ABCD"[st.lastSel]+(o.ok?" is right.":" is not the best answer.")+'</strong>'+esc(o.fb)+'</div>';
+      if(q.reason) h+='<div class="fb info"><strong>Compare your reason</strong><em>You wrote:</em> '+esc(st.reasonAtCheck||st.reason||"")+'<br><em>'+esc(q.reasonKey)+'</em></div>';
+      h+='<details><summary>Compare feedback for every option</summary><ul class="allfb">'+q.options.map((o2,i2)=>'<li><strong>'+"ABCD"[i2]+(o2.ok?" ✓":"")+'.</strong> '+esc(o2.fb)+'</li>').join("")+'</ul></details>';
+    }
+    h+='</div>';
+    body.innerHTML=h;
+    $$('input[name="'+q.id+'"]',body).forEach(r=>r.onchange=()=>{ S.quiz[q.id]=Object.assign(S.quiz[q.id]||{}, {sel:+r.value}); save(); renderQuiz(); $('input[name="'+q.id+'"]:checked').focus(); });
+    const rta=$("#qReason"); if(rta) rta.oninput=()=>{ S.quiz[q.id]=Object.assign(S.quiz[q.id]||{}, {reason:rta.value}); save(); const ok=rta.value.trim().length>=15; const cb2=$("#qCheck"); cb2.disabled=(S.quiz[q.id].sel===undefined)||!ok; const n=$("#qNeed"); if(n) n.textContent=ok?"":"Write your reason to unlock Check."; };
+    const cb=$("#qCheck"); if(cb) cb.onclick=()=>{
+      const s=S.quiz[q.id]; if(s.sel===undefined) return;
+      if(q.reason && (s.reason||"").trim().length<15) return;
+      if(!s.checked){ s.checked=true; s.firstSel=s.sel; s.first=!!q.options[s.sel].ok; s.reasonAtCheck=s.reason||""; }
+      s.lastSel=s.sel; save(); renderQuiz(); const f=$("#qFb"); if(f) f.focus();
+      if(QUIZ.every(qq=>S.quiz[qq.id]&&S.quiz[qq.id].checked) && !S.done.quiz) {}
+    };
+  } else {
+    const st=S.quiz.q10||{};
+    let h='<div class="panel" style="background:#fff"><div class="time">Question 10 of 10 · '+esc(Q10.level)+' · <span class="tag dye">real-world</span></div>'+
+      '<h3>'+esc(Q10.title)+'</h3><p>'+esc(Q10.stem)+'</p><ol>'+Q10.parts.map(p=>'<li>'+esc(p)+'</li>').join("")+'</ol>'+
+      '<fieldset style="border:1px solid var(--line);border-radius:8px;padding:.4rem .7rem;margin:.4rem 0"><legend><strong>How I&#39;m answering</strong> (all score the same)</legend>'+Q10.modes.map((m,i)=>'<label style="display:inline-flex;gap:.35em;margin:.2rem 1rem .2rem 0;align-items:center"><input type="radio" name="q10mode" value="'+i+'" '+(st.mode===i?"checked":"")+'> '+esc(m)+'</label>').join("")+'</fieldset>'+
+      '<label for="q10text"><strong>Your answer</strong>, or short notes on your diagram or spoken answer:</label><textarea id="q10text" style="min-height:11em">'+esc(st.text||"")+'</textarea>'+
+      '<p class="legend" id="q10count"></p>'+
+      '<h3>Self-check before you hand it in</h3><ul class="checklist">'+Q10.selfcheck.map((s,i)=>'<li><label><input type="checkbox" data-i="'+i+'" '+((st.sc||{})[i]?"checked":"")+'> <span>'+esc(s)+'</span></label></li>').join("")+'</ul>'+
+      '<div class="ctrlbar"><button class="primary" id="q10commit" '+(st.committed?"disabled":"")+'>'+(st.committed?"✓ Answer committed":"Commit my answer")+'</button><span class="legend" id="q10need"></span></div>'+
+      (st.committed?'<div class="fb info" id="q10sample" tabindex="-1"><strong>Short sample response (compare, then improve your own if you like)</strong><ol>'+Q10.sample.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ol></div>':'')+
+      '<p class="legend">Q10 is not auto-scored. Your adult uses the 8-point rubric in <em>BFSU-A-11-Answer-Reference-v3.pdf</em>. The self-check helps you find gaps; it isn\'t your score.</p></div>';
+    body.innerHTML=h;
+    const ta=$("#q10text"), cnt=$("#q10count");
+    const canCommit=()=>{ const t=ta.value.trim(); const m=(S.quiz.q10||{}).mode; return (m===2||m===3) ? t.length>=10 : t.length>=60; };
+    const upd=()=>{ const m=(S.quiz.q10||{}).mode; cnt.textContent = (m===2||m===3) ? "Diagram or spoken answer: a few key words here are enough." : "Bullets or short paragraphs are fine. Cover all four parts.";
+      const b=$("#q10commit"); const st2=S.quiz.q10||{}; if(b&&!st2.committed){ b.disabled=!canCommit(); $("#q10need").textContent=canCommit()?"":"Answer all four parts (or note your diagram or spoken answer) to unlock the sample."; } };
+    upd();
+    ta.oninput=()=>{ S.quiz.q10=Object.assign(S.quiz.q10||{}, {text:ta.value}); save(); upd(); };
+    $$('input[name="q10mode"]',body).forEach(r=>r.onchange=()=>{ S.quiz.q10=Object.assign(S.quiz.q10||{}, {mode:+r.value}); save(); upd(); });
+    $("#q10commit").onclick=()=>{ if(!canCommit()) return; S.quiz.q10.committed=true; save(); renderQuiz(); const sm=$("#q10sample"); if(sm) sm.focus(); };
+    $$("input[data-i]",body).forEach(cbx=>cbx.onchange=()=>{ S.quiz.q10=Object.assign(S.quiz.q10||{}); S.quiz.q10.sc=S.quiz.q10.sc||{}; S.quiz.q10.sc[cbx.dataset.i]=cbx.checked; save();
+      const n=Object.values(S.quiz.q10.sc).filter(Boolean).length; $("#qScore10").textContent="Q10 self-check: "+n+" / "+Q10.selfcheck.length+" items · adult scores Q10 out of 8 with the rubric"; });
+  }
+}
+$("#qPrev").onclick=()=>{ if(S.qcur>0){ S.qcur--; save(); renderQuiz(); } };
+$("#qNext").onclick=()=>{ if(S.qcur<QUIZ.length){ S.qcur++; save(); renderQuiz(); } };
+let qResetArmed=false;
+$("#qReset").onclick=()=>{ const b=$("#qReset"); if(!qResetArmed){ qResetArmed=true; b.textContent="Click again to clear quiz"; setTimeout(()=>{qResetArmed=false;b.textContent="Reset quiz";},4000); return; } qResetArmed=false; b.textContent="Reset quiz"; S.quiz={}; S.qcur=0; save(); renderQuiz(); };
+
+/* ---------- homework ---------- */
+(function(){
+  const box=$("#hwCards");
+  DATA.homework.forEach((h,i)=>{
+    const c=el("article",{class:"card"});
+    if(h.recommended) c.classList.add("rec");
+    c.innerHTML='<div class="num">CHOICE '+(i+1)+' OF 5</div><h3>'+esc(h.title)+'</h3>'+(h.recommended?'<div class="recommend">★ '+esc(h.recommended)+'</div>':'')+'<p><strong>Do:</strong> '+esc(h.do)+'</p><p><strong>Bring back:</strong> '+esc(h.bring)+'</p>'+
+      '<label style="margin-top:auto;display:flex;gap:.5em;align-items:center;font-weight:650"><input type="radio" name="hw" value="'+h.id+'" '+(S.hw===h.id?"checked":"")+' style="transform:scale(1.3)"> I choose this one</label>';
+    box.appendChild(c);
+  });
+  $$('input[name="hw"]').forEach(r=>r.onchange=()=>{ S.hw=r.value; save(); });
+})();
+
+/* ---------- exit check + retrieval ---------- */
+(function(){
+  const box=$("#exitBox"); S.exit=S.exit||{};
+  DATA.exit.forEach((e,i)=>{
+    const d=el("div",{class:"panel",style:"margin:.5rem 0;background:#fff"}); box.appendChild(d);
+    const render=()=>{
+      const st=S.exit[e.id]||{};
+      d.innerHTML='<p style="margin-top:0"><strong>'+(i+1)+'. '+esc(e.title)+'.</strong> '+esc(e.q)+'</p><textarea aria-label="Answer to exit question '+(i+1)+'" '+(st.c?"readonly":"")+'>'+esc(st.t||"")+'</textarea>'+
+        '<div class="ctrlbar">'+(st.c?'<span class="legend">✓ Committed</span>':'<button class="primary ec" '+((st.t||"").trim().length<15?"disabled":"")+'>Commit &amp; reveal sample</button><span class="legend">Write at least a sentence first.</span>')+'</div>'+
+        (st.c?'<div class="fb info"><strong>Sample answer</strong>'+esc(e.a)+'</div>':'');
+      const ta=d.querySelector("textarea");
+      ta.oninput=()=>{ S.exit[e.id]=Object.assign(S.exit[e.id]||{}, {t:ta.value}); save(); const b=d.querySelector(".ec"); if(b) b.disabled=ta.value.trim().length<15; };
+      const b=d.querySelector(".ec"); if(b) b.onclick=()=>{ S.exit[e.id].c=true; save(); render(); };
+    };
+    render();
+  });
+  const fill=(id,arr,key)=>{ const ol=$(id); arr.forEach((q,i)=>{ const li=el("li"); li.innerHTML=esc(q)+'<textarea aria-label="Retrieval answer" data-save="ret_'+key+i+'" style="min-height:2.6em;margin-top:.2rem"></textarea>'; ol.appendChild(li); }); };
+  fill("#retNext",DATA.retrieval.next,"n"); fill("#retWeek",DATA.retrieval.week,"w");
+})();
+
+/* ---------- projector adult cue (temporary, per section) ---------- */
+(function(){
+  const panel=$("#cuePanel"), btn=$("#cueBtn");
+  window.closeCue=()=>{ panel.classList.add("hidden"); btn.setAttribute("aria-expanded","false"); };
+  btn.onclick=()=>{
+    if(!panel.classList.contains("hidden")){ closeCue(); btn.focus(); return; }
+    $("#cueTitle").textContent=$("#t-"+S.tab).dataset.title;
+    $("#cueList").innerHTML=(DATA.cues[S.tab]||[]).map(c=>"<li>"+esc(c)+"</li>").join("");
+    panel.classList.remove("hidden"); btn.setAttribute("aria-expanded","true"); panel.focus();
+  };
+  $("#cueClose").onclick=()=>{ closeCue(); btn.focus(); };
+  document.addEventListener("keydown",e=>{ if(e.key==="Escape" && !panel.classList.contains("hidden")){ closeCue(); btn.focus(); } });
+})();
+
+/* ================= VIRTUAL GLASS ================= */
+const VG = (function(){
+  const cv=$("#vgCanvas"), ctx=cv.getContext("2d");
+  const N=100, D=5e-4;            // cells of 1 mm; food dye D ≈ 5e-10 m²/s = 5e-4 mm²/s
+  const H=336;                    // hours
+  function solve(Deff){
+    let c=new Float64Array(N); for(let i=0;i<6;i++) c[i]=1;
+    const dt=0.4/Deff; const per=3600/dt; const snaps=[Float64Array.from(c)];
+    let acc=0, n=new Float64Array(N);
+    const r=Deff*dt;
+    for(let h=1;h<=H;h++){
+      acc+=per; const steps=Math.floor(acc); acc-=steps;
+      for(let s=0;s<steps;s++){
+        n[0]=c[0]+r*(c[1]-c[0]); n[N-1]=c[N-1]+r*(c[N-2]-c[N-1]);
+        for(let i=1;i<N-1;i++) n[i]=c[i]+r*(c[i+1]-2*c[i]+c[i-1]);
+        const t=c; c=n; n=t;
+      }
+      snaps.push(Float64Array.from(c));
+    }
+    return snaps;
+  }
+  let pure=null, curr=null;
+  function ensure(){ if(!pure){ pure=solve(D); curr=solve(D*30); } }
+  function layer(c){ let top=0; for(let i=0;i<N;i++) if(c[i]>=0.04) top=i+1; return top/10; }
+  function even(c){ let mn=1e9,mx=0; for(const v of c){ if(v<mn) mn=v; if(v>mx) mx=v; } return Math.round(100*mn/mx); }
+  function drawGlass(x,label,sub,c){
+    const gx=x, gy=40, gw=150, gh=240;
+    ctx.fillStyle="#1d2433"; ctx.font="bold 17px system-ui"; ctx.textAlign="center"; ctx.fillText(label,gx+gw/2,22);
+    ctx.font="13px system-ui"; ctx.fillStyle="#566074"; ctx.fillText(sub,gx+gw/2,gy+gh+22);
+    for(let i=0;i<N;i++){
+      const v=1-Math.exp(-8*c[i]);
+      ctx.fillStyle="rgba(138,43,122,"+v.toFixed(3)+")";
+      const y=gy+gh-(i+1)*gh/N; ctx.fillRect(gx,y,gw,gh/N+0.6);
+    }
+    ctx.strokeStyle="#1d2433"; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(gx,gy-6); ctx.lineTo(gx,gy+gh); ctx.lineTo(gx+gw,gy+gh); ctx.lineTo(gx+gw,gy-6); ctx.stroke();
+    ctx.fillStyle="#1d2433"; ctx.font="11px system-ui"; ctx.textAlign="right"; ctx.lineWidth=1;
+    for(let cm=0;cm<=10;cm+=2){ const y=gy+gh-cm*gh/10; ctx.beginPath(); ctx.moveTo(gx-8,y); ctx.lineTo(gx,y); ctx.stroke(); ctx.fillText(cm+" cm",gx-10,y+4); }
+  }
+  function draw(){
+    ensure();
+    const t=+$("#vgTime").value;
+    ctx.clearRect(0,0,cv.width,cv.height);
+    const stirred=new Float64Array(N); const tot=pure[0].reduce((a,b)=>a+b,0);
+    if(t===0){ stirred.set(pure[0]); } else stirred.fill(tot/N);
+    drawGlass(90,"Pure diffusion","perfectly still water",pure[t]);
+    drawGlass(380,"Gentle currents","illustration only",curr[t]);
+    drawGlass(670,"Stirred once","bulk flow",stirred);
+    const days=t>=24?" ("+(t/24).toFixed(t%24?1:0)+" days)":"";
+    $("#vgTimeOut").textContent=t+" h"+days;
+    $("#vgRead").textContent="At "+t+" h, colored-layer height and evenness (top color as % of bottom color): pure diffusion "+layer(pure[t]).toFixed(1)+" cm, "+even(pure[t])+"% · gentle currents "+layer(curr[t]).toFixed(1)+" cm, "+even(curr[t])+"% · stirred "+(t?"10.0 cm, 100% (mixed within about a minute)":layer(pure[0]).toFixed(1)+" cm, 0%")+".";
+  }
+  let playing=null;
+  $("#vgTime").addEventListener("input",draw);
+  $("#vgPlay").onclick=()=>{
+    if(playing){ clearInterval(playing); playing=null; $("#vgPlay").textContent="▶ Play"; return; }
+    const s=$("#vgTime"); if(+s.value>=H) s.value=0;
+    $("#vgPlay").textContent="⏸ Pause";
+    playing=setInterval(()=>{ s.value=Math.min(H,+s.value+2); draw(); if(+s.value>=H){ clearInterval(playing); playing=null; $("#vgPlay").textContent="▶ Play"; } },60);
+  };
+  $("#vgReset").onclick=()=>{ if(playing){clearInterval(playing);playing=null;$("#vgPlay").textContent="▶ Play";} $("#vgTime").value=0; draw(); };
+  return {draw};
+})();
+
+/* ================= PARTICLE MODEL ================= */
+const Model = (function(){
+  const cv=$("#mCanvas"), ctx=cv.getContext("2d");
+  const W=cv.width, H=cv.height;
+  let mode="brownian", running=true, shown=false, raf=null, speed=1, frame=0;
+  let rnd=Math.random;
+  function gauss(){ let u=0,v=0; while(!u) u=rnd(); while(!v) v=rnd(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); }
+  /* --- Brownian --- */
+  let mol=[], disk=null, trail=[], hitsL=0, hitsR=0, hitLog=[];
+  function initBrown(){
+    mol=[]; trail=[]; hitLog=[]; hitsL=hitsR=0;
+    const R=+$("#bSize").value; const M=40*Math.pow(R/8,3);
+    disk={x:W/2,y:H/2,vx:0,vy:0,r:R,m:M};
+    for(let i=0;i<1500;i++){ let x,y; do{ x=rnd()*W; y=rnd()*H; } while(Math.hypot(x-disk.x,y-disk.y)<R+4);
+      mol.push({x,y,vx:gauss()*2.4,vy:gauss()*2.4}); }
+  }
+  function stepBrown(){
+    const sub=2;
+    for(let s=0;s<sub;s++){
+      for(const p of mol){
+        p.x+=p.vx/sub; p.y+=p.vy/sub;
+        if(p.x<0){p.x=-p.x;p.vx=-p.vx;} if(p.x>W){p.x=2*W-p.x;p.vx=-p.vx;}
+        if(p.y<0){p.y=-p.y;p.vy=-p.vy;} if(p.y>H){p.y=2*H-p.y;p.vy=-p.vy;}
+        const dx=p.x-disk.x, dy=p.y-disk.y, d=Math.hypot(dx,dy), rr=disk.r+1.5;
+        if(d<rr && d>0){
+          const nx=dx/d, ny=dy/d; const vn=(p.vx-disk.vx)*nx+(p.vy-disk.vy)*ny;
+          if(vn<0){
+            const m=1, M=disk.m;
+            p.vx-= (2*M/(m+M))*vn*nx; p.vy-= (2*M/(m+M))*vn*ny;
+            disk.vx+= (2*m/(m+M))*vn*nx; disk.vy+= (2*m/(m+M))*vn*ny;
+            if(nx<0) hitsL++; else hitsR++;
+          }
+          p.x=disk.x+nx*rr; p.y=disk.y+ny*rr;
+        }
+      }
+      disk.x+=disk.vx/sub; disk.y+=disk.vy/sub;
+      if(disk.x<disk.r){disk.x=disk.r;disk.vx=Math.abs(disk.vx);} if(disk.x>W-disk.r){disk.x=W-disk.r;disk.vx=-Math.abs(disk.vx);}
+      if(disk.y<disk.r){disk.y=disk.r;disk.vy=Math.abs(disk.vy);} if(disk.y>H-disk.r){disk.y=H-disk.r;disk.vy=-Math.abs(disk.vy);}
+    }
+    trail.push([disk.x,disk.y]); if(trail.length>900) trail.shift();
+    hitLog.push([hitsL,hitsR]); hitsL=hitsR=0; if(hitLog.length>60) hitLog.shift();
+  }
+  function drawBrown(){
+    if($("#bShowMol").checked){ ctx.fillStyle="#5b8fb9"; for(const p of mol){ ctx.beginPath(); ctx.arc(p.x,p.y,1.6,0,6.283); ctx.fill(); } }
+    if($("#bTrail").checked && trail.length>1){ ctx.strokeStyle="rgba(138,43,122,.55)"; ctx.lineWidth=1.5; ctx.beginPath(); ctx.moveTo(trail[0][0],trail[0][1]); for(const t of trail) ctx.lineTo(t[0],t[1]); ctx.stroke(); }
+    ctx.fillStyle="#f3d27a"; ctx.strokeStyle="#8a6d1a"; ctx.lineWidth=2; ctx.beginPath(); ctx.arc(disk.x,disk.y,disk.r,0,6.283); ctx.fill(); ctx.stroke();
+    const L=hitLog.reduce((a,h)=>a+h[0],0), R=hitLog.reduce((a,h)=>a+h[1],0);
+    readout([["Hits from the left (last ~1 s)",L],["Hits from the right (last ~1 s)",R],["Difference",Math.abs(L-R)+(L===R?" (even!)":L>R?" → pushed right":" → pushed left")],["Speck",$("#bSize").selectedOptions[0].text+" (mass "+Math.round(disk.m)+"× a molecule)"]]);
+    caption("Brownian motion. The yellow speck is pushed by invisible water molecules"+($("#bShowMol").checked?" (shown as blue dots)":" (hidden, the way a microscope sees it)")+". Hits from each side are almost never equal, so the speck zig-zags.");
+  }
+  /* --- Diffusion --- */
+  let dye=[], cross={lr:0,rl:0}, crossLog=[], track=[];
+  function initDiff(){ dye=[]; cross={lr:0,rl:0}; crossLog=[]; track=[];
+    for(let i=0;i<420;i++) dye.push({x:6+rnd()*(W*0.25), y:6+rnd()*(H-82), s:0});
+    dye.forEach(p=>p.s=p.x<W/2?0:1);
+  }
+  const HB=H-70, BAND=30;
+  function stepDiff(){
+    const cur=$("#dCurrent").checked; let lr=0, rl=0;
+    for(const p of dye){
+      p.x+=gauss()*9; p.y+=gauss()*9;
+      if(cur){ const U=2.6; const kx=Math.PI/W, ky=Math.PI/HB;
+        const vx=U*Math.sin(kx*p.x)*Math.cos(ky*p.y), vy=-U*(HB/W)*Math.cos(kx*p.x)*Math.sin(ky*p.y); p.x+=vx; p.y+=vy; }
+      if(p.x<2) p.x=4-p.x; if(p.x>W-2) p.x=2*(W-2)-p.x;
+      if(p.y<2) p.y=4-p.y; if(p.y>HB-2) p.y=2*(HB-2)-p.y;
+      const s=p.x<W/2-BAND?0:(p.x>W/2+BAND?1:p.s); if(s!==p.s){ if(s===1) lr++; else rl++; p.s=s; }
+    }
+    cross.lr+=lr; cross.rl+=rl; crossLog.push([lr,rl]); if(crossLog.length>600) crossLog.shift();
+    const t=dye[0]; track.push([t.x,t.y]); if(track.length>1500) track.shift();
+  }
+  function drawDiff(){
+    ctx.strokeStyle="#bbb"; ctx.strokeRect(0.5,0.5,W-1,HB);
+    ctx.fillStyle="rgba(15,107,107,.08)"; ctx.fillRect(W/2-BAND,0,2*BAND,HB); ctx.setLineDash([6,5]); ctx.strokeStyle="#0f6b6b"; ctx.beginPath(); ctx.moveTo(W/2,0); ctx.lineTo(W/2,HB); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle="#8a2b7a"; for(const p of dye){ ctx.beginPath(); ctx.arc(p.x,p.y,2.6,0,6.283); ctx.fill(); }
+    if($("#dTrack").checked){ ctx.strokeStyle="rgba(15,107,107,.8)"; ctx.lineWidth=1.4; ctx.beginPath(); track.forEach((t,i)=>i?ctx.lineTo(t[0],t[1]):ctx.moveTo(t[0],t[1])); ctx.stroke();
+      const t=dye[0]; ctx.fillStyle="#f0a500"; ctx.strokeStyle="#000"; ctx.beginPath(); ctx.arc(t.x,t.y,6,0,6.283); ctx.fill(); ctx.stroke(); }
+    if($("#dHist").checked){ const B=12, cnt=new Array(B).fill(0); dye.forEach(p=>cnt[Math.min(B-1,Math.floor(p.x/W*B))]++); const mx=Math.max(...cnt,1);
+      for(let i=0;i<B;i++){ const bh=cnt[i]/mx*52; ctx.fillStyle="rgba(138,43,122,.75)"; ctx.fillRect(i*W/B+3,H-4-bh,W/B-6,bh); ctx.fillStyle="#1d2433"; ctx.font="12px system-ui"; ctx.textAlign="center"; ctx.fillText(cnt[i],i*W/B+W/B/2,H-8-bh); } }
+    const left=dye.filter(p=>p.x<W/2).length;
+    const rec=crossLog.slice(-600); const a=rec.reduce((s,c)=>s+c[0],0), b=rec.reduce((s,c)=>s+c[1],0);
+    const gap=Math.abs(2*left-dye.length)/dye.length;
+    const status = gap>0.15 ? "Spreading: more crossings from the crowded "+(left>dye.length-left?"left":"right")+" side" : "About even: crossings balance, and motion continues";
+    readout([["Left half · right half",left+" · "+(dye.length-left)],["Crossed L → R · R → L (totals)",cross.lr+" · "+cross.rl],["Last ~10 s: L → R · R → L",a+" · "+b+"  (net "+Math.abs(a-b)+(a>=b?" →":" ←")+")"],["What's happening",status]]);
+    caption("Diffusion. Purple dots are dissolved dye particles; water molecules (not shown) knock each one randomly."+($("#dCurrent").checked?" A CURRENT is ON: the whole liquid is moving, which is bulk flow, not diffusion.":" The bars show how many particles are in each strip.")+" A crossing counts when a particle passes all the way through the shaded band. The orange dot is one particle being tracked. Tip: raise Speed to fast-forward.");
+  }
+  /* --- Lungs --- */
+  let gas=[], lcross={o:0,c:0}, lLog=[], lastBreath=0, lastBlood=0;
+  const WALL=W/2, PORES=[[30,75],[105,150],[180,225],[255,300],[330,375],[405,445]];
+  function inPore(y){ return PORES.some(p=>y>=p[0]&&y<=p[1]); }
+  function addGas(type,side,n){ for(let i=0;i<n;i++) gas.push({t:type, x: side? WALL+12+rnd()*(W-WALL-24) : 12+rnd()*(WALL-24), y:10+rnd()*(H-20)}); }
+  function initLung(){ gas=[]; lLog=[]; lcross={o:0,c:0}; addGas("o",0,120); addGas("c",0,10); addGas("o",1,20); addGas("c",1,110); lastBreath=lastBlood=frame; }
+  function stepLung(){
+    let o=0,c=0;
+    for(const p of gas){
+      const ox=p.x; p.x+=gauss()*8; p.y+=gauss()*8;
+      if(p.y<4) p.y=8-p.y; if(p.y>H-4) p.y=2*(H-4)-p.y;
+      if(p.x<4) p.x=8-p.x; if(p.x>W-4) p.x=2*(W-4)-p.x;
+      const wasL=ox<WALL, isL=p.x<WALL;
+      if(wasL!==isL){ if(!inPore(p.y)) p.x=ox; else { const d=isL?-1:1; if(p.t==="o") o+=d; else c+=d; } }
+    }
+    lcross.o+=o; lcross.c+=c; lLog.push([o,c]); if(lLog.length>300) lLog.shift();
+    const side=(t,s)=>gas.filter(p=>p.t===t&&(s?p.x>=WALL:p.x<WALL));
+    if($("#lBreath").checked && frame-lastBreath>180){ lastBreath=frame;
+      const target=$("#lStuffy").checked?105:10;
+      let lc=side("c",0); while(lc.length>target){ const k=lc.pop(); gas.splice(gas.indexOf(k),1); }
+      if(lc.length<target) addGas("c",0,target-lc.length);
+      const lo=side("o",0).length; if(lo<120) addGas("o",0,120-lo);
+    }
+    if($("#lBlood").checked && frame-lastBlood>120){ lastBlood=frame;
+      let ro=side("o",1); while(ro.length>20){ const k=ro.pop(); gas.splice(gas.indexOf(k),1); }
+      const rc=side("c",1).length; if(rc<110) addGas("c",1,110-rc);
+    }
+  }
+  function drawLung(){
+    ctx.fillStyle="#fdecea"; ctx.fillRect(0,0,WALL,H); ctx.fillStyle="#f7d4d0"; ctx.fillRect(WALL,0,W-WALL,H);
+    ctx.fillStyle="#9a2c1f"; let y0=0; PORES.concat([[H,H]]).forEach(p=>{ ctx.fillRect(WALL-4,y0,8,p[0]-y0); y0=p[1]; });
+    for(const p of gas){ if(p.t==="o"){ ctx.fillStyle="#d9730d"; ctx.beginPath(); ctx.arc(p.x,p.y,3.6,0,6.283); ctx.fill(); } else { ctx.fillStyle="#4a5568"; ctx.fillRect(p.x-3.2,p.y-3.2,6.4,6.4); } }
+    ctx.font="bold 15px system-ui"; ctx.fillStyle="rgba(255,255,255,.85)"; ctx.fillRect(4,4,160,24); ctx.fillRect(W-164,4,160,24); ctx.fillStyle="#1d2433"; ctx.textAlign="left"; ctx.fillText("AIR SAC (alveolus)",10,21); ctx.textAlign="right"; ctx.fillText("BLOOD (capillary)",W-10,21);
+    const cnt=(t,s)=>gas.filter(p=>p.t===t&&(s?p.x>=WALL:p.x<WALL)).length;
+    const rec=lLog.slice(-150); const no=rec.reduce((s,c)=>s+c[0],0), nc=rec.reduce((s,c)=>s+c[1],0);
+    const dir=(n,into)=> n===0?"none": (n>0? n+" into blood" : (-n)+" into air sac");
+    readout([["Oxygen (●) air · blood",cnt("o",0)+" · "+cnt("o",1)],["Carbon dioxide (■) air · blood",cnt("c",0)+" · "+cnt("c",1)],["Net O₂ since last change",dir(lcross.o)],["Net CO₂ since last change",dir(lcross.c)]]);
+    caption("Gas exchange. Orange circles are oxygen and gray squares are carbon dioxide. Gaps in the red wall stand for the thin, moist membrane. Each gas diffuses toward where there is less of it. Net counts restart when you change a setting."+(!$("#lBreath").checked?" Breathing is OFF: the air sac isn't refreshed.":"")+($("#lStuffy").checked?" Stuffy air: the air breathed in carries lots of CO₂.":""));
+  }
+  /* --- shared --- */
+  function readout(items){ $("#mReadout").innerHTML=items.map(i=>'<div>'+esc(i[0])+'<br><b>'+esc(i[1])+'</b></div>').join(""); }
+  function caption(t){ $("#mCaption").textContent=t; cv.setAttribute("aria-label",t); }
+  function init(){ frame=0; if(mode==="brownian") initBrown(); else if(mode==="diffusion") initDiff(); else initLung(); render(); }
+  function step(){ frame++; if(mode==="brownian") stepBrown(); else if(mode==="diffusion") stepDiff(); else stepLung(); }
+  function render(){ ctx.clearRect(0,0,W,H); ctx.fillStyle="#fdfdfb"; ctx.fillRect(0,0,W,H); if(mode==="brownian") drawBrown(); else if(mode==="diffusion") drawDiff(); else drawLung(); badge(); }
+  function badge(){ ctx.font="bold 12px system-ui"; const t="SIMULATION"; const w=ctx.measureText(t).width+12; const x=mode==="lung"?W/2-w/2:W-w-6, y=mode==="lung"?H-22:6; ctx.fillStyle="rgba(255,244,214,.95)"; ctx.fillRect(x,y,w,18); ctx.strokeStyle="#b7791f"; ctx.lineWidth=1; ctx.strokeRect(x+.5,y+.5,w-1,17); ctx.fillStyle="#7a4e0a"; ctx.textAlign="left"; ctx.fillText(t,x+6,y+13); }
+  let acc=0, last=0, readT=0;
+  function loop(ts){
+    raf=requestAnimationFrame(loop);
+    if(!last) last=ts; const dt=Math.min(100,ts-last); last=ts;
+    if(running){ acc+=dt/16.67*speed; let n=0; while(acc>=1 && n<8){ step(); acc-=1; n++; } }
+    render();
+  }
+  function visible(v){ shown=v; if(v&&!raf){ last=0; raf=requestAnimationFrame(loop); } if(!v&&raf){ cancelAnimationFrame(raf); raf=null; } }
+  function setMode(m){ mode=m; $$(".modebar [data-mode]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.mode===m?"true":"false"));
+    $("#ctlBrown").classList.toggle("hidden",m!=="brownian"); $("#ctlDiff").classList.toggle("hidden",m!=="diffusion"); $("#ctlLung").classList.toggle("hidden",m!=="lung"); init(); }
+  function setRunning(r){ running=r; $("#mPlay").textContent=r?"⏸ Pause":"▶ Play"; }
+  $$(".modebar [data-mode]").forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
+  $("#mPlay").onclick=()=>setRunning(!running);
+  $("#mStep").onclick=()=>{ setRunning(false); for(let i=0;i<3;i++) step(); render(); };
+  $("#mReset").onclick=()=>init();
+  $("#mSpeed").oninput=e=>speed=+e.target.value;
+  $("#bSize").onchange=()=>init();
+  ["#lStuffy","#lBreath","#lBlood"].forEach(id=>$(id).addEventListener("change",()=>{ lcross.o=0; lcross.c=0; }));
+  $("#mFull").onclick=()=>{ const w=$("#modelWrap"); try{ if(document.fullscreenElement) document.exitFullscreen(); else if(w.requestFullscreen) w.requestFullscreen(); else if(w.webkitRequestFullscreen) w.webkitRequestFullscreen(); }catch(e){} };
+  document.addEventListener("keydown",e=>{
+    if(!shown) return; const t=e.target; if(t && (t.tagName==="TEXTAREA"||(t.tagName==="INPUT"&&t.type==="text")||t.tagName==="SELECT")) return;
+    if(e.key===" " && !(t.tagName==="BUTTON"||t.tagName==="INPUT")){ e.preventDefault(); setRunning(!running); }
+    else if(e.key==="r"||e.key==="R"){ init(); }
+    else if(e.key==="s"||e.key==="S"){ setRunning(false); for(let i=0;i<3;i++) step(); render(); }
+    else if(e.key==="1") setMode("brownian"); else if(e.key==="2") setMode("diffusion"); else if(e.key==="3") setMode("lung");
+  });
+  document.addEventListener("visibilitychange",()=>{ if(document.hidden) visible(false); else if(S.tab==="model") visible(true); });
+  init();
+  return {setMode, visible, init, _state:()=>({mode,running,frame})};
+})();
+
+/* ---------- boot ---------- */
+applyView(); bindSaved(); renderRows(); renderQuiz(); renderProgress(); showTab(S.tab||"start");
+if(!canStore) note("Answers kept until this tab closes");
+</script>
+</body>
+</html>
