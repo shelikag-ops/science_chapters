@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; frame-src https://docs.google.com; form-action 'none'; base-uri 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow">
+<title>PUBLIC TEST DEMO · Teacher assessment embed · synthetic data only</title>
+<style>
+:root{--bg:#faf8f3;--panel:#ffffff;--ink:#1d2433;--muted:#566074;--line:#d9d4c7;--accent:#0f6b6b;--accent-2:#e9f3f2;--dye:#8a2b7a;--dye-soft:#f4e6f1;--warn-bg:#fff4d6;--radius:10px;--fs:17px}
+@media (min-width:900px){:root{--fs:19px}}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:var(--fs);line-height:1.5}
+button{cursor:pointer;font:inherit;font-size:.92rem;border:1.5px solid var(--accent);background:var(--accent);color:#fff;border-radius:8px;padding:.35em .85em;min-height:2.4em}
+button.secondary{background:var(--panel);color:var(--accent)}
+button:focus-visible,a:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--dye);outline-offset:2px}
+button[disabled]{opacity:.45;cursor:default}
+.deck{display:grid;grid-template-rows:auto auto 1fr auto;min-height:100vh;min-height:100dvh}
+.demobanner{background:var(--dye);color:#fff;text-align:center;font-weight:800;font-size:1.15rem;letter-spacing:.04em;padding:.55rem 1rem}
+.demobanner small{display:block;font-weight:500;font-size:.8rem;letter-spacing:0;opacity:.95}
+header.top{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1rem;padding:.55rem 1rem;border-bottom:1px solid var(--line);background:var(--panel)}
+.brand{font-weight:700;flex:1;min-width:12rem}.brand small{display:block;font-weight:400;color:var(--muted);font-size:.8rem}
+.counter{font-size:.85rem;color:var(--muted)}
+main.stage{padding:1rem;max-width:62rem;width:100%;margin:0 auto}
+.slide{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:1rem 1.2rem}
+.slide[hidden]{display:none}
+.slide h2{margin:.2rem 0 .6rem;font-size:1.35rem}
+.slide h2:focus{outline:none}
+.kicker{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;padding:.1em .5em;border-radius:4px;background:var(--accent-2);color:var(--accent)}
+.callout{background:var(--accent-2);border-left:5px solid var(--accent);padding:.5rem .8rem;border-radius:0 8px 8px 0;margin:.7rem 0}
+.notice{background:var(--warn-bg);border-left:5px solid #b7791f;padding:.5rem .8rem;border-radius:0 8px 8px 0;margin:.7rem 0}
+.blocks{display:flex;flex-wrap:wrap;gap:.6rem;list-style:none;padding:0;margin:.6rem 0}
+.blocks li{border:1.5px solid var(--line);border-radius:8px;padding:.3rem .6rem;background:#fcfbf8;font-size:.92rem}
+details.demo{border:1.5px solid #b9d8d5;border-radius:8px;background:#f6fbfa;padding:.35rem .7rem;margin:.8rem 0}
+details.demo>summary{cursor:pointer;font-weight:700;color:var(--accent)}
+nav.bottom{display:flex;align-items:center;justify-content:space-between;gap:.6rem;padding:.6rem 1rem;border-top:1px solid var(--line);background:var(--panel);position:sticky;bottom:0}
+.menu{position:fixed;z-index:40;top:4.5rem;right:1rem;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 8px 24px rgba(0,0,0,.15);padding:.6rem;min-width:16rem}
+.menu[hidden]{display:none}
+.menu ol{margin:.4rem 0 0;padding-left:1.4rem}.menu li{margin:.2rem 0}
+.menu li button{background:none;border:0;color:var(--accent);text-decoration:underline;padding:.1rem 0;min-height:0;text-align:left}
+.menu li button[aria-current="true"]{font-weight:700;text-decoration:none}
+.drawer{position:fixed;z-index:50;top:0;right:0;bottom:0;width:min(32rem,46vw);background:var(--panel);border-left:3px solid var(--accent);box-shadow:-6px 0 18px rgba(0,0,0,.15);display:flex;flex-direction:column;gap:.45rem;padding:.6rem .8rem}
+.drawer[hidden]{display:none}
+@media (min-width:861px){body.drawer-open .deck{margin-right:min(32rem,46vw)}}
+@media (max-width:860px){.drawer{top:auto;left:0;width:auto;height:65vh;border-left:0;border-top:3px solid var(--accent)} .menu{left:1rem;right:1rem}}
+.dhead{display:flex;align-items:center;gap:.6rem}.dhead h2{flex:1;margin:0;font-size:1.05rem}.dhead h2:focus{outline:none}
+.dnote{font-size:.82rem;color:var(--muted);margin:0}
+.dframe{flex:1;display:flex;min-height:12rem}
+.dframe iframe{flex:1;width:100%;border:1px solid var(--line);border-radius:6px}
+.dlink{margin:0;font-size:.9rem}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="deck">
+<div class="demobanner" role="note">PUBLIC TEST DEMO — SYNTHETIC DATA ONLY<small>Not the full private teacher deck. Uses an invented test question only.</small></div>
+<header class="top">
+<div class="brand">Teacher assessment embed<small>Public test demo · 3 slides</small></div>
+<span class="counter" id="counter" aria-live="polite"></span>
+<button type="button" class="secondary" id="menuBtn" aria-controls="menu" aria-expanded="false">☰ Slides</button>
+</header>
+<main class="stage" aria-label="Public test demo slides">
+
+<section class="slide" id="slide-1" aria-labelledby="h-1">
+<span class="kicker">Demo</span>
+<h2 id="h-1" tabindex="-1">What this demo is</h2>
+<p>This page shows how a teacher deck can open an embedded Google Form in a side panel, so an assessment is entered only in Google’s own form.</p>
+<div class="notice"><b>This is not the full private teacher deck.</b> It contains no real lesson content, no answer guidance and no learner information. Every question and choice here is invented for testing.</div>
+<ul>
+<li>The test form has <b>one required choice</b> and no text fields.</li>
+<li>Please do not add any personal information anywhere.</li>
+<li>Repeat submissions are recorded separately by Google; nothing here merges or removes them.</li>
+</ul>
+</section>
+
+<section class="slide" id="slide-2" aria-labelledby="h-2" hidden>
+<span class="kicker">Invented prompt</span>
+<h2 id="h-2" tabindex="-1">Sorting invented blocks</h2>
+<p>Imagine a tray of invented toy blocks:</p>
+<ul class="blocks" aria-label="Invented blocks">
+<li>blue cube</li><li>blue cylinder</li><li>red ball</li><li>yellow ball</li><li>blue ball</li><li>green cube</li>
+</ul>
+<p><b>Prompt:</b> Sort the blocks into two groups and say the rule you used. Then sort them a different way.</p>
+<details class="demo" id="demoDetails">
+<summary>Synthetic assessment demo</summary>
+<p>Open the test form and pick one invented option. The form is a synthetic test with no real data.</p>
+<button type="button" id="openForm" aria-controls="drawer">Open demo form</button>
+</details>
+</section>
+
+<section class="slide" id="slide-3" aria-labelledby="h-3" hidden>
+<span class="kicker">Checking</span>
+<h2 id="h-3" tabindex="-1">How to check Google’s confirmation</h2>
+<ol>
+<li>In the form panel, choose one option and press Google’s <b>Submit</b> button inside the form.</li>
+<li>Look for Google’s own confirmation message, which appears <b>inside the form</b> after submitting.</li>
+<li>If that confirmation does not appear, treat the response as <b>not submitted</b>.</li>
+<li>This page cannot see inside Google’s form, so it never reports whether anything was submitted.</li>
+<li>If the embedded form does not load, use <b>Open form in new tab</b> at the bottom of the form panel.</li>
+</ol>
+<div class="callout">Closing the panel or changing slides does not reload the form, so an unfinished choice stays in place until you submit or leave the page.</div>
+</section>
+
+</main>
+<nav class="bottom" aria-label="Slide navigation">
+<button type="button" class="secondary" id="btnBack">← Back</button>
+<span class="sr" id="live" aria-live="polite"></span>
+<button type="button" id="btnNext">Next →</button>
+</nav>
+</div>
+
+<div class="menu" id="menu" role="dialog" aria-modal="false" aria-labelledby="menu-h" hidden>
+<div class="dhead"><h2 id="menu-h" tabindex="-1">Slides</h2><button type="button" class="secondary" id="menuClose">Close</button></div>
+<ol id="menuList"></ol>
+</div>
+
+<aside class="drawer" id="drawer" aria-labelledby="drawer-h" hidden>
+<div class="dhead"><h2 id="drawer-h" tabindex="-1">Synthetic demo form</h2><button type="button" class="secondary" id="drawerClose">Close</button></div>
+<p class="dnote">Choices are entered only in Google’s form below. Google’s confirmation inside the form is the only proof of submission. Synthetic test only.</p>
+<div class="dframe" id="dframe"></div>
+<p class="dlink"><a id="newTab" href="https://docs.google.com/forms/d/e/1FAIpQLSdi4GrmRqwa5D_eh_sKuDZ88OcANnLd5do4NURsu33nBQqWvg/viewform" target="_blank" rel="noreferrer noopener">Open form in new tab</a></p>
+</aside>
+
+<script>
+/* pure:begin */
+var DemoDrawer = (function () {
+  'use strict';
+  var FORM = Object.freeze({
+    embedUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSdi4GrmRqwa5D_eh_sKuDZ88OcANnLd5do4NURsu33nBQqWvg/viewform?embedded=true',
+    newTabUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSdi4GrmRqwa5D_eh_sKuDZ88OcANnLd5do4NURsu33nBQqWvg/viewform'
+  });
+  var SLIDES = 3;
+  function initial() { return Object.freeze({ slide: 0, menuOpen: false, drawerOpen: false, frameMounted: false }); }
+  function clamp(n) { return Math.max(0, Math.min(SLIDES - 1, n)); }
+  function next(s, patch) { var o = { slide: s.slide, menuOpen: s.menuOpen, drawerOpen: s.drawerOpen, frameMounted: s.frameMounted }; for (var k in patch) o[k] = patch[k]; return Object.freeze(o); }
+  function reduce(s, a) {
+    switch (a && a.type) {
+      case 'next': return next(s, { slide: clamp(s.slide + 1), menuOpen: false });
+      case 'back': return next(s, { slide: clamp(s.slide - 1), menuOpen: false });
+      case 'goto': return (typeof a.index === 'number' && a.index === Math.floor(a.index)) ? next(s, { slide: clamp(a.index), menuOpen: false }) : s;
+      case 'menu': return next(s, { menuOpen: !s.menuOpen });
+      case 'menuClose': return next(s, { menuOpen: false });
+      case 'open': return next(s, { drawerOpen: true, frameMounted: true });
+      case 'close': return next(s, { drawerOpen: false });
+      default: return s;
+    }
+  }
+  /* mountFrame is true at most once: frameMounted never returns to false. */
+  function effects(p, s) { return { mountFrame: !p.frameMounted && s.frameMounted, slideChanged: p.slide !== s.slide, focusDrawer: !p.drawerOpen && s.drawerOpen, backDisabled: s.slide === 0, nextDisabled: s.slide === SLIDES - 1 }; }
+  function frameHtml() { return '<iframe title="Synthetic demo Google Form" src="' + FORM.embedUrl + '" loading="lazy" referrerpolicy="no-referrer">Loading…</iframe>'; }
+  return { FORM: FORM, SLIDES: SLIDES, initial: initial, reduce: reduce, effects: effects, frameHtml: frameHtml };
+})();
+/* pure:end */
+(function () {
+  'use strict';
+  if (typeof document === 'undefined') return;
+  var Dm = DemoDrawer, $ = function (id) { return document.getElementById(id); };
+  var slides = [$('slide-1'), $('slide-2'), $('slide-3')], titles = slides.map(function (s) { return s.querySelector('h2').textContent; });
+  var state = Dm.initial(), opener = null;
+  $('menuList').innerHTML = titles.map(function (t, i) { return '<li><button type="button" data-goto="' + i + '">' + (i + 1) + '. ' + t + '</button></li>'; }).join('');
+  function render(p, focusSlide) {
+    var fx = Dm.effects(p, state);
+    slides.forEach(function (s, i) { s.hidden = i !== state.slide; });
+    $('counter').textContent = 'Slide ' + (state.slide + 1) + ' of ' + Dm.SLIDES;
+    $('btnBack').disabled = fx.backDisabled; $('btnNext').disabled = fx.nextDisabled;
+    $('menu').hidden = !state.menuOpen; $('menuBtn').setAttribute('aria-expanded', state.menuOpen ? 'true' : 'false');
+    Array.prototype.forEach.call($('menuList').querySelectorAll('button'), function (b, i) { b.setAttribute('aria-current', i === state.slide ? 'true' : 'false'); });
+    if (fx.mountFrame && !$('dframe').querySelector('iframe')) $('dframe').innerHTML = Dm.frameHtml();
+    $('drawer').hidden = !state.drawerOpen; document.body.classList.toggle('drawer-open', state.drawerOpen);
+    if (fx.slideChanged) { $('live').textContent = 'Slide ' + (state.slide + 1) + ': ' + titles[state.slide]; if (focusSlide) slides[state.slide].querySelector('h2').focus(); }
+    if (fx.focusDrawer) $('drawer-h').focus();
+  }
+  function go(a, focusSlide) { var p = state; state = Dm.reduce(state, a); render(p, focusSlide); }
+  render(Dm.initial(), false);
+  $('btnBack').addEventListener('click', function () { go({ type: 'back' }, false); });
+  $('btnNext').addEventListener('click', function () { go({ type: 'next' }, false); });
+  $('menuBtn').addEventListener('click', function () { go({ type: 'menu' }); if (state.menuOpen) $('menu-h').focus(); });
+  $('menuClose').addEventListener('click', function () { go({ type: 'menuClose' }); $('menuBtn').focus(); });
+  $('menuList').addEventListener('click', function (e) { var b = e.target.closest('[data-goto]'); if (b) go({ type: 'goto', index: +b.getAttribute('data-goto') }, true); });
+  $('openForm').addEventListener('click', function () { opener = $('openForm'); go({ type: 'open' }); });
+  function closeDrawer() { go({ type: 'close' }); if (opener && !opener.closest('[hidden]')) opener.focus(); }
+  $('drawerClose').addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { if (state.menuOpen) { go({ type: 'menuClose' }); $('menuBtn').focus(); } else if (state.drawerOpen) closeDrawer(); return; }
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    var t = e.target; if ($('drawer').contains(t) || (t.closest && t.closest('summary, details'))) return;
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); go({ type: 'next' }, true); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go({ type: 'back' }, true); }
+  });
+})();
+</script>
+</body>
+</html>
