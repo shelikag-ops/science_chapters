@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; frame-src https://docs.google.com; form-action 'none'; base-uri 'none'">
+<meta name="referrer" content="no-referrer">
+<title>PUBLIC TEACHER DECK · Session 1 – In class (teacher-led) · r3.3-public</title>
+<style>
+/* Visual tokens matched to the Edition-2 science chapter HTML (BFSU-A-11-Student-Lesson-v3.html): style only, no lesson content. */
+:root{--bg:#faf8f3;--panel:#ffffff;--ink:#1d2433;--muted:#566074;--line:#d9d4c7;--accent:#0f6b6b;--accent-2:#e9f3f2;--dye:#8a2b7a;--dye-soft:#f4e6f1;
+  --good:#1f6f3a;--good-bg:#e5f3e8;--bad:#9a2c1f;--bad-bg:#fbe9e5;--warn-bg:#fff4d6;--radius:10px;--fs:17px}
+*{box-sizing:border-box} html{font-size:var(--fs);height:100%} body{height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;line-height:1.5}
+h1,h2,h3{line-height:1.2;margin:.2em 0 .5em} h2{font-size:1.3rem;color:var(--accent)} h3{font-size:1.08rem;margin:.5em 0 .3em} p{margin:.4em 0 .6em}
+a{color:var(--accent)} button,select,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:1.5px solid var(--accent);background:var(--accent);color:#fff;border-radius:8px;padding:.35em .8em;min-height:2.3em}
+button:hover{filter:brightness(1.1)} button.secondary{background:var(--panel);color:var(--accent)} button.secondary:hover{background:var(--accent-2);filter:none}
+button.ghost{background:transparent;border-color:transparent;color:var(--accent);text-decoration:underline;padding:.2em .4em;min-height:2em}
+button[disabled]{opacity:.45;cursor:not-allowed} :focus-visible{outline:3px solid #f0a500;outline-offset:2px}
+textarea{width:100%;border:1.5px solid var(--line);border-radius:8px;padding:.5em;background:#fff;resize:vertical}
+input[type=text],input[type=number],select{border:1.5px solid var(--line);border-radius:6px;padding:.3em .45em;background:#fff}
+.deck{display:grid;grid-template-rows:auto auto 1fr auto;height:100vh;height:100dvh}
+.draftbar{background:var(--dye);color:#fff;padding:2px 12px;font-size:.72rem;text-align:center;letter-spacing:.02em}
+header.top{background:var(--panel);border-bottom:2px solid var(--line);padding:.4rem 1rem;display:flex;flex-wrap:wrap;gap:.4rem 1rem;align-items:center;justify-content:space-between}
+.brand{font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1} .brand small{display:block;color:var(--muted);font-size:.74rem;font-weight:400}
+.progress{display:flex;align-items:center;gap:.5rem;font-size:.88rem} .counter{font-variant-numeric:tabular-nums;font-weight:700;color:var(--accent)}
+.bar{width:150px;height:12px;border:1.5px solid var(--accent);border-radius:8px;overflow:hidden;background:#fff} .bar>span{display:block;height:100%;background:var(--accent);width:0}
+.controls{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center} .controls button{padding:.25em .65em;min-height:2.1em;font-size:.88rem}
+.stage{overflow:hidden;padding:.7rem 1rem;display:flex;justify-content:center}
+.slide{width:100%;max-width:1050px;height:100%;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:.9rem 1.2rem}
+.slide[hidden]{display:none} .slide>h2{outline:none}
+.kicker{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;padding:.1em .5em;border-radius:4px;background:var(--accent-2);color:var(--accent);margin-bottom:.2em}
+.kicker.dye{background:var(--dye-soft);color:var(--dye)} .time{font-size:.8rem;color:var(--muted);font-weight:600}
+.lead{font-size:1.06rem} .small{font-size:.86rem} .muted{color:var(--muted)} ul,ol{margin:.3em 0;padding-left:1.35em} li{margin:.15em 0}
+nav.bottom{display:flex;align-items:center;justify-content:space-between;gap:.6rem;padding:.45rem 1rem;border-top:2px solid var(--line);background:var(--panel)}
+.navmsg{flex:1;text-align:center;font-size:.88rem;color:#8a4b00;min-height:1.2em}
+.menu{position:fixed;top:0;right:0;bottom:0;width:min(400px,92vw);background:var(--panel);border-left:2px solid var(--line);box-shadow:-6px 0 24px rgba(29,36,51,.16);padding:.7rem .9rem;overflow:auto;z-index:30}
+.menu[hidden]{display:none} .menu ol{list-style:none;padding:0;margin:.2rem 0 .5rem;display:flex;flex-wrap:wrap;gap:.3rem}
+.menu li{margin:0} .menu li button{font-size:.84rem;padding:.2em .7em;min-height:2em;border-radius:20px;background:var(--panel);color:var(--accent);text-align:left}
+.menu li button[aria-current="step"]{background:var(--accent);color:#fff} .menu .sec{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700;margin:.5rem 0 .1rem}
+.callout,.note{border-left:5px solid var(--accent);background:var(--accent-2);padding:.5rem .85rem;border-radius:0 8px 8px 0;margin:.5rem 0}
+.callout.dye{border-color:var(--dye);background:var(--dye-soft)} .callout.warn,.alert.warn{border-left:5px solid #b7791f;background:var(--warn-bg)}
+.alert{padding:.5rem .85rem;border-radius:0 8px 8px 0;margin:.5rem 0;border-left:5px solid var(--accent);background:var(--accent-2)}
+.alert.ok{border-color:var(--good);background:var(--good-bg)} .alert.bad,.status{border-left:5px solid var(--bad);background:var(--bad-bg);padding:.5rem .85rem;border-radius:0 8px 8px 0;margin:.5rem 0}
+.check{display:flex;gap:.55em;align-items:flex-start;border:1.5px solid var(--line);border-radius:8px;padding:.45em .65em;margin:.4em 0;background:#fff;cursor:pointer}
+.check input{margin-top:.3em;transform:scale(1.25);flex:none}
+.opt{display:flex;gap:.55em;align-items:flex-start;border:1.5px solid var(--line);border-radius:8px;padding:.42em .6em;margin:.3em 0;cursor:pointer;background:#fff}
+.opt:hover{border-color:var(--accent)} .opt input{margin-top:.3em;transform:scale(1.2);flex:none}
+fieldset{border:0;padding:0;margin:0} legend{padding:0}
+.btnrow{display:flex;flex-wrap:wrap;gap:.45rem;margin:.6rem 0}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;padding:.1em .5em;border-radius:4px;background:var(--accent-2);color:var(--accent);margin-right:.3em}
+table{border-collapse:collapse;width:100%} th,td{border:1px solid var(--line);padding:.3em .45em;text-align:left;vertical-align:top} th{background:var(--accent-2);font-size:.86rem}
+table.rep td:first-child{width:24%} .reference-slide table td:first-child{width:24%}
+.grid2{display:grid;grid-template-columns:1.05fr 1fr;gap:.9rem} .grid2.app{grid-template-columns:1.4fr 1fr} table.data th,table.data td{font-size:.86rem;padding:.18em .35em;line-height:1.3} .cols{columns:2;column-gap:1.6rem} .cols li{break-inside:avoid}
+.hintbox{border-left:5px solid var(--dye);background:var(--dye-soft);padding:.5rem .85rem;border-radius:0 8px 8px 0;margin:.4rem 0}
+.checklist{list-style:none;padding-left:0;display:flex;flex-wrap:wrap;gap:.15rem 1.2rem} .checklist li::before{content:"☐ ";color:var(--accent)} ul.cols2{columns:2;column-gap:1.4rem} ul.cols2 li{break-inside:avoid}
+.labels .tag.dye{background:var(--dye-soft);color:var(--dye)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.private{position:fixed;top:0;left:0;bottom:0;width:min(560px,96vw);background:#fffdf5;border-right:3px dashed #b7791f;box-shadow:6px 0 24px rgba(29,36,51,.18);padding:.7rem .9rem;overflow:auto;z-index:40}
+.private[hidden]{display:none} .private .pbanner{background:var(--dye);color:#fff;border-radius:8px;padding:.4rem .7rem;font-weight:700;margin-bottom:.5rem}
+.private table td,.private table th{font-size:.84rem;padding:.2em .35em}
+@media (max-height:820px){ html{font-size:15.5px} .slide{padding:.75rem 1.05rem} }
+@media (max-height:740px){ html{font-size:15px} }
+@media (min-width:1600px) and (min-height:950px){ html{--fs:21px} .slide{max-width:1500px} }
+@media (max-width:820px){ .grid2{grid-template-columns:1fr} .cols,ul.cols2{columns:1} }
+@media print{ body{overflow:visible} .deck{display:block;height:auto} nav.bottom,.controls,.menu,.private,.draftbar,.bar{display:none!important} .slide{height:auto;border:0} }
+</style>
+<style>.homelink{display:inline-flex;align-items:center;border:1.5px solid var(--accent);color:var(--accent);background:#fff;border-radius:8px;padding:.25em .65em;min-height:2.1em;font-size:.88rem;text-decoration:none}.homelink:hover{background:var(--accent-2)} .deck{grid-template-columns:minmax(0,1fr);width:100%;max-width:100vw} .deck>*{min-width:0;max-width:100%} @media (max-width:700px){ .brand{white-space:normal;flex:1 1 100%;overflow:visible} .controls{flex-wrap:wrap} .progress{flex:1 1 auto;min-width:0} .grid2>div{min-width:0} .tw{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%} th,td{font-size:.78rem;padding:.2em .3em} .grid2.app{grid-template-columns:1fr} .brand small{display:none} .bar{width:70px} }</style>
+</head>
+<body>
+<div class="deck"><div class="pilotbanner" role="note">Public teacher deck — anyone with the link can view these rubrics; an unlisted address is not access control — assessments submitted through Google Forms</div><div class="draftbar">BFSU K–2 revision · Session 1 · Matter and materials</div><header class="top"><div class="brand">Session 1 – In class (teacher-led)<small>Matter and materials · teacher-led class deck</small></div><div class="progress"><div class="bar" aria-hidden="true"><span id="progressFill"></span></div><span class="counter" id="counter"></span></div><div class="controls"><a class="homelink" href="https://shelikag-ops.github.io/science_chapters/revision/">← All revision decks</a><button type="button" class="secondary" id="menuBtn" aria-controls="menu" aria-expanded="false">☰ Slides</button></div></header><main class="stage" aria-label="Session 1 – In class (teacher-led)"><section class="slide" data-slide="0" role="group" aria-roledescription="slide" aria-label="Session 1: Matter and materials · agenda" hidden><div class="kicker">Start</div><h2>Session 1: Matter and materials · agenda</h2><p class="lead">60 minutes · BFSU A/B-1, A-2, A-4, A-5</p><div class="tw"><table><thead><tr><th>Time</th><th>Activity</th></tr></thead><tbody><tr><td><b>10 min</b></td><td>1. Learner retells the concepts</td></tr><tr><td><b>20 min</b></td><td>2. Discussion of the actual written-practice results, if available; otherwise say clearly that there are none</td></tr><tr><td><b>20 min</b></td><td>3. Unfamiliar applications: three (7 + 7 + 6 min); one optional alternative</td></tr><tr><td><b>10 min</b></td><td>4. Open-ended instant recall, then 5. plan the next reading</td></tr></tbody></table></div></section><section class="slide" data-slide="1" role="group" aria-roledescription="slide" aria-label="Before class: what the learner does" hidden><div class="kicker">Start</div><h2>Before class: what the learner does</h2><ol class="small"><li><b>First reading:</b> reread the chapter presentations already studied — A/B-1 <a href="https://shelikag-ops.github.io/Organising-Things/" target="_blank" rel="noopener noreferrer">Organising Things into Categories</a>, A-2 <a href="https://shelikag-ops.github.io/Solids-Liquids/" target="_blank" rel="noopener noreferrer">Solids Liquids and Gases</a>, A-4 <a href="https://shelikag-ops.github.io/science_chapters/chapter-a4-matter-particles.html" target="_blank" rel="noopener noreferrer">Matter and Particles</a>, A-5 <a href="https://shelikag-ops.github.io/science_chapters/chapter-a5-distinguishing-materials.html" target="_blank" rel="noopener noreferrer">Distinguishing Materials</a>.</li><li><b>Then, all required:</b> Spectrum Science, Grade 3, Lesson 2.5 “Molecules on the Move” — p. 30 passage and all p. 31 workbook questions; Science: A Closer Look, Grade 2 — Chapter 9 pp. 294, 300, 308, 316 and Chapter 10 pp. 330–335; DK First Science Encyclopedia — pp. 4–13 and 52–61. If your edition’s page numbers differ, read the pages on the matching topics.</li><li><b>Two paper-only thinking tasks:</b> museum groupings (visitors vs packing); weather station material table.</li><li><b>A different, later day:</b> the 41-question written practice in the native Google Form — memory first, then revisit blanks.</li></ol><p class="small"><b>All of the preparation above is required.</b></p><p class="small">The private Form link is supplied separately; this deck does not collect or show the learner’s written-practice results.</p></section><section class="slide" data-slide="2" role="group" aria-roledescription="slide" aria-label="1. Learner retells the concepts · 10 min" hidden><div class="kicker">Class activities</div><h2>1. Learner retells the concepts · 10 min</h2><p>The learner retells each chapter in their own words, without notes. Every topic gets a turn.</p><ol><li><span class="small muted">BFSU A/B-1</span><br>Tell me about sorting things into groups: what makes a good group, and why the same things can be grouped in different ways.<div class="item-slot" data-item-slot="S1-T3-AB1"></div></li><li><span class="small muted">BFSU A-2</span><br>Tell me how you decide whether something is a solid, a liquid or a gas, and what can make it change.<div class="item-slot" data-item-slot="S1-T3-A2"></div></li><li><span class="small muted">BFSU A-4</span><br>Tell me what everything is made of, and what is going on inside a solid, a liquid and a gas.<div class="item-slot" data-item-slot="S1-T3-A4"></div></li><li><span class="small muted">BFSU A-5</span><br>Tell me how you would describe and choose materials for a job.<div class="item-slot" data-item-slot="S1-T3-A5"></div></li></ol><p class="small muted">Follow up with “Tell me more” or “How do you know?”.</p></section><section class="slide" data-slide="3" role="group" aria-roledescription="slide" aria-label="2. Discussion of actual written-practice results · 20 min" hidden><div class="kicker">Class activities</div><h2>2. Discussion of actual written-practice results · 20 min</h2><ol><li>If the teacher has the learner’s results, the learner picks two questions they left blank or felt unsure about and explains their thinking now.<div class="item-slot" data-item-slot="S1-T4-D1"></div></li><li>Compare what was written from memory with what was added on revisit.<div class="item-slot" data-item-slot="S1-T4-D2"></div></li><li>Choose one idea to strengthen in the applications.<div class="item-slot" data-item-slot="S1-T4-D3"></div></li></ol><div class="callout">If no results are available, say so plainly and move on to the applications. Do not guess at results.</div></section><section class="slide" data-slide="4" role="group" aria-roledescription="slide" aria-label="3. Application 1 · Beach finds key · 7 min" hidden><div class="kicker">Application</div><h2>3. Application 1 · Beach finds key · 7 min</h2><div class="grid2 app"><div><p>A beach clean-up team wants a yes/no key so volunteers can sort finds quickly. These are the team’s observations:</p><div class="tw"><table class="data"><thead><tr><th>Find</th><th>Made by a living thing?</th><th>Floats in seawater?</th><th>Attracted to a magnet?</th><th>Bends without breaking?</th></tr></thead><tbody><tr><td>Shell</td><td>Yes</td><td>No</td><td>No</td><td>No</td></tr><tr><td>Driftwood</td><td>Yes</td><td>Yes</td><td>No</td><td>No</td></tr><tr><td>Kelp</td><td>Yes</td><td>Yes</td><td>No</td><td>Yes</td></tr><tr><td>Sea glass</td><td>No</td><td>No</td><td>No</td><td>No</td></tr><tr><td>Plastic bottle cap</td><td>No</td><td>Yes</td><td>No</td><td>Yes</td></tr><tr><td>Rusty bolt</td><td>No</td><td>No</td><td>Yes</td><td>No</td></tr><tr><td>Pumice stone</td><td>No</td><td>Yes</td><td>No</td><td>No</td></tr></tbody></table></div></div><div><h3>Learner actions</h3><ol><li>Choose a first yes/no question from the table that splits the finds into two groups.<div class="item-slot" data-item-slot="S1-T5-A1"></div></li><li>Keep adding yes/no questions until every find is on its own.<div class="item-slot" data-item-slot="S1-T5-A2"></div></li><li>Draw your key as a branching diagram.<div class="item-slot" data-item-slot="S1-T5-A3"></div></li><li>Name the observation that would be hardest for a volunteer to check on the beach, and suggest an easier one.<div class="item-slot" data-item-slot="S1-T5-A4"></div></li></ol><p class="small"><b>Response format:</b> Branching key drawing + 1 sentence</p><p class="small"><span class="time">About 7 minutes</span></p><div class="callout"><b>Follow-up question:</b> Your key puts pumice next to the bottle cap. Is that a mistake, or does it depend on what the key is for?<div class="item-slot" data-item-slot="S1-T5-F"></div></div></div></div></section><section class="slide" data-slide="5" role="group" aria-roledescription="slide" aria-label="3. Application 2 · Two puddles, two days · 7 min" hidden><div class="kicker">Application</div><h2>3. Application 2 · Two puddles, two days · 7 min</h2><div class="grid2 app"><div><p>Two puddles were made the same way (2 L of water on the same playground surface) on two different days. Measured conditions and puddle widths:</p><div class="tw"><table class="data"><thead><tr><th>Time</th><th>Day 1: air 12 °C, cloudy, no wind</th><th>Day 2: air 24 °C, sunny, light wind</th></tr></thead><tbody><tr><td>9:00</td><td>120 cm</td><td>120 cm</td></tr><tr><td>11:00</td><td>110 cm</td><td>80 cm</td></tr><tr><td>13:00</td><td>100 cm</td><td>35 cm</td></tr><tr><td>15:00</td><td>90 cm</td><td>only a damp patch</td></tr></tbody></table></div></div><div><h3>Learner actions</h3><ol><li>Describe the difference between the days, using numbers from the table.<div class="item-slot" data-item-slot="S1-T6-A1"></div></li><li>Where did the water go? Name the change of state.<div class="item-slot" data-item-slot="S1-T6-A2"></div></li><li>Draw a particle model (label it “model”) of water at the puddle’s surface on Day 2.<div class="item-slot" data-item-slot="S1-T6-A3"></div></li><li>Name two conditions that differ between the days, and explain why you cannot be sure which one caused the difference.<div class="item-slot" data-item-slot="S1-T6-A4"></div></li></ol><p class="small"><b>Response format:</b> 2 sentences with numbers + 1 labelled model + 1 sentence on fairness</p><p class="small"><span class="time">About 7 minutes</span></p><div class="callout"><b>Follow-up question:</b> If you wanted to find out whether wind matters, what would you keep the same?<div class="item-slot" data-item-slot="S1-T6-F"></div></div></div></div></section><section class="slide" data-slide="6" role="group" aria-roledescription="slide" aria-label="3. Application 3 · Mystery cubes · 6 min" hidden><div class="kicker">Application</div><h2>3. Application 3 · Mystery cubes · 6 min</h2><div class="grid2 app"><div><p>Four cubes each measure 2 cm on every side. Their masses and a reference table are below.</p><div class="tw"><table class="data"><thead><tr><th>Cube</th><th>Mass</th><th></th><th>Reference</th><th>Density</th></tr></thead><tbody><tr><td>P</td><td>4.0 g</td><td></td><td>Pine wood</td><td>0.5 g/cm³</td></tr><tr><td>Q</td><td>7.2 g</td><td></td><td>Polypropylene plastic</td><td>0.9 g/cm³</td></tr><tr><td>R</td><td>21.6 g</td><td></td><td>Aluminum</td><td>2.7 g/cm³</td></tr><tr><td>S</td><td>63.2 g</td><td></td><td>Steel</td><td>7.9 g/cm³</td></tr><tr><td></td><td></td><td></td><td>Fresh water</td><td>1.0 g/cm³</td></tr><tr><td></td><td></td><td></td><td>Very salty water</td><td>1.2 g/cm³</td></tr></tbody></table></div></div><div><h3>Learner actions</h3><ol><li>Find the volume of one cube; show your working.<div class="item-slot" data-item-slot="S1-T7-A1"></div></li><li>Calculate each cube’s density, with units.<div class="item-slot" data-item-slot="S1-T7-A2"></div></li><li>Match each cube to a material in the reference table.<div class="item-slot" data-item-slot="S1-T7-A3"></div></li><li>Predict which cubes float in fresh water and which in very salty water; explain one prediction.<div class="item-slot" data-item-slot="S1-T7-A4"></div></li></ol><p class="small"><b>Response format:</b> Table: cube · density (with units) · material · fresh water · salty water</p><p class="small"><span class="time">About 6 minutes</span></p><div class="callout"><b>Follow-up question:</b> Cube Q only just floats. Imagine adding a small steel washer to it. What would you need to know to predict what happens?<div class="item-slot" data-item-slot="S1-T7-F"></div></div></div></div></section><section class="slide" data-slide="7" role="group" aria-roledescription="slide" aria-label="Optional alternative · The unlabeled powder · 6 min" hidden><div class="kicker">Application · optional</div><h2>Optional alternative · The unlabeled powder · 6 min</h2><div class="grid2 app"><div><p>A jar label fell off. The white powder could be table salt, sugar, sand or flour. An adult made these observations earlier (no tasting):</p><div class="tw"><table class="data"><thead><tr><th>Sample</th><th>Under a magnifier</th><th>Stirred into room-temperature water</th></tr></thead><tbody><tr><td>Table salt (reference)</td><td>Tiny clear cube-shaped grains</td><td>Disappears; water stays clear</td></tr><tr><td>Sugar (reference)</td><td>Clear grains, not cube-shaped</td><td>Disappears; water stays clear</td></tr><tr><td>Sand (reference)</td><td>Mixed-color irregular grains</td><td>Grains settle at the bottom</td></tr><tr><td>Flour (reference)</td><td>Fine powder, no clear grains</td><td>Water turns cloudy</td></tr><tr><td>Mystery powder</td><td>Tiny clear cube-shaped grains</td><td>Disappears; water stays clear</td></tr></tbody></table></div></div><div><h3>Learner actions</h3><ol><li>Which candidates can you rule out? Give the evidence for each.<div class="item-slot" data-item-slot="S1-T8-A1"></div></li><li>Which candidates are still possible after the water test alone?<div class="item-slot" data-item-slot="S1-T8-A2"></div></li><li>Which observation decides between them?<div class="item-slot" data-item-slot="S1-T8-A3"></div></li><li>Name one more safe test (no tasting) that could confirm your answer.<div class="item-slot" data-item-slot="S1-T8-A4"></div></li></ol><p class="small"><b>Response format:</b> Ruled-out list with evidence · 1 deciding observation · 1 safe test</p><p class="small"><span class="time">About 6 minutes</span></p><div class="callout"><b>Follow-up question:</b> Why is tasting never the test, even for powders found in a kitchen?<div class="item-slot" data-item-slot="S1-T8-F"></div></div><p class="small muted">Optional: use instead of part of an application, never as extra work.</p></div></div></section><section class="slide" data-slide="8" role="group" aria-roledescription="slide" aria-label="4. Open-ended instant recall" hidden><div class="kicker">Class activities</div><h2>4. Open-ended instant recall</h2><p>No notes, no choices, no word lists. The learner answers out loud or in writing.</p><ol><li>Make up a new example of a category and say its rule.<div class="item-slot" data-item-slot="S1-T9-R1"></div></li><li>Explain how you would decide the state of something you have never seen before.<div class="item-slot" data-item-slot="S1-T9-R2"></div></li><li>Describe what the particles are doing when a solid melts.<div class="item-slot" data-item-slot="S1-T9-R3"></div></li><li>Pick one material and explain how its properties suit one job.<div class="item-slot" data-item-slot="S1-T9-R4"></div></li></ol></section><section class="slide" data-slide="9" role="group" aria-roledescription="slide" aria-label="5. Plan the next reading" hidden><div class="kicker">Class activities</div><h2>5. Plan the next reading</h2><p class="lead"><b>Proposed next topic: Session 2 · Air and pressure</b> · BFSU A-3, A-6, A-7</p><ol><li>Teacher and learner confirm the Session 2 chapter presentation links and the required reading pages together. They are not set yet.</li><li>Begin with any assigned chapters the learner has already studied; then the confirmed additional reading.</li><li>Write down the reading day, and a different, later day for the written practice.</li></ol><p><a href="https://shelikag-ops.github.io/science_chapters/revision/">← Back to all revision decks</a></p></section></main><nav class="bottom" aria-label="Slide navigation"><button type="button" class="secondary" id="btnBack">← Back</button><span class="navmsg" id="navMsg" role="status"></span><button type="button" id="btnNext">Next →</button></nav></div><div class="menu" id="menu" role="dialog" aria-modal="false" aria-label="Slide menu" hidden><div style="display:flex;justify-content:space-between;align-items:center"><b>Slides</b><button type="button" class="ghost" id="menuClose">Close</button></div><div id="menuList"></div></div><div class="sr" id="live" aria-live="polite"></div>
+<script>
+/* Generic slide deck: one active slide, Back/Next, clickable menu, n / total counter, optional keyboard (←/→, PageUp/PageDown, Home/End),
+   gates via canEnter(i) -> true | 'reason'. Menu jumps go through the same gate as Back/Next. */
+function makeDeck(o){
+  var slides=o.slides, cur=0, $=function(id){return document.getElementById(id);}, secs=[].slice.call(document.querySelectorAll('.slide'));
+  var menu=$('menu'), menuBtn=$('menuBtn'), list=$('menuList'), back=$('btnBack'), next=$('btnNext'), counter=$('counter'), msg=$('navMsg'), live=$('live');
+  function can(i){ if(i<0||i>=slides.length) return 'No more slides.'; var g=slides[i].canEnter?slides[i].canEnter():true; return g; }
+  function renderMenu(){ var html='', sec=null; slides.forEach(function(s,i){ if(s.section&&s.section!==sec){ sec=s.section; html+='</ol><div class="sec">'+s.section+'</div><ol>'; }
+      var g=can(i); html+='<li><button type="button" data-goto="'+i+'"'+(i===cur?' aria-current="step"':'')+(g===true?'':' disabled aria-disabled="true" title="'+String(g).replace(/"/g,'&quot;')+'"')+'>'+(i+1)+'. '+s.title+(g===true?'':' <span class="small muted">(locked)</span>')+'</button></li>'; });
+    list.innerHTML=('<ol>'+html+'</ol>').replace('<ol></ol>',''); }
+  function show(i,focus){ cur=i; secs.forEach(function(sct,k){ sct.hidden=k!==i; });
+    if(slides[i].onEnter) slides[i].onEnter();
+    counter.textContent=(i+1)+' / '+slides.length; counter.setAttribute('aria-label','Slide '+(i+1)+' of '+slides.length); var pf=$('progressFill'); if(pf) pf.style.width=Math.round(100*(i+1)/slides.length)+'%';
+    back.disabled=!slides.slice(0,i).some(function(_,k){ return can(k)===true; }); next.disabled=i===slides.length-1;
+    msg.textContent=''; if(o.onShow) o.onShow(i); renderMenu();
+    live.textContent='Slide '+(i+1)+' of '+slides.length+': '+slides[i].title;
+    if(focus!==false){ var h=secs[i].querySelector('h2'); if(h){ h.setAttribute('tabindex','-1'); try{ h.focus({preventScroll:true}); }catch(e){} } } secs[i].scrollTop=0; }
+  function go(i,focus){ var g=can(i); if(g!==true){ msg.textContent=g; return false; } show(i,focus); return true; }
+  function goNext(){ if(cur<slides.length-1) go(cur+1); }
+  function goBack(){ for(var j=cur-1;j>=0;j--){ if(can(j)===true){ show(j); return; } } }
+  back.addEventListener('click',goBack); next.addEventListener('click',goNext);
+  function openMenu(){ renderMenu(); menu.hidden=false; menuBtn.setAttribute('aria-expanded','true'); var b=list.querySelector('[aria-current]')||list.querySelector('button'); if(b) b.focus(); }
+  function closeMenu(){ menu.hidden=true; menuBtn.setAttribute('aria-expanded','false'); menuBtn.focus(); }
+  menuBtn.addEventListener('click',function(){ if(menu.hidden) openMenu(); else closeMenu(); }); $('menuClose').addEventListener('click',closeMenu);
+  list.addEventListener('click',function(e){ var b=e.target.closest('[data-goto]'); if(!b||b.disabled) return; menu.hidden=true; menuBtn.setAttribute('aria-expanded','false'); go(+b.getAttribute('data-goto')); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&!menu.hidden){ closeMenu(); return; }
+    var t=e.target, typing=t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.tagName==='SELECT'||t.isContentEditable); if(typing||e.altKey||e.ctrlKey||e.metaKey) return;
+    if(e.key==='ArrowRight'||e.key==='PageDown'){ e.preventDefault(); goNext(); } else if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); goBack(); }
+    else if(e.key==='Home'){ e.preventDefault(); go(0); } else if(e.key==='End'){ e.preventDefault(); for(var j=slides.length-1;j>=0;j--){ if(can(j)===true){ go(j); return; } } } });
+  return { go:go, show:show, next:goNext, back:goBack, cur:function(){ return cur; }, can:can, refresh:function(){ renderMenu(); next.disabled=cur===slides.length-1; }, count:slides.length };
+}
+window.PUB_SLIDES=[{"title":"Agenda","section":"Start"},{"title":"Before class","section":"Start"},{"title":"1. Retell","section":"Class activities"},{"title":"2. Discussion of results","section":"Class activities"},{"title":"Application 1","section":"Application"},{"title":"Application 2","section":"Application"},{"title":"Application 3","section":"Application"},{"title":"Backup","section":"Application · optional"},{"title":"4. Instant recall","section":"Class activities"},{"title":"5. Plan next reading","section":"Class activities"}];
+(function(){'use strict';
+var S=window.PUB_SLIDES; var deck=makeDeck({ slides:S.map(function(s){ return { title:s.title, section:s.section }; }) }); deck.show(0,false); window.PubDeck=deck;
+})();</script>
+<style>
+.deck{grid-template-rows:auto auto auto 1fr auto}
+.pilotbanner{background:#8a2b7a;color:#fff;text-align:center;font-size:.8rem;padding:4px 10px;letter-spacing:.01em}
+.item-slot{margin:.25rem 0 .55rem;max-width:62rem}
+.item-slot details{border:1px solid var(--line);border-radius:8px;padding:.25rem .5rem;margin:.35rem 0;background:#fcfbf8}
+.item-slot details.assess{background:#f6fbfa;border-color:#b9d8d5} .item-slot summary{cursor:pointer;font-weight:700;color:var(--accent);padding:.12rem 0}
+.idtag{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:400;font-size:.78rem;color:var(--muted);margin-left:.35rem}
+.rid{font-size:.86rem;margin:.3rem 0} .hint{font-size:.8rem;color:var(--muted);margin:.25rem 0 0}
+ol.crit{list-style:none;padding-left:0;margin:.3rem 0;font-size:.9rem} ol.crit li{margin:.2rem 0} .cnum{display:inline-block;min-width:6.2rem;font-weight:700;color:var(--accent)}
+.caution{font-size:.8rem;color:var(--muted);border-left:3px solid #b7791f;padding-left:.5rem;margin:.3rem 0}
+.fnote{font-size:.8rem;color:var(--muted);margin:.35rem 0}
+button.openform{margin:.2rem 0}
+.formdrawer{position:fixed;z-index:50;right:0;top:0;bottom:0;width:min(34rem,46vw);background:#fff;border-left:3px solid var(--accent);box-shadow:-6px 0 18px rgba(0,0,0,.15);display:flex;flex-direction:column;padding:.6rem .8rem;gap:.4rem}
+.formdrawer[hidden]{display:none}
+@media (min-width:861px){ body.drawer-open .deck{margin-right:min(34rem,46vw)} }
+@media (max-width:860px){ .formdrawer{top:auto;left:0;width:auto;height:62vh;border-left:0;border-top:3px solid var(--accent)} }
+.fdhead{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .8rem} .fdhead h2{font-size:1.05rem;margin:0;flex:1}
+.fdsel{font-size:.9rem} .fdnote{font-size:.78rem;color:var(--muted);margin:0}
+.fdframe{flex:1;min-height:12rem;display:flex} .gform{flex:1;width:100%;border:1px solid var(--line);border-radius:6px}
+.formplaceholder{flex:1;background:var(--warn-bg);border:2px dashed #b7791f;border-radius:8px;padding:.8rem;font-size:.9rem}
+.fdlink{margin:0;font-size:.86rem} .newtab.disabled{color:var(--muted)}
+</style>
+<script>
+/* ---- bfsu-s1-teacher-deck-r3.2-embed-data.js (verbatim) ---- */
+/* BFSU Session 1 teacher deck (r2) — DECK DATA. Pure data; no logic, DOM, storage or network.
+   Source (read-only): the r5 public teacher deck, revision/session-01-teacher.html (sha256 0d040503…).
+   All item texts are VERBATIM from that source. Slides 1, 2 and 10 carry no assessment; slides 3–9 do.
+   Rubric "evidence" lines are teacher-facing guidance; a tick records evidence OBSERVED, never automatic correctness. */
+var BfsuTeacherDeckData = (function () {
+  'use strict';
+  var S = [];
+  S.push({ index: 1, key: 's1-agenda', title: 'Session 1: Matter and materials · agenda', assess: false });
+  S.push({ index: 2, key: 's1-before-class', title: 'Before class: what the learner does', assess: false });
+  S.push({ index: 3, key: 's1-retell', title: '1. Learner retells the concepts · 10 min', assess: true, items: [
+    { id: 'S1-T3-AB1', label: 'BFSU A/B-1', kind: 'prompt',
+      text: 'Tell me about sorting things into groups: what makes a good group, and why the same things can be grouped in different ways.',
+      evidence: [
+        { id: 'AB1-rule', text: 'States a sorting rule based on a property (for example colour, shape, material or use).' },
+        { id: 'AB1-fit', text: 'Checks that every member fits the rule, or spots an item that does not belong.' },
+        { id: 'AB1-purpose', text: 'Says what the grouping is for (to find, compare or organise things).' },
+        { id: 'AB1-regroup', text: 'Shows the same things can be regrouped with a different rule.' },
+        { id: 'AB1-reason', text: 'Gives a reason or example when asked “How do you know?”.' }],
+      caution: 'Any sensible rule counts; there is no single right grouping.' },
+    { id: 'S1-T3-A2', label: 'BFSU A-2', kind: 'prompt',
+      text: 'Tell me how you decide whether something is a solid, a liquid or a gas, and what can make it change.',
+      evidence: [
+        { id: 'A2-solid', text: 'Solid: keeps its own shape and volume.' },
+        { id: 'A2-liquid', text: 'Liquid: keeps its volume but takes the shape of its container; it can be poured.' },
+        { id: 'A2-gas', text: 'Gas: spreads out to fill all the space available.' },
+        { id: 'A2-test', text: 'Decides by a test or observation (keeps shape? pours? spreads?), e.g. a heap of sugar or sand is still a solid because each grain keeps its shape.' },
+        { id: 'A2-change', text: 'Heating or cooling can change some materials from one state to another (melting, freezing, evaporating or boiling, condensing), with an example.' },
+        { id: 'A2-notall', text: 'Knows the change is possible, not universal: materials change at different temperatures, and some burn or char instead of melting.' }],
+      caution: 'Do not expect technical terms; describing the behaviour is enough.' },
+    { id: 'S1-T3-A4', label: 'BFSU A-4', kind: 'prompt',
+      text: 'Tell me what everything is made of, and what is going on inside a solid, a liquid and a gas.',
+      evidence: [
+        { id: 'A4-particles', text: 'Ordinary matter (solids, liquids and gases, including air) is made of tiny particles (atoms or molecules) too small to see.' },
+        { id: 'A4-solid', text: 'Solid: particles packed closely in place, vibrating (jiggling) where they are.' },
+        { id: 'A4-liquid', text: 'Liquid: particles close together but able to move past one another.' },
+        { id: 'A4-gas', text: 'Gas: particles spread far apart, moving freely in all directions.' },
+        { id: 'A4-temp', text: 'Warmer means the particles move faster; heating changes their motion and spacing.' },
+        { id: 'A4-evidence', text: 'Links an observation to particles (e.g. a smell spreading across a room, sugar seeming to disappear in water).' }],
+      caution: 'Accept “tiny bits”. Do not credit “atoms get bigger when heated” (spacing and motion change, not the particles). Light is not matter, so do not credit it as made of these particles.' },
+    { id: 'S1-T3-A5', label: 'BFSU A-5', kind: 'prompt',
+      text: 'Tell me how you would describe and choose materials for a job.',
+      evidence: [
+        { id: 'A5-props', text: 'Describes materials by properties (hard or soft, bendy or stiff, waterproof or absorbent, see-through or not, strong, lets heat through easily or slowly).' },
+        { id: 'A5-object', text: 'Tells the object apart from the material it is made of (a spoon vs the metal or wood).' },
+        { id: 'A5-match', text: 'Matches a property to what the job needs and gives a reason (“because…”).' },
+        { id: 'A5-tradeoff', text: 'Mentions a trade-off or a second-best choice (e.g. strong but heavy).' },
+        { id: 'A5-test', text: 'Suggests a test to check a property (e.g. a water drop, a bend test, a magnet).' },
+        { id: 'A5-metals', text: 'If magnets come up: knows only some metals are attracted to an ordinary magnet (iron and many steels are, though some stainless steels are not; aluminium and copper are not strongly attracted).' }],
+      caution: 'Any reasoned choice counts; the reason matters more than the material named.' }] });
+  S.push({ index: 4, key: 's1-results-discussion', title: '2. Discussion of actual written-practice results · 20 min', assess: true,
+    gate: { id: 'results_status', default: 'not_available',
+            options: [{ id: 'not_available', label: 'No results available — say so and move on (default)' },
+                      { id: 'available', label: 'The teacher has the learner’s actual results' }],
+            note: 'Never fabricate or guess results. Rate these items only when the teacher actually has the learner’s results.' },
+    items: [
+      { id: 'S1-T4-D1', label: 'Discussion 1', kind: 'action',
+        text: 'If the teacher has the learner’s results, the learner picks two questions they left blank or felt unsure about and explains their thinking now.',
+        evidence: [
+          { id: 'D1-picks', text: 'Picks two questions from their own results that were blank or unsure.' },
+          { id: 'D1-explains', text: 'Explains their thinking now in their own words.' },
+          { id: 'D1-idea', text: 'Uses an idea from the chapters (grouping rules, states, particles or materials) in the explanation.' }],
+      caution: 'Only with the learner’s actual results in hand. Explaining a change of mind counts; there is no penalty for blanks.' },
+      { id: 'S1-T4-D2', label: 'Discussion 2', kind: 'action', text: 'Compare what was written from memory with what was added on revisit.',
+        evidence: [
+          { id: 'D2-difference', text: 'Points out a difference between the memory-first answer and what was added on revisit.' },
+          { id: 'D2-why', text: 'Says what helped on revisit (a reminder, a picture, rereading the question).' }],
+      caution: 'Describe; do not grade the earlier answers here.' },
+      { id: 'S1-T4-D3', label: 'Discussion 3', kind: 'action', text: 'Choose one idea to strengthen in the applications.',
+        evidence: [
+          { id: 'D3-specific', text: 'Names one specific idea to work on.' },
+          { id: 'D3-link', text: 'Links it to one of today’s applications.' }],
+      caution: 'One idea is enough.' }] });
+  S.push({ index: 5, key: 's1-app1-beach-key', title: '3. Application 1 · Beach finds key · 7 min', assess: true, items: [
+    { id: 'S1-T5-A1', label: 'Action 1', kind: 'action', text: 'Choose a first yes/no question from the table that splits the finds into two groups.',
+      evidence: [
+        { id: 'B1-column', text: 'Chooses a question that is one of the table’s columns (or an equivalent observation).' },
+        { id: 'B1-split', text: 'Sorts the finds correctly by it into two non-empty groups (e.g. living thing: shell, driftwood, kelp / sea glass, bottle cap, bolt, pumice).' }],
+      caution: 'Every column in this table splits the seven finds into two groups, so any column is a valid first question.' },
+    { id: 'S1-T5-A2', label: 'Action 2', kind: 'action', text: 'Keep adding yes/no questions until every find is on its own.',
+      evidence: [
+        { id: 'B2-consistent', text: 'Every answer along each path agrees with the table (no find is sent the wrong way).' },
+        { id: 'B2-alone', text: 'Ends with all seven finds each on its own, none missing or repeated.' },
+        { id: 'B2-table', text: 'Uses only properties given in the table (or says when they add a new one).' }],
+      caution: 'The table’s four properties are enough to separate all seven finds.' },
+    { id: 'S1-T5-A3', label: 'Action 3', kind: 'action', text: 'Draw your key as a branching diagram.',
+      evidence: [
+        { id: 'B3-branches', text: 'Each question has exactly two branches, labelled yes and no.' },
+        { id: 'B3-leaves', text: 'The diagram has seven end points (leaves), one find at each.' },
+        { id: 'B3-structure', text: 'With seven leaves, a correct yes/no key has six question points.' }],
+      caution: 'Different orders of questions are all fine if every path is consistent with the table.' },
+    { id: 'S1-T5-A4', label: 'Action 4', kind: 'action', text: 'Name the observation that would be hardest for a volunteer to check on the beach, and suggest an easier one.',
+      evidence: [
+        { id: 'B4-hardest', text: 'Names one observation and says why it is hard on a beach (e.g. “made by a living thing?” needs knowledge; floating needs water).' },
+        { id: 'B4-easier', text: 'Suggests an easier observable test (e.g. try a magnet, try to bend it, look at it).' }],
+      caution: 'Accept any reasoned choice.' },
+    { id: 'S1-T5-F', label: 'Follow-up', kind: 'follow_up', text: 'Your key puts pumice next to the bottle cap. Is that a mistake, or does it depend on what the key is for?',
+      evidence: [
+        { id: 'BF-shared', text: 'Notices both are not made by a living thing, float, and are not attracted to a magnet; they differ only in bending.' },
+        { id: 'BF-purpose', text: 'Says it is not a mistake if the key is consistent: grouping depends on the key’s purpose (e.g. floating rubbish vs. hazards).' }],
+      caution: 'There is no single right key.' }] });
+  S.push({ index: 6, key: 's1-app2-puddles', title: '3. Application 2 · Two puddles, two days · 7 min', assess: true, items: [
+    { id: 'S1-T6-A1', label: 'Action 1', kind: 'action', text: 'Describe the difference between the days, using numbers from the table.',
+      evidence: [
+        { id: 'P1-numbers', text: 'Quotes widths from the table (e.g. at 13:00, 100 cm on Day 1 but 35 cm on Day 2).' },
+        { id: 'P1-faster', text: 'States the Day 2 puddle shrank faster (120 to 35 cm by 13:00, only a damp patch by 15:00; Day 1 only 120 to 90 cm).' }],
+      caution: 'The table gives widths only. Do not credit claims about how much water (litres) was lost worked out from width; depth is unknown.' },
+    { id: 'S1-T6-A2', label: 'Action 2', kind: 'action', text: 'Where did the water go? Name the change of state.',
+      evidence: [
+        { id: 'P2-air', text: 'Says the water went into the air as water vapour.' },
+        { id: 'P2-evaporation', text: 'Names evaporation (liquid to gas).' }],
+      caution: 'Saying some water may also have soaked into the ground is reasonable, but soaking in is not a change of state.' },
+    { id: 'S1-T6-A3', label: 'Action 3', kind: 'action', text: 'Draw a particle model (label it “model”) of water at the puddle’s surface on Day 2.',
+      evidence: [
+        { id: 'P3-label', text: 'The drawing is labelled “model”.' },
+        { id: 'P3-liquid', text: 'Liquid particles drawn close together, able to move past one another.' },
+        { id: 'P3-escape', text: 'Some particles leave the surface into the air, drawn far apart as vapour.' }],
+      caution: 'Particles are not drawn getting bigger or disappearing.' },
+    { id: 'S1-T6-A4', label: 'Action 4', kind: 'action', text: 'Name two conditions that differ between the days, and explain why you cannot be sure which one caused the difference.',
+      evidence: [
+        { id: 'P4-two', text: 'Names two of: air temperature (12 °C vs 24 °C), sun (cloudy vs sunny), wind (none vs light).' },
+        { id: 'P4-confounded', text: 'Explains that several conditions changed at once, so the table cannot show which one caused the difference.' }],
+      caution: 'A fair test changes one condition at a time.' },
+    { id: 'S1-T6-F', label: 'Follow-up', kind: 'follow_up', text: 'If you wanted to find out whether wind matters, what would you keep the same?',
+      evidence: [
+        { id: 'PF-same', text: 'Keeps the same amount of water, surface, temperature and sunshine (and time of day or measuring method).' },
+        { id: 'PF-change', text: 'Changes only the wind.' }],
+      caution: 'Any sensible list of controlled conditions counts.' }] });
+  S.push({ index: 7, key: 's1-app3-mystery-cubes', title: '3. Application 3 · Mystery cubes · 6 min', assess: true, items: [
+    { id: 'S1-T7-A1', label: 'Action 1', kind: 'action', text: 'Find the volume of one cube; show your working.',
+      evidence: [
+        { id: 'C1-working', text: 'Shows 2 cm × 2 cm × 2 cm.' },
+        { id: 'C1-volume', text: 'Gets 8 cm³, with units.' }],
+      caution: 'Not 6 cm (adding) or 4 cm² (one face).' },
+    { id: 'S1-T7-A2', label: 'Action 2', kind: 'action', text: 'Calculate each cube’s density, with units.',
+      evidence: [
+        { id: 'C2-method', text: 'Divides mass by volume (mass ÷ 8 cm³).' },
+        { id: 'C2-values', text: 'P 0.5, Q 0.9, R 2.7 and S 7.9 g/cm³, with units.' }],
+      caution: 'Missing units are worth a prompt.' },
+    { id: 'S1-T7-A3', label: 'Action 3', kind: 'action', text: 'Match each cube to a material in the reference table.',
+      evidence: [ { id: 'C3-match', text: 'P pine wood, Q polypropylene plastic, R aluminum, S steel.' } ],
+      caution: 'Matching follows from the densities, not from the masses alone.' },
+    { id: 'S1-T7-A4', label: 'Action 4', kind: 'action', text: 'Predict which cubes float in fresh water and which in very salty water; explain one prediction.',
+      evidence: [
+        { id: 'C4-fresh', text: 'Fresh water (1.0 g/cm³): P and Q float, R and S sink.' },
+        { id: 'C4-salty', text: 'Very salty water (1.2 g/cm³): P and Q float, R and S sink, so the same result in both.' },
+        { id: 'C4-explain', text: 'Explains by comparing the cube’s density with the water’s (less dense floats, denser sinks).' }],
+      caution: 'Size alone does not decide: all four cubes are the same size.' },
+    { id: 'S1-T7-F', label: 'Follow-up', kind: 'follow_up', text: 'Cube Q only just floats. Imagine adding a small steel washer to it. What would you need to know to predict what happens?',
+      evidence: [
+        { id: 'CF-mass', text: 'Needs the washer’s mass (or the combined mass).' },
+        { id: 'CF-volume', text: 'Needs the washer’s volume: the combined volume of cube plus washer when fully submerged (not counting the washer’s hole; assume no trapped air) — not the water the object displaces while floating.' },
+        { id: 'CF-compare', text: 'Would compare the combined density (combined mass ÷ that fully submerged combined volume) with the water’s density, and needs to know which water.' }],
+      caution: 'Q floats in fresh water with only a small margin (0.9 vs 1.0 g/cm³), so a small washer could make it sink, but that cannot be decided without numbers.' }] });
+  S.push({ index: 8, key: 's1-optional-powder', title: 'Optional alternative · The unlabeled powder · 6 min', assess: true, optional: true, items: [
+    { id: 'S1-T8-A1', label: 'Action 1', kind: 'action', text: 'Which candidates can you rule out? Give the evidence for each.',
+      evidence: [
+        { id: 'W1-sand', text: 'Rules out sand: its grains are mixed-colour and irregular, and they settle at the bottom.' },
+        { id: 'W1-flour', text: 'Rules out flour: it is a fine powder with no clear grains, and it turns the water cloudy.' }],
+      caution: 'Each ruling-out needs its own evidence.' },
+    { id: 'S1-T8-A2', label: 'Action 2', kind: 'action', text: 'Which candidates are still possible after the water test alone?',
+      evidence: [ { id: 'W2-both', text: 'Table salt and sugar: both disappear and leave the water clear, so the water test alone cannot tell them apart.' } ],
+      caution: 'Do not credit “salt” alone here; the water test does not separate salt from sugar.' },
+    { id: 'S1-T8-A3', label: 'Action 3', kind: 'action', text: 'Which observation decides between them?',
+      evidence: [ { id: 'W3-grains', text: 'The magnifier: tiny clear cube-shaped grains match table salt, not sugar (not cube-shaped).' } ],
+      caution: 'This points to salt among the listed candidates only; it is not proof against other, unlisted substances.' },
+    { id: 'S1-T8-A4', label: 'Action 4', kind: 'action', text: 'Name one more safe test (no tasting) that could confirm your answer.',
+      evidence: [ { id: 'W4-safe', text: 'Names a safe, adult-supervised observation, e.g. compare side by side with a labelled salt sample under the magnifier, or let a drop of the solution dry and look for cube-shaped crystals.' } ],
+      caution: 'No tasting, ever. Anything involving heat is for an adult to do.' },
+    { id: 'S1-T8-F', label: 'Follow-up', kind: 'follow_up', text: 'Why is tasting never the test, even for powders found in a kitchen?',
+      evidence: [ { id: 'WF-unknown', text: 'An unknown powder could be harmful; looking similar is not proof of what it is.' } ],
+      caution: 'Safety first: unlabelled substances are treated as unknown.' }] });
+  S.push({ index: 9, key: 's1-instant-recall', title: '4. Open-ended instant recall', assess: true, items: [
+    { id: 'S1-T9-R1', label: 'Recall 1', kind: 'prompt', text: 'Make up a new example of a category and say its rule.',
+      evidence: [ { id: 'R1-new', text: 'Invents a category not used earlier in the session.' }, { id: 'R1-rule', text: 'States a rule that every member meets.' } ],
+      caution: 'Any sensible category counts.' },
+    { id: 'S1-T9-R2', label: 'Recall 2', kind: 'prompt', text: 'Explain how you would decide the state of something you have never seen before.',
+      evidence: [ { id: 'R2-tests', text: 'Uses tests: keeps its own shape? flows and takes the container’s shape while keeping its volume? spreads out to fill the space?' },
+                  { id: 'R2-observe', text: 'Says they would observe or test rather than guess from appearance.' } ],
+      caution: 'Pourable solids (sand, sugar) are a good extension.' },
+    { id: 'S1-T9-R3', label: 'Recall 3', kind: 'prompt', text: 'Describe what the particles are doing when a solid melts.',
+      evidence: [ { id: 'R3-energy', text: 'Heating makes the particles move (vibrate) more.' },
+                  { id: 'R3-free', text: 'They leave their fixed places and start moving past one another, as in a liquid.' } ],
+      caution: 'Do not credit “the particles melt” or “the particles get bigger”.' },
+    { id: 'S1-T9-R4', label: 'Recall 4', kind: 'prompt', text: 'Pick one material and explain how its properties suit one job.',
+      evidence: [ { id: 'R4-property', text: 'Names a property of the material.' }, { id: 'R4-reason', text: 'Explains why that property suits the job (“because…”).' } ],
+      caution: 'Any reasoned pairing counts.' }] });
+  S.push({ index: 10, key: 's1-next-reading', title: '5. Plan the next reading', assess: false });
+  var LEVELS = [{ id: 'independent', label: 'Independent' }, { id: 'with_prompt', label: 'With prompt' }, { id: 'not_yet', label: 'Not yet' }, { id: 'not_assessed', label: 'Not assessed' }];
+  return { SOURCE: { file: 'revision/session-01-teacher.html', sha256: '0d040503030fd1347b8e8995a2b1c0ba73da1a36064a1556dc629f70577fb15b', slide_count: 10 },
+           SLIDES: S, LEVELS: LEVELS, NOTES_MAX: 500 };
+})();
+if (typeof module !== 'undefined' && module.exports) module.exports = BfsuTeacherDeckData;
+
+/* ---- bfsu-s1-teacher-deck-r3.2-embed-embed.js (verbatim) ---- */
+/* BFSU Session 1 teacher deck (r3.1-embed) — native Google Form EMBED layer. Pure: no DOM, storage or network.
+   Runs unchanged in Node (tests) and the browser (deck). Requires BfsuTeacherDeckData (item IDs, numbered rubric evidence).
+   - The deck has NO input controls of its own. The only place to record an assessment is the owner's native Google Form,
+     shown in ONE persistent iframe inside ONE shared drawer (mounted at most once; never reloaded by slide navigation or toggling).
+   - r3.1: liveFormEnabled is TRUE. The owner approved and published the Form (anyone with the link; no sign-in). Synthetic
+     verification is still pending. The frame is mounted only on the first "Open assessment form" click, then kept.
+     Setting liveFormEnabled to false restores the disabled placeholder (nothing fetched).
+   - No identifiers, notes, ratings or answers are ever put into a URL (no prefill). The parent page cannot see inside the
+     cross-origin frame, so it never claims anything was saved: Google's own confirmation inside the Form is authoritative. */
+var BfsuTeacherFormEmbed = (function () {
+  'use strict';
+  var CONFIG = Object.freeze({
+    liveFormEnabled: true,
+    state: 'form_published_synthetic_verification_pending',
+    embedUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSfdY_OT2gIlNOfJl3Ij70fm6xmG7woKgvPGyzb9DJ10yvikmA/viewform?embedded=true',
+    newTabUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSfdY_OT2gIlNOfJl3Ij70fm6xmG7woKgvPGyzb9DJ10yvikmA/viewform',
+    signInRequired: false,
+    ratingOptions: Object.freeze(['Independent', 'With prompt', 'Not yet', 'Not assessed', 'Skipped — actual results unavailable']),
+    maxCriteria: 6
+  });
+  var FORM_ID = '1FAIpQLSfdY_OT2gIlNOfJl3Ij70fm6xmG7woKgvPGyzb9DJ10yvikmA';
+
+  function esc(s) { return String(s === null || s === undefined ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function domId(s) { return String(s).replace(/[^A-Za-z0-9_-]/g, '_'); }
+
+  function allItems(D) { var out = []; D.SLIDES.forEach(function (s) { (s.items || []).forEach(function (it) { out.push({ slide: s, item: it }); }); }); return out; }
+  function itemIds(D) { return allItems(D).map(function (x) { return x.item.id; }); }
+
+  /* A URL is acceptable only if it is EXACTLY the owner's Form URL (embedded=true is the only query allowed, embed only). */
+  function urlIsClean(url, forEmbed) {
+    var base = 'https://docs.google.com/forms/d/e/' + FORM_ID + '/viewform';
+    return forEmbed ? url === base + '?embedded=true' : url === base;
+  }
+  function checkConfig(cfg) {
+    var errs = [];
+    if (typeof cfg.liveFormEnabled !== 'boolean') errs.push('liveFormEnabled');
+    if (!urlIsClean(cfg.embedUrl, true)) errs.push('embedUrl');
+    if (!urlIsClean(cfg.newTabUrl, false)) errs.push('newTabUrl');
+    if (cfg.signInRequired !== false) errs.push('signInRequired');
+    return errs;
+  }
+
+  /* Answer rubric: criteria numbered 1..N in the exact evidence order; the Form's "Criterion k" checkbox = item k here. */
+  function criteria(it) { return it.evidence.map(function (e, i) { return { number: i + 1, evidence_id: e.id, text: e.text }; }); }
+
+  function renderItemDropdowns(D, slide, it) {
+    var id = esc(it.id), lab = esc(it.label);
+    var skip = slide.gate ? '<p class="fnote"><b>Actual results not available?</b> Choose “Skipped — actual results unavailable” in the Form. Never guess or invent results.</p>' : '';
+    return '<details class="rubric" data-panel="rubric-' + id + '"><summary>Answer rubric<span class="sr"> — ' + lab + '</span> <span class="idtag">' + id + '</span></summary>' +
+      '<p class="rid">Item ID <b>' + id + '</b> — ' + lab + '</p>' +
+      '<p class="hint">Evidence to listen for (any wording; not a script). In the Form, tick <b>Criterion k</b> for each numbered line you actually heard or saw:</p>' +
+      '<ol class="crit" data-item="' + id + '">' + criteria(it).map(function (c) {
+        return '<li value="' + c.number + '" data-criterion="' + c.number + '"><span class="cnum">Criterion ' + c.number + '</span> ' + esc(c.text) + '</li>'; }).join('') + '</ol>' +
+      '<p class="caution">' + esc(it.caution) + '</p></details>' +
+      '<details class="assess" data-panel="assess-' + id + '"><summary>Teacher assessment<span class="sr"> — ' + lab + '</span> <span class="idtag">' + id + '</span></summary>' +
+      '<p class="rid">In the Form’s first question choose item ID <b>' + id + '</b>.</p>' + skip +
+      '<button type="button" class="openform" data-open-form="' + id + '">Open assessment form for ' + id + '</button>' +
+      '<p class="fnote">One Form submission per prompt. Each submission is a separate record, including repeats.</p></details>';
+  }
+
+  /* The ONE fallback link (or its disabled stand-in) and the ONE frame (or the disabled placeholder). */
+  function renderNewTab(cfg) {
+    if (!cfg.liveFormEnabled) return '<span class="newtab disabled" aria-disabled="true">Open form in new tab — unavailable (live Form loading is switched off)</span>';
+    return '<a class="newtab" href="' + esc(cfg.newTabUrl) + '" target="_blank" rel="noreferrer noopener">Open form in new tab</a>';
+  }
+  function renderFrame(cfg) {
+    if (!cfg.liveFormEnabled) return '<div class="formplaceholder" role="note"><b>Form not loaded.</b> Live Form loading is switched off in this copy (liveFormEnabled is false), so nothing is fetched from Google.</div>';
+    return '<iframe class="gform" title="Teacher assessment Google Form" src="' + esc(cfg.embedUrl) + '" loading="lazy" referrerpolicy="no-referrer">Loading…</iframe>';
+  }
+  /* Drawer shell, rendered ONCE at load. The frame area is filled at most once (see reduce: frameMounted). */
+  function renderDrawer(cfg) {
+    return '<aside class="formdrawer" id="formdrawer" aria-labelledby="formdrawer-h" hidden>' +
+      '<div class="fdhead"><h2 id="formdrawer-h" tabindex="-1">Teacher assessment form</h2>' +
+      '<span class="fdsel">Item ID to choose in the Form: <b id="formdrawer-id">—</b></span>' +
+      '<button type="button" class="secondary" data-drawer="close">Close</button></div>' +
+      '<p class="fdnote">Rating, criterion ticks, notes and initials are entered only in the Google Form below. Google’s confirmation inside the Form is the only proof of submission; this page cannot see inside the Form and never reports a save. Notes: no names, student identifiers or sensitive information. Initials are optional and unverified.</p>' +
+      '<div class="fdframe" id="formdrawer-frame"></div>' +
+      '<p class="fdlink">' + renderNewTab(cfg) + '</p></aside>';
+  }
+
+  /* Pure drawer state. frameMounted only ever goes false → true, and only when the live Form is enabled. */
+  function initialState() { return Object.freeze({ open: false, itemId: null, frameMounted: false }); }
+  function reduce(D, cfg, state, action) {
+    var ids = itemIds(D);
+    switch (action && action.type) {
+      case 'open':
+        if (ids.indexOf(action.itemId) < 0) return state;
+        return Object.freeze({ open: true, itemId: action.itemId, frameMounted: state.frameMounted || cfg.liveFormEnabled === true });
+      case 'close': return Object.freeze({ open: false, itemId: state.itemId, frameMounted: state.frameMounted });
+      case 'navigate': case 'toggle-dropdown': return state;
+      default: return state;
+    }
+  }
+  /* What the DOM must do to move from prev to next. mountFrame is true at most once in any sequence. */
+  function effects(prev, next) {
+    return { showDrawer: next.open, setItemId: next.itemId, mountFrame: !prev.frameMounted && next.frameMounted, focusDrawer: next.open && !prev.open };
+  }
+
+  return { CONFIG: CONFIG, FORM_ID: FORM_ID, esc: esc, domId: domId, allItems: allItems, itemIds: itemIds, urlIsClean: urlIsClean, checkConfig: checkConfig,
+    criteria: criteria, renderItemDropdowns: renderItemDropdowns, renderNewTab: renderNewTab, renderFrame: renderFrame, renderDrawer: renderDrawer,
+    initialState: initialState, reduce: reduce, effects: effects };
+})();
+if (typeof module !== 'undefined' && module.exports) module.exports = BfsuTeacherFormEmbed;
+
+/* ---- form-embed wiring ---- */
+(function(){'use strict';
+/* No inputs, no storage, no network code, no receipts. Only the native Google Form (when enabled) takes input. */
+var E=BfsuTeacherFormEmbed, D=BfsuTeacherDeckData, CFG=E.CONFIG;
+if(E.checkConfig(CFG).length) return;
+/* Build once: per-item dropdowns into the in-item slots; one drawer at the end of <body>. Navigation only hides/shows slides. */
+E.allItems(D).forEach(function(x){ var slot=document.querySelector('[data-item-slot="'+x.item.id+'"]'); if(slot) slot.innerHTML=E.renderItemDropdowns(D,x.slide,x.item); });
+var host=document.createElement('div'); host.innerHTML=E.renderDrawer(CFG); document.body.appendChild(host.firstChild);
+var drawer=document.getElementById('formdrawer'), idEl=document.getElementById('formdrawer-id'), frameBox=document.getElementById('formdrawer-frame');
+if(!CFG.liveFormEnabled) frameBox.innerHTML=E.renderFrame(CFG);   /* disabled placeholder; a live frame is mounted only on first open */
+var state=E.initialState(), opener=null;
+function dispatch(action){ var prev=state; state=E.reduce(D,CFG,state,action); var fx=E.effects(prev,state);
+  if(fx.mountFrame && !frameBox.querySelector('iframe')) frameBox.innerHTML=E.renderFrame(CFG);   /* the ONE iframe, mounted once, never removed */
+  idEl.textContent=fx.setItemId||'—'; drawer.hidden=!fx.showDrawer; document.body.classList.toggle('drawer-open',fx.showDrawer);
+  if(fx.focusDrawer) document.getElementById('formdrawer-h').focus(); }
+document.addEventListener('click',function(e){
+  var o=e.target.closest&&e.target.closest('[data-open-form]'); if(o){ opener=o; dispatch({type:'open',itemId:o.getAttribute('data-open-form')}); return; }
+  var c=e.target.closest&&e.target.closest('[data-drawer="close"]'); if(c) closeDrawer(); });
+function closeDrawer(){ dispatch({type:'close'}); if(opener&&opener.focus) opener.focus(); }
+drawer.addEventListener('keydown',function(e){ if(e.key==='Escape'){ e.stopPropagation(); closeDrawer(); } });
+})();
+
+</script>
+</body>
+</html>
